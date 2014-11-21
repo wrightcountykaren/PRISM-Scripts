@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "BETA - NOTE - CS - client contact"
+name_of_script = "NOTE - CS - client contact"
 start_time = timer
 
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------

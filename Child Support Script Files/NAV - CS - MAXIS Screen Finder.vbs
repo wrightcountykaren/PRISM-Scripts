@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "BETA - NAV - MAXIS screen finder"
+name_of_script = "NAV - MAXIS screen finder"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS

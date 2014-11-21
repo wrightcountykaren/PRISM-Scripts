@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "BETA - NAV - Log into PRISM training region"
+name_of_script = "NAV - Log into PRISM training region"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS

@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "BETA - CS - NOTE - Pay or Report"
+name_of_script = "NOTE - CS - Pay or Report"
 start_time = timer
 '
 ''LOADING ROUTINE FUNCTIONS
@@ -91,7 +91,7 @@ Loop until worker_signature <> ""
 	
 
 
-'Going to CAWT screen and adding the worklists
+'Going to CAWT screen
 call navigate_to_PRISM_screen("CAWT")
 
 PF5									'adding a note
@@ -205,11 +205,16 @@ EMWriteScreen "FREE", 4, 54 			'adds free note
 
 EMSetCursor 16, 4					'Because the cursor does not default to this location
 call write_new_line_in_PRISM_case_note("Pay or Report Information")
-call write_editbox_in_PRISM_case_note("Purge Conditions", purge_condition, 6)  
+call write_editbox_in_PRISM_case_note("Purge Condition", purge_condition, 6)  
 call write_editbox_in_PRISM_case_note("Order Date", Order_date, 6)
 call write_editbox_in_PRISM_case_note("County Attorney", CAO_list, 6)
 call write_new_line_in_PRISM_case_note("---")	
 call write_new_line_in_PRISM_case_note(worker_signature)
+
+
+
+
+
 
 
 

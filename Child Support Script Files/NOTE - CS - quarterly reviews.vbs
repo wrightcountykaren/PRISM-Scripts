@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "BETA - NOTE - CS - quarterly reviews"
+name_of_script = "NOTE - CS - quarterly reviews"
 start_time = timer
 
 
