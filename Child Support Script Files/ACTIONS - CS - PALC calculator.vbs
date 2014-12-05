@@ -55,7 +55,7 @@ call navigate_to_PRISM_screen("PALC")
 
 'Entering case number and transmitting
 EMSetCursor 20, 9
-EMSendKey replace(PRISM_case_number, "-", "")		'Entering the specific case indicated
+EMSendKey replace(PRISM_case_number, "-", "")	 	'Entering the specific case indicated
 transmit								'Transmitting into it
 
 
@@ -63,12 +63,14 @@ transmit								'Transmitting into it
 row = 9		'Setting variable for the do...loop
 
 Do
+
 	'Reading payment date, which for some crazy reason is YYMMDD, without slashes. This converts.
 	EMReadScreen pmt_ID_YY, 2, row, 7
 	EMReadScreen pmt_ID_MM, 2, row, 9
 	EMReadScreen pmt_ID_DD, 2, row, 11
 	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY	
-	If (cdate(start_date) <= cdate(pmt_ID_date)) and (cdate(pmt_ID_date) <= cdate(end_date)) then 					'Checks to see if date is in between start/end dates
+
+		If (cdate(start_date) <= cdate(pmt_ID_date)) and (cdate(pmt_ID_date) <= cdate(end_date)) then 				'Checks to see if date is in between start/end dates
 		date_within_range = True															'Determines date range
 		EMReadScreen proc_type, 3, row, 25														'Reading the proc type
 		EMReadScreen case_alloc_amt, 10, row, 70													'Reading the amt allocated
