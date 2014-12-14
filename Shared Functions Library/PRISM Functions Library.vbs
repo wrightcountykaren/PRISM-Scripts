@@ -41,40 +41,6 @@
 'END IF
 '----------------------------------------------------------------------------------------------------
 
-'FUNCTIONS THAT ARE BEING USED:
-'          attn
-'          back_to_SELF
-'          end_excel_and_script
-'          find_variable
-'		fix_case
-'          navigate_to_MAXIS_screen
-'          navigate_to_PRISM_screen
-'          PF1
-'          PF2
-'          PF3
-'          PF4
-'          PF5
-'          PF6
-'          PF7
-'          PF8
-'          PF9
-'          PF10
-'          PF11
-'          PF12
-'          PF20
-'		PRISM_case_number_finder
-'		PRISM_case_number_validation
-'          run_another_script
-'          script_end_procedure
-'          script_end_procedure_wsh
-'          step_through_handling
-'          transmit
-'		write_editbox_in_PRISM_case_note
-'		write_new_line_in_PRISM_case_note
-'-------------------------------------------------------------------------------------------------------
-
-
-
 Function attn
   EMSendKey "<attn>"
   EMWaitReady -1, 0
@@ -291,6 +257,33 @@ function run_another_script(script_path)
   fso_command.Close
   Execute text_from_the_other_script
 end function
+
+'Runs a script from GitHub.
+FUNCTION run_from_GitHub(url)
+	Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+	req.open "GET", url, False									'Attempts to open the URL
+	req.send													'Sends request
+	If req.Status = 200 Then									'200 means great success
+		Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+		Execute req.responseText								'Executes the script code
+	ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
+		MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+				vbCr & _
+				"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+				vbCr & _
+				"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+				vbTab & "- The name of the script you are running." & vbCr &_
+				vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
+				vbTab & "- The name and email for an employee from your IT department," & vbCr & _
+				vbTab & vbTab & "responsible for network issues." & vbCr &_
+				vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
+				vbCr & _
+				"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+				vbCr &_
+				"URL: " & url
+				script_end_procedure("Script ended due to error connecting to GitHub.")
+	END IF
+END FUNCTION
 
 function script_end_procedure(closing_message)
 	If closing_message <> "" then MsgBox closing_message
