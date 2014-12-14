@@ -294,51 +294,55 @@ end function
 
 function script_end_procedure(closing_message)
 	If closing_message <> "" then MsgBox closing_message
-	stop_time = timer
-	script_run_time = stop_time - start_time
-	'Getting user name
-	Set objNet = CreateObject("WScript.NetWork") 
-	user_ID = objNet.UserName
+	If collecting_statistics = True then
+		stop_time = timer
+		script_run_time = stop_time - start_time
+		'Getting user name
+		Set objNet = CreateObject("WScript.NetWork") 
+		user_ID = objNet.UserName
 
-	'Setting constants
-	Const adOpenStatic = 3
-	Const adLockOptimistic = 3
+		'Setting constants
+		Const adOpenStatic = 3
+		Const adLockOptimistic = 3
 
-	'Creating objects for Access
-	Set objConnection = CreateObject("ADODB.Connection")
-	Set objRecordSet = CreateObject("ADODB.Recordset")
+		'Creating objects for Access
+		Set objConnection = CreateObject("ADODB.Connection")
+		Set objRecordSet = CreateObject("ADODB.Recordset")
 
-	'Opening DB
-	objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
+		'Opening DB
+		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
 
-	'Opening usage_log and adding a record
-	objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
-	"VALUES ('" & user_ID & "', '" & date & "', '" & time & "', '" & name_of_script & "', " & script_run_time & ", '" & closing_message & "')", objConnection, adOpenStatic, adLockOptimistic
+		'Opening usage_log and adding a record
+		objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
+		"VALUES ('" & user_ID & "', '" & date & "', '" & time & "', '" & name_of_script & "', " & script_run_time & ", '" & closing_message & "')", objConnection, adOpenStatic, adLockOptimistic
+	End if
 	stopscript
 end function
 
 function script_end_procedure_wsh(closing_message) 'For use when running a script outside of the BlueZone Script Host
 	If closing_message <> "" then MsgBox closing_message
-	stop_time = timer
-	script_run_time = stop_time - start_time
-	'Getting user name
-	Set objNet = CreateObject("WScript.NetWork") 
-	user_ID = objNet.UserName
+	If collecting_statistics = True then
+		stop_time = timer
+		script_run_time = stop_time - start_time
+		'Getting user name
+		Set objNet = CreateObject("WScript.NetWork") 
+		user_ID = objNet.UserName
 
-	'Setting constants
-	Const adOpenStatic = 3
-	Const adLockOptimistic = 3
+		'Setting constants
+		Const adOpenStatic = 3
+		Const adLockOptimistic = 3
 
-	'Creating objects for Access
-	Set objConnection = CreateObject("ADODB.Connection")
-	Set objRecordSet = CreateObject("ADODB.Recordset")
+		'Creating objects for Access
+		Set objConnection = CreateObject("ADODB.Connection")
+		Set objRecordSet = CreateObject("ADODB.Recordset")
 
-	'Opening DB
-	objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
+		'Opening DB
+		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
 
-	'Opening usage_log and adding a record
-	objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
-	"VALUES ('" & user_ID & "', '" & date & "', '" & time & "', '" & name_of_script & "', " & script_run_time & ", '" & closing_message & "')", objConnection, adOpenStatic, adLockOptimistic
+		'Opening usage_log and adding a record
+		objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
+		"VALUES ('" & user_ID & "', '" & date & "', '" & time & "', '" & name_of_script & "', " & script_run_time & ", '" & closing_message & "')", objConnection, adOpenStatic, adLockOptimistic
+	End if
 	Wscript.Quit
 end function
 
