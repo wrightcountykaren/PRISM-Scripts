@@ -32,11 +32,11 @@ END IF
 BeginDialog NOTES_main_menu_dialog, 0, 0, 306, 100, "NOTES main menu dialog"
   ButtonGroup ButtonPressed
     CancelButton 250, 80, 50, 15
-    PushButton 5, 5, 50, 10, "Client contact", NOTE_Client_contact_button
-    PushButton 5, 20, 90, 10, "Date of the hearing (expro)", NOTE_date_of_hearing_expro_button
-    PushButton 5, 35, 95, 10, "Date of the hearing (judicial)", NOTE_date_of_hearing_judicial_button
-    PushButton 5, 50, 50, 10, "Pay or report", NOTE_pay_or_report_button
-    PushButton 5, 65, 65, 10, "Quarterly reviews", NOTE_quarterly_reviews_button
+    PushButton 5, 5, 50, 10, "Client contact", NOTES_client_contact_button
+    PushButton 5, 20, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
+    PushButton 5, 35, 95, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
+    PushButton 5, 50, 50, 10, "Pay or report", NOTES_pay_or_report_button
+    PushButton 5, 65, 65, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
   Text 60, 5, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
   Text 100, 20, 200, 10, "-- Date of the hearing template for expro."
   Text 105, 35, 195, 10, "-- Date of the hearing template for judicial."
@@ -49,9 +49,9 @@ EndDialog
 
 'Shows the dialog
 Dialog NOTES_main_menu_dialog
-If buttonpressed = cancel then stopscript
-IF ButtonPressed = NOTE_Client_contact_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Client contact.vbs")
-IF ButtonPressed = NOTE_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - date of the hearing (expro).vbs")
-IF ButtonPressed = NOTE_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - date of the hearing (judicial).vbs")
-IF ButtonPressed = NOTE_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - pay or report.vbs")
-IF ButtonPressed = NOTE_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - quarterly reviews.vbs")
+If buttonpressed = cancel then StopScript
+IF ButtonPressed = NOTES_Client_contact_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Client contact.vbs")
+IF ButtonPressed = NOTES_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Date of the hearing (expro).vbs")
+IF ButtonPressed = NOTES_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Date of the hearing (judicial).vbs")
+IF ButtonPressed = NOTES_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Pay or report.vbs")
+IF ButtonPressed = NOTES_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Quarterly reviews.vbs")
