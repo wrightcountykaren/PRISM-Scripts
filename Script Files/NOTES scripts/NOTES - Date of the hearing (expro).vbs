@@ -146,5 +146,4 @@ end if
 call write_new_line_in_PRISM_case_note("---")	
 call write_new_line_in_PRISM_case_note(worker_signature)
 
-
-
+script_end_procedure("")
