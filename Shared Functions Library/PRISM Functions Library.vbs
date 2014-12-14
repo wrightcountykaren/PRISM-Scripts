@@ -10,10 +10,6 @@
 '
 'Here's the code to add, including stats gathering pieces (without comments of course):
 '
-'GATHERING STATS----------------------------------------------------------------------------------------------------
-'name_of_script = ""
-'start_time = timer
-'
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 'url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 'Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
@@ -39,7 +35,14 @@
 '			"URL: " & url
 '			StopScript
 'END IF
-'----------------------------------------------------------------------------------------------------
+
+'GLOBAL CONSTANTS----------------------------------------------------------------------------------------------------
+checked = 1			'Value for checked boxes
+unchecked = 0		'Value for unchecked boxes
+cancel = 0			'Value for cancel button in dialogs
+OK = -1				'Value for OK button in dialogs
+
+'SHARED FUNCTIONS----------------------------------------------------------------------------------------------------
 
 Function attn
   EMSendKey "<attn>"
@@ -303,7 +306,7 @@ function script_end_procedure(closing_message)
 		Set objRecordSet = CreateObject("ADODB.Recordset")
 
 		'Opening DB
-		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
+		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " & stats_database_path
 
 		'Opening usage_log and adding a record
 		objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
@@ -330,7 +333,7 @@ function script_end_procedure_wsh(closing_message) 'For use when running a scrip
 		Set objRecordSet = CreateObject("ADODB.Recordset")
 
 		'Opening DB
-		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
+		objConnection.Open "Provider = Microsoft.ACE.OLEDB.12.0; Data Source = " & stats_database_path
 
 		'Opening usage_log and adding a record
 		objRecordSet.Open "INSERT INTO usage_log (USERNAME, SDATE, STIME, SCRIPT_NAME, SRUNTIME, CLOSING_MSGBOX)" &  _
@@ -338,8 +341,6 @@ function script_end_procedure_wsh(closing_message) 'For use when running a scrip
 	End if
 	Wscript.Quit
 end function
-
-
 
 Function step_through_handling 'This function will introduce "warning screens" before each transmit, which is very helpful for testing new scripts
 	'To use this function, simply replace the "Execute text_from_the_other_script" line with:
