@@ -32,23 +32,6 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-'<<<<<PRISM SPECIFIC, MERGE INTO MAIN FUNCTIONS FILE BEFORE GO-LIVE
-Function PRISM_case_number_validation(case_number_to_validate, outcome)
-  If len(case_number_to_validate) <> 13 then 
-    outcome = False
-  Elseif isnumeric(left(case_number_to_validate, 10)) = False then
-    outcome = False
-  Elseif isnumeric(right(case_number_to_validate, 2)) = False then
-    outcome = False
-  Elseif InStr(11, case_number_to_validate, "-") <> 11 then
-    outcome = False
-  Else
-    outcome = True
-  End if
-End function
-
-
-
 'DIALOGS----------------------------------------------------------------------------------------------------
 BeginDialog contact_dialog, 0, 0, 381, 295, "Client contact"
   DropListBox 80, 15, 260, 15, ""+chr(9)+"T0050 PHONE CALL TO CP"+chr(9)+"T0051 PHONE CALL FR CP"+chr(9)+"T0052 PHONE CALL RET TO CP"+chr(9)+"T0053 PHONE CALL RET FR CP"+chr(9)+"T0054 PHONE CALL ATMPT TO RET TO CP"+chr(9)+"T0093 CONTACT WITH CP SPOUSE"+chr(9)+"T0101 PHONE CONTACT CP'S ATTORNEY"+chr(9)+"T0201 CONTACT WITH CP EMPLOYER"+chr(9)+"M3910 INTERVIEW WITH CP", contact_type_CP
@@ -102,10 +85,6 @@ If row <> 0 then
 	If isnumeric(left(PRISM_case_number, 10)) = False or isnumeric(right(PRISM_case_number, 2)) = False then PRISM_case_number = ""
 End if
 
-'<<<<A TEMPORARY MSGBOX TO CHECK THE ACCURACY OF THE PRISM CASE NUMBER FINDER. IF THIS WORKS CREATE A CUSTOM FUNCTION OUT OF THE ABOVE CODE
-If PRISM_case_number <> "" then MsgBox "A case number was automatically found on this screen! It is indicated as: " & PRISM_case_number & ". If this case number is incorrect, please take a screenshot of PRISM and send a description of what's wrong to Veronica Cary."
-
-
 'Shows dialog, then navigates to CAAD. It will validate the PRISM case number using the custom function.
 Do
 	Do
@@ -132,7 +111,6 @@ If contact_type_CP <> "" and contact_type_NCP = "" and contact_type_other = "" t
 If contact_type_CP = "" and contact_type_NCP <> "" and contact_type_other = "" then contact_type = contact_type_NCP
 If contact_type_CP = "" and contact_type_NCP = "" and contact_type_other <> "" then contact_type = contact_type_other
 
-
 'Writing the case note
 EMWriteScreen left(contact_type, 5), 4, 54				'The contact type (only need the left 5 characters)
 EMWriteScreen date_of_contact, 4, 37					'Writing the contact date as the activity date on CAAD
@@ -148,6 +126,5 @@ If phone_number <> "" then call write_editbox_in_PRISM_case_note("Phone number",
 If time_contact_was_made <> "" then call write_editbox_in_PRISM_case_note("Time contact was made", time_contact_was_made, 5)
 call write_new_line_in_PRISM_case_note("---")
 call write_new_line_in_PRISM_case_note(worker_signature)
-
 
 script_end_procedure("")
