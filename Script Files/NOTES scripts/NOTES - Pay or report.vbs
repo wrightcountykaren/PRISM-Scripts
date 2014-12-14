@@ -230,17 +230,4 @@ call write_editbox_in_PRISM_case_note("County Attorney", CAO_list, 6)
 call write_new_line_in_PRISM_case_note("---")	
 call write_new_line_in_PRISM_case_note(worker_signature)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+script_end_procedure("")

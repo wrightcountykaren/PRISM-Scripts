@@ -29,9 +29,6 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-'<<<<<PRISM SPECIFIC, MERGE INTO MAIN FUNCTIONS FILE BEFORE GO-LIVE
-
-
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
 days_to_push_out_worklist = "90"	'This is the default
 
@@ -47,10 +44,6 @@ BeginDialog quarterly_reviews_dialog, 0, 0, 176, 85, "Quarterly Reviews Dialog"
   Text 5, 30, 130, 10, "Days to push out worklist (default is 90):"
   Text 5, 50, 60, 10, "Worker signature:"
 EndDialog
-
-
-
-
 
 'THE SCRIPT----------------------------------------------------------------------------------------------------
 
@@ -73,9 +66,6 @@ If row <> 0 then
 	PRISM_case_number = replace(PRISM_case_number, " ", "-")
 	If isnumeric(left(PRISM_case_number, 10)) = False or isnumeric(right(PRISM_case_number, 2)) = False then PRISM_case_number = ""
 End if
-
-'<<<<A TEMPORARY MSGBOX TO CHECK THE ACCURACY OF THE PRISM CASE NUMBER FINDER. IF THIS WORKS CREATE A CUSTOM FUNCTION OUT OF THE ABOVE CODE
-If PRISM_case_number <> "" then MsgBox "A case number was automatically found on this screen! It is indicated as: " & PRISM_case_number & ". If this case number is incorrect, please take a screenshot of PRISM and send a description of what's wrong to Veronica Cary."
 
 Do
 	Do
@@ -109,3 +99,5 @@ EMWriteScreen worklist_line_03, 18, 4
 EMWriteScreen worklist_line_04, 19, 4
 EMWriteScreen "------" & worker_signature, 20, 4
 EMWriteScreen "E0002", 4, 54
+
+script_end_procedure("")
