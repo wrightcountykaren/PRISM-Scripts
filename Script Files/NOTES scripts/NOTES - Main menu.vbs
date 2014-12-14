@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - Main menu.vbs"
+name_of_script = "NOTES - Main menu.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
@@ -29,19 +29,29 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'DIALOGS---------------------------------------------------------------------------
-BeginDialog ACTIONS_main_menu_dialog, 0, 0, 306, 65, "ACTIONS main menu dialog"
+BeginDialog NOTES_main_menu_dialog, 0, 0, 306, 100, "NOTES main menu dialog"
   ButtonGroup ButtonPressed
-    CancelButton 250, 45, 50, 15
-    PushButton 5, 5, 30, 10, "Intake", ACTIONS_intake_button
-    PushButton 5, 30, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
-  Text 40, 5, 260, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
-  Text 70, 30, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
+    CancelButton 250, 80, 50, 15
+    PushButton 5, 5, 50, 10, "Client contact", NOTE_Client_contact_button
+    PushButton 5, 20, 90, 10, "Date of the hearing (expro)", NOTE_date_of_hearing_expro_button
+    PushButton 5, 35, 95, 10, "Date of the hearing (judicial)", NOTE_date_of_hearing_judicial_button
+    PushButton 5, 50, 50, 10, "Pay or report", NOTE_pay_or_report_button
+    PushButton 5, 65, 65, 10, "Quarterly reviews", NOTE_quarterly_reviews_button
+  Text 60, 5, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
+  Text 100, 20, 200, 10, "-- Date of the hearing template for expro."
+  Text 105, 35, 195, 10, "-- Date of the hearing template for judicial."
+  Text 60, 50, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
+  Text 75, 65, 225, 10, "-- CAAD note for quarterly review processes."
 EndDialog
+
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------
 
 'Shows the dialog
-Dialog ACTIONS_main_menu_dialog
+Dialog NOTES_main_menu_dialog
 If buttonpressed = cancel then stopscript
-IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_repository & "ACTIONS scripts/ACTIONS - Intake.vbs")
-IF ButtonPressed = ACTIONS_PALC_calculator_button then call run_from_GitHub(script_repository & "ACTIONS scripts/ACTIONS - PALC calculator.vbs")
+IF ButtonPressed = NOTE_Client_contact_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Client contact.vbs")
+IF ButtonPressed = NOTE_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - date of the hearing (expro).vbs")
+IF ButtonPressed = NOTE_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - date of the hearing (judicial).vbs")
+IF ButtonPressed = NOTE_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - pay or report.vbs")
+IF ButtonPressed = NOTE_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - quarterly reviews.vbs")
