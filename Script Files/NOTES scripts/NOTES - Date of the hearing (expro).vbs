@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - date of the hearing (expro).vbs"
+name_of_script = "NOTES - Date of the hearing (expro).vbs"
 start_time = timer
 '
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
