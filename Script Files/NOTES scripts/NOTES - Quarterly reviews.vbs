@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - quarterly reviews.vbs"
+name_of_script = "NOTES - Quarterly reviews.vbs"
 start_time = timer
 
 
