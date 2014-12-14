@@ -25,6 +25,9 @@ county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303", "~")
 'This is a variable which signifies the agency is beta (affects script URL)
 beta_agency = True
 
+'An array of script developer usernames who should be accessing the master versions of the scripts (instead of the beta or release branches). Usernames should be ALL CAPS.
+script_developer_array = array("PWVKC45", "VKCARY", "VKC", "PASCHELL", "RCSCHULT")
+
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 
 'Making a list of offices to be used in various scripts
@@ -47,13 +50,6 @@ If worker_county_code <> "MULTICOUNTY" then two_digit_county_code = right(worker
 Set objNet = CreateObject("WScript.NetWork") 
 windows_user_ID = objNet.UserName
 
-'This is the URL of our script repository, and should only change if the agency is beta or standard.
-If beta_agency = True then
-	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/beta/Script Files/"
-Else
-	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/release/Script Files/"
-End if
-
 'Loads worker sig
 Dim oTxtFile 
 With (CreateObject("Scripting.FileSystemObject"))
@@ -65,3 +61,13 @@ With (CreateObject("Scripting.FileSystemObject"))
 		worker_sig_command.Close
 	END IF
 END WITH
+
+'This is the URL of our script repository, and should only change if the agency is beta or standard, or if there's a scriptwriter in the group.
+result = filter(script_developer_array, ucase(windows_user_ID))
+If ubound(result) <> 0 then
+	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Script Files/"
+ElseIf beta_agency = True then
+	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/beta/Script Files/"
+Else
+	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/release/Script Files/"
+End if
