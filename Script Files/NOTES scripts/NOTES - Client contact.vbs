@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "NOTE - client contact.vbs"
+name_of_script = "NOTES - client contact.vbs"
 start_time = timer
 
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------

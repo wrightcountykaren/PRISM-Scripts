@@ -61,13 +61,6 @@ county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303~1201 89th Av
 'This is a variable which signifies the agency is beta (affects script URL)
 beta_agency = True
 
-'This is the URL of our script repository, and should only change if the agency is beta or standard.
-If beta_agency = True then
-	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/beta/Script Files/"
-Else
-	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/release/Script Files/"
-End if
-
 'GLOBAL CONSTANTS----------------------------------------------------------------------------------------------------
 checked = 1			'Value for checked boxes
 unchecked = 0		'Value for unchecked boxes
@@ -96,6 +89,14 @@ If worker_county_code <> "MULTICOUNTY" then two_digit_county_code = right(worker
 Set objNet = CreateObject("WScript.NetWork") 
 windows_user_ID = objNet.UserName
 
+'This is the URL of our script repository, and should only change if the agency is beta or standard.
+If beta_agency = True then
+	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/beta/Script Files/"
+Else
+	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/release/Script Files/"
+End if
+
+'Loads worker sig
 Dim oTxtFile 
 With (CreateObject("Scripting.FileSystemObject"))
 	If .FileExists("C:\users\" & windows_user_ID & "\my documents\workersig.txt") Then
