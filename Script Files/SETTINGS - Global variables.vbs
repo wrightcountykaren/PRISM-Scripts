@@ -64,7 +64,7 @@ END WITH
 
 'This is the URL of our script repository, and should only change if the agency is beta or standard, or if there's a scriptwriter in the group.
 result = filter(script_developer_array, ucase(windows_user_ID))
-If ubound(result) <> 0 then
+If ubound(result) >= 0 then
 	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Script Files/"
 ElseIf beta_agency = True then
 	script_repository = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/beta/Script Files/"
