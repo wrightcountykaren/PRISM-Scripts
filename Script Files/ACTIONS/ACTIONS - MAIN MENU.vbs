@@ -3,7 +3,7 @@ name_of_script = "ACTIONS - Main menu.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+url = "https://raw.githubusercontent.com/Anoka-Script-Team/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request
@@ -43,6 +43,6 @@ EndDialog
 'Shows the dialog
 Dialog ACTIONS_main_menu_dialog
 If buttonpressed = cancel then stopscript
-IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_repository & "ACTIONS scripts/ACTIONS - Intake.vbs")
-IF ButtonPressed = ACTIONS_PALC_calculator_button then call run_from_GitHub(script_repository & "ACTIONS scripts/ACTIONS - PALC calculator.vbs")
+IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - INTAKE.vbs")
+IF ButtonPressed = ACTIONS_PALC_calculator_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - PALC CALCULATOR.vbs")
 
