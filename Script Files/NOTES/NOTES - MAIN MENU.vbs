@@ -3,7 +3,7 @@ name_of_script = "NOTES - Main menu.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+url = "https://raw.githubusercontent.com/Anoka-Script-Team/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request
@@ -50,8 +50,8 @@ EndDialog
 'Shows the dialog
 Dialog NOTES_main_menu_dialog
 If buttonpressed = cancel then StopScript
-IF ButtonPressed = NOTES_Client_contact_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Client contact.vbs")
-IF ButtonPressed = NOTES_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Date of the hearing (expro).vbs")
-IF ButtonPressed = NOTES_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Date of the hearing (judicial).vbs")
-IF ButtonPressed = NOTES_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Pay or report.vbs")
-IF ButtonPressed = NOTES_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES scripts/NOTES - Quarterly reviews.vbs")
+IF ButtonPressed = NOTES_Client_contact_button then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
+IF ButtonPressed = NOTES_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
+IF ButtonPressed = NOTES_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
+IF ButtonPressed = NOTES_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES/NOTES - PAY OR REPORT.vbs")
+IF ButtonPressed = NOTES_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES/NOTES - QUARTERLY REVIEWS.vbs")
