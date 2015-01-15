@@ -1,9 +1,6 @@
-'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
-Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-Set fso_command = run_another_script_fso.OpenTextFile("C:\Anoka-PRISM-Scripts\Script Files\SETTINGS - GLOBAL VARIABLES.vbs")
-text_from_the_other_script = fso_command.ReadAll
-fso_command.Close
-Execute text_from_the_other_script
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "NAV - CAWT.vbs"
+start_time = timer
 
 'LOADING SCRIPT
 url = script_repository & "/NAV/NAV - CAWT.vbs"
@@ -30,3 +27,13 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			"URL: " & url
 			StopScript
 END IF
+
+EMConnect ""
+
+PRISM_check_function
+
+
+call navigate_to_PRISM_screen("CAWT")
+
+
+script_end_procedure("")
