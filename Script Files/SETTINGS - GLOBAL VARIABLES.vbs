@@ -19,6 +19,8 @@ county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303", "~")
 'This is a variable which signifies the agency is beta (affects script URL)
 beta_agency = True
 
+county_attorney_array=array("Select one:", "Tonya D.F. Berzat", "Michael S. Barone", "Paul C. Clabo", "Dorrie B. Estebo", "Francine Mocchi", "Rachel Morrison", "D. Marie Sieber", "Brett Shading")  
+
 'An array of script developer usernames who should be accessing the master versions of the scripts (instead of the beta or release branches). Usernames should be ALL CAPS.
 script_developer_array = array("PWVKC45", "VKCARY", "VKC", "PASCHELL", "RCSCHULT")
 
