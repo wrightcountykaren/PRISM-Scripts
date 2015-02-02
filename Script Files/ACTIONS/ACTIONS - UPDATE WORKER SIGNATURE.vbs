@@ -1,5 +1,5 @@
 'STATS GATHERING--------------------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - Update Worker Sig"
+name_of_script = "ACTIONS - UPDATE WORKER SIGNATURE.vbs"
 start_time = timer
 
 worker_signature = InputBox("Please enter what you would like for your default worker signature (NOTE: this will create the signature that is auto-filled as worker signature in scripts)")
