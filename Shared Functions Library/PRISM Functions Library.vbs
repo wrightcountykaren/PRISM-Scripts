@@ -57,6 +57,16 @@ function back_to_SELF
   Loop until SELF_check = "SELF"
 End function
 
+Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
+	For each item in array_to_convert
+		If output_droplist_box = "" then 
+			output_droplist_box = item
+		Else
+			output_droplist_box = output_droplist_box & chr(9) & item
+		End if
+	Next
+End Function
+
 Function end_excel_and_script
   objExcel.Workbooks.Close
   objExcel.quit
