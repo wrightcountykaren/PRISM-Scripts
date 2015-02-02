@@ -1,6 +1,5 @@
-Anoka-PRISM-Scripts
+PRISM-Scripts
 ===================
+These PRISM scripts are designed with the goal of saving hundreds of hours of processing time for Child Support officers and staff, by automating simple tasks in the state's Child Support mainframe system. The lead developer and project manager for these scripts is Veronica Cary, found on GitHub at @theVKC (in her part-time capacity as System Support Technician with Anoka County Human Services). 
 
-Anoka County's PRISM scripts are maintained by Veronica Kahl Cary, in her part time capacity with Anoka County Economic Assistance. If your county or agency chooses to use them, it should be understood that Anoka County is not responsible for any ongoing support or script maintenance.
-
-Anoka's PRISM scripts are designed with the goal of saving hundreds of hours of processing time for Child Support officers and staff, by automating simple tasks in the state's Child Support mainframe system. 
+At this time, supported use of these scripts is restricted to agencies who are contributing their own script code to the project. As has been stipulated by the multiple MN counties working on this project. If you are interested in contributing code to the project, please contact Veronica Cary at veronica.cary@co.anoka.mn.us, or Robert Fewins-Kalb (Anoka's Technical Analyst/Operations Coordinator) at robert.kalb@co.anoka.mn.us.

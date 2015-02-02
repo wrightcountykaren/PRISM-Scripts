@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "NAV - NCDD.vbs"
+name_of_script = "NAV - CAWT.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
@@ -28,13 +28,12 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-
 EMConnect ""
 
 PRISM_check_function
 
 
-call navigate_to_PRISM_screen("NCDD")
+call navigate_to_PRISM_screen("CAWT")
 
 
 script_end_procedure("")
