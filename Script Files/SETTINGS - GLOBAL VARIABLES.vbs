@@ -3,7 +3,7 @@
 
 'Default directory: used by the script to determine if we're scriptwriters or not (scriptwriters use a default directory traditionally).
 '	This is modified by the installer, which will determine if this is a scriptwriter or a production user.
-default_directory = "C:\DHS-MAXIS-Scripts\Script Files\"
+default_directory = "C:\PRISM-Scripts\Script Files\"
 
 'This is used for determining whether script_end_procedure will also log usage info in an Access table.
 collecting_statistics = True
@@ -24,7 +24,7 @@ county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303", "~")
 beta_agency = True
 
 'An array of county attorneys. "Select one:" should ALWAYS be in there, and ALWAYS be first.
-county_attorney_array = array("Select one:", "Tonya D.F. Berzat", "Michael S. Barone", "Paul C. Clabo", "Dorrie B. Estebo", "Kay M. Gavinski", "Rachel Morrison", "D. Marie Sieber", "Brett Schading")
+county_attorney_array = array("Select one:", "Tonya D.F. Berzat", "Michael S. Barone", "Paul C. Clabo", "Dorrie B. Estebo", "Francine Mocchi", "Rachel Morrison", "D. Marie Sieber", "Brett Shading")  
 
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ With (CreateObject("Scripting.FileSystemObject"))
 END WITH
 
 'This is the URL of our script repository, and should only change if the agency is beta or standard, or if there's a scriptwriter in the group (which is determined by the default directory being C:\Anoka-PRISM-Scripts\Script Files.
-If default_directory = "C:\DHS-MAXIS-Scripts\Script Files\" then
+If default_directory = "C:\PRISM-Scripts\Script Files\" then
 	script_repository = "https://raw.githubusercontent.com/Anoka-Script-Team/Anoka-PRISM-Scripts/master/Script Files/"
 Else
 	If beta_agency = True then
