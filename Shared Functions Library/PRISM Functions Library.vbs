@@ -10,8 +10,15 @@
 '
 'Here's the code to add, including stats gathering pieces (without comments of course):
 '
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-'url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+''LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+'Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+'If beta_agency = "" then 			'For scriptwriters only
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'ElseIf beta_agency = True then		'For beta agencies and testers
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'Else								'For most users
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'End if
 'Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 'req.open "GET", url, False									'Attempts to open the URL
 'req.send													'Sends request
@@ -37,6 +44,9 @@
 'END IF
 
 'GLOBAL CONSTANTS----------------------------------------------------------------------------------------------------
+'Declares variables (thinking of option explicit in the future)
+Dim checked, unchecked, cancel, OK
+
 checked = 1			'Value for checked boxes
 unchecked = 0		'Value for unchecked boxes
 cancel = 0			'Value for cancel button in dialogs
