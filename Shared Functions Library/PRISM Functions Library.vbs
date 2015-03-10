@@ -67,6 +67,15 @@ function back_to_SELF
   Loop until SELF_check = "SELF"
 End function
 
+Function check_for_PRISM(end_script)
+	EMReadScreen PRISM_check, 5, 1, 36
+	IF end_script = True THEN 
+		If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
+	ELSE
+		If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
+	END IF
+END FUNCTION
+
 Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	For each item in array_to_convert
 		If output_droplist_box = "" then 
@@ -268,11 +277,6 @@ Function PRISM_case_number_validation(case_number_to_validate, outcome)
   End if
 End function
 
-function PRISM_check_function
-	EMReadScreen PRISM_check, 5, 1, 36
-	If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
-END function
-
 function run_another_script(script_path)
   Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
   Set fso_command = run_another_script_fso.OpenTextFile(script_path)
@@ -456,12 +460,16 @@ Function write_variable_in_CAAD(variable)
   End if
 End function
 
-Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)
+'----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
+function PRISM_check_function													'DEPRECIATED 03/10/2015
+	call check_for_PRISM(True)	'Defaults to True because that's how we always did it.
+END function
+
+Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)		'DEPRECIATED 03/10/2015
 	call write_bullet_and_variable_in_CAAD(bullet, variable)
 End function
 
-Function write_new_line_in_PRISM_case_note(variable)
+Function write_new_line_in_PRISM_case_note(variable)							'DEPRECIATED 03/10/2015
 	call write_variable_in_CAAD(variable)
 End function
-
 
