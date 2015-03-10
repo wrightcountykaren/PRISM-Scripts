@@ -10,8 +10,15 @@
 '
 'Here's the code to add, including stats gathering pieces (without comments of course):
 '
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-'url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+''LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+'Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+'If beta_agency = "" then 			'For scriptwriters only
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'ElseIf beta_agency = True then		'For beta agencies and testers
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'Else								'For most users
+'	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+'End if
 'Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 'req.open "GET", url, False									'Attempts to open the URL
 'req.send													'Sends request
@@ -37,6 +44,9 @@
 'END IF
 
 'GLOBAL CONSTANTS----------------------------------------------------------------------------------------------------
+'Declares variables (thinking of option explicit in the future)
+Dim checked, unchecked, cancel, OK
+
 checked = 1			'Value for checked boxes
 unchecked = 0		'Value for unchecked boxes
 cancel = 0			'Value for cancel button in dialogs
@@ -56,6 +66,25 @@ function back_to_SELF
     EMReadScreen SELF_check, 4, 2, 50
   Loop until SELF_check = "SELF"
 End function
+
+Function check_for_PRISM(end_script)
+	EMReadScreen PRISM_check, 5, 1, 36
+	IF end_script = True THEN 
+		If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
+	ELSE
+		If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
+	END IF
+END FUNCTION
+
+Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
+	For each item in array_to_convert
+		If output_droplist_box = "" then 
+			output_droplist_box = item
+		Else
+			output_droplist_box = output_droplist_box & chr(9) & item
+		End if
+	Next
+End Function
 
 Function end_excel_and_script
   objExcel.Workbooks.Close
@@ -248,11 +277,6 @@ Function PRISM_case_number_validation(case_number_to_validate, outcome)
   End if
 End function
 
-function PRISM_check_function
-	EMReadScreen PRISM_check, 5, 1, 36
-	If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
-END function
-
 function run_another_script(script_path)
   Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
   Set fso_command = run_another_script_fso.OpenTextFile(script_path)
@@ -360,7 +384,9 @@ function transmit
   EMWaitReady 0, 0
 end function
 
-Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
+Function write_bullet_and_variable_in_CAAD(bullet, variable)
+  spaces_count = 6	'Temporary just to make it work
+
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(bullet)) >= 78) or row = 21) and line_check = "26" then 
@@ -372,26 +398,26 @@ Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-  variable_array = split(editbox, " ")
+  variable_array = split(variable, " ")
   EMSendKey "* " & bullet & ": "
-  For each editbox_word in variable_array 
+  For each variable_word in variable_array 
     EMGetCursor row, col 
     EMReadScreen line_check, 2, 15, 2
-    If ((row = 20 and col + (len(editbox_word)) >= 78) or row = 21) and line_check = "26" then 
+    If ((row = 20 and col + (len(variable_word)) >= 78) or row = 21) and line_check = "26" then 
       MsgBox "You've run out of room in this case note. The script will now stop."
       StopScript
     End if
-    If (row = 20 and col + (len(editbox_word)) >= 78) or (row = 16 and col = 4) or row = 21 then
+    If (row = 20 and col + (len(variable_word)) >= 78) or (row = 16 and col = 4) or row = 21 then
       EMSendKey "<PF8>"
       EMWaitReady 0, 0
       EMSetCursor 16, 4
     End if
     EMGetCursor row, col 
-    If (row < 20 and col + (len(editbox_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count) 
+    If (row < 20 and col + (len(variable_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count) 
 '    If (row = 16 and col = 4) then EMSendKey space(spaces_count)		'<<<REPLACED WITH BELOW IN ORDER TO TEST column issue
     If (col = 4) then EMSendKey space(spaces_count)
-    EMSendKey editbox_word & " "
-    If right(editbox_word, 1) = ";" then 
+    EMSendKey variable_word & " "
+    If right(variable_word, 1) = ";" then 
       EMSendKey "<backspace>" & "<backspace>" 
       EMGetCursor row, col 
       If row = 20 then
@@ -411,9 +437,9 @@ Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-End function
+End Function
 
-Function write_new_line_in_PRISM_case_note(x)
+Function write_variable_in_CAAD(variable)
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then 
@@ -434,4 +460,16 @@ Function write_new_line_in_PRISM_case_note(x)
   End if
 End function
 
+'----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
+function PRISM_check_function													'DEPRECIATED 03/10/2015
+	call check_for_PRISM(True)	'Defaults to True because that's how we always did it.
+END function
+
+Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)		'DEPRECIATED 03/10/2015
+	call write_bullet_and_variable_in_CAAD(bullet, variable)
+End function
+
+Function write_new_line_in_PRISM_case_note(variable)							'DEPRECIATED 03/10/2015
+	call write_variable_in_CAAD(variable)
+End function
 

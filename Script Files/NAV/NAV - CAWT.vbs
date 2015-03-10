@@ -1,12 +1,9 @@
-'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
-Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-Set fso_command = run_another_script_fso.OpenTextFile("C:\PRISM-Scripts\Script Files\SETTINGS - GLOBAL VARIABLES.vbs")
-text_from_the_other_script = fso_command.ReadAll
-fso_command.Close
-Execute text_from_the_other_script
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "NAV - CAWT.vbs"
+start_time = timer
 
-'LOADING SCRIPT
-url = script_repository & "/NAV/NAV - CAFS.vbs"
+'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
+url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request
@@ -30,3 +27,13 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			"URL: " & url
 			StopScript
 END IF
+
+EMConnect ""
+
+PRISM_check_function
+
+
+call navigate_to_PRISM_screen("CAWT")
+
+
+script_end_procedure("")

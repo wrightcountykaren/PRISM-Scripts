@@ -6,7 +6,7 @@ fso_command.Close
 Execute text_from_the_other_script
 
 'LOADING SCRIPT
-url = script_repository & "/NAV/NAV - CAFS.vbs"
+url = script_repository & "/NAV/NAV - FIND THAT SCREEN IN PRISM.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request

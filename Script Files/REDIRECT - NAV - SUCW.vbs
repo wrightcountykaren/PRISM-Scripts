@@ -1,12 +1,12 @@
 'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
 Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-Set fso_command = run_another_script_fso.OpenTextFile("C:\Anoka-PRISM-Scripts\Script Files\SETTINGS - Global variables.vbs")
+Set fso_command = run_another_script_fso.OpenTextFile("C:\PRISM-Scripts\Script Files\SETTINGS - GLOBAL VARIABLES.vbs")
 text_from_the_other_script = fso_command.ReadAll
 fso_command.Close
 Execute text_from_the_other_script
 
 'LOADING SCRIPT
-url = script_repository & "/NAV scripts/NAV - SUCW.vbs"
+url = script_repository & "/NAV/NAV - SUCW.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request
