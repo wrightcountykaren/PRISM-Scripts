@@ -451,7 +451,7 @@ Function write_variable_in_CAAD(variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-  EMSendKey x & "<newline>"
+  EMSendKey variable & "<newline>"
   EMGetCursor row, col 
   If (row = 20 and col + (len(x)) >= 78) or (row = 21) then
     EMSendKey "<PF8>"
