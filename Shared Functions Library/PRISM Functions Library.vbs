@@ -433,7 +433,7 @@ Function write_bullet_and_variable_in_CAAD(bullet, variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-End if
+End Function
 
 Function write_variable_in_CAAD(variable)
   EMGetCursor row, col 
@@ -457,7 +457,7 @@ Function write_variable_in_CAAD(variable)
 End function
 
 Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)
-	write_bullet_and_variable_in_CAAD(bullet, variable)
+	call write_bullet_and_variable_in_CAAD(bullet, variable)
 End function
 
 Function write_new_line_in_PRISM_case_note(variable)
