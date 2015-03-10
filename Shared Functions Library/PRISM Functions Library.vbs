@@ -380,7 +380,9 @@ function transmit
   EMWaitReady 0, 0
 end function
 
-Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
+Function write_bullet_and_variable_in_CAAD(bullet, variable)
+  spaces_count = 6	'Temporary just to make it work
+
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(bullet)) >= 78) or row = 21) and line_check = "26" then 
@@ -392,26 +394,26 @@ Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-  variable_array = split(editbox, " ")
+  variable_array = split(variable, " ")
   EMSendKey "* " & bullet & ": "
-  For each editbox_word in variable_array 
+  For each variable_word in variable_array 
     EMGetCursor row, col 
     EMReadScreen line_check, 2, 15, 2
-    If ((row = 20 and col + (len(editbox_word)) >= 78) or row = 21) and line_check = "26" then 
+    If ((row = 20 and col + (len(variable_word)) >= 78) or row = 21) and line_check = "26" then 
       MsgBox "You've run out of room in this case note. The script will now stop."
       StopScript
     End if
-    If (row = 20 and col + (len(editbox_word)) >= 78) or (row = 16 and col = 4) or row = 21 then
+    If (row = 20 and col + (len(variable_word)) >= 78) or (row = 16 and col = 4) or row = 21 then
       EMSendKey "<PF8>"
       EMWaitReady 0, 0
       EMSetCursor 16, 4
     End if
     EMGetCursor row, col 
-    If (row < 20 and col + (len(editbox_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count) 
+    If (row < 20 and col + (len(variable_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count) 
 '    If (row = 16 and col = 4) then EMSendKey space(spaces_count)		'<<<REPLACED WITH BELOW IN ORDER TO TEST column issue
     If (col = 4) then EMSendKey space(spaces_count)
-    EMSendKey editbox_word & " "
-    If right(editbox_word, 1) = ";" then 
+    EMSendKey variable_word & " "
+    If right(variable_word, 1) = ";" then 
       EMSendKey "<backspace>" & "<backspace>" 
       EMGetCursor row, col 
       If row = 20 then
@@ -431,9 +433,9 @@ Function write_editbox_in_PRISM_case_note(bullet, editbox, spaces_count)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
-End function
+End if
 
-Function write_new_line_in_PRISM_case_note(x)
+Function write_variable_in_CAAD(variable)
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then 
@@ -452,6 +454,14 @@ Function write_new_line_in_PRISM_case_note(x)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
+End function
+
+Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)
+	write_bullet_and_variable_in_CAAD(bullet, variable)
+End function
+
+Function write_new_line_in_PRISM_case_note(variable)
+	call write_variable_in_CAAD(variable)
 End function
 
 
