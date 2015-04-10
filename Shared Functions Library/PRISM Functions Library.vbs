@@ -473,3 +473,8 @@ Function write_new_line_in_PRISM_case_note(variable)							'DEPRECIATED 03/10/20
 	call write_variable_in_CAAD(variable)
 End function
 
+FUNCTION write_value_and_transmit(input_value, PRISM_row, PRISM_col)
+	EMWriteScreen input_value, PRISM_row, PRISM_col
+	transmit
+END FUNCTION
+
