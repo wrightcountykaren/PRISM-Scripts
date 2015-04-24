@@ -238,10 +238,25 @@ Function PF12
   EMWaitReady 0, 0
 End function
 
+Function PF13
+  EMSendKey "<PF13>"
+  EMWaitReady 0, 0
+End function
+
+Function PF14
+  EMSendKey "<PF14>"
+  EMWaitReady 0, 0
+End function
+
 function PF20
   EMSendKey "<PF20>"
   EMWaitReady 0, 0
 end function
+
+Function PF21
+  EMSendKey "<PF21>"
+  EMWaitReady 0, 0
+End function
 
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
