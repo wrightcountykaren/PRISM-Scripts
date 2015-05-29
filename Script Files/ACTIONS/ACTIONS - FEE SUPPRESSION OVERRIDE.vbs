@@ -1,5 +1,3 @@
-option explicit
-
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)-------------------------------------------------------------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
@@ -102,15 +100,3 @@ transmit
 PF3
 
 script_end_procedure("")                                                                     	'stopping the script
-
-
-
-
-
-
-
-
-
-
-
-Enter file contents here
