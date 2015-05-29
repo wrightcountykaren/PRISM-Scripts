@@ -30,8 +30,21 @@ objExcel.Visible = True 'Set this to False to make the Excel spreadsheet go away
 Set objWorkbook = objExcel.Workbooks.Add() 
 objExcel.DisplayAlerts = True 'Set this to false to make alerts go away. This is necessary in production.
 
+Dim CAFS_checkbox
+BeginDialog CALI_to_excel_Dialog, 0, 0, 196, 70, "CALI To Excel"
+  CheckBox 5, 10, 115, 10, "Check here if you want to include total arrears, monthly accrual amount, and non-accrual amount to Excel", CAFS_checkbox
+  Text 15, 20, 110, 30, "total arrears, monthly accrual amount, and non-accrual amount to Excel from CAFS. "
+  ButtonGroup ButtonPressed
+    OkButton 135, 10, 50, 15
+    CancelButton 135, 30, 50, 15
+  Text 10, 50, 120, 15, "(This takes more time to process)"
+EndDialog
+
 'Connects to Bluezone
 EMConnect ""
+
+					DIALOG CALI_to_excel_Dialog
+     					IF ButtonPressed = 0 THEN StopScript
 
 PF3
 
@@ -99,6 +112,35 @@ Do
 
 Loop until prism_case_number = ""
 
+If CAFS_checkbox = checked then
+
+EMWriteScreen "CAFS", 21, 18 
+Transmit
+
+excel_row = 2
+
+Do
+	prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
+	EMWriteScreen Left (prism_case_number, 10), 4, 8
+	EMWriteScreen Right (prism_case_number, 2), 4, 19
+	EMWriteScreen "D", 3, 29
+	Transmit 
+	EMReadScreen amount_of_arrears, 10, 12, 68
+	ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
+	EMReadScreen monthly_accrual, 7, 9, 32
+	ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
+	EMReadScreen monthly_non_accrual, 7, 10, 32
+	ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
+	excel_row = excel_row + 1
+	
+
+Loop until prism_case_number = ""
+
+End If
+
+
+
+
 ObjExcel.Cells(1, 1).Value = "Case Number"
 ObjExcel.Cells(1, 2).Value = "Function"
 ObjExcel.Cells(1, 3).Value = "Program"
@@ -106,8 +148,13 @@ ObjExcel.Cells(1, 4).Value = "Interstate?"
 ObjExcel.Cells(1, 5).Value = "CP Name"
 ObjExcel.Cells(1, 6).Value = "NCP Name"
 ObjExcel.Cells(1, 7).Value = "Last Payment Date"
+If CAFS_checkbox = checked then
+ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
+ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
+ObjExcel.Cells(1, 10).Value = "Monthly Non-Accrual"
+End If
 
 'Autofitting columns
-For col_to_autofit = 1 to 7
+For col_to_autofit = 1 to 10
 	ObjExcel.columns(col_to_autofit).AutoFit()
 Next
