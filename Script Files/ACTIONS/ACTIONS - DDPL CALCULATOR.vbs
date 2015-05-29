@@ -98,4 +98,4 @@ Loop until end_of_data_check = "*** End of Data ***"
 string_for_msgbox = " Total payments issued for the period of " & PRISM_begin_date & " through " & PRISM_end_date & " is $" & total_amount_issued 
 
 MsgBox string_for_msgbox 
-Enter file contents here
+
