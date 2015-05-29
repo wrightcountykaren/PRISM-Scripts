@@ -86,6 +86,24 @@ Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	Next
 End Function
 
+FUNCTION create_mainframe_friendly_date(date_variable, screen_row, screen_col, year_type) 
+	var_month = datepart("m", date_variable)
+	IF len(var_month) = 1 THEN var_month = "0" & var_month
+	EMWriteScreen var_month & "/", screen_row, screen_col
+	var_day = datepart("d", date_variable)
+	IF len(var_day) = 1 THEN var_day = "0" & var_day
+	EMWriteScreen var_day & "/", screen_row, screen_col + 3
+	If year_type = "YY" then
+		var_year = right(datepart("yyyy", date_variable), 2)
+	ElseIf year_type = "YYYY" then
+		var_year = datepart("yyyy", date_variable)
+	Else
+		MsgBox "Year type entered incorrectly. Fourth parameter of function create_mainframe_friendly_date should read ""YYYY"" or ""YY"". The script will now stop."
+		StopScript
+	END IF
+	EMWriteScreen var_year, screen_row, screen_col + 6
+END FUNCTION
+
 Function end_excel_and_script
   objExcel.Workbooks.Close
   objExcel.quit
@@ -238,10 +256,65 @@ Function PF12
   EMWaitReady 0, 0
 End function
 
+Function PF13
+  EMSendKey "<PF13>"
+  EMWaitReady 0, 0
+End function
+
+Function PF14
+  EMSendKey "<PF14>"
+  EMWaitReady 0, 0
+End function
+
+Function PF15
+  EMSendKey "<PF15>"
+  EMWaitReady 0, 0
+End function
+
+Function PF16
+  EMSendKey "<PF16>"
+  EMWaitReady 0, 0
+End function
+
+Function PF17
+  EMSendKey "<PF17>"
+  EMWaitReady 0, 0
+End function
+
+Function PF18
+  EMSendKey "<PF18>"
+  EMWaitReady 0, 0
+End function
+
+Function PF19
+  EMSendKey "<PF19>"
+  EMWaitReady 0, 0
+End function
+
 function PF20
   EMSendKey "<PF20>"
   EMWaitReady 0, 0
 end function
+
+Function PF21
+  EMSendKey "<PF21>"
+  EMWaitReady 0, 0
+End function
+
+Function PF22
+  EMSendKey "<PF22>"
+  EMWaitReady 0, 0
+End function
+
+Function PF23
+  EMSendKey "<PF23>"
+  EMWaitReady 0, 0
+End function
+
+Function PF24
+  EMSendKey "<PF24>"
+  EMWaitReady 0, 0
+End function
 
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
@@ -384,6 +457,20 @@ function transmit
   EMWaitReady 0, 0
 end function
 
+FUNCTION word_doc_open(doc_location, objWord, objDoc)
+	'Opens Word object
+	Set objWord = CreateObject("Word.Application")
+	objWord.Visible = True		'We want to see it
+	
+	'Opens the specific Word doc
+	set objDoc = objWord.Documents.Add(doc_location)
+END FUNCTION
+
+FUNCTION word_doc_update_field(field_name, variable_for_field, objDoc)
+	'Simply enters the Word document field based on these three criteria
+	objDoc.FormFields(field_name).Result = variable_for_field
+END FUNCTION
+
 Function write_bullet_and_variable_in_CAAD(bullet, variable)
   spaces_count = 6	'Temporary just to make it work
 
@@ -460,6 +547,33 @@ Function write_variable_in_CAAD(variable)
   End if
 End function
 
+'-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+req.send													'Sends request
+IF req.Status = 200 THEN									'200 means great success
+	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+	Execute req.responseText								'Executes the script code
+ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
+	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+			vbCr & _
+			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			vbCr & _
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			vbTab & "- The name of the script you are running." & vbCr &_
+			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
+			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
+			vbTab & vbTab & "responsible for network issues." & vbCr &_
+			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
+			vbCr & _
+			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			vbCr &_
+			"URL: " & FuncLib_URL
+			script_end_procedure("Script ended due to error connecting to GitHub.")
+END IF
+
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
 	call check_for_PRISM(True)	'Defaults to True because that's how we always did it.
@@ -472,4 +586,9 @@ End function
 Function write_new_line_in_PRISM_case_note(variable)							'DEPRECIATED 03/10/2015
 	call write_variable_in_CAAD(variable)
 End function
+
+FUNCTION write_value_and_transmit(input_value, PRISM_row, PRISM_col)
+	EMWriteScreen input_value, PRISM_row, PRISM_col
+	transmit
+END FUNCTION
 
