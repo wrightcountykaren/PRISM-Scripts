@@ -86,6 +86,24 @@ Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	Next
 End Function
 
+FUNCTION create_mainframe_friendly_date(date_variable, screen_row, screen_col, year_type) 
+	var_month = datepart("m", date_variable)
+	IF len(var_month) = 1 THEN var_month = "0" & var_month
+	EMWriteScreen var_month & "/", screen_row, screen_col
+	var_day = datepart("d", date_variable)
+	IF len(var_day) = 1 THEN var_day = "0" & var_day
+	EMWriteScreen var_day & "/", screen_row, screen_col + 3
+	If year_type = "YY" then
+		var_year = right(datepart("yyyy", date_variable), 2)
+	ElseIf year_type = "YYYY" then
+		var_year = datepart("yyyy", date_variable)
+	Else
+		MsgBox "Year type entered incorrectly. Fourth parameter of function create_mainframe_friendly_date should read ""YYYY"" or ""YY"". The script will now stop."
+		StopScript
+	END IF
+	EMWriteScreen var_year, screen_row, screen_col + 6
+END FUNCTION
+
 Function end_excel_and_script
   objExcel.Workbooks.Close
   objExcel.quit
@@ -238,10 +256,25 @@ Function PF12
   EMWaitReady 0, 0
 End function
 
+Function PF13
+  EMSendKey "<PF13>"
+  EMWaitReady 0, 0
+End function
+
+Function PF14
+  EMSendKey "<PF14>"
+  EMWaitReady 0, 0
+End function
+
 function PF20
   EMSendKey "<PF20>"
   EMWaitReady 0, 0
 end function
+
+Function PF21
+  EMSendKey "<PF21>"
+  EMWaitReady 0, 0
+End function
 
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
