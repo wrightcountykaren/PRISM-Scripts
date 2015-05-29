@@ -266,6 +266,31 @@ Function PF14
   EMWaitReady 0, 0
 End function
 
+Function PF15
+  EMSendKey "<PF15>"
+  EMWaitReady 0, 0
+End function
+
+Function PF16
+  EMSendKey "<PF16>"
+  EMWaitReady 0, 0
+End function
+
+Function PF17
+  EMSendKey "<PF17>"
+  EMWaitReady 0, 0
+End function
+
+Function PF18
+  EMSendKey "<PF18>"
+  EMWaitReady 0, 0
+End function
+
+Function PF19
+  EMSendKey "<PF19>"
+  EMWaitReady 0, 0
+End function
+
 function PF20
   EMSendKey "<PF20>"
   EMWaitReady 0, 0
@@ -273,6 +298,21 @@ end function
 
 Function PF21
   EMSendKey "<PF21>"
+  EMWaitReady 0, 0
+End function
+
+Function PF22
+  EMSendKey "<PF22>"
+  EMWaitReady 0, 0
+End function
+
+Function PF23
+  EMSendKey "<PF23>"
+  EMWaitReady 0, 0
+End function
+
+Function PF24
+  EMSendKey "<PF24>"
   EMWaitReady 0, 0
 End function
 
@@ -416,6 +456,20 @@ function transmit
   EMSendKey "<enter>"
   EMWaitReady 0, 0
 end function
+
+FUNCTION word_doc_open(doc_location, objWord, objDoc)
+	'Opens Word object
+	Set objWord = CreateObject("Word.Application")
+	objWord.Visible = True		'We want to see it
+	
+	'Opens the specific Word doc
+	set objDoc = objWord.Documents.Add(doc_location)
+END FUNCTION
+
+FUNCTION word_doc_update_field(field_name, variable_for_field, objDoc)
+	'Simply enters the Word document field based on these three criteria
+	objDoc.FormFields(field_name).Result = variable_for_field
+END FUNCTION
 
 Function write_bullet_and_variable_in_CAAD(bullet, variable)
   spaces_count = 6	'Temporary just to make it work
