@@ -547,6 +547,33 @@ Function write_variable_in_CAAD(variable)
   End if
 End function
 
+'-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+req.send													'Sends request
+IF req.Status = 200 THEN									'200 means great success
+	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+	Execute req.responseText								'Executes the script code
+ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
+	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+			vbCr & _
+			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			vbCr & _
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			vbTab & "- The name of the script you are running." & vbCr &_
+			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
+			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
+			vbTab & vbTab & "responsible for network issues." & vbCr &_
+			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
+			vbCr & _
+			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			vbCr &_
+			"URL: " & FuncLib_URL
+			script_end_procedure("Script ended due to error connecting to GitHub.")
+END IF
+
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
 	call check_for_PRISM(True)	'Defaults to True because that's how we always did it.
