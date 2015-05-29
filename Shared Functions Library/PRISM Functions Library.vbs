@@ -238,10 +238,25 @@ Function PF12
   EMWaitReady 0, 0
 End function
 
+Function PF13
+  EMSendKey "<PF13>"
+  EMWaitReady 0, 0
+End function
+
+Function PF14
+  EMSendKey "<PF14>"
+  EMWaitReady 0, 0
+End function
+
 function PF20
   EMSendKey "<PF20>"
   EMWaitReady 0, 0
 end function
+
+Function PF21
+  EMSendKey "<PF21>"
+  EMWaitReady 0, 0
+End function
 
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
@@ -472,4 +487,9 @@ End function
 Function write_new_line_in_PRISM_case_note(variable)							'DEPRECIATED 03/10/2015
 	call write_variable_in_CAAD(variable)
 End function
+
+FUNCTION write_value_and_transmit(input_value, PRISM_row, PRISM_col)
+	EMWriteScreen input_value, PRISM_row, PRISM_col
+	transmit
+END FUNCTION
 

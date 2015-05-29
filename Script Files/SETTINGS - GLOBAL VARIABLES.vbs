@@ -6,7 +6,7 @@
 default_directory = "C:\PRISM-Scripts\Script Files\"
 
 'This is used for determining whether script_end_procedure will also log usage info in an Access table.
-collecting_statistics = True
+collecting_statistics = False
 
 'This is the file path for the statistics Access database.
 stats_database_path = "Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"

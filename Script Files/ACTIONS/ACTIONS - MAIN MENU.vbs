@@ -29,13 +29,15 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'DIALOGS---------------------------------------------------------------------------
-BeginDialog ACTIONS_main_menu_dialog, 0, 0, 306, 65, "ACTIONS main menu dialog"
+BeginDialog ACTIONS_main_menu_dialog, 0, 0, 306, 95, "ACTIONS main menu dialog"
   ButtonGroup ButtonPressed
-    CancelButton 250, 45, 50, 15
-    PushButton 5, 5, 30, 10, "Intake", ACTIONS_intake_button
-    PushButton 5, 30, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
-  Text 40, 5, 260, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
-  Text 70, 30, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
+    PushButton 5, 10, 30, 10, "Intake", ACTIONS_intake_button
+    PushButton 5, 35, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
+    PushButton 5, 55, 60, 10, "Prorate Support", ACTIONS_prorate_support_button
+    CancelButton 250, 75, 50, 15
+  Text 70, 35, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
+  Text 40, 10, 260, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
+  Text 70, 55, 225, 10, "- Calculator for deteremining pro-rated support for partial months."
 EndDialog
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------
@@ -43,6 +45,7 @@ EndDialog
 'Shows the dialog
 Dialog ACTIONS_main_menu_dialog
 If buttonpressed = cancel then stopscript
+IF ButtonPressed = ACTIONS_prorate_support_button THEN call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - PRORATE SUPPORT.vbs")
 IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - INTAKE.vbs")
 IF ButtonPressed = ACTIONS_PALC_calculator_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - PALC CALCULATOR.vbs")
 
