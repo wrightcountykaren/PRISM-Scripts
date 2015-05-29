@@ -1,5 +1,3 @@
-Option Explicit
-
 DIM beta_agency
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
