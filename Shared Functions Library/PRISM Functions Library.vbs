@@ -350,14 +350,6 @@ Function PRISM_case_number_validation(case_number_to_validate, outcome)
   End if
 End function
 
-function run_another_script(script_path)
-  Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-  Set fso_command = run_another_script_fso.OpenTextFile(script_path)
-  text_from_the_other_script = fso_command.ReadAll
-  fso_command.Close
-  Execute text_from_the_other_script
-end function
-
 'Runs a script from GitHub.
 FUNCTION run_from_GitHub(url)
 	Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
