@@ -112,19 +112,19 @@ If contact_type_CP = "" and contact_type_NCP <> "" and contact_type_other = "" t
 If contact_type_CP = "" and contact_type_NCP = "" and contact_type_other <> "" then contact_type = contact_type_other
 
 'Writing the case note
-EMWriteScreen left(contact_type, 5), 4, 54				'The contact type (only need the left 5 characters)
-EMWriteScreen date_of_contact, 4, 37					'Writing the contact date as the activity date on CAAD
+EMWriteScreen left(contact_type, 5), 4, 54					'The contact type (only need the left 5 characters)
+CALL create_mainframe_friendly_date(date_of_contact, 4, 37, "YYYY")	'Writing the contact date as the activity date on CAAD
 EMSetCursor 16, 4 								'Because the PRISM case note functions require the cursor to start here
-If issue <> "" then call write_editbox_in_PRISM_case_note("Issue/subject", issue, 5)
-If verified_ID_check = 1 then call write_new_line_in_PRISM_case_note("* Verified ID.")
-If actions_taken <> "" then call write_editbox_in_PRISM_case_note("Actions taken", actions_taken, 5)
-If verifs_needed <> "" then call write_editbox_in_PRISM_case_note("Verifs needed", verifs_needed, 5)
-If special_instructions_for_client <> "" then call write_editbox_in_PRISM_case_note("Special Instructions for Client", special_instructions_for_client, 5)
-If case_status <> "" then call write_editbox_in_PRISM_case_note("Case status", case_status, 5)
-If left_generic_message_check = 1 then call write_new_line_in_PRISM_case_note("* Left client a generic message requesting a return call.")
-If phone_number <> "" then call write_editbox_in_PRISM_case_note("Phone number", phone_number, 5)
-If time_contact_was_made <> "" then call write_editbox_in_PRISM_case_note("Time contact was made", time_contact_was_made, 5)
-call write_new_line_in_PRISM_case_note("---")
-call write_new_line_in_PRISM_case_note(worker_signature)
+If issue <> "" then call write_bullet_and_variable_in_CAAD("Issue/subject", issue)
+If verified_ID_check = 1 then call write_variable_in_CAAD("* Verified ID.")
+If actions_taken <> "" then call write_bullet_and_variable_in_CAAD("Actions taken", actions_taken)
+If verifs_needed <> "" then call write_bullet_and_variable_in_CAAD("Verifs needed", verifs_needed)
+If special_instructions_for_client <> "" then call write_bullet_and_variable_in_CAAD("Special Instructions for Client", special_instructions_for_client)
+If case_status <> "" then call write_bullet_and_variable_in_CAAD("Case status", case_status)
+If left_generic_message_check = 1 then call write_variable_in_CAAD("* Left client a generic message requesting a return call.")
+If phone_number <> "" then call write_bullet_and_variable_in_CAAD("Phone number", phone_number)
+If time_contact_was_made <> "" then call write_bullet_and_variable_in_CAAD("Time contact was made", time_contact_was_made)
+call write_variable_in_CAAD("---")
+call write_variable_in_CAAD(worker_signature)
 
 script_end_procedure("")
