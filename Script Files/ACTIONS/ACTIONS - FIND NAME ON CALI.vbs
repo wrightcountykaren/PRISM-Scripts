@@ -67,17 +67,17 @@ EndDialog
 'position listing screen is open, the screen must be exited before the script can run properly.  This function checks to see if either of 
 'these circumstances apply.  If the position list is open, the script exits the list, and if the CALI screen is open, navigates away so that
 'the report will function properly.
-FUNCTION refresh_CALI_screen
-	EMReadScreen check_for_position_list, 22, 8, 36
-		IF check_for_position_list = "Caseload Position List" THEN
-			PF3
-		END IF
-	EMReadScreen check_for_caseload_list, 13, 2, 32
-		If check_for_caseload_list = "Caseload List" THEN	
-			CALL navigate_to_PRISM_screen("MAIN")
-			transmit
-		END IF
-END FUNCTION
+'FUNCTION refresh_CALI_screen
+'	EMReadScreen check_for_position_list, 22, 8, 36
+'		IF check_for_position_list = "Caseload Position List" THEN
+'			PF3
+'		END IF
+'	EMReadScreen check_for_caseload_list, 13, 2, 32
+'		If check_for_caseload_list = "Caseload List" THEN	
+'			CALL navigate_to_PRISM_screen("MAIN")
+'			transmit
+'		END IF
+'END FUNCTION
 '***********************************************************************************************************************************************
 '*************************************************************************************
 ' Custom Function for finding a name in CALI
@@ -88,7 +88,15 @@ END FUNCTION
 ' CALI_position = the position to be searched
 '*************************************************************************************
 FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
-	refresh_CALI_screen	
+	EMReadScreen check_for_position_list, 22, 8, 36
+		IF check_for_position_list = "Caseload Position List" THEN
+			PF3
+		END IF
+	EMReadScreen check_for_caseload_list, 13, 2, 32
+		If check_for_caseload_list = "Caseload List" THEN	
+			CALL navigate_to_PRISM_screen("MAIN")
+			transmit
+		END IF	
 	CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered, and display the desired CALI listing
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
