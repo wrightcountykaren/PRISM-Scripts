@@ -88,7 +88,7 @@ END FUNCTION
 ' CALI_position = the position to be searched
 '*************************************************************************************
 FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
-	CALL refresh_CALI_screen	
+	refresh_CALI_screen	
 	CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered, and display the desired CALI listing
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
