@@ -31,7 +31,7 @@ END IF
 'DIALOGS---------------------------------------------------------------------------
 BeginDialog ACTIONS_main_menu_dialog, 0, 0, 306, 145, "ACTIONS main menu dialog"
   ButtonGroup ButtonPressed
-    PushButton 5, 10, 70, 10, "Find Name on CALI", find_name_on_cali_button
+    PushButton 5, 10, 70, 10, "Find Name on CALI", ACTIONS_find_name_on_cali_button
     PushButton 5, 30, 30, 10, "Intake", ACTIONS_intake_button
     PushButton 5, 55, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
     PushButton 5, 75, 60, 10, "Prorate Support", ACTIONS_prorate_support_button
