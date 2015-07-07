@@ -1,13 +1,9 @@
-'OPTION EXPLICIT
-'DIM beta_agency, name_of_script, start_time, date_of_contact
-'DIM URL, REQ, FSO
-
 'STATS GATHERING----------------------------------------------------------------------------------------------------
 name_of_script = "NOTES - CLIENT CONTACT.vbs"
 start_time = timer
 
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
-'date_of_contact = date & ""	'defaults to today = changed this from original to enter date as a text string in the body of the CAAD note instead of Activity Date
+date_of_contact = date & ""	'defaults to today
 
 'FUNCTIONS----------------------------------------------------------------------------------------------------
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
