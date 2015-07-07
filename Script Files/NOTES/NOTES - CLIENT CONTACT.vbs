@@ -3,7 +3,7 @@ name_of_script = "NOTES - CLIENT CONTACT.vbs"
 start_time = timer
 
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
-'date_of_contact = date & ""	'defaults to today
+date_of_contact = date & ""	'defaults to today
 
 'FUNCTIONS----------------------------------------------------------------------------------------------------
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
