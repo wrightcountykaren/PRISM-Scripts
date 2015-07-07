@@ -124,14 +124,14 @@ IF contact_type_CP = "" and contact_type_NCP = "" and contact_type_other <> "" T
 EMWriteScreen left(contact_type, 5), 4, 54				'The contact type (only need the left 5 characters)
 
 EMSetCursor 16, 4 								'Because the PRISM case note functions require the cursor to start here
-IF issue <> "" THEN CALL write_variable_in_CAAD("Issue/subject", issue)
-CALL write_bullet_and_variable_in_CAAD("Date of Contact", date_of_contact & " ", time_contact_was_made)
-IF verified_ID_check = 1 THEN CALL write_bullet_and_variable_in_CAAD("Verified ID.")
+IF issue <> "" THEN CALL write_bullet_and_variable_in_CAAD("Issue/subject", issue)
+CALL write_bullet_and_variable_in_CAAD("Date of Contact", date_of_contact & ", " & time_contact_was_made)
+IF verified_ID_check = 1 THEN CALL write_variable_in_CAAD("* Verified ID.")
 IF actions_taken <> "" THEN CALL write_bullet_and_variable_in_CAAD("Actions taken", actions_taken)
 IF verifs_needed <> "" THEN CALL write_bullet_and_variable_in_CAAD("Verifs needed", verifs_needed)
 IF special_instructions_for_client <> "" THEN CALL write_bullet_and_variable_in_CAAD("Special Instructions for Client", special_instructions_for_client)
 IF case_status <> "" THEN CALL write_bullet_and_variable_in_CAAD("Case status", case_status)
-IF left_generic_message_check = 1 THEN CALL write_bullet_and_variable_in_CAAD("Left client a generic message requesting a return call.")
+IF left_generic_message_check = 1 THEN CALL write_variable_in_CAAD("* Left client a generic message requesting a return call.")
 IF phone_number <> "" THEN CALL write_bullet_and_variable_in_CAAD("Phone number", phone_number)
 CALL write_variable_in_CAAD("---")
 CALL write_variable_in_CAAD(worker_signature)
