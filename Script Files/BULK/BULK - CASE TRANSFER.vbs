@@ -166,7 +166,6 @@ CALL navigate_to_PRISM_screen("CAAS")
 
 err_workers = ""
 FOR i = 0 TO number_of_workers
-	msgbox worker_array(i, 0) & vbCr & worker_array(i, 1)
 	IF worker_array(i, 1) = "WORKER NOT FOUND" THEN 
 		err_workers = err_workers & vbCr & "     " & worker_array(i, 0) 
 	ELSEIF worker_array(i, 1) <> "WORKER NOT FOUND" THEN 
