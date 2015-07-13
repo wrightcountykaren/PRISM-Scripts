@@ -106,33 +106,39 @@ NEXT
 
 FOR i = 0 TO number_of_workers
 	IF len(worker_array(i, 0)) = 8 THEN 
-		'If the length of the worker number is 8 then the script goes to LIPO to gather the 11-digit worker position number.
-		CALL navigate_to_PRISM_screen("LIPO")
-		lipo_row = 6
+		'If the length of the worker number is 8 then the script goes to CALI to gather the 11-digit worker position number.
+		CALL navigate_to_PRISM_screen("CALI")
+		EMWriteScreen left(worker_array(i, 0), 3), 20, 18
+		EMWriteScreen "001", 20, 30
+		transmit
+		
+		EMSetCursor 20, 49
+		EMSendKey "X"
+
+		PF1
+		
+		CALI_row = 13
 		DO
-			EMReadScreen worker_id, 8, lipo_row, 15
-			EMReadScreen end_of_data, 11, lipo_row, 32
+			EMReadScreen worker_id, 8, CALI_row, 39
+			EMReadScreen end_of_data, 11, CALI_row, 39
 			IF end_of_data = "End of Data" THEN 
 				worker_array(i, 1) = "WORKER NOT FOUND"
 				EXIT DO
 			END IF
 			IF UCASE(worker_id) = UCASE(worker_array(i, 0)) THEN 
-				EMReadScreen worker_array(i, 1), 30, lipo_row, 26
-				EMWriteScreen "D", lipo_row, 4
-				transmit
-				EMReadScreen LIPO_county, 3, 4, 10
-				EMReadScreen LIPO_office, 3, 5, 10
-				EMReadScreen LIPO_team, 3, 6, 10
-				EMReadScreen LIPO_position, 2, 7, 12
-				worker_array(i, 0) = LIPO_county & LIPO_office & LIPO_team & LIPO_position
-				CALL find_variable("Name: ", worker_array(i, 1), 30)
+				EMReadScreen worker_array(i, 1), 30, CALI_row, 49
+				worker_array(i, 1) = trim(worker_array(i, 1))
+				EMReadScreen CALI_position, 20, CALI_row, 18
+				CALI_position = replace(CALI_position, " ", "")
+				worker_array(i, 0) = CALI_position
+				PF3
 				CALL create_case_numbers_dlg(i, worker_array)
 				EXIT DO
 			ELSE
-				lipo_row = lipo_row + 1
-				IF lipo_row = 19 THEN 
+				CALI_row = CALI_row + 1
+				IF CALI_row = 19 THEN 
 					PF8
-					lipo_row = 6
+					CALI_row = 13
 				END IF
 			END IF
 		LOOP		
