@@ -396,15 +396,17 @@ ELSEIF transfer_all_cases_check = 1 THEN
 	
 	CALL navigate_to_PRISM_screen("CAAS")
 	FOR EACH PRISM_case_number IN all_cases_array
-		EMSetCursor 3, 29
-		EMSendKey "M"
-		EMSendKey PRISM_case_number
-		EMSendKey transfer_to_position_number
-		IF developer_mode = False THEN 
-			transmit
-		ELSEIF developer_mode = True THEN 
-			objExcel.Cells(excel_row, 2).Value = PRISM_case_number
-			excel_row = excel_row + 1
+		IF PRISM_case_number <> "" THEN 
+			EMSetCursor 3, 29
+			EMSendKey "M"
+			EMSendKey PRISM_case_number
+			EMSendKey transfer_to_position_number
+			IF developer_mode = False THEN 
+				transmit
+			ELSEIF developer_mode = True THEN 
+				objExcel.Cells(excel_row, 2).Value = PRISM_case_number
+				excel_row = excel_row + 1
+			END IF
 		END IF
 	NEXT
 	
