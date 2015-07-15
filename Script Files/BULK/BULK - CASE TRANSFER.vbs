@@ -408,7 +408,7 @@ ELSEIF transfer_all_cases_check = 1 THEN
 			EMSendKey PRISM_case_number
 			transmit
 			
-		
+			EMWriteScreen "M", 3, 29
 			EMSetCursor 9, 20
 			EMSendKey transfer_to_position_number
 			IF developer_mode = False THEN 
