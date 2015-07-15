@@ -205,7 +205,7 @@ IF transfer_all_cases_check = 0 THEN
 					ELSE
 						DO
 							transmit
-							EMReadScreen confirmation_message 70, 24, 2
+							EMReadScreen confirmation_message, 70, 24, 2
 						LOOP UNTIL InStr(confirmation_message, "modified successfully") <> 0
 					END IF
 				END IF
@@ -407,7 +407,7 @@ ELSEIF transfer_all_cases_check = 1 THEN
 			IF developer_mode = False THEN 
 				DO
 					transmit
-					EMReadScreen confirmation_message 70, 24, 2
+					EMReadScreen confirmation_message, 70, 24, 2
 				LOOP UNTIL InStr(confirmation_message, "modified successfully") <> 0
 			ELSEIF developer_mode = True THEN 
 				objExcel.Cells(excel_row, 2).Value = PRISM_case_number
