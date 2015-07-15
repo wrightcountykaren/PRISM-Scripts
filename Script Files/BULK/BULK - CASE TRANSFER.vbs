@@ -190,10 +190,13 @@ IF transfer_all_cases_check = 0 THEN
 					CAAS_office = right(left(worker_array(i, 0), 6), 3)
 					CAAS_team = left(right(worker_array(i, 0), 5), 3)
 					CAAS_position = right(worker_array(i, 0), 2)
-									
-					EMWriteScreen "M", 3, 29
-					EMWriteScreen left(worker_array(i, j), 10), 4, 8
+					
+					EMWriteScreen "D", 3, 29
+					EMwriteScreen left(worker_array(i, j), 10), 4, 8
 					EMWriteScreen right(worker_array(i, j), 2), 4, 19
+					transmit
+					
+					EMWriteScreen "M", 3, 29
 					EMWriteScreen CAAS_county, 9, 20
 					EMWriteScreen CAAS_office, 10, 20
 					EMWriteScreen CAAS_team, 11, 20
@@ -401,8 +404,12 @@ ELSEIF transfer_all_cases_check = 1 THEN
 	FOR EACH PRISM_case_number IN all_cases_array
 		IF PRISM_case_number <> "" THEN 
 			EMSetCursor 3, 29
-			EMSendKey "M"
+			EMSendKey "D"
 			EMSendKey PRISM_case_number
+			transmit
+			
+		
+			EMSetCursor 9, 20
 			EMSendKey transfer_to_position_number
 			IF developer_mode = False THEN 
 				DO
