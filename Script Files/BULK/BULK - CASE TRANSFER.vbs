@@ -203,7 +203,10 @@ IF transfer_all_cases_check = 0 THEN
 						MsgBox "*** Developer Mode Enabled ***" & vbCr & vbCr & _
 							"Transferring Case " & worker_array(i, j) & " to " & worker_array(i, 1)				
 					ELSE
-						transmit
+						DO
+							transmit
+							EMReadScreen confirmation_message 70, 24, 2
+						LOOP UNTIL InStr(confirmation_message, "modified successfully") <> 0
 					END IF
 				END IF
 			NEXT
@@ -402,7 +405,10 @@ ELSEIF transfer_all_cases_check = 1 THEN
 			EMSendKey PRISM_case_number
 			EMSendKey transfer_to_position_number
 			IF developer_mode = False THEN 
-				transmit
+				DO
+					transmit
+					EMReadScreen confirmation_message 70, 24, 2
+				LOOP UNTIL InStr(confirmation_message, "modified successfully") <> 0
 			ELSEIF developer_mode = True THEN 
 				objExcel.Cells(excel_row, 2).Value = PRISM_case_number
 				excel_row = excel_row + 1
