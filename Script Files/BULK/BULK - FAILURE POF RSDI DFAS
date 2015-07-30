@@ -2,6 +2,7 @@
 name_of_script = "BULK - FAILURE POF - RSDI DFAS.vbs" 
 start_time = timer 
 
+'blah blah blah
 
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
