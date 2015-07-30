@@ -2,7 +2,6 @@
 name_of_script = "BULK - FAILURE POF - RSDI DFAS.vbs" 
 start_time = timer 
 
-'blah blah blah
 
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
@@ -73,7 +72,7 @@ DO
 			IF current_month = DatePart ("m", PAPL_most_recent_pay_date) THEN
 				PF11
 				EMReadScreen PAPL_name, 25, 7, 38
-				IF InStr(PAPL_name, "DFAS") <> 0 OR InStr(PAPL_name, "US TREASURY") <> 0 THEN	purge = True
+				IF InStr(PAPL_name, "DFAS") <> 0 OR InStr(PAPL_name, "U S Social") <> 0 OR InStr(PAPL_name, "U S Dept of Treasury") <> 0 THEN purge = True
 
 			END IF
 
@@ -97,10 +96,9 @@ DO
 
 		IF purge = True THEN 
 			EMWriteScreen "P", USWT_row, 4
-			'transmit
-			'transmit
-		MsgBox "it purged"
-			'PF3
+			transmit
+			transmit
+			PF3
 		ELSE
 			USWT_row = USWT_row + 1
 			IF USWT_row = 19 THEN 
@@ -111,7 +109,7 @@ DO
 	END IF
 LOOP UNTIL USWT_type <> "E0014"
 
-script_end_procedure ("Success!!")
+
 
 
 
