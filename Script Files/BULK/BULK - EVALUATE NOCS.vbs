@@ -7,19 +7,12 @@ DIM initial_run_through
 DIM worker_signature
 DIM cso_name
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
+'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
+url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+req.open "GET", url, FALSE									'Attempts to open the URL
 req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
+IF req.Status = 200 THEN									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
