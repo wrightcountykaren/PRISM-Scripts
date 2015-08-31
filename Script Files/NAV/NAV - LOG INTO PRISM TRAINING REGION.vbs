@@ -28,6 +28,8 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
+script_end_procedure("This script is no longer supported.")
+
 'VARIABLES AND CALCULATIONS----------------------------------------------------------------------------------------------------
 'PRISM training uses the current month as part of the password. This figures out what it needs to be.
 date_for_PW = datepart("m", date) 
