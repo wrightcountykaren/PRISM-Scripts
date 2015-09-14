@@ -34,8 +34,8 @@ BeginDialog start_end_date_dialog, 0, 0, 171, 65, "Start and End Date Dialog"
     OkButton 120, 25, 50, 15
     CancelButton 120, 45, 50, 15
   EditBox 60, 5, 110, 15, PRISM_case_number
-  EditBox 45, 25, 70, 15, start_date
-  EditBox 45, 45, 70, 15, end_date
+  EditBox 45, 25, 70, 15, start_date  'Start date for the search
+  EditBox 45, 45, 70, 15, end_date  'End date for the search
   Text 5, 10, 50, 10, "Case number:"
   Text 5, 30, 40, 10, "Start date:"
   Text 5, 50, 40, 10, "End date:"
@@ -75,6 +75,9 @@ call navigate_to_PRISM_screen("PALC")
 'Entering case number and transmitting
 EMSetCursor 20, 9
 EMSendKey replace(PRISM_case_number, "-", "")	 	'Entering the specific case indicated
+
+EMWriteScreen cstr(start_date), 20, 35
+EMWriteScreen cstr(end_date), 20, 49
 transmit								'Transmitting into it
 
 
@@ -90,9 +93,7 @@ Do
 	EMReadScreen pmt_ID_MM, 2, row, 9
 	EMReadScreen pmt_ID_DD, 2, row, 11
 	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY	
-
-	If (cdate(start_date) <= cdate(pmt_ID_date)) and (cdate(pmt_ID_date) <= cdate(end_date)) then 				'Checks to see if date is in between start/end dates
-		date_within_range = True															'Determines date range
+					
 		EMReadScreen proc_type, 3, row, 25														'Reading the proc type
 		EMReadScreen case_alloc_amt, 10, row, 70													'Reading the amt allocated
 		If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _	
@@ -101,7 +102,7 @@ Do
 		Else
 			total_voluntary_alloc = total_voluntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for voluntary
 		End if
-	End if
+	
 	row = row + 1														'Increases the row variable by one, to check the next row
 	EMReadScreen end_of_data_check, 19, row, 28									'Checks to see if we've reached the end of the list
 	If end_of_data_check = "*** End of Data ***" then exit do							'Exits do if we have
