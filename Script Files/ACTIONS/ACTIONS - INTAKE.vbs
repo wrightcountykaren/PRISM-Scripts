@@ -96,6 +96,7 @@ EndDialog
 
 
 'THE SCRIPT----------------------------------------------------------------------------------------------------
+IF county_name <> "Anoka County" THEN MsgBox "This script contains links to documents stored on the Anoka County network. As such, it may not work for your agency."
 
 'Connects to BlueZone
 EMConnect ""

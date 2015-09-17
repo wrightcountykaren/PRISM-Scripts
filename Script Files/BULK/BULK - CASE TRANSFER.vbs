@@ -263,7 +263,7 @@ IF script_run_mode = "Specify Cases to Transfer" THEN
 	'Displaying the list of workers that were skipped because they could not be found.
 	IF err_workers <> "" THEN MsgBox ("*** NOTICE!!! ***" & vbCr & vbCr & "The script could not transfer cases to the following worker ID/code(s): " & vbCr & err_workers & vbCr & vbCr & "The script has determined that ID/code is not a valid ID/code assigned to a worker. You may need to reconsider the worker ID/code you selected and try again." & vbCr & vbCr & "If the script erred in its determination of valid worker ID/codes, please report this to your scripts administrator." & vbCr & vbCr & "Thank you.")
 
-ELSEIF script_run_mode = "Transfer Caseload" THEN 
+ELSEIF script_run_mode = "Transfer Caseload Top to Bottom" THEN 
 
 	'Clearing the memory.
 	CALL navigate_to_PRISM_screen("REGL")
