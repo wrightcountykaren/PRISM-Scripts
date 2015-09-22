@@ -398,7 +398,7 @@ If supplemental_paternity_information_form_check = checked then
 End if
 'Opening the Relative Caretaker Paternity Information Form document 
 If relative_caretaker_paternity_info_form_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Supplemental Paternity Information Form.dotx")
+	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Relative Caretakers Paternity Questionnaire.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
