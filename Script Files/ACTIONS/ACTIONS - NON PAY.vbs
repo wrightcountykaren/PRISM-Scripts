@@ -58,7 +58,7 @@ FUNCTION send_non_compliance_dord
 	EMWriteScreen "        ", 4, 50
 	EMWriteScreen "       ", 4, 59
 	EMWriteScreen "F0919", 6, 36
-'	transmit
+	transmit
 END FUNCTION
 
 
@@ -174,52 +174,38 @@ Loop until case_number_valid = True
 	IF ButtonPressed = Cancel_button THEN stopscript
 	If ButtonPressed = NonPay_button then 
 		CALL send_non_pay_memo
-		purge_msg = MsgBox ("Do you want to purge this worklist item?", vbYesNo)
+		purge_msg = MsgBox ("Do you want to purge E0002 worklist item?", vbYesNo)
 		IF purge_msg = vbYes THEN 
-			CALL navigate_to_PRISM_screen("USWT")
-			CALL write_value_and_transmit("E0002", 20, 30)
-			uswt_row = 7
-			DO
-				EMReadScreen uswt_case_number, 13, 7, 8
-				uswt_case_number = replace(uswt_case_number, " ", "-")
-				IF uswt_case_number <> PRISM_case_number THEN 
-					uswt_row = uswt_row + 1 
-					IF uswt_row = 19 THEN 
-						PF8
-						uswt_row = 7
-					END IF
-				END IF
-			LOOP UNTIL uswt_case_number = PRISM_case_number
-			EMWriteScreen "P", uswt_row, 4
-			transmit
-			transmit
-			PF3	
+			CALL navigate_to_PRISM_screen("CAWT")
+			Do
+				CALL write_value_and_transmit("E0002", 20, 29)
+				EMReadscreen worklist_check, 5, 8, 8
+				If worklist_check = "E0002" then
+					EMWriteScreen "P", 8, 4
+					transmit
+					transmit
+					PF3
+				end if	
+			Loop until worklist_check <> "E0002"
 		END IF
 		CALL add_caad_code("E9685")
 		script_end_procedure("The script has sent the requested DORD document and is now waiting for you to transmit to confirm the CAAD Note.")
 	End If
 	If ButtonPressed = PAPD_button then 
 		CALL send_non_compliance_dord
-		purge_msg = MsgBox ("Do you want to purge this worklist item?", vbYesNo)
+		purge_msg = MsgBox ("Do you want to purge E4111 worklist item?", vbYesNo)
 		IF purge_msg = vbYes THEN 
-			CALL navigate_to_PRISM_screen("USWT")
-			CALL write_value_and_transmit("E4111", 20, 30)
-			uswt_row = 7
-			DO
-				EMReadScreen uswt_case_number, 13, 7, 8
-				uswt_case_number = replace(uswt_case_number, " ", "-")
-				IF uswt_case_number <> PRISM_case_number THEN 
-					uswt_row = uswt_row + 1 
-					IF uswt_row = 19 THEN 
-						PF8
-						uswt_row = 7
-					END IF
-				END IF
-			LOOP UNTIL uswt_case_number = PRISM_case_number
+			CALL navigate_to_PRISM_screen("CAWT")	
+			Do
+				CALL write_value_and_transmit("E4111", 20, 29)
+				EMReadScreen worklist_check, 5, 8, 8
+				If worklist_check = "E4111" then
+					EMWriteScreen "P", 8, 4
+					transmit
+					transmit
+					PF3	
+				End if
+			Loop until worklist_check <> "E4111"
 		END IF
-		EMWriteScreen "P", uswt_row, 4
-		transmit
-		transmit
-		PF3	
 		script_end_procedure("The script has sent the requested DORD document.")
 	END IF
