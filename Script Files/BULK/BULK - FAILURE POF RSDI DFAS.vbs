@@ -52,6 +52,9 @@ DO
 		EMReadScreen USWT_case_number, 13, USWT_row, 8
 		EMWriteScreen "s", USWT_row, 4
 		transmit
+		'Selecting the worklist brings the user to NCP's PAPL screen
+
+		purge = false 'Reset the purge variable
 
 		' >>>>> MAKING SURE THAT THERE IS INFORMATION ON PAPL <<<<
 		EMReadScreen end_of_data, 11, USWT_row, 32
@@ -59,18 +62,27 @@ DO
 
 			' >>>>> READING THE MOST RECENT PAY DATE AND CONVERTING IT TO A USABLE DATE <<<<<
 			EMReadScreen PAPL_most_recent_pay_date, 6, 7, 7
-			Call PRISM_date_conversion(PAPL_most_recent_pay_date)
-
+			Call date_converter_PALC_PAPL(PAPL_most_recent_pay_date)
+			pmt_year = Right(PAPL_most_recent_pay_date, 2) 'string variables added to track the payment month and 2-digit year.
+			pmt_month = Left(PAPL_most_recent_pay_date, 2)	
+			
 			' >>>> CHECKING THAT THE DATE IN THE PAYMENT ID IS FROM THE CURRENT MONTH MINUS 1 <<<<<
-			current_month_minus1 = DateAdd("m", -1, date)
-			IF current_month_minus1 = DatePart ("m", PAPL_most_recent_pay_date) THEN
-				' >>>>> IF THE PAYMENT IS FROM LAST MONTH, THE SCRIPT GRABS THE EMPLOYER/SOURCE ID <<<<<
-				PF11
-				EMReadScreen PAPL_name, 30, 7, 38
-				' >>>>> LISTING OUT THE CONDITIONS THAT CAN BE PURGED AUTOMATICALLY <<<<<
-				IF InStr(PAPL_name, "DFAS") <> 0 OR _
-				   InStr(PAPL_name, "U S SOCIAL") <> 0 OR _ 
-				   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN purge = True
+			current_month_minus1 = DateAdd("m", -1, date) 'variable for the current date minus one - this returns a date format
+			c_year = Right(CStr(current_month_minus1), 2) 'string variables added to track the current month minus 1 month and year. 
+			c_month = Left(CStr(current_month_minus1), 2)
+
+			IF pmt_year = c_year THEN
+				If pmt_month = c_month or pmt_month > c_month THEN  
+ 				' >>>>> IF THE PAYMENT IS FROM LAST MONTH OR CURRENT MONTH, THE SCRIPT GRABS THE EMPLOYER/SOURCE ID <<<<<
+				'We want this to occur if the payment occurred last month or in the current month.				
+					PF11
+					EMReadScreen PAPL_name, 30, 7, 38
+					' >>>>> LISTING OUT THE CONDITIONS THAT CAN BE PURGED AUTOMATICALLY <<<<<
+					IF InStr(PAPL_name, "DFAS") <> 0 OR _
+					   InStr(PAPL_name, "U S SOCIAL") <> 0 OR _ 
+					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN purge = True
+					End If
+				End If
 			END IF
 		END IF	
 
@@ -106,7 +118,7 @@ DO
 				USWT_row = 7
 			END IF
 		END IF
-	END IF
+
 LOOP UNTIL USWT_type <> "E0014"
 
 script_end_procedure("")
