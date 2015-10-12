@@ -45,6 +45,8 @@ EMWriteScreen "E0014", 20, 30
 transmit
 
 USWT_row = 7
+COUNT = 0
+SCROLL = 0
 ' >>>>> STARTING THE DO LOOP. THE SCRIPT NEEDS TO HANDLE THESE CASES ONE AT A TIME <<<<<
 DO
 	EMReadScreen USWT_type, 5, USWT_row, 45
@@ -80,45 +82,55 @@ DO
 					' >>>>> LISTING OUT THE CONDITIONS THAT CAN BE PURGED AUTOMATICALLY <<<<<
 					IF InStr(PAPL_name, "DFAS") <> 0 OR _
 					   InStr(PAPL_name, "U S SOCIAL") <> 0 OR _ 
-					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN purge = True
+					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN 
+						purge = True
+					 	COUNT = COUNT + 1
+					   	Msgbox USWT_case_number & " worklist selected for purge!"
+					Else
+						purge = false
 					End If
 				End If
 			END IF
-		END IF	
+		End If
 
-		' >>>>> GOING BACK TO USWT <<<<<
-		Call navigate_to_PRISM_screen ("USWT")
-		EMWriteScreen "E0014", 20, 30
+		
+		Call navigate_to_PRISM_screen ("CAWT")
+		EMWriteScreen "E0014", 20, 29
+		EMWriteScreen USWT_case_number, 20, 8
 		transmit
-
-		' >>>>> FINDING THE CASE NUMBER THAT WE WERE WORKING ON <<<<<
-		USWT_row = 7
-		DO
-			EMReadScreen case_number, 13, USWT_row, 8
-			IF case_number <> USWT_case_number THEN 
-				USWT_row = USWT_row + 1
-				IF USWT_row = 19 THEN 
-					PF8
-					USWT_row = 7
-				END IF
-			END IF
-		LOOP UNTIL USWT_case_number = case_number
 
 		' >>>>> IF THE WORKLIST ITEM IS ELIGIBLE TO BE PURGED, THE SCRIPT PURGES...
 		IF purge = True THEN 
-			EMWriteScreen "P", USWT_row, 4
-			transmit
-			transmit
-			PF3
+			CAWT_row = 8
+			DO 
+				EMReadScreen CAWD_type, 5, cawt_row, 8
+				If cawd_type = "E0014" then	
+					EMWriteScreen "P", caWT_row, 4
+					transmit
+					transmit
+					PF3
+				End if
+				cawt_row = cawt_row + 1
+			LOOP until cawd_type <> "E0014"
 		ELSE
 		'  ...  IF THE WORKLIST ITME IS NOT ELIGIBLE TO BE PURGED, THE SCRIPT INCREASES USWT_ROW + 1 <<<<<
+			Call navigate_to_PRISM_screen ("USWT")
+
+			EMWriteScreen "E0014", 20, 30
+			transmit
+			IF SCROLL > 0 THEN
+				FOR I = 0 TO SCROLL
+				PF8
+				NEXT
+			END IF
 			USWT_row = USWT_row + 1
 			IF USWT_row = 19 THEN 
 				PF8
 				USWT_row = 7
+				SCROLL = SCROLL + 1
 			END IF
 		END IF
-
+	End If
 LOOP UNTIL USWT_type <> "E0014"
 
-script_end_procedure("")
+script_end_procedure("Success!  " & Count & " worklists purged!")
