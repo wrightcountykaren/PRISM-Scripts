@@ -526,8 +526,7 @@ End if
 If CAWD_check = checked then
 	'Going to CAWD to write worklist
 	call navigate_to_PRISM_screen("CAWD")
-	EMWriteScreen "A", 8, 4
-	transmit
+	PF5
 
 	'Setting type as "free" and writing note	
 	EMWriteScreen "FREE", 4, 37
