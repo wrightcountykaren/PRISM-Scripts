@@ -68,11 +68,15 @@ function back_to_SELF
 End function
 
 Function check_for_PRISM(end_script)
-	EMReadScreen PRISM_check, 5, 1, 36
-	IF end_script = True THEN 
-		If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
-	ELSE
-		If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
+	PF11
+	PF10
+	CALL find_variable("PLEASE ENTER YOUR ", timed_out, 8)
+	IF timed_out = "PASSWORD" THEN 
+		IF end_script = True THEN 
+			If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
+		ELSE
+			If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
+		END IF
 	END IF
 END FUNCTION
 
@@ -102,6 +106,15 @@ FUNCTION create_mainframe_friendly_date(date_variable, screen_row, screen_col, y
 		StopScript
 	END IF
 	EMWriteScreen var_year, screen_row, screen_col + 6
+END FUNCTION
+
+FUNCTION date_converter_PALC_PAPL (date_variable)
+
+	date_year = left (date_variable, 2)
+	date_day = right (date_variable, 2)
+	date_month = right (left (date_variable, 4), 2)
+	
+	date_variable = date_month & "/" & date_day & "/" & date_year 
 END FUNCTION
 
 Function end_excel_and_script

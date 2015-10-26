@@ -1,6 +1,3 @@
-option explicit
-DIM beta_agency
-
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO
 					'Declares variables to be good to option explicit users
