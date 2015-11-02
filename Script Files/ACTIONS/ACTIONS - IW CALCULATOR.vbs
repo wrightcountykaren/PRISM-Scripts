@@ -1,5 +1,3 @@
-'Option Explicit 'this has to be on the top, always
-Option Explicit
 
 'this is a function document
 DIM beta_agency 'remember to add
@@ -101,6 +99,8 @@ BiWeekPay = FormatNumber(BiWeekPay, 2)
 SemiMoPay = MoTotal/2
 SemiMoPay = FormatNumber(SemiMoPay, 2)
 
+'takes you to PALC so you can see the amount that is being received on the case
+CALL navigate_to_PRISM_screen ("PALC")
  
 'msgbox needed to show calculations, weekly, biweekly, semi monthly, and monthly
 MsgBox ("Monthly: $" & MoTotal & VbNewline & VbNewline & _
