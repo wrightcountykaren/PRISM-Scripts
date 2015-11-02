@@ -1,3 +1,8 @@
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "NOTES - CSENET INFO.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 'LOADING PRISM CUSTOM FUNCTIONS--------------------------------------------------------------------------------------------------------------------------------
 
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users

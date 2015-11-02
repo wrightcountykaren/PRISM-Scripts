@@ -1,4 +1,9 @@
-Option Explicit
+'Option Explicit -- COMMENTED OUT PER VKC REQUEST
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "NOTES - PAYMENT PLAN REVIEW.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only

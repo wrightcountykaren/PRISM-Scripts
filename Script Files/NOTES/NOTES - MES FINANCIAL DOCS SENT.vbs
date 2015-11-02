@@ -1,4 +1,8 @@
-option explicit
+'option explicit  -- COMMENTING OUT PER VKC REQUEST
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "NOTES - MES FINANCIAL DOCS SENT.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 DIM beta_agency, row, col
 
