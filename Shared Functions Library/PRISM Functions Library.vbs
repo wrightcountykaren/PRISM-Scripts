@@ -155,6 +155,42 @@ Function fix_case(phrase_to_split, smallest_length_to_skip)									'Ex: fix_cas
 	phrase_to_split = output_phrase												'making the phrase_to_split equal to the output, so that it can be used by the rest of the script.
 End function
 
+'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
+'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
+FUNCTION send_dord_doc(recipient, dord_doc)
+	call navigate_to_PRISM_screen("DORD")
+	EMWriteScreen "C", 3, 29
+	transmit
+	EMWriteScreen "A", 3, 29
+	EMWriteScreen dord_doc, 6, 36
+	EMWriteScreen recipient, 11, 51
+	transmit
+END FUNCTION
+	
+'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the 
+'variable to be searched.  The function searches the variable and removes underscores.  Then, the fix case function is called to format
+'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.	
+FUNCTION fix_read_data (search_string) 
+	search_string = replace(search_string, "_", "")
+	call fix_case(search_string, 1)
+	search_string = trim(search_string)
+	fix_read_data = search_string 'To make this a return function, this statement must set the value of the function name
+END FUNCTION
+
+' This is a custom function to change the format of a participant name.  The parameter is a string with the 
+' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
+FUNCTION change_client_name_to_FML(client_name)
+	client_name = trim(client_name)
+	length = len(client_name)
+	position = InStr(client_name, ", ")
+	last_name = Left(client_name, position-1)
+	first_name = Right(client_name, length-position-1)	
+	client_name = first_name & " " & last_name
+	client_name = lcase(client_name)
+	call fix_case(client_name, 1)
+	change_client_name_to_FML = client_name 'To make this a return function, this statement must set the value of the function name
+END FUNCTION
+
 function navigate_to_MAXIS_screen(x, y)
   EMSendKey "<enter>"
   EMWaitReady 0, 0
