@@ -1,3 +1,8 @@
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "ACTIONS - DDPL CALCULATOR.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 DIM beta_agency
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
