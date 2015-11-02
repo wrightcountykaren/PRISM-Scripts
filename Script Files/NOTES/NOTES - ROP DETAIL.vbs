@@ -1,4 +1,8 @@
-option explicit
+'option explicit -- COMMENTED OUT PER VKC REQUEST
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "NOTES - ROP DETAIL.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
