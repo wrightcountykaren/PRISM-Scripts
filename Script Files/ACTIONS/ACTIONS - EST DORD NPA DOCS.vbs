@@ -1,4 +1,7 @@
-Enter file contents hereOption Explicit
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "ACTIONS - EST DORD NPA DOCS.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 DIM beta_agency
 
