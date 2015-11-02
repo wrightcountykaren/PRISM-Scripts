@@ -1,4 +1,8 @@
-option explicit
+'option explicit  -- COMMENTED OUT PER VKC REQUEST 
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "NOTES - SOP INVOICE.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 DIM beta_agency, row, col
 
