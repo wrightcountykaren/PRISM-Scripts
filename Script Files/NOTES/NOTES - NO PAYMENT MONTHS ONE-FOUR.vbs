@@ -1,3 +1,7 @@
+'Gathering stats--------------------------------------------------------------------------------
+script_name = "NOTES - NO PAY MONTHS 1 THRU 4.vbs"
+start_time = timer
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO
 					'Declares variables to be good to option explicit users
@@ -34,10 +38,7 @@ END IF
 
 
 'DIM variables from dialog; you can include a space and underscore return to start a new line and DIM will read it otherwise it has to be all on one line
-DIM No_Payment_Main_Dialog, ButtonPressed, Case_Number, No_Payment_Reason, NCP_Receiving_PA_dropdownlist, Social_security_benefits_droplist, Month_Dropdownlist, worker_number, ButtonGroup
-
-
-
+'DIM No_Payment_Main_Dialog, ButtonPressed, Case_Number, No_Payment_Reason, NCP_Receiving_PA_dropdownlist, Social_security_benefits_droplist, Month_Dropdownlist, worker_signature, ButtonGroup
 
 'This is intended to have one main dialog box with the worker making a selection of which month they are working and the different steps needed with each month.
 'The worker completes the info in the main dialog box and selects the month. The dialog box for that month then opens for worker to complete
@@ -45,28 +46,26 @@ DIM No_Payment_Main_Dialog, ButtonPressed, Case_Number, No_Payment_Reason, NCP_R
 
 'MAIN dialog box
 BeginDialog No_Payment_Main_Dialog, 0, 0, 271, 225, "No Payment Months 1-4"
-  Text 5, 10, 50, 15, "Case Number"
   EditBox 60, 10, 75, 15, Case_Number
   Text 5, 35, 215, 15, "NCP was called for status update regarding no payment received."
-  Text 5, 60, 120, 15, "Reason no payment has been made:"
   EditBox 130, 60, 135, 15, No_Payment_Reason
-  Text 5, 80, 125, 30, "Confirmed via MAXIS, NCP is receiving public assistance and coded NCDE panel 2:"
   DropListBox 135, 95, 130, 15, "Select one:"+chr(9)+"Yes receiving public assistance"+chr(9)+"No public assistance case", NCP_Receiving_PA_dropdownlist
-  Text 5, 120, 125, 20, "Confirmed via SSTD and SSSD, NCP is receiving Social Security benefits:"
   DropListBox 135, 125, 130, 15, "Select one:"+chr(9)+"Yes receiving Social Security benefits"+chr(9)+"No Social Security benefits issued", Social_security_benefits_droplist
-  Text 25, 160, 200, 15, "Select the appropriate month below for additional questions:"
   DropListBox 65, 180, 105, 15, "Select one:"+chr(9)+"Month ONE"+chr(9)+"Month TWO"+chr(9)+"Month THREE"+chr(9)+"Month FOUR", Month_Dropdownlist
-  Text 5, 210, 50, 10, "Worker Name:"
-  EditBox 60, 205, 65, 15, worker_number
-  'ButtonGroup ButtonPressed
+  EditBox 60, 205, 65, 15, worker_signature
+  ButtonGroup ButtonPressed
     OkButton 155, 205, 50, 15
     CancelButton 215, 205, 50, 15
+  Text 5, 10, 50, 15, "Case Number"
+  Text 5, 60, 120, 15, "Reason no payment has been made:"
+  Text 5, 80, 125, 30, "Confirmed via MAXIS, NCP is receiving public assistance and coded NCDE panel 2:"
+  Text 5, 120, 125, 20, "Confirmed via SSTD and SSSD, NCP is receiving Social Security benefits:"
+  Text 5, 210, 50, 10, "Worker Name:"
+  Text 25, 160, 200, 15, "Select the appropriate month below for additional questions:"
 EndDialog
 
-
 'Month ONE dialog DIM-----------------------------------------------------------------------------------------------
-DIM No_Payment_Month_One_Dialog, NCP_DL_Loaded_CheckBox, SUDL_DL_Suppressed_checkbox, CRB_Suppressed_Checkbox, New_HIRE_checkbox, Create_worklist_CheckBox
-
+'DIM No_Payment_Month_One_Dialog, NCP_DL_Loaded_CheckBox, SUDL_DL_Suppressed_checkbox, CRB_Suppressed_Checkbox, New_HIRE_checkbox, Create_worklist_CheckBox
 
 'dialog box for Month ONE
 BeginDialog No_Payment_Month_One_Dialog, 0, 0, 276, 135, "No Payment - Month One"
@@ -76,14 +75,14 @@ BeginDialog No_Payment_Month_One_Dialog, 0, 0, 276, 135, "No Payment - Month One
   CheckBox 30, 55, 155, 15, "Is CRB suppressed in SUDL appropriately?", CRB_Suppressed_Checkbox
   CheckBox 5, 75, 205, 15, "Confirmed all employer information is current in NCLD", New_HIRE_checkbox
   CheckBox 5, 90, 180, 15, "Create a worker worklist note for 30 days from today.", Create_worklist_CheckBox
-  'ButtonGroup ButtonPressed
+  ButtonGroup ButtonPressed
     OkButton 160, 115, 50, 15
     CancelButton 220, 115, 50, 15
 EndDialog
 
 
 'Month TWO dialog DIM---------------------------------------------------------------------------------------------------
-DIM No_Payment_Month_Two_Dialog, Reached_NCP_Checkbox, Sent_NO_PAYMENT_Letter_CheckBox, Sent_NCPWFC_Letter_CheckBox, Request_Manual_Requests_Checkbox, Check_LOID_Checkbox
+'DIM No_Payment_Month_Two_Dialog, Reached_NCP_Checkbox, Sent_NO_PAYMENT_Letter_CheckBox, Sent_NCPWFC_Letter_CheckBox, Request_Manual_Requests_Checkbox, Check_LOID_Checkbox
 
 'dialog box for Month TWO
 BeginDialog No_Payment_Month_Two_Dialog, 0, 0, 281, 150, "No Payment - Month Two"
@@ -94,14 +93,14 @@ BeginDialog No_Payment_Month_Two_Dialog, 0, 0, 281, 150, "No Payment - Month Two
   CheckBox 5, 60, 180, 15, "Requested manual requests through NCMR for DLI", Request_Manual_Requests_Checkbox
   CheckBox 5, 75, 180, 15, "Checked LOID for additional information", Check_LOID_Checkbox
   CheckBox 5, 100, 180, 15, "Create a worker worklist note for 30 days from today.", Create_worklist_CheckBox
- ' ButtonGroup ButtonPressed
+  ButtonGroup ButtonPressed
     OkButton 170, 130, 50, 15
     CancelButton 225, 130, 50, 15
 EndDialog
 
 
 'Month THREE Dialog DIM---------------------------------------------------------------------------------------------------
-DIM No_Payment_Month_Three_Dialog, Sent_Pay2_letter_checkbox, Moving_to_Contempt_Dropdownlist
+'DIM No_Payment_Month_Three_Dialog, Sent_Pay2_letter_checkbox, Moving_to_Contempt_Dropdownlist
 
 
 'Dialog box for Month THREE
@@ -111,13 +110,13 @@ BeginDialog No_Payment_Month_Three_Dialog, 0, 0, 281, 100, "No Payment - Month T
   Text 5, 40, 150, 10, "Case appears to be moving toward contempt action:"
   DropListBox 160, 40, 115, 15, "Select one:"+chr(9)+"Yes payment history created"+chr(9)+"No payment history created", Moving_to_Contempt_Dropdownlist
   CheckBox 5, 60, 180, 15, "Create a worker worklist note for 30 days from today.", Create_worklist_CheckBox
-'  ButtonGroup ButtonPressed
+  ButtonGroup ButtonPressed
     OkButton 165, 80, 50, 15
     CancelButton 225, 80, 50, 15
 EndDialog
 
 'Month FOUR Dialog DIM---------------------------------------------------------------------------------------------------
-DIM No_Payment_Month_Four_Dialog, Check_ENFL_checkbox, Contempt_Checkbox, prohibit_contempt, Call_CP_Checkbox, CP_Info
+'DIM No_Payment_Month_Four_Dialog, Check_ENFL_checkbox, Contempt_Checkbox, prohibit_contempt, Call_CP_Checkbox, CP_Info
 
 
 
@@ -133,7 +132,7 @@ BeginDialog No_Payment_Month_Four_Dialog, 0, 0, 296, 225, "No Payment - Month FO
   Text 5, 150, 100, 15, "Additional information from CP"
   EditBox 110, 150, 180, 15, CP_Info
   CheckBox 5, 185, 180, 15, "Create a worker worklist note for 30 days from today.", Create_worklist_CheckBox
- ' ButtonGroup ButtonPressed
+  ButtonGroup ButtonPressed
     OkButton 185, 205, 50, 15
     CancelButton 240, 205, 50, 15
 EndDialog
@@ -146,24 +145,16 @@ EMConnect ""
 
 'Case Note dialog - need to do the DO loops right after running dialog
 DO
-	DO
-		DO
-			DO
-				DO
-					DIALOG No_Payment_Main_Dialog
-					IF ButtonPressed = 0 THEN StopScript
-
-					IF Case_Number = "" THEN MsgBox "You must enter case number!"
-				LOOP UNTIL Case_Number <> ""
-				IF NCP_No_Payment_Reason = "" THEN MsgBox "You must enter no payment reason"
-			LOOP UNTIL NCP_No_Payment_Reason <>""
-			IF NCP_Receiving_PA_dropdownlist = "Select one:" THEN MsgBox "You must confirm receipt of public assistance"
-		LOOP UNTIL NCP_Receiving_PA_dropdownlist <>"Select one:"
-		IF Social_security_benefits_droplist = "Select one:" THEN MsgBox "You must confirm receipt of SS benefits"
-	LOOP UNTIL Social_security_benefits_droplist <>"Select one:"
-	IF worker_number = "" THEN MsgBox "Please sign your note"
-LOOP UNTIL worker_number <> ""
-
+	err_msg = ""
+	DIALOG No_Payment_Main_Dialog
+		IF ButtonPressed = 0 THEN StopScript
+		IF case_number = "" THEN err_msg = err_msg & vbCr & "* Please enter a case number."
+		IF no_payment_reason = "" THEN err_msg = err_msg & vbCr & "* Please enter a no-payment reason."
+		IF NCP_receiving_PA_dropdownlist = "Select one:" THEN err_msg = err_msg & vbCr & "* Please confirm receipt of public assistance."
+		IF social_security_benefits_droplist = "Select one:" THEN err_msg = err_msg & vbCr & "* Please confirm receipt of Social Security benefits."
+		IF worker_signature = "" THEN err_msg = err_msg & vbCr & "* Please sign your CAAD note."
+		IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+LOOP UNTIL err_msg = ""
 
 'Month One
 IF Month_Dropdownlist = "Month ONE" THEN
@@ -221,10 +212,10 @@ CALL write_variable_in_CAAD ("SS benefits confirmed via SSTD and SSSD: " & Socia
 IF Month_Dropdownlist = "Month ONE" THEN
 
 	CALL write_variable_in_CAAD("**No Payment - Month ONE**")
-	IF NCP_DL_Loaded_CheckBox = 1 THEN CALL write_bullet_and_varialbe_in_CAAD("NCP driver's license is loaded in NCLD")
-	IF SUDL_DL_Suppressed_checkbox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("DL is suppressed in SUDL")
-	IF CRB_Suppressed_Checkbox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("CRB is suppressed in SUDL")
-	IF New_HIRE_Checkbox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("Employer information is current in NEW HIRE")
+	IF NCP_DL_Loaded_CheckBox = 1 THEN CALL write_variable_in_CAAD("NCP driver's license is loaded in NCLD")
+	IF SUDL_DL_Suppressed_checkbox = 1 THEN CAll write_variable_in_CAAD("DL is suppressed in SUDL")
+	IF CRB_Suppressed_Checkbox = 1 THEN CAll write_variable_in_CAAD("CRB is suppressed in SUDL")
+	IF New_HIRE_Checkbox = 1 THEN CAll write_variable_in_CAAD("Employer information is current in NEW HIRE")
 
 END IF
 
@@ -233,67 +224,53 @@ END IF
 IF Month_Dropdownlist = "Month TWO" THEN
 
 	CALL write_variable_in_CAAD("**No Payment - Month TWO**")
-	IF Reached_NCP_Checkbox = 1 THEN CALL write_bullet_and_varialbe_in_CAAD("Call attempt to NCP was successful.  No payment letter sent")
-	IF Sent_NO_PAYMENT_Letter_CheckBox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("NCP was not reached: No payment letter sent")
-	IF Request_Manual_Requests_Checkbox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("Requested manual requests through NCMR for DLI")
-	IF Check_LOID_Checkbox = 1 THEN CAll write_bullet_and_varialbe_in_CAAD("LOID was checked for additional information")
+	IF Reached_NCP_Checkbox = 1 THEN CALL write_variable_in_CAAD("Call attempt to NCP was successful.  No payment letter sent")
+	IF Sent_NO_PAYMENT_Letter_CheckBox = 1 THEN CAll write_variable_in_CAAD("NCP was not reached: No payment letter sent")
+	IF Request_Manual_Requests_Checkbox = 1 THEN CAll write_variable_in_CAAD("Requested manual requests through NCMR for DLI")
+	IF Check_LOID_Checkbox = 1 THEN CAll write_variable_in_CAAD("LOID was checked for additional information")
 
 END IF
 
 
 'writes CAAD note for Month THREE
 IF Month_Dropdownlist = "Month THREE" THEN
-
 	CALL write_variable_in_CAAD("**No Payment - Month THREE**")
-	CALL write_bullet_and_variable_in_CAAD ("Case appears to be moving toward contempt action: " & Moving_to_Conhtempt_Dropdownlist)
+	CALL write_variable_in_CAAD ("Case appears to be moving toward contempt action: " & Moving_to_Contempt_Dropdownlist)
 
 END IF
 
 
-  
 'writes CAAD note for Month FOUR
 IF Month_Dropdownlist = "Month FOUR" THEN
 
 	CALL write_variable_in_CAAD("**No Payment - Month THREE**")
-	IF Check_ENFL_checkbox = 1 THEN CAll write_bullet_and_variable_in_CAAD("ENFL was checked for driver's license")
-	IF Contempt_Checkbox = 1 THEN CAll write_bullet_and_variable_in_CAAD("Case is ready for contempt or contempt list")
-	CALL write_bullet_and_variable_in_CAAD("The following factor(s) prohibit contempt:  " & prohibit_contempt)
-	IF Call_CP_Checkbox = 1 THEN CAll write_bullet_and_variable_in_CAAD("CP provided additional information:  " & CP_Info)
+	IF Check_ENFL_checkbox = 1 THEN CAll write_variable_in_CAAD("ENFL was checked for driver's license")
+	IF Contempt_Checkbox = 1 THEN CAll write_variable_in_CAAD("Case is ready for contempt or contempt list")
+	CALL write_variable_in_CAAD("The following factor(s) prohibit contempt:  " & prohibit_contempt)
+	IF Call_CP_Checkbox = 1 THEN CAll write_variable_in_CAAD("CP provided additional information:  " & CP_Info)
 
-END IF
-
- 
-CALL write_variable_in_CAAD ("----" & worker_number)
-
+END IF 
+CALL write_variable_in_CAAD ("----" & worker_signature)
 
 EMWriteScreen "A", 3, 29
+transmit
 
-EMSendKey "<enter>"
-EMWaitReady 0, 0
-
-IF Create_worklist_CheckBox = 0 THEN StopScript
-
-
+IF Create_worklist_CheckBox = 0 THEN script_end_procedure("Success!!")
 
 '****************REMINDER SET-UP WORKLIST REMINDER ******************
-'EMSetCursor 21, 21
-EMWriteScreen "CAWD", 21, 18
-EMSendKey "<enter>"
-EMWaitReady 0, 0
+CALL navigate_to_PRISM_screen("CAWD")
 
+'Creating a new worklist
 PF5
 
 EMWriteScreen "FREE", 4, 37
 EMWriteScreen "Review for payment from NCP", 10, 4
 EMWriteScreen "30", 17, 52
-EMSendKey "<enter>"
-EMWaitReady 0, 0
+transmit
 
 
 'RETURNS TO MAIN SCREEN "CAST" 
-EMWriteScreen "CAST", 21, 18
-EMSendKey "<enter>"
-EMWaitReady 0, 0
+CALL navigate_to_PRISM_screen("CAST")
+transmit
 
-
-
+script_end_procedure("Success!!")
