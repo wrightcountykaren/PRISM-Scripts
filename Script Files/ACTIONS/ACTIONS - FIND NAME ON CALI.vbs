@@ -1,4 +1,8 @@
-                                           
+ 'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "ACTIONS - FIND NAME ON CALI.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 url = "https://raw.githubusercontent.com/theVKC/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
