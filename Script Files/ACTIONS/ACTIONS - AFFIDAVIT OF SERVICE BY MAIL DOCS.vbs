@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - ACTIONS - AFFIDAVIT OF SERVICE BY MAIL.vbs"
+name_of_script = "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
