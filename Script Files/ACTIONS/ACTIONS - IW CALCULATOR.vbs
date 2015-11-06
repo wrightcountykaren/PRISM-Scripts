@@ -1,6 +1,9 @@
 
+'Option Explicit 'this has to be on the top, always
+'Option Explicit
+
 'this is a function document
-DIM beta_agency 'remember to add
+'DIM beta_agency 'remember to add
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO                                                                          'Declares variables to be good to option explicit users
@@ -39,20 +42,21 @@ END IF
 
 
 'DIALOGS---------------------------------------------------------------------------
-DIM IW_CALC_Dialog, PRISM_case_number, Current_Support, Percent, Manual, Other_Amount, err_msg, ButtonPressed, case_number_is_valid, MoTotal
+'DIM IW_CALC_Dialog, PRISM_case_number, Current_Support, Percent, Manual, Other_Amount, err_msg, ButtonPressed, case_number_is_valid, MoTotal
 
-BeginDialog IW_CALC_Dialog, 0, 0, 176, 120, "IW CALC Dialog"
-  EditBox 60, 5, 95, 15, PRISM_case_number
-  EditBox 100, 25, 55, 15, Current_Support
-  CheckBox 10, 65, 45, 10, "20 Percent", Percent
-  CheckBox 10, 80, 55, 10, "Other Amount", Other_Amount
-  EditBox 70, 75, 50, 15, Manual
+BeginDialog IW_CALC_Dialog, 0, 0, 177, 156, "IW CALC Dialog"
+  EditBox 60, 0, 100, 20, PRISM_case_number
+  EditBox 100, 20, 60, 20, Current_Support
+  CheckBox 10, 60, 60, 10, "20 Percent", Percent
+  CheckBox 10, 80, 60, 10, "Other Amount", Other_Amount
+  CheckBox 10, 100, 140, 10, "Add 30-day FREE worklist?", cawd_check
+  EditBox 70, 70, 50, 20, Manual
   ButtonGroup ButtonPressed
-    OkButton 60, 100, 50, 15
-    CancelButton 120, 100, 50, 15
-  Text 5, 10, 50, 10, "Case Number"
-  Text 5, 30, 90, 10, "Current Monthly Obligation "
-  Text 5, 50, 80, 10, "Arrears Collection Rate"
+    OkButton 30, 130, 50, 20
+    CancelButton 100, 130, 50, 20
+  Text 0, 10, 50, 10, "Case Number"
+  Text 0, 30, 90, 10, "Current Monthly Obligation "
+  Text 0, 50, 80, 10, "Arrears Collection Rate"
 EndDialog
 
 
@@ -99,13 +103,26 @@ BiWeekPay = FormatNumber(BiWeekPay, 2)
 SemiMoPay = MoTotal/2
 SemiMoPay = FormatNumber(SemiMoPay, 2)
 
-'takes you to PALC so you can see the amount that is being received on the case
-CALL navigate_to_PRISM_screen ("PALC")
+IF cawd_check = checked THEN
+CALL navigate_to_PRISM_screen ("CAWD")
+PF5
+EMWriteScreen "A", 3, 30
+EMWriteScreen "FREE", 4, 37
+EMWriteScreen "30", 17, 52
+
+EMSetCursor 10, 4
+CALL write_variable_in_CAAD ("Monthly: " & FormatCurrency(MoTotal))
+CALL write_variable_in_CAAD ("Bi-Weekly: " & FormatCurrency(BiWeekPay))
+CALL write_variable_in_CAAD ("Semi-Monthly: " & FormatCurrency(SemiMoPay))
+CALL write_variable_in_CAAD ("Weekly: " & FormatCurrency(WeekPay))
+
+
+ELSE
  
 'msgbox needed to show calculations, weekly, biweekly, semi monthly, and monthly
 MsgBox ("Monthly: $" & MoTotal & VbNewline & VbNewline & _
 	"Weekly: $" & WeekPay & VbNewline & VbNewline & _
 	"Bi-Weekly: $" & BiWeekPay & VbNewline & VbNewline & _
 	"Semi-Monthly: $" & SemiMoPay)
-
-'script_end_procedure("")
+END IF
+script_end_procedure("")
