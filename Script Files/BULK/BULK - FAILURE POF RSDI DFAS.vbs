@@ -55,7 +55,7 @@ DO
 		EMWriteScreen "s", USWT_row, 4
 		transmit
 		'Selecting the worklist brings the user to NCP's PAPL screen
-
+		
 		purge = false 'Reset the purge variable
 
 		' >>>>> MAKING SURE THAT THERE IS INFORMATION ON PAPL <<<<
@@ -68,13 +68,21 @@ DO
 			pmt_year = Right(PAPL_most_recent_pay_date, 2) 'string variables added to track the payment month and 2-digit year.
 			pmt_month = Left(PAPL_most_recent_pay_date, 2)	
 			
+			
+			
 			' >>>> CHECKING THAT THE DATE IN THE PAYMENT ID IS FROM THE CURRENT MONTH MINUS 1 <<<<<
 			current_month_minus1 = DateAdd("m", -1, date) 'variable for the current date minus one - this returns a date format
+			c_month = datepart("m", current_month_minus1)
+			IF len(c_month) = 1 THEN c_month = "0" & c_month
+			
+			
 			c_year = Right(CStr(current_month_minus1), 2) 'string variables added to track the current month minus 1 month and year. 
-			c_month = Left(CStr(current_month_minus1), 2)
-
+			'c_month = Left(CStr(current_month_minus1), 2)
+			
+			
+			
 			IF pmt_year = c_year THEN
-				If pmt_month = c_month or pmt_month > c_month THEN  
+				If  pmt_month >= c_month THEN  
  				' >>>>> IF THE PAYMENT IS FROM LAST MONTH OR CURRENT MONTH, THE SCRIPT GRABS THE EMPLOYER/SOURCE ID <<<<<
 				'We want this to occur if the payment occurred last month or in the current month.				
 					PF11
@@ -85,7 +93,7 @@ DO
 					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN 
 						purge = True
 					 	COUNT = COUNT + 1
-					   	Msgbox USWT_case_number & " worklist selected for purge!"
+					  ' 	Msgbox USWT_case_number & " worklist selected for purge!"
 					Else
 						purge = false
 					End If
@@ -112,7 +120,7 @@ DO
 				End if
 				cawt_row = cawt_row + 1
 			LOOP until cawd_type <> "E0014"
-		ELSE
+		END IF
 		'  ...  IF THE WORKLIST ITME IS NOT ELIGIBLE TO BE PURGED, THE SCRIPT INCREASES USWT_ROW + 1 <<<<<
 			Call navigate_to_PRISM_screen ("USWT")
 
@@ -129,7 +137,7 @@ DO
 				USWT_row = 7
 				SCROLL = SCROLL + 1
 			END IF
-		END IF
+		
 	End If
 LOOP UNTIL USWT_type <> "E0014"
 
