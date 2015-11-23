@@ -39,7 +39,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 431, 260, "NOTES main menu dialog"
     PushButton 10, 95, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
     PushButton 10, 110, 50, 10, "Pay or report", NOTES_pay_or_report_button
     PushButton 10, 125, 65, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
-    PushButton 10, 140, 50, 10, "ROP Invoice", NOTES_ROP_invoice_button
+    PushButton 10, 140, 50, 10, "ROP Detail", NOTES_ROP_invoice_button
     PushButton 10, 165, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
     PushButton 10, 190, 105, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
     CancelButton 375, 240, 50, 15
@@ -51,7 +51,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 431, 260, "NOTES main menu dialog"
   Text 85, 95, 340, 10, "-- NEW 09/2015!! -- Creates CAAD note for documenting non-payment enforcement actions."
   Text 65, 110, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
   Text 80, 125, 225, 10, "-- CAAD note for quarterly review processes."
-  Text 70, 140, 350, 20, "-- NEW 09/2015!! -- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
+  Text 70, 140, 350, 20, "-- NEW 09/2015!! -- Creates CAAD note noting the dates parties signed recognition of parentage."
   Text 70, 165, 350, 20, "-- NEW 09/2015!! -- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
   Text 120, 190, 285, 15, "-- NEW 09/2015!! -- Creates CAAD note of the date a CP signed the waiver of personal service document."
 EndDialog
