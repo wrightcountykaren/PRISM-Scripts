@@ -1,4 +1,4 @@
- 'STATS GATHERING----------------------------------------------------------------------------------------------------
+'STATS GATHERING----------------------------------------------------------------------------------------------------
 name_of_script = "ACTIONS - FIND NAME ON CALI.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
@@ -54,12 +54,12 @@ BeginDialog CALI_search_dialog, 0, 0, 211, 170, "CALI Search Criteria"
   Text 10, 45, 40, 15, "Last Name:"
   EditBox 55, 45, 75, 15, last_name
   Text 5, 70, 195, 10, "Enter these optional fields to search another CALI caseload:"
-  Text 5, 90, 25, 10, "Office:"
+  Text 5, 90, 25, 10, "County:"
   EditBox 35, 85, 30, 15, cali_office
   Text 75, 90, 25, 10, "Team:"
   EditBox 105, 85, 25, 15, cali_team
   Text 145, 90, 30, 10, "Position:"
-  EditBox 180, 85, 25, 15, position
+  EditBox 180, 85, 25, 15, cali_position
   ButtonGroup ButtonPressed
     PushButton 140, 45, 65, 15, "Find on your CALI", find_button
     PushButton 140, 110, 65, 15, "Find on this CALI", find_CALI_button
@@ -104,11 +104,12 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 	CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered, and display the desired CALI listing
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
-	EMWriteScreen CALI_office, 20, 30
+	EMWriteScreen CALI_office, 20, 18
+	EMWriteScreen "001", 20, 30
 	EMWriteScreen CALI_team, 20, 40
 	EMWriteScreen CALI_position, 20, 49
 	transmit
-	
+
 	name = UCASE(name) 'convert the name that the user entered as search criteria to all caps (or names won't be found!)
 
 	'Set up variables for loop for searching through CALI listing of CP's for the search criteria
@@ -148,7 +149,8 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 	'Re-set CALI and variables for a second search, this time searching in the CALI list of NCP's.
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
-	EMWriteScreen CALI_office, 20, 30
+	EMWriteScreen CALI_office, 20, 18
+	EMWriteScreen "001", 20, 30
 	EMWriteScreen CALI_team, 20, 40
 	EMWriteScreen CALI_position, 20, 49
 	transmit
@@ -197,111 +199,58 @@ END FUNCTION
 '**********************************************************************************************
 EMConnect "" 'Connect to PRISM
 
-dialog CALI_search_dialog 'Display the dialog 
+DO
+	err_msg = ""
+	dialog CALI_search_dialog 'Display the dialog 
+		CALL check_for_PRISM (false) 'Check to see if PRISM is locked
 
-CALL check_for_PRISM (TRUE) 'Check to see if PRISM is locked
+		IF buttonpressed = 0 THEN stopscript  'If cancel is pressed, end script
 
-	IF buttonpressed = 0 THEN stopscript  'If cancel is pressed, end script
-
-	IF buttonpressed = find_button THEN  'The user selected to search on their own CALI
-		CALL check_for_PRISM (TRUE)
-		CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
-		EMWriteScreen "             ", 20, 58  'and make note of the user's unit and position.
-            EMWriteScreen "  ", 20, 69
-		EMReadScreen office, 3, 20, 30
-		EMReadScreen unit, 3, 20, 40
-		EMReadScreen position, 2, 20, 49
-		transmit
+		IF buttonpressed = find_button THEN  'The user selected to search on their own CALI
+			CALL check_for_PRISM (TRUE)
+			CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
+			EMWriteScreen "             ", 20, 58  'and make note of the user's unit and position.
+			EMWriteScreen "  ", 20, 69
+			transmit
 				'Check to see if the user entered a first name, a last name, both or neither
 				'If neither, prompt the user to enter search criteria.
 				'Otherwise, call the custom function with the appropriate parameters	
-		IF LEN(last_name) = 0 and LEN(first_name) = 0 THEN
-			DO	
-				msgbox "Please enter either a first and/or last name for the search."
-				dialog CALI_search_dialog
-			LOOP UNTIL LEN(last_name) <> 0 OR LEN(first_name) <> 0
-		ELSEIF LEN(last_name) = 0 and LEN(first_name) > 0 THEN
-			CALL find_name_in_CALI (first_name, office, unit, position)
-		ELSEIF LEN(last_name) > 0 and LEN(first_name) = 0 THEN
-			CALL find_name_in_CALI (last_name, office, unit, position)
-		ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
-			CALL find_name_in_CALI (last_name & ", " & first_name, office, unit, position)
-		END IF 
-	END IF 
-
-	IF buttonpressed = find_CALI_button THEN 'The user selected to search a specific CALI listing
-		CALL check_for_PRISM (TRUE)
-		'Determine which group was selected from the dropdown.
-		'IF Group_dropdown_list = "Child Support 1" THEN
-		'	unit = "CS1"
-		'ELSEIF Group_dropdown_list = "Child Support 2" THEN 
-		'	unit = "CS2"
-		'ELSEIF Group_dropdown_list = "Child Support 3" THEN 
-		'	unit = "CS3"
-		'ELSEIF Group_dropdown_list = "Child Support 4" THEN 
-		'	unit = "CS4"
-		'END IF
-
-
-		'The dialog must have required information to do the search.  Set up loop variables.
-		'Error messages and the dialog will display until the dialog has all required information.
-		name_entered = FALSE
-		office_entered = FALSE
-		position_entered = FALSE
-		unit_selected = FALSE
-
-		'If the user has not entered all the required information for the search, display 
-		'approrpiate error messages.
-		DO WHILE name_entered = FALSE and position_entered = FALSE and unit_selected = FALSE 
-			IF LEN(last_name) > 0 OR LEN(first_name) > 0 THEN 
-				name_entered = TRUE
-			ELSE
-				msgbox "Please enter either a first and/or last name for the search."
-				dialog CALI_search_dialog
+			IF LEN(last_name) = 0 and LEN(first_name) = 0 THEN
+				DO	
+					msgbox "Please enter either a first and/or last name for the search."
+					dialog CALI_search_dialog
+				LOOP UNTIL LEN(last_name) <> 0 OR LEN(first_name) <> 0
+			ELSEIF LEN(last_name) = 0 and LEN(first_name) > 0 THEN
+				CALL find_name_in_CALI (first_name, office, unit, position)
+			ELSEIF LEN(last_name) > 0 and LEN(first_name) = 0 THEN
+				CALL find_name_in_CALI (last_name, office, unit, position)
+			ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
+				CALL find_name_in_CALI (last_name & ", " & first_name, office, unit, position)
 			END IF 
-			IF Group_dropdown_list <> "Select unit" THEN 
-				unit_selected = TRUE
-			ELSE
-				msgbox "Please make a unit selection for the caseload to search."
-				dialog CALI_search_dialog
-			END IF 
-			IF isNumeric(position) = FALSE THEN
-				msgbox "Please enter a valid position number for the caseload to search."
-				dialog CALI_search_dialog
-			END IF 
-			CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
-			EMWriteScreen "             ", 20, 58
-            	EMWriteScreen "  ", 20, 69
-			EMWriteScreen unit, 20, 40
-			EMWriteScreen position, 20, 49
-			transmit
-			EMReadScreen error_msg, 20, 24, 2 'Check to see if the position number has a valid CALI list
-			error_msg = trim (error_msg)      'if not, display error message
-			IF INSTR(error_msg, "Position") > 0 THEN
-				msgbox "Please enter a valid position number for the caseload to search."
-				dialog CALI_search_dialog
-			ELSE
-				position_entered = TRUE
-			END IF 
-		LOOP
-				
+			script_end_procedure("")
+		ELSEIF ButtonPressed = find_CALI_button THEN  'The user selected to search a specific CALI listing
+			CALL check_for_PRISM (false)
+
+			IF first_name = "" AND last_name = "" THEN err_msg = err_msg & vbCr & "* Please enter a first and/or last name."
+			IF len(CALI_position) <> 2 THEN err_msg = err_msg & vbCr & "* Please enter a valid, 2-digit position number."
+			IF IsNumeric(CALI_position) = FALSE THEN err_msg = err_msg & vbCr & "* Please enter a valid, 2-digit position number."
+			IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+		END IF
+LOOP UNTIL err_msg = ""			
 		
-		CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
-		EMWriteScreen "             ", 20, 58  'and display the desired CALI listing
-            EMWriteScreen "  ", 20, 69
-		EMWriteScreen office, 20, 30
-		EMWriteScreen unit, 20, 40
-		EMWriteScreen position, 20, 49
-		transmit
-		
-		'Check to see if the user entered a first name, a last name, or both.
-	      'Call the custom function with the appropriate parameters.	
-		IF LEN(last_name) = 0 and LEN(first_name) > 0 THEN
-			CALL find_name_in_CALI (first_name, office, unit, position)
-		ELSEIF LEN(last_name) > 0 and LEN(first_name) = 0 THEN
-			CALL find_name_in_CALI (last_name, office, unit, position)
-		ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
-			CALL find_name_in_CALI (last_name & ", " & first_name, office, unit, position)
-		END IF 
-	END IF
+CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
+EMWriteScreen "             ", 20, 58  'and display the desired CALI listing
+EMWriteScreen "  ", 20, 69
+transmit
+
+'Check to see if the user entered a first name, a last name, or both.
+     'Call the custom function with the appropriate parameters.	
+IF LEN(last_name) = 0 and LEN(first_name) > 0 THEN
+	CALL find_name_in_CALI (first_name, CALI_office, CALI_team, CALI_position)
+ELSEIF LEN(last_name) > 0 and LEN(first_name) = 0 THEN
+	CALL find_name_in_CALI (last_name, CALI_office, CALI_team, CALI_position)
+ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
+	CALL find_name_in_CALI (last_name & ", " & first_name, CALI_office, CALI_team, CALI_position)
+END IF 
 	
+script_end_procedure("")
