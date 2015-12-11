@@ -614,5 +614,3 @@ END IF
 script_end_procedure("Success!!")
 
 
-
-

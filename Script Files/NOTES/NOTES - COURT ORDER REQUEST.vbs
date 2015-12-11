@@ -1,5 +1,11 @@
 option explicit
 
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+Dim name_of_script, start_time
+name_of_script = "NOTES - COURT ORDER REQUEST.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)-------------------------------------------------------------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only

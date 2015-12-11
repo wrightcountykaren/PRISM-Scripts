@@ -55,7 +55,7 @@ DO
 	' >>>>> CALLING THE DIALOG <<<<<
 	DIALOG get_cali_location_dlg
 		IF ButtonPressed = 0 THEN stopscript
-		
+		CALL check_for_PRISM(false)
 		position_number = replace(position_number, " ", "")
 		position_number = split(position_number, ",")
 		
@@ -139,7 +139,7 @@ FOR EACH worker_position IN position_number
 			
 			
 			IF confirmation_message = vbYes THEN 
-				worker_position = CALI_position	
+				IF len(worker_position) <> 11 THEN worker_position = CALI_position	
 				' >>>>> CREATING THE EXCEL FILE <<<<<
 				' >>>>> MAKING THE EXCEL FILE NOT VISIBLE UNTIL THE SCRIPT IS DONE. THIS PREVENTS WORKERS FROM CLICKING AND INTERRUPTING THE FLOW. <<<<<
 				Set objExcel = CreateObject("Excel.Application")

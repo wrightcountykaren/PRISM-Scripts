@@ -34,7 +34,7 @@ BeginDialog date_of_the_hearing_expro_dialog, 0, 0, 321, 220, "Date of the Heari
   Text 5, 25, 85, 10, "Child Support Magistrate"
   DropListBox 90, 25, 85, 15, "Select one:"+chr(9)+"Beverly Anderson"+chr(9)+"Jeffery Bangma"+chr(9)+"Kim Brandell"+chr(9)+"Alyssa Berg"+chr(9)+"James Brinegar"+chr(9)+"Jill Prohofsky"+chr(9)+"Patricia Marty-Villaume"+chr(9)+"Susan Williams", child_support_magistrate
   Text 180, 25, 55, 10, "County Attorney"
-  DropListBox 235, 25, 85, 15, "Select one:"+chr(9)+"Tonya D.F. Berzat"+chr(9)+"Michael S. Barone"+chr(9)+"Paul C. Clabo"+chr(9)+"Dorrie B. Estebo"+chr(9)+"Kay M. Gavinski"+chr(9)+"Rachel Morrison"+chr(9)+"D. Marie Sieber"+chr(9)+"Brett Schading", CAO_list
+  DropListBox 235, 25, 85, 15, "Select one:"+chr(9)+"Tonya D.F. Berzat"+chr(9)+"Michael S. Barone"+chr(9)+"Paul C. Clabo"+chr(9)+"Dorrie B. Estebo"+chr(9)+"Francine P. Mocchi"+chr(9)+"Rachel Morrison"+chr(9)+"D. Marie Sieber"+chr(9)+"Brett Schading", CAO_list
   CheckBox 5, 50, 50, 10, "NCP present", NCP_present_check
   Text 60, 50, 60, 10, "Represented by:"
   EditBox 115, 50, 85, 15, NCP_represented_by

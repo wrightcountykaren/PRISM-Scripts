@@ -1,3 +1,8 @@
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "ACTIONS - DDPL CALCULATOR.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+
 DIM beta_agency
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
@@ -98,4 +103,4 @@ Loop until end_of_data_check = "*** End of Data ***"
 string_for_msgbox = " Total payments issued for the period of " & PRISM_begin_date & " through " & PRISM_end_date & " is $" & total_amount_issued 
 
 MsgBox string_for_msgbox 
-
+script_end_procedure("")

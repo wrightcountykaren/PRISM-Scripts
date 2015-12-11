@@ -233,22 +233,13 @@ FOR EACH prism_case_number IN cases_array
 	END IF
 NEXT
 
-CALL navigate_to_PRISM_screen("CALI")
-FOR i = 0 to number_of_cases
-'	nocs_array(i, 0) >> PRISM_case_number
-'	nocs_array(i, 3) >> program_code (NPA, non-NPA; pulled from CALI)
-	EMWriteScreen nocs_array(i, 0), 20, 58
-	EMWriteScreen right(nocs_array(i, 0), 2), 20, 69
-	transmit
-	EMReadScreen program_code, 3, 8, 27
-	nocs_array(i, 3) = program_code
-NEXT
 
 CALL navigate_to_PRISM_screen("CAST")
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 0) >> PRISM_case_number
 '	nocs_array(i, 1) >> CP name
 '	nocs_array(i, 2) >> NCP name
+'	nocs_array(i, 3) >> program_code (NPA, non-NPA)
 '	nocs_array(i, 4) >> full_service (whether or not the case is full service; pulled from CAST)
 	EMWriteScreen nocs_array(i, 0), 4, 8
 	EMWriteScreen right(nocs_array(i, 0), 2), 4, 19
@@ -261,6 +252,8 @@ FOR i = 0 to number_of_cases
 	ncp_name = trim(ncp_name)
 	nocs_array(i, 1) = cp_name
 	nocs_array(i, 2) = ncp_name
+	EMReadScreen program_code, 3, 6, 68
+	nocs_array(i, 3) = program_code
 NEXT
 
 CALL navigate_to_PRISM_screen("CATH")
@@ -298,6 +291,7 @@ FOR i = 0 to number_of_cases
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	EMWriteScreen nocs_array(i, 0), 4, 8
 	EMWriteScreen right(nocs_array(i, 0), 2), 4, 19
+	EMWriteScreen date, 9, 18
 	CALL write_value_and_transmit("D", 3, 29)
 	EMReadScreen ivd_coop_code, 1, 15, 25
 	IF ivd_coop_code = "_" THEN ivd_coop_code = "Y"			'IF there has never been non-coop for good cause, the panel will be coded "_" which is effectively a "Y"
@@ -493,6 +487,8 @@ FOR i = 0 to number_of_cases
 			EMReadScreen uswt_case_number, 13, uswt_row, 8
 			IF PRISM_case_number = uswt_case_number THEN
 				EMWriteScreen "P", uswt_row, 4
+				transmit
+				transmit
 				number_of_cases_purged = number_of_cases_purged + 1
 			ELSE
 				uswt_row = uswt_row + 1

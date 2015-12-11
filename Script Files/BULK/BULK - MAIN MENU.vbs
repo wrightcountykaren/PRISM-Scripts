@@ -29,20 +29,23 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'DIALOGS---------------------------------------------------------------------------
-BeginDialog BULK_main_menu_dialog, 0, 0, 351, 180, "BULK main menu dialog"
+BeginDialog BULK_main_menu_dialog, 0, 0, 381, 210, "BULK Main Menu"
   ButtonGroup ButtonPressed
     PushButton 10, 15, 60, 10, "CALI to Excel", BULK_cali_to_excel_button
     PushButton 10, 40, 60, 10, "Case Transfer", BULK_case_transfer_button
-    PushButton 10, 75, 100, 10, "Companion Case Finder - CP", BULK_cp_companion_case_finder_button
-    PushButton 10, 100, 105, 10, "Companion Case Finder - NCP", BULK_ncp_companion_case_finder_button
-    PushButton 10, 125, 60, 10, "Evaluate NOCS", BULK_evaluate_nocs_button
-    CancelButton 295, 160, 50, 15
-  Text 80, 15, 265, 20, "This script builds a list in Microsoft Excel of case numbers, function types, program codes, interstate codes, and parent names."
-  Text 80, 40, 265, 25, "-- NEW!!! 08/2015  This script allows users to transfer up to 15 cases to as many workers as they need OR to transfer an entire caseload to as many workers as needed."
-  Text 115, 75, 225, 20, "--- NEW!!! 08/2015 -- This script builds a list of companion cases for your CPs on a given CALI."
-  Text 120, 100, 220, 20, "--- NEW!!! 08/2015 -- This script builds a list of companion cases for your NCPs on a given CALI."
-  Text 80, 125, 260, 10, "This script evaluates D0800 worklist items for continued services."
+    PushButton 10, 65, 100, 10, "Companion Case Finder - CP", BULK_cp_companion_case_finder_button
+    PushButton 10, 85, 105, 10, "Companion Case Finder - NCP", BULK_ncp_companion_case_finder_button
+    PushButton 10, 105, 60, 10, "Evaluate NOCS", BULK_evaluate_nocs_button
+    PushButton 10, 125, 90, 10, "Failure POF -- SSA, DFAS", BULK_failure_pof_rsdi_dfas_button
+    CancelButton 325, 190, 50, 15
+  Text 80, 15, 295, 20, "-- This script builds a list in Microsoft Excel of case numbers, function types, program codes, interstate codes, and parent names."
+  Text 80, 40, 295, 20, "-- This script allows users to transfer up to 15 cases to as many workers as they need OR to transfer an entire caseload to as many workers as needed."
+  Text 115, 65, 260, 10, "--- This script builds a list of companion cases for your CPs on a given CALI."
+  Text 120, 85, 255, 10, "-- This script builds a list of companion cases for your NCPs on a given CALI."
+  Text 80, 105, 260, 10, "-- This script evaluates D0800 worklist items for continued services."
+  Text 105, 125, 270, 20, "-- NEW 11/2015!!! Clears E0014 worklist item when income is from RSDI (US Treasury) or Dept of Defense."
 EndDialog
+
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------
 'Shows the dialog
@@ -52,4 +55,5 @@ IF ButtonPressed = BULK_cali_to_excel_button 					THEN CALL run_from_GitHub(scri
 IF ButtonPressed = BULK_case_transfer_button 					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - CASE TRANSFER.vbs")
 IF ButtonPressed = BULK_cp_companion_case_finder_button 			THEN CALL run_from_GitHub(script_repository & "BULK/BULK - CP COMPANION CASE FINDER.vbs")
 IF ButtonPressed = BULK_ncp_companion_case_finder_button			THEN CALL run_from_GitHub(script_repository & "BULK/BULK - NCP COMPANION CASE FINDER.vbs")
+IF ButtonPressed = BULK_failure_pof_rsdi_dfas_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - FAILURE POF RSDI DFAS.vbs")
 IF ButtonPressed = BULK_evaluate_nocs_button 					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - EVALUATE NOCS.vbs")

@@ -1,4 +1,6 @@
-
+'Gathering stats+=====================
+name_of_scripts = "ACTIONS - ESTB DORD DOCS FOR PA CASE.vbs"
+start_time = timer
 
 DIM beta_agency
 
@@ -307,5 +309,4 @@ Transmit
 
 pf3
 
-StopScript
-
+script_end_procedure("")
