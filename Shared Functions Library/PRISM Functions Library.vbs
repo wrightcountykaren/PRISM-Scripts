@@ -701,6 +701,13 @@ CLASS doc_info
 		EMReadScreen cp_ssn, 11, 6, 7
 	END PROPERTY
 	
+	' CP MCI
+	PUBLIC PROPERTY GET cp_mci
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_mci, 10, 5, 7
+	END PROPERTY	
+	
 	' CP address
 	PUBLIC PROPERTY GET cp_addr
 		EMReadScreen at_screen, 4, 21, 75
@@ -793,6 +800,13 @@ CLASS doc_info
 		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_ssn, 11, 6, 7
 	END PROPERTY
+	
+	' NCP MCI
+	PUBLIC PROPERTY GET ncp_mci
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_mci, 10, 5, 7
+	END PROPERTY	
 
 	' NCP street address
 	PUBLIC PROPERTY GET ncp_addr
