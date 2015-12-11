@@ -1,3 +1,7 @@
+'Gathering stats==========================================
+name_of_script = "NOTES - CASE TRANSFER.vbs"
+start_time = timer
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)-------------------------------------------------------------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
@@ -137,6 +141,4 @@ IF letter_checkbox = 1 THEN CALL write_variable_in_CAAD("* Sent New Worker lette
 CALL write_variable_in_CAAD(worker_signature) 
 transmit
 
-MsgBox "Case has been transferred and CAAD noted. If you use OnBase as your EDMS System, don't forget to SCREEN SCRAPE if necessary."
-
-
+script_end_procedure("Case has been transferred and CAAD noted. If you use OnBase as your EDMS System, don't forget to SCREEN SCRAPE if necessary.")
