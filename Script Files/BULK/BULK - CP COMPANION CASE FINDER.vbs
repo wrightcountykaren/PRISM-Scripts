@@ -55,7 +55,7 @@ DO
 	' >>>>> CALLING THE DIALOG <<<<<
 	DIALOG get_cali_location_dlg
 		IF ButtonPressed = 0 THEN stopscript
-		
+		CALL check_for_PRISM(false)
 		position_number = replace(position_number, " ", "")
 		position_number = split(position_number, ",")
 		
@@ -68,6 +68,7 @@ DO
 		
 		IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."	
 LOOP UNTIL err_msg = ""
+
 
 
 ' >>>>> BUILDING A NEW EXCEL FILE FOR EACH CALI. <<<<<
