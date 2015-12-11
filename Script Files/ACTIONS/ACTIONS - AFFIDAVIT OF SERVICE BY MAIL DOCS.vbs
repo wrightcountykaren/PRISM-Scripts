@@ -1023,8 +1023,6 @@ EMSendKey (PF3)
 
 End If
 
-
-
-
+script_end_procedure("")
 
 
