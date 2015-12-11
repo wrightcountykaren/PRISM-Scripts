@@ -1,4 +1,6 @@
-
+'GATHERING STATS ==============================
+name_of_script = "NOTES - IW CAAD CAWT.vbs"
+start_time = timer
 
 'this is a function document
 DIM beta_agency 'remember to add
