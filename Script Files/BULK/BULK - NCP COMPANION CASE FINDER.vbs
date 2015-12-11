@@ -139,6 +139,7 @@ FOR EACH worker_position IN position_number
 			
 			
 			IF confirmation_message = vbYes THEN 
+				CALL check_for_PRISM(false)
 				IF len(worker_position) <> 11 THEN worker_position = CALI_position	
 				' >>>>> CREATING THE EXCEL FILE <<<<<
 				' >>>>> MAKING THE EXCEL FILE NOT VISIBLE UNTIL THE SCRIPT IS DONE. THIS PREVENTS WORKERS FROM CLICKING AND INTERRUPTING THE FLOW. <<<<<
