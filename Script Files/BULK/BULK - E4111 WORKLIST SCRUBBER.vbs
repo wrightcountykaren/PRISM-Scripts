@@ -82,7 +82,7 @@ DO
 		begin_date = cdate(c_begin_date)
 		begin_date_plus1 = DateAdd("m", 1, begin_date)
 		end_date = DateAdd("d", -1, begin_date_plus1)
-		EMWriteScreen begin_date, 20, 35
+		EMWriteScreen c_begin_date, 20, 35
 		EMWriteScreen end_date, 20, 49		
 		transmit
 
