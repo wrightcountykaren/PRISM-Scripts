@@ -177,4 +177,6 @@ EMConnect ""
 
 CALL quarterly_wage("NCP")
 CALL quarterly_wage("CP")
+CALL quarterly_wage("NCP")
+CALL quarterly_wage("CP")
 script_end_procedure("Success! The script is now ending!")
