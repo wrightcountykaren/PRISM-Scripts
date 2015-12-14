@@ -1,5 +1,5 @@
 'GATHERING STATS---------------------------------------------------------------------------------------------------- 
-name_of_script = "BULK - M6529 .vbs" 
+name_of_script = "BULK - M6529.vbs" 
 start_time = timer 
 
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
