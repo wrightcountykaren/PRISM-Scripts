@@ -29,23 +29,30 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'DIALOGS---------------------------------------------------------------------------
-BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 180, "ACTIONS Main Menu"
+BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 240, "ACTIONS Main Menu"
   ButtonGroup ButtonPressed
-    PushButton 5, 10, 85, 10, "Affidavit of Service Docs", ACTIONS_affidavit_of_service_button
-    PushButton 5, 30, 70, 10, "Find Name on CALI", ACTIONS_find_name_on_cali_button
-    PushButton 5, 50, 30, 10, "Intake", ACTIONS_intake_button
-    PushButton 5, 75, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
-    PushButton 5, 95, 60, 10, "Prorate Support", ACTIONS_prorate_support_button
-    PushButton 5, 115, 65, 10, "Redirection Docs", ACTIONS_redirection_docs_button
-    PushButton 5, 135, 75, 10, "Unreimb/Unins Docs", ACTIONS_un_un_button
-    CancelButton 325, 160, 50, 15
-  Text 100, 10, 270, 10, "-- NEW 11/2015!!! Sends Affidavits of Serivce to multiple participants on the case."
-  Text 80, 30, 215, 10, "-- Searches CALI for a specific CP or NCP."
-  Text 40, 50, 335, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
-  Text 70, 75, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
-  Text 70, 95, 225, 10, "- Calculator for deteremining pro-rated support for partial months."
-  Text 75, 115, 290, 10, "-- NEW 11/2015!!! Creates redirection docs and redirection worklist items."
-  Text 85, 135, 290, 10, "-- NEW 11/2015!!! Prints DORD docs for collecting unreimbursed and unisured expenses."
+    PushButton 5, 25, 85, 10, "Affidavit of Service Docs", ACTIONS_affidavit_of_service_button
+    PushButton 5, 40, 60, 10, "DDPL Calculator", ACTIONS_DDPL_CALC_button
+    PushButton 5, 55, 80, 10, "Estab NPA DORD Docs", ACTIONS_EST_DORD_NPA_button
+    PushButton 5, 70, 80, 10, "Estab PA DORD Docs", ACTIONS_EST_DORD_PA_button
+    PushButton 5, 85, 70, 10, "Find Name on CALI", ACTIONS_find_name_on_cali_button
+    PushButton 5, 100, 30, 10, "Intake", ACTIONS_intake_button
+    PushButton 5, 125, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
+    PushButton 5, 145, 60, 10, "Prorate Support", ACTIONS_prorate_support_button
+    PushButton 5, 165, 65, 10, "Redirection Docs", ACTIONS_redirection_docs_button
+    PushButton 5, 185, 75, 10, "Unreimb/Unins Docs", ACTIONS_un_un_button
+    CancelButton 325, 220, 50, 15
+    PushButton 300, 5, 75, 10, "PRISM Scripts in SIR", SIR_button
+  Text 100, 25, 270, 10, "-- Sends Affidavits of Serivce to multiple participants on the case."
+  Text 70, 40, 300, 10, "-- NEW 01/2016!! Calculates payments received during a specific date range."
+  Text 90, 55, 280, 10, "-- NEW 01/2016!! Generates DORD docs for NPA case."
+  Text 90, 70, 280, 10, "-- NEW 01/2016!! Generates DORD docs for PA case."
+  Text 80, 85, 215, 10, "-- Searches CALI for a specific CP or NCP."
+  Text 40, 100, 330, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
+  Text 70, 125, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
+  Text 70, 145, 225, 10, "- Calculator for deteremining pro-rated support for partial months."
+  Text 75, 165, 290, 10, "-- Creates redirection docs and redirection worklist items."
+  Text 85, 185, 290, 10, "-- Prints DORD docs for collecting unreimbursed and unisured expenses."
 EndDialog
 
 
@@ -53,9 +60,15 @@ EndDialog
 'THE SCRIPT-----------------------------------------------------------------------------------------------
 
 'Shows the dialog
-Dialog ACTIONS_main_menu_dialog
-If buttonpressed = cancel then stopscript
+DO
+	Dialog ACTIONS_main_menu_dialog
+	If buttonpressed = cancel then stopscript
+	IF ButtonPressed = SIR_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
+LOOP UNTIL ButtonPressed <> SIR_button
 IF ButtonPressed = ACTIONS_affidavit_of_service_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - AFFIDAVIT OF SERVICE BY MAIL DOCS.vbs")
+IF ButtonPressed = ACTIONS_DDPL_CALC_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - DDPL CALCULATOR.vbs")
+IF ButtonPressed = ACTIONS_EST_DORD_NPA_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - EST DORD NPA DOCS.vbs")
+IF ButtonPressed = ACTIONS_EST_DORD_PA_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - ESTB DORD PA DOCS.vbs")
 IF ButtonPressed = ACTIONS_find_name_on_cali_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - FIND NAME ON CALI.vbs")
 IF ButtonPressed = ACTIONS_prorate_support_button THEN call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - PRORATE SUPPORT.vbs")
 IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - INTAKE.vbs")
