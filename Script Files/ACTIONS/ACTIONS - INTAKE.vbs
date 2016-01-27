@@ -294,7 +294,7 @@ End if
 'Updating the CP paternity request document
 If CP_paternity_request_sheet_check = checked then
 	
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\CP Paternity Request Sheet.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\CP Paternity Request Sheet.dotx")
 	With objDoc
 		.FormFields("field_childs_name").Result = childs_name
 		.FormFields("field_CP_name").Result = CP_name
@@ -305,7 +305,7 @@ End if
 
 'Updating the Financial Affidavit OCS document
 If financial_affidavit_OCS_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Financial Affidavit OCS.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Financial Affidavit OCS.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_all_children").Result = CAPS_kids
@@ -316,7 +316,7 @@ End if
 
 'Updating the Normal Paternity Cover Letter to CP document
 If paternity_cover_letter_normal_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Normal.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Normal.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -328,12 +328,14 @@ If paternity_cover_letter_normal_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
+		.FormFields("PRISM_Number").Result = PRISM_case_number
+		.FormFields("CP_NAME").Result = CP_name
 	End With
 End if
 
 'Opening the Relative Caretaker Paternity Cover Letter to CP document (does not autofill any info)
 If paternity_cover_letter_relative_caretaker_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Relative Caretaker.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Relative Caretaker.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -341,13 +343,14 @@ If paternity_cover_letter_relative_caretaker_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
-
+		.FormFields("PRISM_Number").Result = PRISM_case_number
+		.FormFields("CP_NAME").Result = CP_name
 	End With
 End if
 
 'Updating the Minor with GAL Paternity Cover Letter to CP document
 If paternity_cover_letter_minor_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Minor with GAL attachment.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Minor with GAL attachment.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -357,12 +360,14 @@ If paternity_cover_letter_minor_check = checked then
 		.FormFields("field_phone").Result = worker_phone
 		.FormFields("field_name_02").Result = CP_name
 		.FormFields("field_case_number_02").Result = PRISM_case_number
+		.FormFields("PRISM_Number").Result = PRISM_case_number
+		.FormFields("CP_NAME").Result = CP_name
 	End With
 End if
 
 'Updating the Establishment Intake Ltr
 If Est_Ltr_checkbox = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Establishment Intake Letter.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Establishment Intake Letter.dotx")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CP_address").Result = street_address
@@ -375,11 +380,11 @@ If Est_Ltr_checkbox = checked then
 End if
 
 'Opening the Paternity Information Form Memo document (does not autofill any info)
-If paternity_information_form_memo_check = checked then set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Information Form Memo.dotx")
+If paternity_information_form_memo_check = checked then set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Information Form Memo.dotx")
 
 'Opening the Paternity Information Form document 
 If paternity_information_form_check = checked then 
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Information Form.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Information Form.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -389,7 +394,7 @@ End if
 
 'Opening the Supplemental Paternity Information Form document 
 If supplemental_paternity_information_form_check = checked then 
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Supplemental Paternity Information Form.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Supplemental Paternity Information Form.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -398,7 +403,7 @@ If supplemental_paternity_information_form_check = checked then
 End if
 'Opening the Relative Caretaker Paternity Information Form document 
 If relative_caretaker_paternity_info_form_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Relative Caretakers Paternity Questionnaire.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Relative Caretakers Paternity Questionnaire.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -536,3 +541,4 @@ If CAWD_check = checked then
 End if
 
 script_end_procedure("")
+
