@@ -66,7 +66,7 @@ BeginDialog CS_intake_dialog, 0, 0, 370, 344, "CS intake dialog"
   CheckBox 10, 220, 150, 10, "Issues-Paternity-to be Decided", issues_paternity_to_be_decided_check
   CheckBox 10, 230, 150, 10, "Parenting Time Schedules", parenting_time_schedules_check
   CheckBox 10, 240, 150, 10, "Financial Affidavit OCS", financial_affidavit_OCS_check
-  CheckBox 10, 260, 130, 10, "Establishment Intake Ltr", Est_Ltr_checkbox
+  CheckBox 10, 270, 130, 10, "Establishment Intake Ltr", Est_Ltr_checkbox
   CheckBox 200, 110, 100, 10, "F0018 - Your Privacy Rights", F0018_checkbox
   CheckBox 200, 120, 160, 10, "F0021 - Financial Statement", F0021_checkbox
   CheckBox 200, 130, 140, 10, "F0022 - Important Statement of Rights", F0022_check
@@ -96,8 +96,9 @@ BeginDialog CS_intake_dialog, 0, 0, 370, 344, "CS intake dialog"
   GroupBox 180, 100, 190, 70, "DORD docs to print for client"
   Text 200, 220, 70, 10, "Sign your CAAD note:"
   Text 10, 60, 50, 10, "Street (line 2):"
-  
+  CheckBox 10, 250, 130, 10, "Special Services Assessment", Special_assessment_check
 EndDialog
+
 'CUSTOM FUNCTIONS***************************************************************************************************************
 ' This is a custom function to change the format of a participant name.  The parameter is a string with the 
 ' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
@@ -285,11 +286,20 @@ If _
 	paternity_information_form_memo_check = checked or _
 	paternity_information_form_check = checked or _
 	relative_caretaker_paternity_info_form_check = checked or _
-	supplemental_paternity_information_form_check = checked then
+	supplemental_paternity_information_form_check = checked or _
+	Special_assessment_check = checked then
 		Set objWord = CreateObject("Word.Application")
 		objWord.Visible = True
 End if
 
+If Special_assessment_check = checked then
+	
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\CP Paternity Request Sheet.dotx")
+	With objDoc
+		.FormFields("PRISM_Number").Result = PRISM_case_number
+		.FormFields("CP_NAME").Result = CP_name
+	End With
+End if
 
 'Updating the CP paternity request document
 If CP_paternity_request_sheet_check = checked then
@@ -328,8 +338,7 @@ If paternity_cover_letter_normal_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
-		.FormFields("PRISM_Number").Result = PRISM_case_number
-		.FormFields("CP_NAME").Result = CP_name
+
 	End With
 End if
 
@@ -343,8 +352,6 @@ If paternity_cover_letter_relative_caretaker_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
-		.FormFields("PRISM_Number").Result = PRISM_case_number
-		.FormFields("CP_NAME").Result = CP_name
 	End With
 End if
 
@@ -360,8 +367,6 @@ If paternity_cover_letter_minor_check = checked then
 		.FormFields("field_phone").Result = worker_phone
 		.FormFields("field_name_02").Result = CP_name
 		.FormFields("field_case_number_02").Result = PRISM_case_number
-		.FormFields("PRISM_Number").Result = PRISM_case_number
-		.FormFields("CP_NAME").Result = CP_name
 	End With
 End if
 
@@ -511,6 +516,7 @@ If CAAD_note_check = checked then
 	If paternity_information_form_memo_check = checked then call write_new_line_in_PRISM_case_note("    * Paternity Information Form Memo")
 	If paternity_information_form_check = checked then call write_new_line_in_PRISM_case_note("    * Paternity Information Form")
 	If supplemental_paternity_information_form_check = checked then call write_new_line_in_PRISM_case_note("    * Supplemental Paternity Information Form")
+	If Special_assessment_check = checked then call write_new_line_in_PRISM_case_note("    * Special Services Assessment")
 	If Est_Ltr_checkbox = checked then call write_new_line_in_PRISM_case_note("    * Establishment Intake Letter")
 	If F0018_checkbox = checked then call write_new_line_in_PRISM_case_note("    * DORD F0018")
 	If F0021_checkbox = checked then call write_new_line_in_PRISM_case_note("    * DORD F0021")
@@ -541,4 +547,5 @@ If CAWD_check = checked then
 End if
 
 script_end_procedure("")
+
 
