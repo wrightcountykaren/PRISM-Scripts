@@ -29,32 +29,34 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 '-----The dialog-----
-BeginDialog NOTES_main_menu_dialog, 0, 0, 431, 260, "NOTES main menu dialog"
+BeginDialog NOTES_main_menu_dialog, 0, 0, 430, 260, "NOTES main menu dialog"
   ButtonGroup ButtonPressed
     PushButton 10, 30, 50, 10, "Client contact", NOTES_client_contact_button
-    PushButton 10, 45, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
+    PushButton 10, 40, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
     PushButton 10, 70, 50, 10, "CSENET Info", NOTES_CSENET_button
-    PushButton 10, 85, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
-    PushButton 10, 100, 95, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
-    PushButton 10, 115, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
+    PushButton 10, 80, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
+    PushButton 10, 100, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
+    PushButton 10, 110, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
     PushButton 10, 130, 50, 10, "Pay or report", NOTES_pay_or_report_button
-    PushButton 10, 145, 65, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
+    PushButton 10, 140, 70, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
     PushButton 10, 160, 50, 10, "ROP Detail", NOTES_ROP_invoice_button
     PushButton 10, 180, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
-    PushButton 10, 205, 105, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
-    CancelButton 380, 240, 50, 15
-    PushButton 355, 5, 75, 10, "PRISM Scripts in SIR", SIR_button
-  Text 65, 30, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
-  Text 95, 45, 325, 20, "-- Creates B0170 CAAD note for requesting a court order, which also creates a work list to remind the worker to check the status of the court order request."
-  Text 65, 70, 350, 10, "-- Creates T0111 CAAD note script with text copied from the INTD screen."
-  Text 105, 85, 200, 10, "-- Date of the hearing template for expro."
-  Text 110, 100, 195, 10, "-- Date of the hearing template for judicial."
-  Text 85, 115, 340, 10, "-- Creates CAAD note for documenting non-payment enforcement actions."
-  Text 65, 130, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
-  Text 80, 145, 225, 10, "-- CAAD note for quarterly review processes."
+    PushButton 10, 200, 110, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
+    PushButton 10, 20, 40, 10, "Adjustment", NOTES_adjustment_button
+    CancelButton 380, 240, 50, 20
+    PushButton 350, 0, 80, 10, "PRISM Scripts in SIR", SIR_button
+  Text 50, 20, 300, 10, "-- NEW 1/2016 Creates a CAAD note for documenting adjustments made to the case."
+  Text 90, 40, 330, 20, "-- Creates B0170 CAAD note for requesting a court order, which also creates a work list to remind the worker to check the status of the court order request."
+  Text 60, 70, 350, 10, "-- Creates T0111 CAAD note script with text copied from the INTD screen."
+  Text 100, 80, 200, 10, "-- Date of the hearing template for expro."
+  Text 110, 100, 200, 10, "-- Date of the hearing template for judicial."
+  Text 80, 110, 340, 10, "-- Creates CAAD note for documenting non-payment enforcement actions."
+  Text 60, 130, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
+  Text 80, 140, 230, 10, "-- CAAD note for quarterly review processes."
   Text 70, 160, 350, 10, "-- Creates CAAD note noting the dates parties signed recognition of parentage."
   Text 70, 180, 350, 20, "-- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
-  Text 120, 205, 285, 15, "-- Creates CAAD note of the date a CP signed the waiver of personal service document."
+  Text 120, 200, 290, 20, "-- Creates CAAD note of the date a CP signed the waiver of personal service document."
+  Text 60, 30, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
 EndDialog
 
 
@@ -67,6 +69,7 @@ DO
 	IF ButtonPressed = SIR_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
 LOOP UNTIL ButtonPressed <> SIR_button
 
+IF ButtonPressed = NOTES_adjustment_button then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
 IF ButtonPressed = NOTES_Client_contact_button then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
 IF ButtonPressed = NOTES_court_order_requested_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
 IF ButtonPressed = NOTES_CSENET_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
@@ -78,3 +81,4 @@ IF ButtonPressed = NOTES_quarterly_reviews_button then call run_from_GitHub(scri
 IF ButtonPressed = NOTES_ROP_invoice_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - ROP DETAIL.vbs")
 IF ButtonPressed = NOTES_SOP_invoice_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - SOP INVOICE.vbs")
 IF ButtonPressed = NOTES_waiver_of_personal_service_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - WAIVER OF PERSONAL SERVICE.vbs")
+
