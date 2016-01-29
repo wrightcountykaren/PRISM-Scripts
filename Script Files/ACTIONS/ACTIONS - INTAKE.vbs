@@ -294,7 +294,7 @@ End if
 
 If Special_assessment_check = checked then
 	
-	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\CP Paternity Request Sheet.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Special Services Assessment.dotx")
 	With objDoc
 		.FormFields("PRISM_Number").Result = PRISM_case_number
 		.FormFields("CP_NAME").Result = CP_name
@@ -547,5 +547,6 @@ If CAWD_check = checked then
 End if
 
 script_end_procedure("")
+
 
 
