@@ -46,8 +46,10 @@ END FUNCTION
 
 ' >>>>> DETERMINING FIRST DAY OF THE MONTH <<<<< 
 current_month = DatePart("M", date)
+if len(current_month) = 1 then current_month = 0 & current_month
 current_year = DatePart("YYYY", date)
 current_date = current_month & "/01/" & current_year
+
 
 ' >>>>> DETERMINING LAST DAY OF THE MONTH <<<<< 
 next_month = DateAdd("M", 1, current_date)
@@ -91,7 +93,7 @@ DO
 
 		Call navigate_to_PRISM_screen ("PALC")
 
-
+		
 		EMWriteScreen current_month_minus3f, 20, 35
 		transmit	
 					
@@ -209,3 +211,4 @@ total_involuntary_alloc = "0"
 LOOP UNTIL USWT_type <> "M6529"
 
 script_end_procedure("Success!  " & Count & " worklists have been processed.")
+
