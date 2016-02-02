@@ -99,6 +99,8 @@ DO
 		IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
 LOOP UNTIL err_msg = ""
 
+CALL check_for_PRISM(false)
+
 'goes to correct case
 CALL write_value_and_transmit("CAST", 21, 18)
 
