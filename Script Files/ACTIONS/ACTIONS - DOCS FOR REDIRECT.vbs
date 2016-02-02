@@ -43,7 +43,7 @@ redirection_month = DatePart("m", month_after)
 redirection_year = DatePart("yyyy", month_after)
 If len(redirection_month) = 1 then redirection_month = "0" & redirection_month
 
-Dim case_number, caregiver_case_number, caregiver_name, prorate_yes, prorate_no, child_one, child_two, child_three, child_four, child_five, child_six, cch_amount, cms_amount, ccc_amount, total_amount, original_cp_name
+'Dim case_number, caregiver_case_number, caregiver_name, prorate_yes, prorate_no, child_one, child_two, child_three, child_four, child_five, child_six, cch_amount, cms_amount, ccc_amount, total_amount, original_cp_name
 BeginDialog redirection_dialog, 0, 0, 236, 285, "Redirection Script"
   EditBox 90, 5, 145, 15, case_number
   EditBox 90, 20, 145, 15, caregiver_case_number
@@ -94,7 +94,6 @@ EMWriteScreen Right (case_number, 2), 4, 19
 
 CALL write_value_and_transmit("D", 3, 29)
 
-msgbox "updated 01/27/2016 @ 5:00"
 '________________________________________________________________________________________________________________________________________________________________________________________ NCP NOTICE
 'goes to DORD
 CALL navigate_to_PRISM_screen("DORD")
