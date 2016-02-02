@@ -1,7 +1,7 @@
 'Option Explicit
 
 'STATS GATHERING ---------------------------
-name_of_script = "ACTIONS - these DOCS.vbs"
+name_of_script = "ACTIONS - REDIRECT DOCS.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
