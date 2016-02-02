@@ -82,8 +82,22 @@ EndDialog
 EMConnect ""
 
 'Starts dialog
-					Dialog redirection_dialog
-     					IF ButtonPressed = 0 THEN StopScript
+DO
+	err_msg = ""
+	Dialog redirection_dialog
+    	IF ButtonPressed = 0 THEN StopScript
+		IF case_number = "" 											THEN err_msg = err_msg & vbCr & "* Please provide a PRISM case number."
+		IF caregiver_case_number = "" 									THEN err_msg = err_msg & vbCr & "* Please provide the caregiver's case number."
+		IF (case_number = caregiver_case_number) AND case_number <> ""	THEN err_msg = err_msg & vbCr & "* The current case number and the caregiver's case number match. Please review the case numbers you are providing."
+		IF original_cp_name = "" 										THEN err_msg = err_msg & vbCr & "* Please provide the CP's name."
+		IF caregiver_name = "" 											THEN err_msg = err_msg & vbCr & "* Please provide the caregiver's name."
+		IF child_one = "" 												THEN err_msg = err_msg & vbCr & "* You have not provided the name of any children on this case."
+		IF prorate_no = 1 AND prorate_yes = 1							THEN err_msg = err_msg & vbCr & "* Please indicate if the support is prorated. You cannot select YES and NO."
+		IF prorate_yes = 0 AND prorate_no = 0 							THEN err_msg = err_msg & vbCr & "* Please indicate if the support is prorated. You must select either YES or NO."
+		IF cch_amount = "" AND cms_amount = "" AND ccc_amount = "" 		THEN err_msg = err_msg & vbCr & "* Please indicate the CCH amount OR the CMS amount OR the CCC amount. These fields cannot be left blank."
+		IF total_amount = "" 											THEN err_msg = err_msg & vbCr & "* Please indicate the total amount. This field cannot be left blank."
+		IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+LOOP UNTIL err_msg = ""
 
 'goes to correct case
 CALL write_value_and_transmit("CAST", 21, 18)
