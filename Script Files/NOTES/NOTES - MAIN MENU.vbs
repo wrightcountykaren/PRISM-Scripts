@@ -43,8 +43,10 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 437, 316, "NOTES main menu dialog"
     PushButton 10, 240, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
     PushButton 10, 260, 110, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
     PushButton 10, 10, 40, 10, "Adjustment", NOTES_adjustment_button
-    CancelButton 380, 290, 50, 20
+    PushButton 10, 30, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
     PushButton 350, 0, 80, 10, "PRISM Scripts in SIR", SIR_button
+    CancelButton 380, 290, 50, 20
+
   Text 90, 30, 300, 10, "-- NEW 2/2016 Creates a CAAD note for documenting an arrears management review."
   Text 90, 70, 330, 20, "-- Creates B0170 CAAD note for requesting a court order, which also creates a work list to remind the worker to check the status of the court order request."
   Text 60, 100, 350, 10, "-- Creates T0111 CAAD note script with text copied from the INTD screen."
@@ -57,8 +59,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 437, 316, "NOTES main menu dialog"
   Text 60, 240, 350, 20, "-- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
   Text 120, 260, 290, 20, "-- Creates CAAD note of the date a CP signed the waiver of personal service document."
   Text 60, 50, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
-  ButtonGroup ButtonPressed
-    PushButton 10, 30, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
+
   Text 50, 10, 300, 10, "-- NEW 1/2016 Creates a CAAD note for documenting adjustments made to the case."
 EndDialog
 
