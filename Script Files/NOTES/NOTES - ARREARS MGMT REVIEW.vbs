@@ -81,7 +81,7 @@ DO
 	
 		
 	DO
-		dialog contact_dialog
+		dialog arrears_mgmt_dialog
 		IF buttonpressed = 0 THEN stopscript
 		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 		IF case_number_valid = FALSE THEN MsgBox "Your case number is not valid. Please make sure it uses the following format: ''XXXXXXXXXX-XX''"
