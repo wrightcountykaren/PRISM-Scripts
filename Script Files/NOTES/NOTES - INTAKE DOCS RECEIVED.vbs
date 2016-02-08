@@ -97,20 +97,14 @@ DO
 	dialog intake_docs_recd_dialog
 	IF buttonpressed = 0 THEN stopscript
 	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
-	IF case_number_valid = False THEN MsgBox "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX"
-LOOP UNTIL case_number_valid = True
+	IF case_number_valid = False THEN error_msg = "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX.  "
+	IF worker_signature = "" THEN error_msg = error_msg & "You must sign your CAAD note!"                   'If worker sig is blank, message box pops saying you must sign caad note
+	Msgbox error_msg
+LOOP UNTIL case_number_valid = True AND worker_signature <> ""
 
 
 'Makes sure you are not passworded out
-'CALL check_for_PRISM(True)
-
-'The script will not run unless the CAAD note is signed
-DO
-	Dialog intake_docs_recd_dialog
-	IF ButtonPressed = 0 THEN StopScript		                                       'Pressing Cancel stops the script
-	IF worker_signature = "" THEN MsgBox "You must sign your CAAD note!"                   'If worker sig is blank, message box pops saying you must sign caad note
-LOOP UNTIL worker_signature <> ""                                                            'Will keep popping up until worker signs note
-
+CALL check_for_PRISM(True)
 
 'Navigates to CAAD and adds the note
 CALL navigate_to_PRISM_screen("CAAD")
