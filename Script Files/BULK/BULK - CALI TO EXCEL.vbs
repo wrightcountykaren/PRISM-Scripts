@@ -117,7 +117,6 @@ objExcel.DisplayAlerts = True 'Set this to false to make alerts go away. This is
 'sets row to fill info into Excel
 excel_row = 2
 
-
 Do 'Loops script until the end of CALI
 	prism_row = 8
 	Do 'Copies Case Number, Function Type, Program Type, CP Name, and NCP Name to the Excel document
