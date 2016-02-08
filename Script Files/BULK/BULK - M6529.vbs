@@ -33,31 +33,40 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			"URL: " & url
 			StopScript
 END IF
-
+'This function takes a date and addes leading zeros if necessary to format MM/DD/YYYY
 FUNCTION change_date_format(date_to_format)
 		month3 = DatePart("M", date_to_format)
 		day3 = DatePart("D", date_to_format)
 		year3 = DatePart("YYYY", date_to_format)
-		if len(month3) = 1 then month3 = 0 & month3
-		if len(day3) = 1 then day3 = 0 & day3
-		date_to_format = month3 & "/" & day3 & "/" & year3
+		if len(month3) = 1 then 
+			month3_s = "0" & month3
+		else
+			month3_s = month3
+		end if
+		if len(day3) = 1 then 
+			day3_s = "0" & day3
+		else
+			day3_s = day3
+		end if
+		date_to_format = month3_s & "/" & day3_s & "/" & year3
 		change_date_format = date_to_format
 END FUNCTION
 
 ' >>>>> DETERMINING FIRST DAY OF THE MONTH <<<<< 
 current_month = DatePart("M", date)
-if len(current_month) = 1 then current_month = 0 & current_month
+if len(current_month) = 1 then current_month_s = "0" & current_month
 current_year = DatePart("YYYY", date)
-current_date = current_month & "/01/" & current_year
+current_date = current_month_s & "/01/" & current_year
 
 
 ' >>>>> DETERMINING LAST DAY OF THE MONTH <<<<< 
 next_month = DateAdd("M", 1, current_date)
 next_month_minus1 = DateAdd("D", -1, next_month)
+next_month_minus1_s = change_date_format(next_month_minus1)
 
 '>>>>>> DETERMINING A DATE 3 MONTHS AGO  <<<<<<	
 current_month_minus3 = DateAdd("M", -3, date) 'variable for the current date minus three - this returns a date format
-current_month_minus3f = change_date_format(current_month_minus3)
+current_month_minus3_s = change_date_format(current_month_minus3)
 
 ' >>>>> THE SCRIPT <<<<<
 EMConnect ""
@@ -67,8 +76,8 @@ Call navigate_to_Prism_screen("USWT")
 
 ' >>>>> SELECTING THE SPECIFIC WORKLIST INFO <<<<<
 EMWriteScreen "M6529", 20, 30
-EMWriteScreen current_date, 20, 48
-EMWriteScreen next_month_minus1, 20, 63
+EMWriteScreen current_date, 20, 48   'Select worklists that are due this calendar month 
+EMWriteScreen next_month_minus1_s, 20, 63
 transmit
 
 USWT_row = 7
@@ -94,7 +103,7 @@ DO
 		Call navigate_to_PRISM_screen ("PALC")
 
 		
-		EMWriteScreen current_month_minus3f, 20, 35
+		EMWriteScreen current_month_minus3_s, 20, 35  'Checks for payments for the last three months
 		transmit	
 					
 		row = 9		'Setting variable for the do...loop
