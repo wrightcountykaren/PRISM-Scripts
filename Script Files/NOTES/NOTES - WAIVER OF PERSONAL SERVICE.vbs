@@ -106,7 +106,6 @@ EMSetCursor 16, 4
 CALL write_bullet_and_variable_in_CAAD("Waiver of Personal Service Signed by CP", waiver_signed_date)
 CALL write_variable_in_CAAD(worker_signature)
 transmit  'Saves the CAAD note
-PF3	    'Exits back out of CAAD
 
 
 script_end_procedure("")   'Stops the script
