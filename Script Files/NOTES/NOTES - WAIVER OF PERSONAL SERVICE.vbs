@@ -40,7 +40,6 @@ END IF
 'DIMMING variables
 DIM beta_agency, row, col, case_number_valid, waiver_signed_date, prism_case_number, worker_signature, waiver_dialog, ButtonPressed
 
-
 'THE DIALOG--------------------------------------------------------------------------------------------------
 
 BeginDialog Waiver_Dialog, 0, 0, 236, 85, "Waiver of Personal Service"
