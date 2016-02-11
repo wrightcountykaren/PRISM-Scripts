@@ -81,4 +81,4 @@ IF ButtonPressed = BULK_M6529_button						THEN CALL run_from_GitHub(script_repos
 IF ButtonPressed = BULK_M8001_button						THEN CALL run_from_GitHub(script_repository & "BULK/BULK - M8001 WORKLIST SCRUBBER.vbs")
 IF ButtonPressed = BULK_REVIEW_QW_button					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - REVIEW QW INFO.vbs")
 IF ButtonPressed = BULK_E4111_activity_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - E4111 WORKLIST SCRUBBER.vbs")
-IF ButtonPressed = BULK_E4111_suspended_button				THEN CALL run_from_GitHub(script_repository & "BULK/ BULK - E4111 SUSP SCRUBBER.vbs")
+IF ButtonPressed = BULK_E4111_suspended_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - E4111 SUSP SCRUBBER.vbs")
