@@ -45,11 +45,9 @@ BeginDialog case_number_dialog, 0, 0, 176, 85, "Case number dialog"
 EndDialog
 
 'Adjustment Dialog-
-BeginDialog Adjustment_Dialog, 0, 0, 187, 176, "Adjustment(s)"
-  Text 0, 10, 70, 10, "Adjustment Reason"
-  DropListBox 70, 10, 110, 10, "Please Select One:"+chr(9)+"Arrears Management"+chr(9)+"Direct Support"+chr(9)+"Error"+chr(9)+"Forgiveness"+chr(9)+"Interest Adjustment"+chr(9)+"Order"+chr(9)+"Other"+chr(9)+"Overpayment", Reason_List
-  Text 0, 30, 70, 20, "Affected Obligations"
-  CheckBox 70, 30, 30, 20, "CCC", CCC_Obli_checkbox
+BeginDialog Adjustment_Dialog, 0, 0, 206, 180, "Adjustment(s)"
+  DropListBox 75, 5, 110, 10, "Please Select One:"+chr(9)+"Arrears Management"+chr(9)+"Direct Support"+chr(9)+"Error"+chr(9)+"Forgiveness"+chr(9)+"Interest Adjustment"+chr(9)+"Order"+chr(9)+"Other"+chr(9)+"Overpayment", Reason_List
+  CheckBox 70, 40, 30, 10, "CCC", CCC_Obli_checkbox
   CheckBox 70, 50, 30, 10, "CCH", CCH_Obli_checkbox
   CheckBox 70, 60, 30, 10, "CMI", CMI_Obli_checkbox
   CheckBox 70, 70, 30, 10, "CMS", CMS_Obli_checkbox
@@ -59,20 +57,28 @@ BeginDialog Adjustment_Dialog, 0, 0, 187, 176, "Adjustment(s)"
   CheckBox 110, 60, 30, 10, "JME", JME_Obli_checkbox
   CheckBox 110, 70, 30, 10, "JMI", JMI_Obli_checkbox
   CheckBox 110, 80, 30, 10, "JMS", JMS_Obli_checkbox
-  CheckBox 150, 40, 30, 20, "Other", Other_Obli_checkbox
-  Text 0, 100, 50, 10, "Description"
-  EditBox 40, 100, 150, 10, Descrip_Box
-  Text 0, 120, 80, 20, "Total Amount Adjusted"
-  EditBox 80, 120, 50, 10, Amount_Adjusted
-  Text 60, 140, 60, 20, "Worker Signature"
-  EditBox 120, 140, 50, 10, Worker_Signature
+  CheckBox 145, 40, 30, 10, "Other", Other_Obli_checkbox
+  EditBox 85, 100, 50, 15, Amount_Adjusted
+  EditBox 50, 120, 150, 15, Descrip_Box
+  EditBox 70, 140, 50, 15, Worker_Signature
   ButtonGroup ButtonPressed
-    OkButton 70, 160, 40, 10
-    CancelButton 140, 160, 40, 10
+    OkButton 95, 160, 50, 15
+    CancelButton 150, 160, 50, 15
+  Text 5, 10, 65, 10, "Adjustment Reason"
+  Text 5, 30, 65, 10, "Affected Obligations"
+  Text 5, 105, 75, 10, "Total Amount Adjusted"
+  Text 5, 125, 40, 10, "Description"
+  Text 5, 145, 60, 20, "Worker Signature"
 EndDialog
 
 'Connecting to BlueZone
 EMConnect ""
+
+'Brings Bluezone to the Front
+EMFocus
+
+'Makes sure you are not passworded out
+CALL check_for_PRISM(True)
 
 call PRISM_case_number_finder(PRISM_case_number)
 
@@ -87,29 +93,19 @@ Loop until case_number_valid = True
 
 'Displays dialog for adjustments and checks for information
 Do
-	
-	Do
-		Do 	
-			Do
-				'Shows dialog, validates that PRISM is up and not timed out, with transmit
-				Dialog Adjustment_Dialog
-				If buttonpressed = 0 then stopscript
-				transmit
-				EMReadScreen PRISM_check, 5, 1, 36
-				If PRISM_check <> "PRISM" then MsgBox "You appear to have timed out, or are out of PRISM. Navigate to PRISM and try again."
-			Loop until PRISM_check = "PRISM"
-			'Makes sure worker enters in signature
-			If Worker_Signature = "" then MsgBox "Sign your CAAD note"
-		Loop until Worker_Signature <> ""
-		'Makes sure worker selects adjustment reason
-		If Reason_List = "Please Select One" then MsgBox "Please enter a reason for the adjustment"
-	Loop until Reason_List <> "Please Select One"
-	'Make sure worker selects at least one obligation
-	If CCH_Obli_checkbox <> checked and CMS_Obli_checkbox <> checked and CMI_Obli_checkbox <> checked and CCC_Obli_checkbox <> checked and CSP_Obli_checkbox <> checked and _
-	  JCH_Obli_checkbox <> checked and JMS_Obli_checkbox <> checked and JME_Obli_checkbox <> checked and JCC_Obli_checkbox <> checked and JMI_Obli_checkbox <> checked and _
-	  Other_Obli_checkbox <> checked Then MsgBox "You must select an obligation!"
-Loop until CCH_Obli_checkbox = checked or CMS_Obli_checkbox = checked or CMI_Obli_checkbox = checked or CCC_Obli_checkbox = checked or CSP_Obli_checkbox = checked or _
-  JCH_Obli_checkbox = checked or JMS_Obli_checkbox = checked or JME_Obli_checkbox = checked or JCC_Obli_checkbox = checked or JMI_Obli_checkbox = checked or Other_Obli_checkbox = checked 
+	err_msg = ""
+	'Shows dialog, validates that PRISM is up and not timed out, with transmit
+	Dialog Adjustment_Dialog
+	If buttonpressed = 0 then stopscript
+	If Reason_List = "Please Select One:" THEN err_msg = err_msg & vbNewline & "Adjustment REASON must be completed."
+	If CCC_Obli_checkbox = 0 AND CCH_Obli_checkbox = 0 AND CMI_Obli_checkbox = 0 AND CMS_Obli_checkbox = 0 AND CSP_Obli_checkbox = 0 AND JCC_Obli_checkbox = 0 AND JCH_Obli_checkbox = 0 AND JME_Obli_checkbox = 0 AND JMI_Obli_checkbox =0 AND JMS_Obli_checkbox = 0 AND Other_Obli_checkbox = 0 THEN err_msg = err_msg & vbNewline & "You must check at least ONE obligation."    
+	If Amount_Adjusted = "" THEN err_msg = err_msg & vbNewline & "Adjustment AMOUNT must be completed."
+	If Worker_Signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
+	If err_Msg <> "" THEN 
+				Msgbox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
+	END IF
+LOOP UNTIL err_msg = ""
+
 
 'Cleaning up the case note for check boxes	
 
@@ -150,5 +146,6 @@ call write_editbox_in_PRISM_case_note("Affected Obligations", line_for_CAAD_note
 call write_editbox_in_PRISM_case_note("Description", Descrip_Box, 4)
 call write_new_line_in_PRISM_case_note("---")
 call write_new_line_in_PRISM_case_note(Worker_Signature)
+
 
 
