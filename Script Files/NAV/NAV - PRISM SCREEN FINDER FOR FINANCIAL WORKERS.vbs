@@ -59,9 +59,9 @@ CALL check_for_PRISM(FALSE)
 'Now it'll navigate to any of the screens chosen
 If buttonpressed = DDPL_button then call navigate_to_PRISM_screen("DDPL")
 If buttonpressed = CAAD_button then call navigate_to_PRISM_screen("CAAD")
-If buttonpressed = CAFS_button then call = navigate_to_PRISM_screen("CAFS")
-If buttonpressed = GCSC_button then call = navigate_to_PRISM_screen("GCSC")
-If buttonpressed = PESE_button then call = navigate_to_PRISM_screen("PESE")
-If buttonpressed = PALC_button then call = navigate_to_PRISM_screen("PALC")
+If buttonpressed = CAFS_button then call navigate_to_PRISM_screen("CAFS")
+If buttonpressed = GCSC_button then call navigate_to_PRISM_screen("GCSC")
+If buttonpressed = PESE_button then call navigate_to_PRISM_screen("PESE")
+If buttonpressed = PALC_button then call navigate_to_PRISM_screen("PALC")
 
 script_end_procedure("")
