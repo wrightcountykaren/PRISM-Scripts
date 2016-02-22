@@ -55,6 +55,7 @@ EMConnect ""
 
 CALL check_for_PRISM(FALSE)
 
+Dialog PRISM_screen_finder_dialog
 
 'Now it'll navigate to any of the screens chosen
 If buttonpressed = DDPL_button then call navigate_to_PRISM_screen("DDPL")
