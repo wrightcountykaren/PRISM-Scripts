@@ -1,5 +1,8 @@
-'Option Explicit 'this has to be on the top, always
-Option Explicit
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+
+name_of_script = "ACTIONS - Unreimbursed Uninsured Docs.vbs"
+start_time = timer
+
 
 'this is a function document
 DIM beta_agency 'remember to add
@@ -128,8 +131,8 @@ IF NCP = checked THEN
 	EMWriteScreen "S", 7, 5
 
 	EMSendKey "<enter>" 
-	CALL write_variable_in_CAAD (Percent)
-	EMSendKey "<enter>"
+	EMWriteScreen (Percent), 16, 15
+	transmit
 	PF3
 	EMWriteScreen "M", 3, 29
 	transmit
@@ -173,7 +176,7 @@ IF CP = checked THEN
 	
 	'enters the percent typed in the dialog box
 	EMSendKey "<enter>" 
-	CALL write_variable_in_CAAD (Percent)
+	EMWriteScreen (Percent), 16, 15
 	transmit
 	PF3
 	EMWriteScreen "M", 3, 29
@@ -181,8 +184,7 @@ IF CP = checked THEN
 
 End IF
 
-'''need to select legal heading''''''''''''''''''''''''''''HELP HELP is there a better way'''''''''''''''''''''''''''''''''''''''''HELP
-
+'''need to select legal heading
 MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue." )
 
 
@@ -191,6 +193,4 @@ transmit
 
 
 script_end_procedure("")
-
-
 
