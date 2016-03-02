@@ -395,7 +395,7 @@ NEXT
 'One more check for PRISM
 CALL check_for_PRISM(False)
 
-'If the case is being purged, the script will generate a CAAD note. If the script is not purging the worklist item, it will not CAAD note.
+'Converting numeric values assigned by checkboxes to True or False.
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	IF nocs_array(i, 11) = 1 THEN
@@ -474,31 +474,30 @@ FOR i = 0 to number_of_cases
 NEXT
 
 'Now the script needs to PURGE for all (i, 11) = True
-CALL navigate_to_PRISM_screen("USWT")
-CALL write_value_and_transmit("D0800", 20, 30)
+
 number_of_cases_purged = 0
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 0) >> PRISM_case_number
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	IF nocs_array(i, 11) = True THEN 
-		PRISM_case_number = replace(nocs_array(i, 0), "-", " ")
-		uswt_row = 7
+		CALL navigate_to_PRISM_screen("CAWT")
+		CALL write_value_and_transmit("D0800", 20, 29)
+		EMWriteScreen left(nocs_array(i, 0), 10), 20, 8	
+		EMWritescreen right(nocs_array(i, 0), 2), 20, 19
+		transmit
+		
+	
 		DO
-			EMReadScreen uswt_case_number, 13, uswt_row, 8
-			IF PRISM_case_number = uswt_case_number THEN
-				EMWriteScreen "P", uswt_row, 4
+			EMReadscreen cawd_type, 5, 8, 8
+			IF cawd_type = "D0800" THEN
+				EMWriteScreen "P", 8, 4
 				transmit
 				transmit
 				number_of_cases_purged = number_of_cases_purged + 1
-			ELSE
-				uswt_row = uswt_row + 1
-				IF uswt_row = 19 THEN 
-					PF8
-					uswt_row = 7
-				END IF
 			END IF
-		LOOP UNTIL PRISM_case_number = uswt_case_number	
+		LOOP UNTIL cawd_type <> "D0800"
 	END IF
 NEXT
 
 script_end_procedure("Success!! " &  number_of_cases_purged  & " items have been purged.")
+
