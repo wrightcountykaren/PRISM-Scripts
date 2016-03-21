@@ -29,23 +29,23 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 '-----The dialog-----
-BeginDialog NOTES_main_menu_dialog, 0, 0, 437, 346, "NOTES main menu dialog"
+BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 346, "NOTES main menu dialog"
   ButtonGroup ButtonPressed
+    PushButton 10, 10, 40, 10, "Adjustment", NOTES_adjustment_button
+    PushButton 10, 30, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
     PushButton 10, 50, 50, 10, "Client contact", NOTES_client_contact_button
     PushButton 10, 70, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
     PushButton 10, 90, 50, 10, "CSENET Info", NOTES_CSENET_button
     PushButton 10, 110, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
     PushButton 10, 130, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
+    PushButton 10, 150, 70, 10, "Intake Docs Rec'd", NOTES_Intake_docs_button
+    PushButton 10, 170, 100, 10, "MES Financial Docs Sent", NOTES_MES_Fin_docs_button
     PushButton 10, 190, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
     PushButton 10, 210, 50, 10, "Pay or report", NOTES_pay_or_report_button
     PushButton 10, 230, 70, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
     PushButton 10, 250, 50, 10, "ROP Detail", NOTES_ROP_invoice_button
     PushButton 10, 270, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
     PushButton 10, 290, 110, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
-    PushButton 10, 10, 40, 10, "Adjustment", NOTES_adjustment_button
-    PushButton 10, 30, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
-    PushButton 10, 170, 100, 10, "MES Financial Docs Sent", NOTES_MES_Fin_docs_button
-    PushButton 10, 150, 70, 10, "Intake Docs Rec'd", NOTES_Intake_docs_button
     PushButton 350, 0, 80, 10, "PRISM Scripts in SIR", SIR_button
     CancelButton 380, 320, 50, 20
   Text 90, 30, 300, 10, "-- NEW 2/2016 Creates a CAAD note for documenting an arrears management review."
@@ -64,6 +64,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 437, 346, "NOTES main menu dialog"
   Text 110, 170, 290, 10, "-- NEW 2/2016 Creates a CAAD note for recording documents sent to the parties."
   Text 80, 150, 280, 10, "-- NEW 2/2016 Creates a CAAD note for recording receipt of intake docs."
 EndDialog
+
 
 
 
@@ -92,3 +93,4 @@ IF ButtonPressed = NOTES_waiver_of_personal_service_button THEN CALL run_from_Gi
 IF ButtonPressed = NOTES_Arrears_mgmt_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
 IF ButtonPressed = NOTES_MES_Fin_docs_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - MES FINANCIAL DOCS SENT.vbs")
 IF ButtonPressed = NOTES_Intake_docs_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - INTAKE DOCS RECEIVED.vbs")
+
