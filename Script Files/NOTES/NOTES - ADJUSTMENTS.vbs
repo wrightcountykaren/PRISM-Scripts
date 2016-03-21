@@ -45,7 +45,7 @@ BeginDialog case_number_dialog, 0, 0, 176, 85, "Case number dialog"
 EndDialog
 
 'Adjustment Dialog-
-BeginDialog Adjustment_Dialog, 0, 0, 206, 180, "Adjustment(s)"
+BeginDialog Adjustment_Dialog, 0, 0, 216, 220, "Adjustment(s)"
   DropListBox 75, 5, 110, 10, "Please Select One:"+chr(9)+"Arrears Management"+chr(9)+"Direct Support"+chr(9)+"Error"+chr(9)+"Forgiveness"+chr(9)+"Interest Adjustment"+chr(9)+"Order"+chr(9)+"Other"+chr(9)+"Overpayment", Reason_List
   CheckBox 70, 40, 30, 10, "CCC", CCC_Obli_checkbox
   CheckBox 70, 50, 30, 10, "CCH", CCH_Obli_checkbox
@@ -58,17 +58,21 @@ BeginDialog Adjustment_Dialog, 0, 0, 206, 180, "Adjustment(s)"
   CheckBox 110, 70, 30, 10, "JMI", JMI_Obli_checkbox
   CheckBox 110, 80, 30, 10, "JMS", JMS_Obli_checkbox
   CheckBox 145, 40, 30, 10, "Other", Other_Obli_checkbox
-  EditBox 85, 100, 50, 15, Amount_Adjusted
-  EditBox 50, 120, 150, 15, Descrip_Box
-  EditBox 70, 140, 50, 15, Worker_Signature
+  EditBox 85, 100, 50, 15, start_date
+  EditBox 155, 100, 50, 15, end_date
+  EditBox 85, 125, 50, 15, Amount_Adjusted
+  EditBox 50, 150, 150, 15, Descrip_Box
+  EditBox 70, 175, 50, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 95, 160, 50, 15
-    CancelButton 150, 160, 50, 15
+    OkButton 105, 200, 50, 15
+    CancelButton 160, 200, 50, 15
   Text 5, 10, 65, 10, "Adjustment Reason"
   Text 5, 30, 65, 10, "Affected Obligations"
-  Text 5, 105, 75, 10, "Total Amount Adjusted"
-  Text 5, 125, 40, 10, "Description"
-  Text 5, 145, 60, 20, "Worker Signature"
+  Text 5, 105, 75, 10, "Date Range (optional)"
+  Text 140, 105, 10, 10, "TO"
+  Text 5, 130, 75, 10, "Total Amount Adjusted"
+  Text 5, 155, 40, 10, "Description"
+  Text 5, 180, 60, 10, "Worker Signature"
 EndDialog
 
 'Connecting to BlueZone
@@ -100,7 +104,7 @@ Do
 	If Reason_List = "Please Select One:" THEN err_msg = err_msg & vbNewline & "Adjustment REASON must be completed."
 	If CCC_Obli_checkbox = 0 AND CCH_Obli_checkbox = 0 AND CMI_Obli_checkbox = 0 AND CMS_Obli_checkbox = 0 AND CSP_Obli_checkbox = 0 AND JCC_Obli_checkbox = 0 AND JCH_Obli_checkbox = 0 AND JME_Obli_checkbox = 0 AND JMI_Obli_checkbox =0 AND JMS_Obli_checkbox = 0 AND Other_Obli_checkbox = 0 THEN err_msg = err_msg & vbNewline & "You must check at least ONE obligation."    
 	If Amount_Adjusted = "" THEN err_msg = err_msg & vbNewline & "Adjustment AMOUNT must be completed."
-	If Worker_Signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
+	If worker_signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
 	If err_Msg <> "" THEN 
 				Msgbox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
 	END IF
@@ -108,7 +112,6 @@ LOOP UNTIL err_msg = ""
 
 
 'Cleaning up the case note for check boxes	
-
 If CCH_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CCH, ")
 If CMS_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CMS, ")
 If CMI_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CMI, ")
@@ -123,29 +126,26 @@ If Other_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & 
 If right(line_for_CAAD_note, 2) = ", " then line_for_CAAD_note = left(line_for_CAAD_note, len(line_for_CAAD_note) - 2)
 
 
-
-
-
-
 'Going to CAAD note
 call navigate_to_PRISM_screen("CAAD")
 
 'Entering case number
 call enter_PRISM_case_number(PRISM_case_number, 20, 8)
 
-
 PF5					'Did this because you have to add a new note
-
 EMWriteScreen "FREE", 4, 54   'adds correct caad code 
-
 EMSetCursor 16, 4			'Because the cursor does not default to this location
-call write_new_line_in_PRISM_case_note(">>>Adjustments<<<")
-call write_editbox_in_PRISM_case_note("Adjustment Reason", Reason_List, 4)
-call write_editbox_in_PRISM_case_note("Total Amount Adjusted", "$" & Amount_Adjusted, 4)
-call write_editbox_in_PRISM_case_note("Affected Obligations", line_for_CAAD_note, 4) 
-call write_editbox_in_PRISM_case_note("Description", Descrip_Box, 4)
-call write_new_line_in_PRISM_case_note("---")
-call write_new_line_in_PRISM_case_note(Worker_Signature)
+
+''information to be added to CAAD note
+CALL write_variable_in_CAAD (">>>Adjustments<<<")
+CALL write_bullet_and_variable_in_CAAD ("Adjustment Reason", Reason_List)
+CALL write_bullet_and_variable_in_CAAD ("Total Amount Adjusted", "$" & Amount_Adjusted)
+CALL write_bullet_and_variable_in_CAAD ("Affected Obligations", line_for_CAAD_note)
+IF start_date <> "" and end_date <> "" THEN CALL write_bullet_and_variable_in_CAAD ("Date Range", start_date & "  to  " & end_date)
+CALL write_bullet_and_variable_in_CAAD ("Description", Descrip_Box)
+CALL write_variable_in_CAAD(worker_signature)
+
+script_end_procedure("")
 
 script_end_procedure("")
 
