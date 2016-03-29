@@ -82,6 +82,9 @@ EMConnect ""
 'Brings Bluezone to the Front
 EMFocus
 
+call PRISM_case_number_finder(PRISM_case_number)
+
+
 'Searches for the case number
 row = 1
 col = 1
@@ -92,15 +95,17 @@ If row <> 0 then
 	If isnumeric(left(PRISM_case_number, 10)) = False or isnumeric(right(PRISM_case_number, 2)) = False then PRISM_case_number = ""
 End if
 
-'Makes sure worker is in a valid PRISM Case
-DO
-	dialog intake_docs_recd_dialog
-	IF buttonpressed = 0 THEN stopscript
-	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
+Do
+	err_msg = ""
+	'Shows dialog, validates that PRISM is up and not timed out, with transmit
+	Dialog intake_docs_recd_dialog
+	If buttonpressed = 0 then stopscript
 	IF case_number_valid = False THEN error_msg = "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX.  "
-	IF worker_signature = "" THEN error_msg = error_msg & "You must sign your CAAD note!"                   'If worker sig is blank, message box pops saying you must sign caad note
-	Msgbox error_msg
-LOOP UNTIL case_number_valid = True AND worker_signature <> ""
+	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
+	IF err_msg <> "" THEN
+				MsgBox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
+	END IF
+LOOP UNTIL err_msg = ""
 
 
 'Makes sure you are not passworded out
@@ -147,3 +152,4 @@ transmit
 PF3
 
 script_end_procedure("")          'Stops the script
+
