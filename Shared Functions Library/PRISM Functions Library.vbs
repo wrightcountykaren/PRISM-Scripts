@@ -513,6 +513,7 @@ FUNCTION word_doc_update_field(field_name, variable_for_field, objDoc)
 END FUNCTION
 
 Function write_bullet_and_variable_in_CAAD(bullet, variable)
+IF variable <> "" THEN  
   spaces_count = 6	'Temporary just to make it work
 
   EMGetCursor row, col 
@@ -565,9 +566,11 @@ Function write_bullet_and_variable_in_CAAD(bullet, variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
+END IF
 End Function
 
 Function write_variable_in_CAAD(variable)
+IF variable <> "" THEN  
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then 
@@ -586,6 +589,7 @@ Function write_variable_in_CAAD(variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
+END IF
 End function
 
 '-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
