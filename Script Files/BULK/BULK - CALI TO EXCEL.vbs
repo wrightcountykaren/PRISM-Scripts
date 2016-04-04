@@ -31,15 +31,18 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 Dim CAFS_checkbox
-BeginDialog CALI_to_excel_Dialog, 0, 0, 196, 100, "CALI To Excel"
-  CheckBox 5, 40, 115, 10, "Check here if you want to include total arrears, monthly accrual amount, and non-accrual amount to Excel", CAFS_checkbox
-  Text 15, 50, 110, 30, "total arrears, monthly accrual amount, and non-accrual amount to Excel from CAFS. "
+
+BeginDialog CALI_to_excel_Dialog, 0, 0, 231, 115, "CALI To Excel"
+  DropListBox 70, 15, 120, 15, "Run for your own CALI list"+chr(9)+"Run for another CALI list", action_dropdown
+  CheckBox 15, 35, 200, 10, "Check here if you want to include last payment received", payments_checkbox
+  CheckBox 15, 65, 115, 10, "Check here if you want to include total arrears, monthly accrual amount, and non-accrual amount to Excel", CAFS_checkbox
   ButtonGroup ButtonPressed
-    OkButton 140, 45, 50, 15
-    CancelButton 140, 65, 50, 15
-  Text 10, 80, 120, 15, "(This takes more time to process)"
-  DropListBox 65, 10, 120, 15, "Run for your own CALI list"+chr(9)+"Run for another CALI list", action_dropdown
-  Text 0, 10, 60, 15, "Select an action:"
+    OkButton 165, 70, 50, 15
+    CancelButton 165, 90, 50, 15
+  Text 25, 45, 120, 10, "(This takes more time to process)"
+  Text 10, 15, 60, 10, "Select an action:"
+  Text 30, 75, 120, 30, "total arrears, monthly accrual amount, and non-accrual amount to Excel from CAFS. "
+  Text 30, 100, 120, 10, "(This takes more time to process)"
 EndDialog
 
 BeginDialog CALI_selection_dialog, 0, 0, 211, 80, "CALI Criteria"
@@ -156,17 +159,21 @@ Transmit
 
 excel_row = 2
 
-Do
-	prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
-	EMWriteScreen Left (prism_case_number, 10), 20, 9
-	EMWriteScreen Right (prism_case_number, 2), 20, 20
-	Transmit
-	EMReadScreen last_payment_date, 8, 9, 59
-	If last_payment_date = "        " then last_payment_date = "No Payments"
-	ObjExcel.Cells(excel_row, 7).Value = last_payment_date
-	excel_row = excel_row + 1
+If payments_checkbox = checked then
+	Do
+		prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
+		EMWriteScreen Left (prism_case_number, 10), 20, 9
+		EMWriteScreen Right (prism_case_number, 2), 20, 20
+		Transmit
+		EMReadScreen last_payment_date, 8, 9, 59
+		If last_payment_date = "        " then last_payment_date = "No Payments"
+		ObjExcel.Cells(excel_row, 7).Value = last_payment_date
+		excel_row = excel_row + 1
 
-Loop until prism_case_number = ""
+	Loop until prism_case_number = ""
+End IF
+
+excel_row = 2
 
 If CAFS_checkbox = checked then
 
@@ -200,7 +207,9 @@ ObjExcel.Cells(1, 3).Value = "Program"
 ObjExcel.Cells(1, 4).Value = "Interstate?"
 ObjExcel.Cells(1, 5).Value = "CP Name"
 ObjExcel.Cells(1, 6).Value = "NCP Name"
+If Payments_Checkbox = checked then
 ObjExcel.Cells(1, 7).Value = "Last Payment Date"
+End IF
 If CAFS_checkbox = checked then
 ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
 ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
