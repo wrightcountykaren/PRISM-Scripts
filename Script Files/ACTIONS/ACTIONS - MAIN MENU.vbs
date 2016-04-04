@@ -77,4 +77,4 @@ IF ButtonPressed = ACTIONS_intake_button then call run_from_GitHub(script_reposi
 IF ButtonPressed = ACTIONS_PALC_calculator_button then call run_from_GitHub(script_repository & "ACTIONS/ACTIONS - PALC CALCULATOR.vbs")
 IF ButtonPressed = ACTIONS_redirection_docs_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - DOCS FOR REDIRECT.vbs")
 IF ButtonPressed = ACTIONS_un_un_button THEN CALL run_from_GitHub(script_repository & "ACTIONS/ACTIONS - UNREIMBURSED UNINSURED DOCS.vbs")
-
+IF ButtonPressed = ACTIONS_update_worker_signature_button THEN CALL run_from_Github(script_repository & "ACTIONS/ACTIONS - UPDATE WORKER SIGNATURE.vbs")
