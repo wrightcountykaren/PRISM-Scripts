@@ -79,9 +79,6 @@ EndDialog
 'Connects to BlueZone
 EMConnect ""
 
-'Brings Bluezone to the Front
-EMFocus
-
 call PRISM_case_number_finder(PRISM_case_number)
 
 
@@ -100,7 +97,8 @@ Do
 	'Shows dialog, validates that PRISM is up and not timed out, with transmit
 	Dialog intake_docs_recd_dialog
 	If buttonpressed = 0 then stopscript
-	IF case_number_valid = False THEN error_msg = "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX.  "
+	CALL Prism_case_number_validation(PRISM_case_number, case_number_valid)
+	IF case_number_valid = False THEN err_msg = err_msg & vbNewLine & "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX.  "
 	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
 	IF err_msg <> "" THEN
 				MsgBox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
@@ -152,4 +150,3 @@ transmit
 PF3
 
 script_end_procedure("")          'Stops the script
-
