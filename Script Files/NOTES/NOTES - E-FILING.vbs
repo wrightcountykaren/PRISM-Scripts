@@ -118,11 +118,12 @@ IF worklist_checkbox = CHECKED THEN
 CALL navigate_to_PRISM_screen("CAWT")
 PF5
 EMWritescreen "FREE", 4, 37
-END IF
 
 'SETS THE CURSOR AND STARTS THE WORKLIST
 IF efile_status_dropdown = "Submitted" THEN EMWritescreen "E-Filing Status: Documents Submitted", 10, 4
 IF efile_status_dropdown = "Accepted" THEN EMWritescreen "E-Filing Status: Documents Accepted", 10, 4
+
+END IF
 
 'REMINDS WORKER TO FINISH AND SAVE THEIR WORKLIST
 IF worklist_checkbox = CHECKED THEN 
