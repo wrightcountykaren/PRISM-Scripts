@@ -29,7 +29,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'DIALOGS---------------------------------------------------------------------------
-BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 240, "ACTIONS Main Menu"
+BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 250, "ACTIONS Main Menu"
   ButtonGroup ButtonPressed
     PushButton 5, 25, 85, 10, "Affidavit of Service Docs", ACTIONS_affidavit_of_service_button
     PushButton 5, 40, 60, 10, "DDPL Calculator", ACTIONS_DDPL_CALC_button
@@ -41,7 +41,8 @@ BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 240, "ACTIONS Main Menu"
     PushButton 5, 145, 60, 10, "Prorate Support", ACTIONS_prorate_support_button
     PushButton 5, 165, 65, 10, "Redirection Docs", ACTIONS_redirection_docs_button
     PushButton 5, 185, 75, 10, "Unreimb/Unins Docs", ACTIONS_un_un_button
-    CancelButton 325, 220, 50, 15
+    PushButton 5, 205, 90, 10, "Update Worker Signature", ACTIONS_update_worker_signature_button
+    CancelButton 325, 230, 50, 15
     PushButton 300, 5, 75, 10, "PRISM Scripts in SIR", SIR_button
   Text 100, 25, 270, 10, "-- Sends Affidavits of Serivce to multiple participants on the case."
   Text 70, 40, 300, 10, "-- NEW 01/2016!! Calculates payments received during a specific date range."
@@ -53,6 +54,7 @@ BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 240, "ACTIONS Main Menu"
   Text 70, 145, 225, 10, "- Calculator for deteremining pro-rated support for partial months."
   Text 75, 165, 290, 10, "-- Creates redirection docs and redirection worklist items."
   Text 85, 185, 290, 10, "-- Prints DORD docs for collecting unreimbursed and unisured expenses."
+  Text 100, 205, 280, 10, "-- NEW 04/2016!! -- Allows you to maintain a default signature that loads in all scripts."
 EndDialog
 
 
