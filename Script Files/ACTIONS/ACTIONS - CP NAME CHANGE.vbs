@@ -1,6 +1,6 @@
 'Gathering stats
 name_of_script = "Action - CP NAME CHANGE.vbs"
-start_time = timeer
+start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 120
 STATS_denomination = "C"
@@ -57,11 +57,29 @@ EndDialog
 ' connects to Bluezone
 EMConnect ""
 
-'Navigates to CAST
-EMwritescreen "cast", 21, 08
+'Brings Bluezone to the Front
+EMFocus
+
+'Makes sure you are not passworded out
+CALL check_for_PRISM(True)
 
 'Grabs the case number
 call PRISM_case_number_finder(Prism_case_number)
+	DO
+		err_msg = ""
+		Dialog Name_change_dialog
+		IF ButtonPressed = 0 THEN StopScript		                                       'Pressing Cancel stops the script
+		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You must sign your CAAD note!" 'If worker sig is blank, message box pops saying you must sign caad note
+		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
+		IF case_number_valid = False THEN MsgBox "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX"
+		If err_msg <> "" THEN msgbox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
+	LOOP UNTIL err_msg = ""
+
+
+
+'Navigates to CAST
+navigate_to_PRISM_screen("CAST")
+
 
 'Calls the dialog
 Dialog Name_change_dialog
@@ -72,8 +90,8 @@ If buttonpressed = 0 then stopscript
 'Navigates to CPDE
 call navigate_to_prism_screen ("CPDE")
 
-'Hits transmit
-EMsendkey "<enter>"
+'hits transmit
+transmit
 
 'Enters "M" to modify
 EMwritescreen "M", 3, 29
@@ -159,6 +177,5 @@ call script_end_procedure ("")
  
 
  
-
 
 
