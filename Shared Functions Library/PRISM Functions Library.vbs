@@ -28,16 +28,16 @@
 'ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 '	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 '			vbCr & _
-'			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+'			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 '			vbCr & _
-'			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+'			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 '			vbTab & "- The name of the script you are running." & vbCr &_
 '			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 '			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 '			vbTab & vbTab & "responsible for network issues." & vbCr &_
 '			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 '			vbCr & _
-'			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+'			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 '			vbCr &_
 '			"URL: " & url
 '			StopScript
@@ -78,6 +78,51 @@ Function check_for_PRISM(end_script)
 			If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
 		END IF
 	END IF
+END FUNCTION
+
+'This code is helpful for bulk scripts. This script is used to select the caseload by the 8 digit worker ID code entered in the dialog.
+FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
+	DO
+		DO
+			CALL navigate_to_PRISM_screen("USWT")
+			err_msg = ""
+			'Grabbing the CSO name for the intro dialog.
+			CALL find_variable("Worker Id: ", cso_id, 8)
+			EMSetCursor 20, 13
+			PF1
+			CALL write_value_and_transmit(cso_id, 20, 35)
+			EMReadScreen cso_name, 24, 13, 55
+			cso_name = trim(cso_name)
+			PF3
+			
+			BeginDialog select_cso_dlg, 0, 0, 286, 145, " - Select CSO Caseload"
+			EditBox 70, 55, 65, 15, cso_id
+			Text 70, 80, 90, 10, cso_name
+			ButtonGroup ButtonPressed
+				OkButton 130, 125, 50, 15
+				PushButton 180, 125, 50, 15, "UPDATE CSO", update_cso_button
+				PushButton 230, 125, 50, 15, "STOP SCRIPT", stop_script_button
+			Text 10, 15, 265, 30, "This script will check for worklist items coded E0014 for the following Worker ID. If you wish to change the Worker ID, enter the desired Worker ID in the box and press UPDATE CSO. When you are ready to continue, press OK."
+			Text 10, 60, 50, 10, "Worker ID:"
+			Text 10, 80, 55, 10, "Worker Name:"
+		
+			EndDialog
+		
+			DIALOG select_cso_dlg
+				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
+				IF ButtonPressed = update_cso_button THEN 
+					CALL navigate_to_PRISM_screen("USWT")
+					CALL write_value_and_transmit(cso_id, 20, 13)
+					EMReadScreen cso_name, 24, 13, 55
+					cso_name = trim(cso_name)
+				END IF
+				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
+				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
+																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
+																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
+				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+		LOOP UNTIL ButtonPressed = -1 
+	LOOP UNTIL err_msg = ""
 END FUNCTION
 
 Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
