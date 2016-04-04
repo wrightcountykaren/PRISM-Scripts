@@ -275,7 +275,9 @@ FOR i = 0 to number_of_cases
 			END IF
 		ELSEIF case_program_code = "CASE PROGRAM CODE" THEN
 			EMReadScreen program_change_date, 8, cath_row, 2
+			date_converter_PALC_PAPL (program_change_date)
 			nocs_array(i, 5) = program_change_date
+			
 			EXIT DO
 		END IF
 	LOOP
@@ -291,7 +293,8 @@ FOR i = 0 to number_of_cases
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	EMWriteScreen nocs_array(i, 0), 4, 8
 	EMWriteScreen right(nocs_array(i, 0), 2), 4, 19
-	EMWriteScreen date, 9, 18
+	current_date = date_converter_PALC_PAPL(date)
+	EMWriteScreen current_date, 9, 18
 	CALL write_value_and_transmit("D", 3, 29)
 	EMReadScreen ivd_coop_code, 1, 15, 25
 	IF ivd_coop_code = "_" THEN ivd_coop_code = "Y"			'IF there has never been non-coop for good cause, the panel will be coded "_" which is effectively a "Y"
@@ -500,4 +503,5 @@ FOR i = 0 to number_of_cases
 NEXT
 
 script_end_procedure("Success!! " &  number_of_cases_purged  & " items have been purged.")
+
 
