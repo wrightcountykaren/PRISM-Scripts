@@ -62,8 +62,7 @@ Loop until isdate(start_date) = True and isdate(end_date) = True
 
 
 'Checks to make sure PRISM isn't locked out
-transmit
-PRISM_check_function
+CALL check_for_PRISM(false)
 
 'Clearing case info from PRISM
 call navigate_to_PRISM_screen("REGL")
@@ -81,7 +80,6 @@ EMWriteScreen cstr(end_date), 20, 49
 transmit								'Transmitting into it
 
 
-
 row = 9		'Setting variable for the do...loop
 
 Do
@@ -96,6 +94,7 @@ Do
 					
 		EMReadScreen proc_type, 3, row, 25														'Reading the proc type
 		EMReadScreen case_alloc_amt, 10, row, 70													'Reading the amt allocated
+		IF case_alloc_amt = "          " THEN case_alloc_amt = 0
 		If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _	
 		proc_type = "PCA" or proc_type = "PIF" or proc_type = "STJ" or proc_type = "STS" or proc_type = "FTJ" then 		'If proc type is one of these, it's involuntary. Else, it's voluntary.
 			total_involuntary_alloc = total_involuntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for involuntary
