@@ -200,6 +200,28 @@ Function fix_case(phrase_to_split, smallest_length_to_skip)									'Ex: fix_cas
 	phrase_to_split = output_phrase												'making the phrase_to_split equal to the output, so that it can be used by the rest of the script.
 End function
 
+'This function takes in a client's name and outputs the name (accounting for hyphenated surnames) with Ucase first character
+'and lcase the rest. This is like fix_case but this function is a bit more specific for names
+FUNCTION fix_case_for_name(name_variable)
+	name_variable = split(name_variable, " ")
+	FOR EACH client_name IN name_variable
+		IF client_name <> "" THEN 
+			IF InStr(client_name, "-") = 0 THEN 
+				client_name = UCASE(left(client_name, 1)) & LCASE(right(client_name, len(client_name) - 1))
+				output_variable = output_variable & " " & client_name
+			ELSE				'When the client has a hyphenated surname
+				hyphen_location = InStr(client_name, "-")
+				first_part = left(client_name, hyphen_location - 1)
+				first_part = UCASE(left(first_part, 1)) & LCASE(right(first_part, len(first_part) - 1))
+				second_part = right(client_name, len(client_name) - hyphen_location)
+				second_part = UCASE(left(second_part, 1)) & LCASE(right(second_part, len(second_part) - 1))
+				output_variable = output_variable & " " & first_part & "-" & second_part
+			END IF
+		END IF
+	NEXT
+	name_variable = output_variable
+END FUNCTION
+
 'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
 'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
 FUNCTION send_dord_doc(recipient, dord_doc)
