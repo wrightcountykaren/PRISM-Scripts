@@ -1,7 +1,9 @@
-'GATHERING STATS----------------------------------------------------------------------------------------------------
-
 name_of_script = "ACTIONS - IW CALCULATOR.vbs"
 start_time = timer
+STATS_Counter = 1
+STATS_manualtime = 120
+STATS_denomination = "C"
+'End of stats block 
 
 
 'this is a function document
@@ -84,10 +86,9 @@ Month_Accrual = CDbl(Month_Accrual)
 Month_NonAccrual = CDbl(Month_NonAccrual)
 
 
-
 Current_Support = Month_Accrual + Month_NonAccrual 
 Current_Support = Trim(Current_Support)
-
+Current_Support = FormatNumber(Current_Support)
 
 'adding a loop
 Do
@@ -114,10 +115,15 @@ Dim WeekPay, BiWeekPay, SemiMoPay
 
 WeekPay = MoTotal /4.333
 WeekPay = FormatNumber(WeekPay, 2)
+
+
 BiWeekPay = MoTotal /2.167
 BiWeekPay = FormatNumber(BiWeekPay, 2)
+
 SemiMoPay = MoTotal/2
 SemiMoPay = FormatNumber(SemiMoPay, 2)
+
+MoTotal = FormatNumber(Mototal)
 
 'takes you to palc so you can see the amount that is being received on the case
 CALL navigate_to_PRISM_screen ("PALC")
