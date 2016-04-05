@@ -43,7 +43,6 @@ For each office in county_office_array
 	county_office_list = county_office_list & chr(9) & city_for_array					'Adds the city to the variable called "county_office_list", which also contains a new line, so that it works correctly in dialogs.
 Next
 
-
 is_county_collecting_stats = collecting_statistics	'IT DOES THIS BECAUSE THE SETUP SCRIPT WILL OVERWRITE LINES BELOW WHICH DEPEND ON THIS, BY SEPARATING THE VARIABLES WE PREVENT ISSUES
 
 'The following code looks in C:\USERS\''windows_user_ID''\My Documents for a text file called workersig.txt.
