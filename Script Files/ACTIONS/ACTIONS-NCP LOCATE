@@ -317,8 +317,6 @@ CALL write_variable_in_CAAD ("Complete Locate Review")
 EMWritescreen worklist_days, 17, 52
 transmit 
 
-msgbox "hi"
-
 End if 
 'adding CAAD note
 call navigate_to_PRISM_screen("CAAD") 
