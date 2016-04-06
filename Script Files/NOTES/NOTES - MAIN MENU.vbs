@@ -36,43 +36,46 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 '-----The dialog-----
-BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 345, "NOTES main menu dialog"
+BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 310, "NOTES main menu dialog"
   ButtonGroup ButtonPressed
-    PushButton 10, 10, 40, 10, "Adjustment", NOTES_adjustment_button
-    PushButton 10, 30, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
+    PushButton 10, 20, 40, 10, "Adjustment", NOTES_adjustment_button
+    PushButton 10, 35, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
     PushButton 10, 50, 50, 10, "Client contact", NOTES_client_contact_button
-    PushButton 10, 70, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
-    PushButton 10, 90, 50, 10, "CSENET Info", NOTES_CSENET_button
-    PushButton 10, 110, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
-    PushButton 10, 130, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
-    PushButton 10, 150, 35, 10, "E-Filing", NOTES_efiling_button
-    PushButton 10, 170, 70, 10, "Intake Docs Rec'd", NOTES_Intake_docs_button
-    PushButton 10, 190, 100, 10, "MES Financial Docs Sent", NOTES_MES_Fin_docs_button
-    PushButton 10, 210, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
-    PushButton 10, 230, 50, 10, "Pay or report", NOTES_pay_or_report_button
-    PushButton 10, 250, 70, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
-    PushButton 10, 270, 50, 10, "ROP Detail", NOTES_ROP_invoice_button
-    PushButton 10, 290, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
-    PushButton 10, 310, 110, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
+    PushButton 10, 65, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
+    PushButton 10, 85, 50, 10, "CSENET Info", NOTES_CSENET_button
+    PushButton 10, 100, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
+    PushButton 10, 115, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
+    PushButton 10, 130, 35, 10, "E-Filing", NOTES_efiling_button
+    PushButton 10, 145, 70, 10, "Intake Docs Rec'd", NOTES_Intake_docs_button
+    PushButton 10, 160, 70, 10, "IW CAAD and CAWT", NOTES_IW_caad_button
+    PushButton 10, 175, 100, 10, "MES Financial Docs Sent", NOTES_MES_Fin_docs_button
+    PushButton 10, 190, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
+    PushButton 10, 205, 50, 10, "Pay or report", NOTES_pay_or_report_button
+    PushButton 10, 220, 70, 10, "Quarterly reviews", NOTES_quarterly_reviews_button
+    PushButton 10, 235, 50, 10, "ROP Detail", NOTES_ROP_invoice_button
+    PushButton 10, 250, 50, 10, "SOP Invoice", NOTES_SOP_invoice_button
+    PushButton 10, 270, 95, 10, "Waiver of Personal Service", NOTES_waiver_of_personal_service_button
     PushButton 350, 0, 80, 10, "PRISM Scripts in SIR", SIR_button
-    CancelButton 380, 325, 50, 15
-  Text 95, 30, 300, 10, "-- Creates a CAAD note for documenting an arrears management review."
-  Text 95, 70, 330, 20, "-- Creates B0170 CAAD note for requesting a court order, which also creates a work list to remind the worker to check the status of the court order request."
-  Text 70, 90, 350, 10, "-- Creates T0111 CAAD note script with text copied from the INTD screen."
-  Text 100, 110, 200, 10, "-- Date of the hearing template for expro."
-  Text 110, 130, 200, 10, "-- Date of the hearing template for judicial."
-  Text 80, 210, 340, 10, "-- Creates CAAD note for documenting non-payment enforcement actions."
-  Text 65, 230, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
-  Text 85, 250, 230, 10, "-- CAAD note for quarterly review processes."
-  Text 65, 270, 350, 10, "-- Creates CAAD note noting the dates parties signed recognition of parentage."
-  Text 65, 290, 350, 20, "-- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
-  Text 120, 310, 290, 10, "-- Creates CAAD note of the date a CP signed the waiver of personal service document."
+    CancelButton 380, 290, 50, 15
+  Text 95, 35, 300, 10, "-- Creates a CAAD note for documenting an arrears management review."
+  Text 95, 65, 330, 20, "-- Creates B0170 CAAD note for requesting a court order, which also creates a work list to remind the worker to check the status of the court order request."
+  Text 70, 85, 350, 10, "-- Creates T0111 CAAD note script with text copied from the INTD screen."
+  Text 100, 100, 200, 10, "-- Date of the hearing template for expro."
+  Text 110, 115, 200, 10, "-- Date of the hearing template for judicial."
+  Text 85, 190, 340, 10, "-- Creates CAAD note for documenting non-payment enforcement actions."
+  Text 65, 205, 240, 10, "-- CAAD note for case noting ''pay or report'' instances."
+  Text 85, 220, 230, 10, "-- CAAD note for quarterly review processes."
+  Text 65, 235, 350, 10, "-- Creates CAAD note noting the dates parties signed recognition of parentage."
+  Text 65, 250, 350, 20, "-- Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
+  Text 110, 270, 305, 10, "-- Creates CAAD note of the date a CP signed the waiver of personal service document."
   Text 65, 50, 240, 10, "-- Creates a uniform CAAD note for when you have contact with a client."
-  Text 50, 10, 300, 10, "-- Creates a CAAD note for documenting adjustments made to the case."
-  Text 110, 190, 290, 10, "-- NEW 2/2016 Creates a CAAD note for recording documents sent to the parties."
-  Text 80, 170, 280, 10, "-- NEW 2/2016 Creates a CAAD note for recording receipt of intake docs."
-  Text 50, 150, 350, 10, "-- NEW 04/2016!! Template for adding a CAAD note about e-filing."
+  Text 50, 20, 300, 10, "-- Creates a CAAD note for documenting adjustments made to the case."
+  Text 110, 175, 290, 10, "-- NEW 2/2016 Creates a CAAD note for recording documents sent to the parties."
+  Text 85, 145, 280, 10, "-- NEW 2/2016 Creates a CAAD note for recording receipt of intake docs."
+  Text 50, 130, 350, 10, "-- NEW 04/2016!! Template for adding a CAAD note about e-filing."
+  Text 85, 160, 280, 10, "-- NEW 04/2016 Creates CAAD and CAWT about IW."
 EndDialog
+
 
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------
@@ -84,20 +87,22 @@ DO
 	IF ButtonPressed = SIR_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
 LOOP UNTIL ButtonPressed <> SIR_button
 
-IF ButtonPressed = NOTES_adjustment_button then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
-IF ButtonPressed = NOTES_Client_contact_button then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
-IF ButtonPressed = NOTES_court_order_requested_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
-IF ButtonPressed = NOTES_CSENET_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
-IF ButtonPressed = NOTES_date_of_hearing_expro_button then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
-IF ButtonPressed = NOTES_date_of_hearing_judicial_button then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
+IF ButtonPressed = NOTES_adjustment_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
+IF ButtonPressed = NOTES_Arrears_mgmt_button			THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
+IF ButtonPressed = NOTES_Client_contact_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
+IF ButtonPressed = NOTES_court_order_requested_butto		THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
+IF ButtonPressed = NOTES_CSENET_button 				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
+IF ButtonPressed = NOTES_date_of_hearing_expro_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
+IF ButtonPressed = NOTES_date_of_hearing_judicial_button 	then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
 IF ButtonPressed = NOTES_efiling_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - E-FILING.vbs")
-IF ButtonPressed = NOTES_no_pay_months_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs")
-IF ButtonPressed = NOTES_pay_or_report_button then call run_from_GitHub(script_repository & "NOTES/NOTES - PAY OR REPORT.vbs")
-IF ButtonPressed = NOTES_quarterly_reviews_button then call run_from_GitHub(script_repository & "NOTES/NOTES - QUARTERLY REVIEWS.vbs")
-IF ButtonPressed = NOTES_ROP_invoice_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - ROP DETAIL.vbs")
-IF ButtonPressed = NOTES_SOP_invoice_button THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - SOP INVOICE.vbs")
-IF ButtonPressed = NOTES_waiver_of_personal_service_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - WAIVER OF PERSONAL SERVICE.vbs")
-IF ButtonPressed = NOTES_Arrears_mgmt_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
-IF ButtonPressed = NOTES_MES_Fin_docs_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - MES FINANCIAL DOCS SENT.vbs")
-IF ButtonPressed = NOTES_Intake_docs_button THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - INTAKE DOCS RECEIVED.vbs")
+IF ButtonPressed = NOTES_Intake_docs_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - INTAKE DOCS RECEIVED.vbs")
+IF ButtonPressed = NOTES_iw_caad_button				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - IW CAAD CAWT.vbs")
+IF ButtonPressed = NOTES_no_pay_months_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs")
+IF ButtonPressed = NOTES_pay_or_report_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - PAY OR REPORT.vbs")
+IF ButtonPressed = NOTES_quarterly_reviews_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - QUARTERLY REVIEWS.vbs")
+IF ButtonPressed = NOTES_ROP_invoice_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - ROP DETAIL.vbs")
+IF ButtonPressed = NOTES_SOP_invoice_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - SOP INVOICE.vbs")
+IF ButtonPressed = NOTES_waiver_of_personal_service_button 	THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - WAIVER OF PERSONAL SERVICE.vbs")
+IF ButtonPressed = NOTES_MES_Fin_docs_button 			THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - MES FINANCIAL DOCS SENT.vbs")
+
 
