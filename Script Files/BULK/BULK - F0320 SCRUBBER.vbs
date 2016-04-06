@@ -2,7 +2,6 @@
 name_of_script = "BULK - F0320 Scrubber.vbs" 
 start_time = timer 
 
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
