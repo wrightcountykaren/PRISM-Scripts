@@ -47,7 +47,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 310, "NOTES main menu dialog"
     PushButton 10, 115, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
     PushButton 10, 130, 35, 10, "E-Filing", NOTES_efiling_button
     PushButton 10, 145, 70, 10, "Intake Docs Rec'd", NOTES_Intake_docs_button
-    PushButton 10, 160, 70, 10, "IW CAAD and CAWT", NOTES_IW_caad_button
+    PushButton 10, 160, 80, 10, "IW CAAD and CAWT", NOTES_IW_caad_button
     PushButton 10, 175, 100, 10, "MES Financial Docs Sent", NOTES_MES_Fin_docs_button
     PushButton 10, 190, 70, 10, "No Pay Months 1-4", NOTES_no_pay_months_button
     PushButton 10, 205, 50, 10, "Pay or report", NOTES_pay_or_report_button
@@ -73,8 +73,9 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 310, "NOTES main menu dialog"
   Text 110, 175, 290, 10, "-- NEW 2/2016 Creates a CAAD note for recording documents sent to the parties."
   Text 85, 145, 280, 10, "-- NEW 2/2016 Creates a CAAD note for recording receipt of intake docs."
   Text 50, 130, 350, 10, "-- NEW 04/2016!! Template for adding a CAAD note about e-filing."
-  Text 85, 160, 280, 10, "-- NEW 04/2016 Creates CAAD and CAWT about IW."
+  Text 95, 160, 280, 10, "-- NEW 04/2016 Creates CAAD and CAWT about IW."
 EndDialog
+
 
 
 
@@ -96,7 +97,10 @@ IF ButtonPressed = NOTES_date_of_hearing_expro_button 		then call run_from_GitHu
 IF ButtonPressed = NOTES_date_of_hearing_judicial_button 	then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
 IF ButtonPressed = NOTES_efiling_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - E-FILING.vbs")
 IF ButtonPressed = NOTES_Intake_docs_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - INTAKE DOCS RECEIVED.vbs")
-IF ButtonPressed = NOTES_iw_caad_button				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - IW CAAD CAWT.vbs")
+IF ButtonPressed = NOTES_IW_caad_button				THEN 
+     msgbox "hi!"
+     CALL run_from_GitHub(script_repository & "NOTES/NOTES - IW CAAD CAWT.vbs")
+END IF
 IF ButtonPressed = NOTES_no_pay_months_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs")
 IF ButtonPressed = NOTES_pay_or_report_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - PAY OR REPORT.vbs")
 IF ButtonPressed = NOTES_quarterly_reviews_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - QUARTERLY REVIEWS.vbs")
