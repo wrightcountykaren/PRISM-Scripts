@@ -18,6 +18,9 @@ EDMS_choice = "Compass Pilot"
 'Replace "Anoka" with your county name below. "Anoka County" just demonstrates the format for County Name.  
 county_name = "Anoka County"
 
+'This is the county code on the CALI screen. 
+county_cali_code = "###"
+
 'Creates a double array of county offices, first by office (using the ~), then by address line (using the |). Dynamically added with the installer.
 'Address below is an example.  Replace with your county office address.
 county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303", "~")
