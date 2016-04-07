@@ -44,7 +44,7 @@ BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 300, "ACTIONS Main Menu"
     PushButton 5, 70, 80, 10, "Estab NPA DORD Docs", ACTIONS_EST_DORD_NPA_button
     PushButton 5, 85, 80, 10, "Estab PA DORD Docs", ACTIONS_EST_DORD_PA_button
     PushButton 5, 100, 70, 10, "Find Name on CALI", ACTIONS_find_name_on_cali_button
-    PushButton 5, 115, 30, 10, "Intake", ACTIONS_intake_button
+    PushButton 5, 115, 60, 10, "Generic Intake", ACTIONS_intake_button
     PushButton 5, 135, 30, 10, "IW Calc", ACTIONS_iw_calc_button
     PushButton 5, 155, 45, 10, "NCP Locate", ACTIONS_NCP_locate_button
     PushButton 5, 175, 60, 10, "PALC calculator", ACTIONS_PALC_calculator_button
@@ -54,12 +54,12 @@ BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 300, "ACTIONS Main Menu"
     PushButton 5, 255, 85, 10, "Update Worker Signature", ACTIONS_update_worker_signature_button
     CancelButton 325, 280, 50, 15
     PushButton 300, 5, 75, 10, "PRISM Scripts in SIR", SIR_button
-  Text 100, 25, 270, 10, "-- Sends Affidavits of Serivce to multiple participants on the case."
+  Text 100, 25, 270, 10, "-- Sends Affidavits of Service to multiple participants on the case."
   Text 70, 55, 300, 10, "-- Calculates payments received during a specific date range."
   Text 90, 70, 280, 10, "-- NEW 01/2016!! Generates DORD docs for NPA case."
   Text 90, 85, 280, 10, "-- NEW 01/2016!! Generates DORD docs for PA case."
   Text 80, 100, 215, 10, "-- Searches CALI for a specific CP or NCP."
-  Text 40, 115, 330, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
+  Text 70, 115, 300, 15, "-- Creates various documents related to Child Support intake, as well as DORD documents, and enters a note on CAAD."
   Text 70, 175, 230, 10, "-- Calculates voluntary and involuntary amounts from the PALC screen."
   Text 70, 195, 225, 10, "- Calculator for deteremining pro-rated support for partial months."
   Text 75, 215, 290, 10, "-- Creates redirection docs and redirection worklist items."
@@ -69,6 +69,7 @@ BeginDialog ACTIONS_main_menu_dialog, 0, 0, 381, 300, "ACTIONS Main Menu"
   Text 55, 155, 320, 10, "-- NEW 04/2016!!! Walks you through processing an NCP locate."
   Text 40, 135, 325, 10, "-- NEW 04/2016!! Calculator for determining the amount of IW over a given period."
 EndDialog
+
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------
 
