@@ -16,6 +16,7 @@ EDMS_choice = "Compass Pilot"
 
 'This is used for MEMO scripts, such as appointment letter
 county_name = "Anoka County"
+county_cali_code = "###"
 
 'Creates a double array of county offices, first by office (using the ~), then by address line (using the |). Dynamically added with the installer.
 county_office_array = split("2100 3rd Ave Suite 400|Anoka, MN 55303", "~")
