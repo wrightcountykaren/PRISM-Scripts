@@ -91,7 +91,10 @@ LOOP UNTIL ButtonPressed <> SIR_button
 IF ButtonPressed = NOTES_adjustment_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
 IF ButtonPressed = NOTES_Arrears_mgmt_button			THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
 IF ButtonPressed = NOTES_Client_contact_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
-IF ButtonPressed = NOTES_court_order_request_button		THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
+IF ButtonPressed = NOTES_court_order_request_button		THEN
+	msgbox true
+	CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
+end if
 IF ButtonPressed = NOTES_CSENET_button 				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
 IF ButtonPressed = NOTES_date_of_hearing_expro_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
 IF ButtonPressed = NOTES_date_of_hearing_judicial_button 	then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
