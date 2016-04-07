@@ -41,7 +41,7 @@ BeginDialog NOTES_main_menu_dialog, 0, 0, 436, 310, "NOTES main menu dialog"
     PushButton 10, 20, 40, 10, "Adjustment", NOTES_adjustment_button
     PushButton 10, 35, 80, 10, "Arrears Management", NOTES_Arrears_mgmt_button
     PushButton 10, 50, 50, 10, "Client contact", NOTES_client_contact_button
-    PushButton 10, 65, 80, 10, "Court Order Requested", NOTES_court_order_requested_button
+    PushButton 10, 65, 80, 10, "Court Order Requested", NOTES_court_order_request_button
     PushButton 10, 85, 50, 10, "CSENET Info", NOTES_CSENET_button
     PushButton 10, 100, 90, 10, "Date of the hearing (expro)", NOTES_date_of_hearing_expro_button
     PushButton 10, 115, 100, 10, "Date of the hearing (judicial)", NOTES_date_of_hearing_judicial_button
@@ -91,10 +91,7 @@ LOOP UNTIL ButtonPressed <> SIR_button
 IF ButtonPressed = NOTES_adjustment_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
 IF ButtonPressed = NOTES_Arrears_mgmt_button			THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
 IF ButtonPressed = NOTES_Client_contact_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
-IF ButtonPressed = NOTES_court_order_requested_butto		THEN 
-  msgbox "hi"
-  CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
-END IF
+IF ButtonPressed = NOTES_court_order_request_button		THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
 IF ButtonPressed = NOTES_CSENET_button 				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
 IF ButtonPressed = NOTES_date_of_hearing_expro_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
 IF ButtonPressed = NOTES_date_of_hearing_judicial_button 	then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
