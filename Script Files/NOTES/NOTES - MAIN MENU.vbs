@@ -91,16 +91,16 @@ LOOP UNTIL ButtonPressed <> SIR_button
 IF ButtonPressed = NOTES_adjustment_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - ADJUSTMENTS.vbs")
 IF ButtonPressed = NOTES_Arrears_mgmt_button			THEN CALL run_from_GitHub (script_repository & "NOTES/NOTES - ARREARS MGMT REVIEW.vbs")
 IF ButtonPressed = NOTES_Client_contact_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - CLIENT CONTACT.vbs")
-IF ButtonPressed = NOTES_court_order_requested_butto		THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
+IF ButtonPressed = NOTES_court_order_requested_butto		THEN 
+  msgbox "hi"
+  CALL run_from_GitHub(script_repository & "NOTES/NOTES - COURT ORDER REQUEST.vbs")
+END IF
 IF ButtonPressed = NOTES_CSENET_button 				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - CSENET INFO.vbs")
 IF ButtonPressed = NOTES_date_of_hearing_expro_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (EXPRO).vbs")
 IF ButtonPressed = NOTES_date_of_hearing_judicial_button 	then call run_from_GitHub(script_repository & "NOTES/NOTES - DATE OF THE HEARING (JUDICIAL).vbs")
 IF ButtonPressed = NOTES_efiling_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - E-FILING.vbs")
 IF ButtonPressed = NOTES_Intake_docs_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - INTAKE DOCS RECEIVED.vbs")
-IF ButtonPressed = NOTES_IW_caad_button				THEN 
-     msgbox "hi!"
-     CALL run_from_GitHub(script_repository & "NOTES/NOTES - IW CAAD CAWT.vbs")
-END IF
+IF ButtonPressed = NOTES_IW_caad_button				THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - IW CAAD CAWT.vbs")
 IF ButtonPressed = NOTES_no_pay_months_button 			THEN CALL run_from_GitHub(script_repository & "NOTES/NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs")
 IF ButtonPressed = NOTES_pay_or_report_button 			then call run_from_GitHub(script_repository & "NOTES/NOTES - PAY OR REPORT.vbs")
 IF ButtonPressed = NOTES_quarterly_reviews_button 		then call run_from_GitHub(script_repository & "NOTES/NOTES - QUARTERLY REVIEWS.vbs")
