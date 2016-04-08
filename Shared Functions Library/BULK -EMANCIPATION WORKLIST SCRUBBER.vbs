@@ -1,6 +1,6 @@
 
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "BULK - Emancipation Worklist Scrubber.vbs"
+name_of_script = "BULK - EMANCIPATION WORKLIST SCRUBBER.vbs"
 start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 120
@@ -84,8 +84,8 @@ Do
 	Do
 		EMReadScreen Child_Actv, 1, Row, 35
 		If Child_Actv = " " Then 
-			MsgBox "Unable to find child with an 18th birthday within the next 3 months! Please process worklist manually! Script Ended.", VBExclamation
-			StopScript
+			script_end_procedure("Unable to find child with an 18th birthday within the next 3 months! Please process worklist manually! Script Ended.")
+
 		ElseIf Child_Actv = "Y" Then
 			EMReadScreen Child_DOB, 8, Row, 57
 			'CONFIRMING CHILD'S 18TH BIRTHDAY WILL BE IN THE NEXT 3 MOS
@@ -124,8 +124,6 @@ Do
 		ElseIf SUOD_Type <> "   " Then 
 			EMSetCursor Row, 72
 			transmit
-			'EMSendKey "<PF11>"
-			'EMWaitReady 10, 250
 			PF11
 
 			'LOOKING FOR CHILD'S MCI TO CONFIRM EMANCIPATION LANGUAGE
