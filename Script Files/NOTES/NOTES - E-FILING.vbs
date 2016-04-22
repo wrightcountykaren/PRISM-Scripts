@@ -127,8 +127,6 @@ IF efile_status_dropdown = "Accepted" THEN EMWritescreen "E-Filing Status: Docum
 EMSetCursor 11,4
 IF envelope_number <> "" THEN CALL write_bullet_and_variable_in_CAAD("Envelope Number", envelope_number)
 
-END IF
-
 'REMINDS WORKER TO FINISH AND SAVE THEIR WORKLIST
 IF worklist_checkbox = CHECKED THEN 
 script_end_procedure("Please finish and save your worklist")
