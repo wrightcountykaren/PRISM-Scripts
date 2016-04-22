@@ -111,25 +111,24 @@ CALL write_variable_in_CAAD(worker_signature)
 transmit
 
 'SENDS MSG BOX TO WORKER TO REMIND THEM TO UPDATE LEHD IF NECESSARY
-IF efile_status_dropdown = "Accepted" THEN
-Msgbox "***REMINDER***" & vbNewline & "Do you need to update the LEHD screen with new court file number?"
-END IF
+IF efile_status_dropdown = "Accepted" THEN Msgbox "***REMINDER***" & vbNewline & "Do you need to update the LEHD screen with new court file number?"
 
 'ADDS A WORKLIST IF THE CHECKBOX TO ADD ONE IS CHECKED
 IF worklist_checkbox = CHECKED THEN 
-CALL navigate_to_PRISM_screen("CAWT")
-PF5
-EMWritescreen "FREE", 4, 37
+	CALL navigate_to_PRISM_screen("CAWT")
+	PF5
+	EMWritescreen "FREE", 4, 37
 
-'SETS THE CURSOR AND STARTS THE WORKLIST
-IF efile_status_dropdown = "Submitted" THEN EMWritescreen "E-Filing Status: Documents Submitted", 10, 4
-IF efile_status_dropdown = "Accepted" THEN EMWritescreen "E-Filing Status: Documents Accepted", 10, 4
-EMSetCursor 11,4
-IF envelope_number <> "" THEN CALL write_bullet_and_variable_in_CAAD("Envelope Number", envelope_number)
+	'SETS THE CURSOR AND STARTS THE WORKLIST
+	IF efile_status_dropdown = "Submitted" THEN EMWritescreen "E-Filing Status: Documents Submitted", 10, 4
+	IF efile_status_dropdown = "Accepted" THEN EMWritescreen "E-Filing Status: Documents Accepted", 10, 4
+	EMSetCursor 11,4
+	IF envelope_number <> "" THEN CALL write_bullet_and_variable_in_CAAD("Envelope Number", envelope_number)
+END IF
 
 'REMINDS WORKER TO FINISH AND SAVE THEIR WORKLIST
 IF worklist_checkbox = CHECKED THEN 
-script_end_procedure("Please finish and save your worklist")
+	script_end_procedure("Please finish and save your worklist")
 ELSE
-script_end_procedure("")
+	script_end_procedure("")
 END IF
