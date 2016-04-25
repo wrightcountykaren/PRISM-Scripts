@@ -17,7 +17,6 @@ EDMS_choice = "Compass Pilot"
 'This is used for MEMO scripts, such as appointment letter
 'Replace "Anoka" with your county name below. "Anoka County" just demonstrates the format for County Name.  
 county_name = "Anoka County"
-county_cali_code = "###"
 
 'This is the county code on the CALI screen. 
 county_cali_code = "###"
