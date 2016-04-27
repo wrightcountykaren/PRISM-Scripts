@@ -100,7 +100,6 @@ EMWritescreen "A", 3, 29
 
 'Writes the CAAD NOTE
 EMWriteScreen "D5010", 4, 54     'Type of Caad note
-EMWriteScreen waiver_dialog, 4, 37
 EMSetCursor 16, 4
 CALL write_bullet_and_variable_in_CAAD("Waiver of Personal Service Signed by CP", waiver_signed_date)
 CALL write_variable_in_CAAD(worker_signature)
