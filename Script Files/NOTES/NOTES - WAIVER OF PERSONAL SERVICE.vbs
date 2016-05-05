@@ -21,16 +21,16 @@ If req.Status = 200 Then									'200 means great success
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
@@ -39,7 +39,6 @@ END IF
 
 'DIMMING variables
 DIM beta_agency, row, col, case_number_valid, waiver_signed_date, prism_case_number, worker_signature, waiver_dialog, ButtonPressed
-
 
 'THE DIALOG--------------------------------------------------------------------------------------------------
 
@@ -101,12 +100,10 @@ EMWritescreen "A", 3, 29
 
 'Writes the CAAD NOTE
 EMWriteScreen "D5010", 4, 54     'Type of Caad note
-EMWriteScreen waiver_dialog, 4, 37
 EMSetCursor 16, 4
 CALL write_bullet_and_variable_in_CAAD("Waiver of Personal Service Signed by CP", waiver_signed_date)
 CALL write_variable_in_CAAD(worker_signature)
 transmit  'Saves the CAAD note
-PF3	    'Exits back out of CAAD
 
 
 script_end_procedure("")   'Stops the script

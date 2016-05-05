@@ -3,33 +3,38 @@ name_of_script = "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
-'LOADING SCRIPT
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
+'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+If beta_agency = "" then 			'For scriptwriters only
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+ElseIf beta_agency = True then		'For beta agencies and testers
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+Else								'For most users
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+End if
+Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
+If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
 END IF
-
-
 
 Dim ncp_button, cp_button, ncp_attorney_button, cp_attorney_button, summons_and_complaint, Amended_Summons_and_Complaint, Findings_Conclusion_Order, des_information, Amended_Findings_Conclusion_Order, Amended_Motion, motion, supporting_affidavit, financial_statement, Amended_Supporting_Affidavit, Notice_of_Hearing, Genetic_Blood_Test_Order, Notice_of_Intervention, Genetic_Blood_Test_results, Notice_of_Registration, Notice_of_Settlement_Conference, Aff_of_Default_and_ID, Your_Privacy_Rights, Case_Financial_Summary, Case_Information_Sheet, Case_Payment_History, Confidential_Info_Form, Important_Statement_of_Rights, sealed_financial_doc, Request_for_Hearing, guidelines_worksheet, Notice_of_Judgment_Renewal, confidential_yes, confidential_no, date_box, certified_mail_yes, certified_mail_no, other_line_1, other_line_2
 BeginDialog AffOfServDialog, 0, 0, 301, 380, "Affidavit of Service By Mail"

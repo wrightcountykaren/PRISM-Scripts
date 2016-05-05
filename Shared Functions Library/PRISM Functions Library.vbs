@@ -28,16 +28,16 @@
 'ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 '	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 '			vbCr & _
-'			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+'			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 '			vbCr & _
-'			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+'			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 '			vbTab & "- The name of the script you are running." & vbCr &_
 '			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 '			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 '			vbTab & vbTab & "responsible for network issues." & vbCr &_
 '			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 '			vbCr & _
-'			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+'			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 '			vbCr &_
 '			"URL: " & url
 '			StopScript
@@ -78,6 +78,51 @@ Function check_for_PRISM(end_script)
 			If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
 		END IF
 	END IF
+END FUNCTION
+
+'This code is helpful for bulk scripts. This script is used to select the caseload by the 8 digit worker ID code entered in the dialog.
+FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
+	DO
+		DO
+			CALL navigate_to_PRISM_screen("USWT")
+			err_msg = ""
+			'Grabbing the CSO name for the intro dialog.
+			CALL find_variable("Worker Id: ", cso_id, 8)
+			EMSetCursor 20, 13
+			PF1
+			CALL write_value_and_transmit(cso_id, 20, 35)
+			EMReadScreen cso_name, 24, 13, 55
+			cso_name = trim(cso_name)
+			PF3
+			
+			BeginDialog select_cso_dlg, 0, 0, 286, 145, " - Select CSO Caseload"
+			EditBox 70, 55, 65, 15, cso_id
+			Text 70, 80, 90, 10, cso_name
+			ButtonGroup ButtonPressed
+				OkButton 130, 125, 50, 15
+				PushButton 180, 125, 50, 15, "UPDATE CSO", update_cso_button
+				PushButton 230, 125, 50, 15, "STOP SCRIPT", stop_script_button
+			Text 10, 15, 265, 30, "This script will check for worklist items coded E0014 for the following Worker ID. If you wish to change the Worker ID, enter the desired Worker ID in the box and press UPDATE CSO. When you are ready to continue, press OK."
+			Text 10, 60, 50, 10, "Worker ID:"
+			Text 10, 80, 55, 10, "Worker Name:"
+		
+			EndDialog
+		
+			DIALOG select_cso_dlg
+				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
+				IF ButtonPressed = update_cso_button THEN 
+					CALL navigate_to_PRISM_screen("USWT")
+					CALL write_value_and_transmit(cso_id, 20, 13)
+					EMReadScreen cso_name, 24, 13, 55
+					cso_name = trim(cso_name)
+				END IF
+				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
+				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
+																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
+																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
+				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+		LOOP UNTIL ButtonPressed = -1 
+	LOOP UNTIL err_msg = ""
 END FUNCTION
 
 Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
@@ -154,6 +199,28 @@ Function fix_case(phrase_to_split, smallest_length_to_skip)									'Ex: fix_cas
 	Next
 	phrase_to_split = output_phrase												'making the phrase_to_split equal to the output, so that it can be used by the rest of the script.
 End function
+
+'This function takes in a client's name and outputs the name (accounting for hyphenated surnames) with Ucase first character
+'and lcase the rest. This is like fix_case but this function is a bit more specific for names
+FUNCTION fix_case_for_name(name_variable)
+	name_variable = split(name_variable, " ")
+	FOR EACH client_name IN name_variable
+		IF client_name <> "" THEN 
+			IF InStr(client_name, "-") = 0 THEN 
+				client_name = UCASE(left(client_name, 1)) & LCASE(right(client_name, len(client_name) - 1))
+				output_variable = output_variable & " " & client_name
+			ELSE				'When the client has a hyphenated surname
+				hyphen_location = InStr(client_name, "-")
+				first_part = left(client_name, hyphen_location - 1)
+				first_part = UCASE(left(first_part, 1)) & LCASE(right(first_part, len(first_part) - 1))
+				second_part = right(client_name, len(client_name) - hyphen_location)
+				second_part = UCASE(left(second_part, 1)) & LCASE(right(second_part, len(second_part) - 1))
+				output_variable = output_variable & " " & first_part & "-" & second_part
+			END IF
+		END IF
+	NEXT
+	name_variable = output_variable
+END FUNCTION
 
 'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
 'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
@@ -513,6 +580,7 @@ FUNCTION word_doc_update_field(field_name, variable_for_field, objDoc)
 END FUNCTION
 
 Function write_bullet_and_variable_in_CAAD(bullet, variable)
+IF variable <> "" THEN  
   spaces_count = 6	'Temporary just to make it work
 
   EMGetCursor row, col 
@@ -565,9 +633,11 @@ Function write_bullet_and_variable_in_CAAD(bullet, variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
+END IF
 End Function
 
 Function write_variable_in_CAAD(variable)
+IF variable <> "" THEN  
   EMGetCursor row, col 
   EMReadScreen line_check, 2, 15, 2
   If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then 
@@ -586,6 +656,7 @@ Function write_variable_in_CAAD(variable)
     EMWaitReady 0, 0
     EMSetCursor 16, 4
   End if
+END IF
 End function
 
 '-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
@@ -632,3 +703,253 @@ FUNCTION write_value_and_transmit(input_value, PRISM_row, PRISM_col)
 	EMWriteScreen input_value, PRISM_row, PRISM_col
 	transmit
 END FUNCTION
+
+
+'>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
+'This CLASS contains properties used to populate documents
+' These properties should not be used for other applications in scripts.
+' Everytime you call the property, the script will try to navigate and grab the information
+CLASS doc_info
+	' >>>>>>>>>>>>><<<<<<<<<<<<<
+	' >>>>> CP INFORMATION <<<<<
+	' >>>>>>>>>>>>><<<<<<<<<<<<<
+	' CP name (last, first middle initial, suffix (if any))
+	PUBLIC PROPERTY GET cp_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_name, 50, 5, 25
+		cp_name = trim(cp_name)
+	END PROPERTY
+	
+	' CP first name
+	PUBLIC PROPERTY GET cp_first_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_first_name, 12, 8, 34
+		cp_first_name = trim(replace(cp_first_name, "_", ""))
+	END PROPERTY
+
+	' CP last name
+	PUBLIC PROPERTY GET cp_last_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		EMReadScreen cp_last_name, 17, 8, 8
+		cp_last_name = trim(replace(cp_last_name, "_", ""))
+	END PROPERTY	
+	
+	' CP middle name
+	PUBLIC PROPERTY GET cp_middle_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		EMReadScreen cp_middle_name, 12, 8, 56
+		cp_middle_name = trim(replace(cp_middle_name, "_", ""))
+	END PROPERTY
+	
+	' CP middle initial
+	PUBLIC PROPERTY GET cp_middle_initial
+		cp_middle_initial = left(cp_middle_name, 1)
+	END PROPERTY
+	
+	' CP suffix
+	PUBLIC PROPERTY GET cp_suffix
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		EMReadScreen cp_suffix, 3, 8, 74
+		cp_suffix = trim(replace(cp_suffix, "_", ""))
+	END PROPERTY
+	
+	' CP date of birth
+	PUBLIC PROPERTY GET cp_dob
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_dob, 8, 6, 24		
+	END PROPERTY
+
+	' CP social security number
+	PUBLIC PROPERTY GET cp_ssn
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_ssn, 11, 6, 7
+	END PROPERTY
+	
+	' CP MCI
+	PUBLIC PROPERTY GET cp_mci
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
+		EMReadScreen cp_mci, 10, 5, 7
+	END PROPERTY	
+	
+	' CP address
+	PUBLIC PROPERTY GET cp_addr
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
+		EMReadScreen cp_addr1, 30, 15, 11
+		EMReadScreen cp_addr2, 30, 16, 11
+		cp_addr = replace(cp_addr1, "_", "") & ", " & replace(cp_addr2, "_", "")
+	END PROPERTY
+
+	' CP address city
+	PUBLIC PROPERTY GET cp_city
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
+		EMReadScreen cp_city, 20, 17, 11
+		cp_city = replace(cp_city, "_", "")
+	END PROPERTY
+
+	' CP address state
+	PUBLIC PROPERTY GET cp_state
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
+		EMReadScreen cp_state, 2, 17, 39
+	END PROPERTY
+	
+    ' CP address zip code
+	PUBLIC PROPERTY GET cp_zip
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
+		EMReadScreen cp_zip, 10, 17, 50
+	END PROPERTY
+	
+	' >>>>>>>>>>>>><<<<<<<<<<<<<<
+	' >>>>> NCP Information <<<<<
+	' >>>>>>>>>>>>><<<<<<<<<<<<<<
+	' NCP Name
+	PUBLIC PROPERTY GET ncp_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_name, 50, 5, 25
+		ncp_name = trim(ncp_name)
+	END PROPERTY
+	
+	' NCP first name
+	PUBLIC PROPERTY GET ncp_first_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_first_name, 12, 8, 34
+		ncp_first_name = trim(replace(ncp_first_name, "_", ""))
+	END PROPERTY
+
+	' NCP last name
+	PUBLIC PROPERTY GET ncp_last_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		EMReadScreen ncp_last_name, 17, 8, 8
+		ncp_last_name = trim(replace(ncp_last_name, "_", ""))
+	END PROPERTY	
+	
+	' NCP middle name
+	PUBLIC PROPERTY GET ncp_middle_name
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		EMReadScreen ncp_middle_name, 12, 8, 56
+		ncp_middle_name = trim(replace(ncp_middle_name, "_", ""))
+	END PROPERTY
+	
+	' NCP middle initial
+	PUBLIC PROPERTY GET ncp_middle_initial
+		ncp_middle_initial = left(ncp_middle_name, 1)
+	END PROPERTY
+	
+	' NCP suffix
+	PUBLIC PROPERTY GET ncp_suffix
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		EMReadScreen ncp_suffix, 3, 8, 74
+		ncp_suffix = trim(replace(ncp_suffix, "_", ""))
+	END PROPERTY	
+	
+	' NCP date of birth
+	PUBLIC PROPERTY GET ncp_dob
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_dob, 8, 6, 24		
+	END PROPERTY
+
+	' NCP SSN
+	PUBLIC PROPERTY GET ncp_ssn
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_ssn, 11, 6, 7
+	END PROPERTY
+	
+	' NCP MCI
+	PUBLIC PROPERTY GET ncp_mci
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
+		EMReadScreen ncp_mci, 10, 5, 7
+	END PROPERTY	
+
+	' NCP street address
+	PUBLIC PROPERTY GET ncp_addr
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
+		EMReadScreen ncp_addr1, 30, 15, 11
+		EMReadScreen ncp_addr2, 30, 16, 11
+		ncp_addr = replace(ncp_addr1, "_", "") & ", " & replace(ncp_addr2, "_", "")
+	END PROPERTY
+
+	' NCP address city
+	PUBLIC PROPERTY GET ncp_city
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
+		EMReadScreen ncp_city, 20, 17, 11
+		ncp_city = replace(ncp_city, "_", "")
+	END PROPERTY
+
+	' NCP address state
+	PUBLIC PROPERTY GET ncp_state
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
+		EMReadScreen ncp_state, 2, 17, 39
+	END PROPERTY
+    
+	' NCP address zip code
+	PUBLIC PROPERTY GET ncp_zip
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
+		EMReadScreen ncp_zip, 10, 17, 50
+	END PROPERTY
+	
+	' >>>>>>>>>>>>>>><<<<<<<<<<<<<<
+	' >>> Financial Information <<<
+	' >>>>>>>>>>>>>>><<<<<<<<<<<<<<
+	' monthly accrual amount
+	PUBLIC PROPERTY GET monthly_accrual
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
+		EMReadScreen monthly_accrual, 8, 9, 31
+		monthly_accrual = trim(monthly_accrual)
+	END PROPERTY
+	
+	' monthly non-accrual
+	PUBLIC PROPERTY GET monthly_non_accrual
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
+		EMReadScreen monthly_non_accrual, 8, 10, 31
+		monthly_non_accrual = trim(monthly_non_accrual)
+	END PROPERTY
+	
+	' NPA arrears
+	PUBLIC PROPERTY GET npa_arrears
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
+		EMReadScreen npa_arrears, 8, 9, 70
+		npa_arrears = trim(npa_arrears)
+	END PROPERTY
+	
+	' PA arrears
+	PUBLIC PROPERTY GET pa_arrears
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
+		EMReadScreen pa_arrears, 8, 10, 70
+		pa_arrears = trim(pa_arrears)
+	END PROPERTY
+	
+	' Total arrears
+	PUBLIC PROPERTY GET ttl_arrears
+		EMReadScreen at_screen, 4, 21, 75
+		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
+		EMReadScreen ttl_arrears, 8, 11, 70
+		ttl_arrears = trim(ttl_arrears)
+	END PROPERTY		
+END CLASS

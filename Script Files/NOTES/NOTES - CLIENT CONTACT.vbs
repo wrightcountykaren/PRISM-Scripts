@@ -5,28 +5,34 @@ start_time = timer
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
 date_of_contact = date & ""	'defaults to today
 
-'FUNCTIONS----------------------------------------------------------------------------------------------------
-'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
+'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+If beta_agency = "" then 			'For scriptwriters only
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+ElseIf beta_agency = True then		'For beta agencies and testers
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+Else								'For most users
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+End if
+Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
+If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
@@ -37,9 +43,9 @@ END IF
 
 'DIALOGS----------------------------------------------------------------------------------------------------
 BeginDialog contact_dialog, 0, 0, 381, 295, "Client contact"
-  DropListBox 80, 15, 260, 15, ""+chr(9)+"T0050 PHONE CALL TO CP"+chr(9)+"T0051 PHONE CALL FR CP"+chr(9)+"T0052 PHONE CALL RET TO CP"+chr(9)+"T0053 PHONE CALL RET FR CP"+chr(9)+"T0054 PHONE CALL ATMPT TO RET TO CP"+chr(9)+"T0093 CONTACT WITH CP SPOUSE"+chr(9)+"T0101 PHONE CONTACT CP'S ATTORNEY"+chr(9)+"T0201 CONTACT WITH CP EMPLOYER"+chr(9)+"M3910 INTERVIEW WITH CP", contact_type_CP
-  DropListBox 80, 35, 260, 15, ""+chr(9)+"T0055 PHONE CALL TO NCP"+chr(9)+"T0056 PHONE CALL FR NCP"+chr(9)+"T0057 PHONE CALL RET TO NCP"+chr(9)+"T0058 PHONE CALL RET FR NCP"+chr(9)+"T0059 PHONE CALL ATMPT TO RET TO NCP"+chr(9)+"T0060 PHONE CALL TO NCP EMP"+chr(9)+"T0061 PHONE CALL FROM NCP EMP"+chr(9)+"T0062 PHONE CALL RET TO NCP EMP"+chr(9)+"T0063 PHONE CALL RET FR NCP EMP"+chr(9)+"T0064 PHONE CALL ATMPT RET TO NCP EMP"+chr(9)+"T0065 PHONE CALL TO NCP AY"+chr(9)+"T0066 PHONE CALL FR NCP AY"+chr(9)+"T0067 PHONE CALL RET TO NCP AY"+chr(9)+"T0068 PHONE CALL RET FR NCP AY"+chr(9)+"T0069 PHONE CALL ATMPT RET TO NCP AY"+chr(9)+"T0092 CONTACT WITH NCP SPOUSE"+chr(9)+"M3911 INTERVIEW WITH NCP", contact_type_NCP
-  DropListBox 80, 55, 260, 15, ""+chr(9)+"M0410 CONTACT WITH CCC WORKER"+chr(9)+"T0070 PHONE CALL/OTHER"+chr(9)+"T0074 CONTACT WITH STATE HELP DESK"+chr(9)+"T0075 CONTACT WITH HEALTH CARRIER"+chr(9)+"T0080 CONTACT WITH COURT ADMINISTRATOR"+chr(9)+"T0085 CONTACT WITH LAW ENFORCEMENT"+chr(9)+"T0087 CONTACT WITH PROBATION OFFICER"+chr(9)+"T0090 CONTACT WITH NCP/CP UNION"+chr(9)+"T0095 CONTACT WITH SOCIAL WORKER"+chr(9)+"T0098 CONTACT WITH WORKER FROM ANOTHER MN COUNTY"+chr(9)+"T0100 PHONE CONTACT WITH OTHER STATE'S CENTRAL REGISTRY"+chr(9)+"T0102 PHONE CONTACT COUNTY ATTORNEY"+chr(9)+"T0103 PHONE CONTACT WITH OTHER STATE WORKER"+chr(9)+"T0104 PHONE CONTACT WITH FINANCIAL WORKER"+chr(9)+"T0105 PHONE CONTACT WITH CSPC"+chr(9)+"T0111 CONTACT WITH OTHER STATE AGENCY", contact_type_other
+  DropListBox 80, 15, 260, 15, ""+chr(9)+"T0050 PHONE CALL TO CP"+chr(9)+"T0051 PHONE CALL FR CP"+chr(9)+"T0052 PHONE CALL RET TO CP"+chr(9)+"T0053 PHONE CALL RET FR CP"+chr(9)+"T0054 PHONE CALL ATMPT TO RET TO CP"+chr(9)+"T0093 CONTACT WITH CP SPOUSE"+chr(9)+"T0101 PHONE CONTACT CP'S ATTORNEY"+chr(9)+"T0201 CONTACT WITH CP EMPLOYER"+chr(9)+"M3910 INTERVIEW WITH CP"+chr(9)+"M2121 LETTER RECD FROM CP", contact_type_CP
+  DropListBox 80, 35, 260, 15, ""+chr(9)+"T0055 PHONE CALL TO NCP"+chr(9)+"T0056 PHONE CALL FR NCP"+chr(9)+"T0057 PHONE CALL RET TO NCP"+chr(9)+"T0058 PHONE CALL RET FR NCP"+chr(9)+"T0059 PHONE CALL ATMPT TO RET TO NCP"+chr(9)+"T0060 PHONE CALL TO NCP EMP"+chr(9)+"T0061 PHONE CALL FROM NCP EMP"+chr(9)+"T0062 PHONE CALL RET TO NCP EMP"+chr(9)+"T0063 PHONE CALL RET FR NCP EMP"+chr(9)+"T0064 PHONE CALL ATMPT RET TO NCP EMP"+chr(9)+"T0065 PHONE CALL TO NCP AY"+chr(9)+"T0066 PHONE CALL FR NCP AY"+chr(9)+"T0067 PHONE CALL RET TO NCP AY"+chr(9)+"T0068 PHONE CALL RET FR NCP AY"+chr(9)+"T0069 PHONE CALL ATMPT RET TO NCP AY"+chr(9)+"T0092 CONTACT WITH NCP SPOUSE"+chr(9)+"M3911 INTERVIEW WITH NCP"+chr(9)+"M2122 LETTER RECD FROM NCP", contact_type_NCP
+  DropListBox 80, 55, 260, 15, ""+chr(9)+"M0410 CONTACT WITH CCC WORKER"+chr(9)+"T0070 PHONE CALL/OTHER"+chr(9)+"T0074 CONTACT WITH STATE HELP DESK"+chr(9)+"T0075 CONTACT WITH HEALTH CARRIER"+chr(9)+"T0080 CONTACT WITH COURT ADMINISTRATOR"+chr(9)+"T0085 CONTACT WITH LAW ENFORCEMENT"+chr(9)+"T0087 CONTACT WITH PROBATION OFFICER"+chr(9)+"T0090 CONTACT WITH NCP/CP UNION"+chr(9)+"T0095 CONTACT WITH SOCIAL WORKER"+chr(9)+"T0098 CONTACT WITH WORKER FROM ANOTHER MN COUNTY"+chr(9)+"T0100 PHONE CONTACT WITH OTHER STATE'S CENTRAL REGISTRY"+chr(9)+"T0102 PHONE CONTACT COUNTY ATTORNEY"+chr(9)+"T0103 PHONE CONTACT WITH OTHER STATE WORKER"+chr(9)+"T0104 PHONE CONTACT WITH FINANCIAL WORKER"+chr(9)+"T1107 CONTACT WITH VITAL RECORDS"+chr(9)+"T0105 PHONE CONTACT WITH CSPC"+chr(9)+"T0111 CONTACT WITH OTHER STATE AGENCY", contact_type_other
   EditBox 165, 80, 80, 15, PRISM_case_number
   EditBox 310, 80, 70, 15, date_of_contact
   EditBox 95, 110, 60, 15, phone_number

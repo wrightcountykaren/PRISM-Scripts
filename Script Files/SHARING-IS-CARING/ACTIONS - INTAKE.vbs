@@ -2,27 +2,34 @@
 name_of_script = "ACTIONS - INTAKE.vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
+'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+If beta_agency = "" then 			'For scriptwriters only
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+ElseIf beta_agency = True then		'For beta agencies and testers
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+Else								'For most users
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+End if
+Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
+If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
@@ -66,7 +73,7 @@ BeginDialog CS_intake_dialog, 0, 0, 370, 344, "CS intake dialog"
   CheckBox 10, 220, 150, 10, "Issues-Paternity-to be Decided", issues_paternity_to_be_decided_check
   CheckBox 10, 230, 150, 10, "Parenting Time Schedules", parenting_time_schedules_check
   CheckBox 10, 240, 150, 10, "Financial Affidavit OCS", financial_affidavit_OCS_check
-  CheckBox 10, 260, 130, 10, "Establishment Intake Ltr", Est_Ltr_checkbox
+  CheckBox 10, 270, 130, 10, "Establishment Intake Ltr", Est_Ltr_checkbox
   CheckBox 200, 110, 100, 10, "F0018 - Your Privacy Rights", F0018_checkbox
   CheckBox 200, 120, 160, 10, "F0021 - Financial Statement", F0021_checkbox
   CheckBox 200, 130, 140, 10, "F0022 - Important Statement of Rights", F0022_check
@@ -96,8 +103,9 @@ BeginDialog CS_intake_dialog, 0, 0, 370, 344, "CS intake dialog"
   GroupBox 180, 100, 190, 70, "DORD docs to print for client"
   Text 200, 220, 70, 10, "Sign your CAAD note:"
   Text 10, 60, 50, 10, "Street (line 2):"
-  
+  CheckBox 10, 250, 130, 10, "Special Services Assessment", Special_assessment_check
 EndDialog
+
 'CUSTOM FUNCTIONS***************************************************************************************************************
 ' This is a custom function to change the format of a participant name.  The parameter is a string with the 
 ' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
@@ -285,16 +293,25 @@ If _
 	paternity_information_form_memo_check = checked or _
 	paternity_information_form_check = checked or _
 	relative_caretaker_paternity_info_form_check = checked or _
-	supplemental_paternity_information_form_check = checked then
+	supplemental_paternity_information_form_check = checked or _
+	Special_assessment_check = checked then
 		Set objWord = CreateObject("Word.Application")
 		objWord.Visible = True
 End if
 
+If Special_assessment_check = checked then
+	
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Special Services Assessment.dotx")
+	With objDoc
+		.FormFields("PRISM_Number").Result = PRISM_case_number
+		.FormFields("CP_NAME").Result = CP_name
+	End With
+End if
 
 'Updating the CP paternity request document
 If CP_paternity_request_sheet_check = checked then
 	
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\CP Paternity Request Sheet.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\CP Paternity Request Sheet.dotx")
 	With objDoc
 		.FormFields("field_childs_name").Result = childs_name
 		.FormFields("field_CP_name").Result = CP_name
@@ -305,7 +322,7 @@ End if
 
 'Updating the Financial Affidavit OCS document
 If financial_affidavit_OCS_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Financial Affidavit OCS.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Financial Affidavit OCS.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_all_children").Result = CAPS_kids
@@ -316,7 +333,7 @@ End if
 
 'Updating the Normal Paternity Cover Letter to CP document
 If paternity_cover_letter_normal_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Normal.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Normal.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -328,12 +345,13 @@ If paternity_cover_letter_normal_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
+
 	End With
 End if
 
 'Opening the Relative Caretaker Paternity Cover Letter to CP document (does not autofill any info)
 If paternity_cover_letter_relative_caretaker_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Relative Caretaker.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Relative Caretaker.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -341,13 +359,12 @@ If paternity_cover_letter_relative_caretaker_check = checked then
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_date_plus_five").Result = dateadd("d", date, 5)
 		.FormFields("field_phone").Result = worker_phone
-
 	End With
 End if
 
 'Updating the Minor with GAL Paternity Cover Letter to CP document
 If paternity_cover_letter_minor_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Cover letter to CP - Minor with GAL attachment.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Cover letter to CP - Minor with GAL attachment.dotx")
 	With objDoc
 		.FormFields("field_name").Result = CP_name
 		.FormFields("field_street_address").Result = street_address
@@ -362,7 +379,7 @@ End if
 
 'Updating the Establishment Intake Ltr
 If Est_Ltr_checkbox = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Establishment Intake Letter.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Establishment Intake Letter.dotx")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CP_address").Result = street_address
@@ -375,11 +392,11 @@ If Est_Ltr_checkbox = checked then
 End if
 
 'Opening the Paternity Information Form Memo document (does not autofill any info)
-If paternity_information_form_memo_check = checked then set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Information Form Memo.dotx")
+If paternity_information_form_memo_check = checked then set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Information Form Memo.dotx")
 
 'Opening the Paternity Information Form document 
 If paternity_information_form_check = checked then 
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Paternity Information Form.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Paternity Information Form.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -389,7 +406,7 @@ End if
 
 'Opening the Supplemental Paternity Information Form document 
 If supplemental_paternity_information_form_check = checked then 
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Supplemental Paternity Information Form.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Supplemental Paternity Information Form.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -398,7 +415,7 @@ If supplemental_paternity_information_form_check = checked then
 End if
 'Opening the Relative Caretaker Paternity Information Form document 
 If relative_caretaker_paternity_info_form_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\New Folder\Relative Caretakers Paternity Questionnaire.dotx")
+	set objDoc = objWord.Documents.Add("L:\Child Support\Paternity\Relative Caretakers Paternity Questionnaire.dotx")
 	With objDoc
 		.FormFields("field_case_number").Result = PRISM_case_number
 		.FormFields("field_childs_name").Result = childs_name
@@ -506,6 +523,7 @@ If CAAD_note_check = checked then
 	If paternity_information_form_memo_check = checked then call write_new_line_in_PRISM_case_note("    * Paternity Information Form Memo")
 	If paternity_information_form_check = checked then call write_new_line_in_PRISM_case_note("    * Paternity Information Form")
 	If supplemental_paternity_information_form_check = checked then call write_new_line_in_PRISM_case_note("    * Supplemental Paternity Information Form")
+	If Special_assessment_check = checked then call write_new_line_in_PRISM_case_note("    * Special Services Assessment")
 	If Est_Ltr_checkbox = checked then call write_new_line_in_PRISM_case_note("    * Establishment Intake Letter")
 	If F0018_checkbox = checked then call write_new_line_in_PRISM_case_note("    * DORD F0018")
 	If F0021_checkbox = checked then call write_new_line_in_PRISM_case_note("    * DORD F0021")
@@ -536,3 +554,6 @@ If CAWD_check = checked then
 End if
 
 script_end_procedure("")
+
+
+

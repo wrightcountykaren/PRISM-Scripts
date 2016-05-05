@@ -2,6 +2,7 @@
 name_of_script = "BULK - FAILURE POF - RSDI DFAS.vbs" 
 start_time = timer 
 
+'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
 	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
@@ -19,16 +20,16 @@ If req.Status = 200 Then									'200 means great success
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
@@ -68,8 +69,7 @@ DO
 			pmt_year = Right(PAPL_most_recent_pay_date, 2) 'string variables added to track the payment month and 2-digit year.
 			pmt_month = Left(PAPL_most_recent_pay_date, 2)	
 			
-			
-			
+						
 			' >>>> CHECKING THAT THE DATE IN THE PAYMENT ID IS FROM THE CURRENT MONTH MINUS 1 <<<<<
 			current_month_minus1 = DateAdd("m", -1, date) 'variable for the current date minus one - this returns a date format
 			c_month = datepart("m", current_month_minus1)
@@ -79,9 +79,7 @@ DO
 			c_year = Right(CStr(current_month_minus1), 2) 'string variables added to track the current month minus 1 month and year. 
 			'c_month = Left(CStr(current_month_minus1), 2)
 			
-			
-			
-			IF pmt_year = c_year THEN
+			IF pmt_year >= c_year THEN
 				If  pmt_month >= c_month THEN  
  				' >>>>> IF THE PAYMENT IS FROM LAST MONTH OR CURRENT MONTH, THE SCRIPT GRABS THE EMPLOYER/SOURCE ID <<<<<
 				'We want this to occur if the payment occurred last month or in the current month.				
@@ -93,7 +91,7 @@ DO
 					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN 
 						purge = True
 					 	COUNT = COUNT + 1
-					  ' 	Msgbox USWT_case_number & " worklist selected for purge!"
+					   	Msgbox USWT_case_number & " worklist selected for purge!"
 					Else
 						purge = false
 					End If

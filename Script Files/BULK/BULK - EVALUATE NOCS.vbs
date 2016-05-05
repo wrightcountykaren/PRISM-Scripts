@@ -7,27 +7,34 @@ DIM initial_run_through
 DIM worker_signature
 DIM cso_name
 
-'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
+'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
+Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
+If beta_agency = "" then 			'For scriptwriters only
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+ElseIf beta_agency = True then		'For beta agencies and testers
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+Else								'For most users
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+End if
+Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
+If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
+			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
+			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
 			vbTab & "- The name of the script you are running." & vbCr &_
 			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
 			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
@@ -275,7 +282,9 @@ FOR i = 0 to number_of_cases
 			END IF
 		ELSEIF case_program_code = "CASE PROGRAM CODE" THEN
 			EMReadScreen program_change_date, 8, cath_row, 2
+			date_converter_PALC_PAPL (program_change_date)
 			nocs_array(i, 5) = program_change_date
+			
 			EXIT DO
 		END IF
 	LOOP
@@ -291,7 +300,8 @@ FOR i = 0 to number_of_cases
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	EMWriteScreen nocs_array(i, 0), 4, 8
 	EMWriteScreen right(nocs_array(i, 0), 2), 4, 19
-	EMWriteScreen date, 9, 18
+	current_date = date_converter_PALC_PAPL(date)
+	EMWriteScreen current_date, 9, 18
 	CALL write_value_and_transmit("D", 3, 29)
 	EMReadScreen ivd_coop_code, 1, 15, 25
 	IF ivd_coop_code = "_" THEN ivd_coop_code = "Y"			'IF there has never been non-coop for good cause, the panel will be coded "_" which is effectively a "Y"
@@ -395,7 +405,7 @@ NEXT
 'One more check for PRISM
 CALL check_for_PRISM(False)
 
-'If the case is being purged, the script will generate a CAAD note. If the script is not purging the worklist item, it will not CAAD note.
+'Converting numeric values assigned by checkboxes to True or False.
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	IF nocs_array(i, 11) = 1 THEN
@@ -474,31 +484,31 @@ FOR i = 0 to number_of_cases
 NEXT
 
 'Now the script needs to PURGE for all (i, 11) = True
-CALL navigate_to_PRISM_screen("USWT")
-CALL write_value_and_transmit("D0800", 20, 30)
+
 number_of_cases_purged = 0
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 0) >> PRISM_case_number
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 	IF nocs_array(i, 11) = True THEN 
-		PRISM_case_number = replace(nocs_array(i, 0), "-", " ")
-		uswt_row = 7
+		CALL navigate_to_PRISM_screen("CAWT")
+		CALL write_value_and_transmit("D0800", 20, 29)
+		EMWriteScreen left(nocs_array(i, 0), 10), 20, 8	
+		EMWritescreen right(nocs_array(i, 0), 2), 20, 19
+		transmit
+		
+	
 		DO
-			EMReadScreen uswt_case_number, 13, uswt_row, 8
-			IF PRISM_case_number = uswt_case_number THEN
-				EMWriteScreen "P", uswt_row, 4
+			EMReadscreen cawd_type, 5, 8, 8
+			IF cawd_type = "D0800" THEN
+				EMWriteScreen "P", 8, 4
 				transmit
 				transmit
 				number_of_cases_purged = number_of_cases_purged + 1
-			ELSE
-				uswt_row = uswt_row + 1
-				IF uswt_row = 19 THEN 
-					PF8
-					uswt_row = 7
-				END IF
 			END IF
-		LOOP UNTIL PRISM_case_number = uswt_case_number	
+		LOOP UNTIL cawd_type <> "D0800"
 	END IF
 NEXT
 
 script_end_procedure("Success!! " &  number_of_cases_purged  & " items have been purged.")
+
+
