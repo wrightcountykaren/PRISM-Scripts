@@ -1,9 +1,6 @@
-'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
-Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-Set fso_command = run_another_script_fso.OpenTextFile("Q:\Blue Zone Scripts\Child Support\Script Files\SETTINGS - GLOBAL VARIABLES.vbs")
-text_from_the_other_script = fso_command.ReadAll
-fso_command.Close
-Execute text_from_the_other_script
+''GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "BULK - MAIN MENU.vbs"
+start_time = timer
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
@@ -71,7 +68,7 @@ Function declare_main_menu(menu_type, script_array)
 End function
 
 DO
-	CALL declare_main_menu("BULK", cs_scripts_array)
+	CALL declare_main_menu("ACTIONS", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
 	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
