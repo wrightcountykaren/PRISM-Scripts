@@ -35,7 +35,9 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-CALL run_another_script("Q:\Blue Zone Scripts\Script Files\Sandbox\Skunk Works\CS Script Revamp\All Scripts.vbs")
+'Loading all scripts
+'Update URL when pushed from RFK repo
+CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
