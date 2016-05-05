@@ -36,7 +36,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'Loading all scripts
-CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
