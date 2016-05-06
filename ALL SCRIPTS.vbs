@@ -1,5 +1,5 @@
 'A class for each script item. This will need to be moved to a global files location.
-class script
+class cs_script
 	public script_name
 	public file_name
 	public description
@@ -11,12 +11,6 @@ class script
 	end property
 	
 	public agencies_that_use	
-	
-	public run_total
-	public plus_one_button
-	public minus_one_button
-	public help_button
-	public help_url	
 end class
 
 all_counties = "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
@@ -26,7 +20,7 @@ all_counties = "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, 
 script_num = 0 
 
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ADJUSTMENTS"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ADJUSTMENTS.vbs"
@@ -35,7 +29,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "AFFIDAVIT OF SERVICE DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL DOCS.vbs"
@@ -44,7 +38,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVW"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ARREARS MGMT REVIEW.vbs"
@@ -53,7 +47,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CALI TO EXCEL"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CALI TO EXCEL.vbs"
@@ -62,7 +56,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
 cs_scripts_array(script_num).script_type		= "ACTIONS, NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CASE TRANSFER.vbs"
@@ -71,7 +65,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CLIENT CONTACT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CLIENT CONTACT.vbs"
@@ -80,7 +74,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COLA"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - COLA.vbs"
@@ -89,7 +83,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COMPANION CASE FINDER - CP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CP COMPANION CASE FINDER.vbs"
@@ -98,7 +92,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COMPANION CASE FINDER - NCP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - NCP COMPANION CASE FINDER.vbs"
@@ -107,7 +101,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COURT ORDER REQUEST"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - COURT ORDER REQUEST.vbs"
@@ -116,7 +110,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CP NAME CHANGE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - CP NAME CHANGE.vbs"
@@ -125,7 +119,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CSENET INFO"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CSENET INFO.vbs"
@@ -134,7 +128,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "DATE OF HEARING (EXPRO)"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - DATE OF THE HEARING (EXPRO).vbs"
@@ -143,7 +137,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "DATE OF HEARING (JUDICIAL)"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - DATE OF THE HEARING (JUDICIAL).vbs"
@@ -152,7 +146,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "DDPL CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DDPL CALCULATOR.vbs"
@@ -161,7 +155,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "E-FILING"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - E-FILING.vbs"
@@ -170,7 +164,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ENFORCEMENT INTAKE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ENFORCEMENT INTAKE.vbs"
@@ -179,7 +173,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "EST DORD NPA DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - EST DORD NPA DOCS.vbs"
@@ -188,7 +182,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ESTB DORD PA DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ESTB DORD DOCS FOR PA CASE.vbs"
@@ -197,7 +191,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "FAILURE POF RSDI DFAS"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - FAILURE POF RSDI DFAS.vbs"
@@ -206,7 +200,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "FEE SUPPRESSION OVERRIDE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - FEE SUPPRESSION OVERRIDE.vbs"
@@ -215,7 +209,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "FIND NAME ON CALI"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - FIND NAME ON CALI.vbs"
@@ -224,7 +218,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "FRAUD REFERRAL"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - FRAUD REFERRAL.vbs"
@@ -233,7 +227,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "GENERIC ENFORCEMENT INTAKE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - GENERIC ENFORCEMENT INTAKE.vbs"
@@ -242,7 +236,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INTAKE DOCS RECEIVED"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - INTAKE DOCS RECEIVED.vbs"
@@ -251,7 +245,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "IW CAAD CAWT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - IW CAAD CAWT.vbs"
@@ -260,7 +254,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "IW CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - IW CALCULATOR.vbs"
@@ -269,7 +263,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MES FINANCIAL DOCS SENT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MES FINANCIAL DOCS SENT.vbs"
@@ -278,7 +272,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NCP LOCATE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NCP LOCATE.vbs"
@@ -287,7 +281,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NON PAY"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NON PAY.vbs"
@@ -296,7 +290,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NO PAY REPORT"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - NO PAY REPORT.vbs"
@@ -305,7 +299,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NO PAYMENT MONTHS ONE-FOUR"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs"
@@ -314,7 +308,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NOTICE OF CONT'D SERVICE"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - EVALUATE NOCS.vbs"
@@ -323,7 +317,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PALC CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PALC CALCULATOR.vbs"
@@ -332,7 +326,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PAYMENT PLAN REVIEW"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - PAYMENT PLAN REVIEW.vbs"
@@ -341,7 +335,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PAY OR REPORT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - PAY OR REPORT.vbs"
@@ -350,7 +344,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PRORATE SUPPORT"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PRORATE SUPPORT.vbs"
@@ -359,7 +353,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "QUARTERLY REVIEWS"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - QUARTERLY REVIEWS.vbs"
@@ -368,7 +362,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REDIRECT DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DOCS FOR REDIRECTION.vbs"
@@ -377,7 +371,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 WORKLIST SCRUBBER.vbs"
@@ -386,7 +380,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN RECENT ACTIVITY"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
@@ -395,7 +389,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW QW INFO"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
@@ -404,7 +398,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ROP DETAIL"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ROP DETAIL.vbs"
@@ -413,7 +407,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "SOP INVOICE"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - SOP INVOICE.vbs"
@@ -422,7 +416,7 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, M
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "TRANSFER CASE(S)"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CASE TRANSFER.vbs"
@@ -431,7 +425,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "UN UN DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UNREIMBURSED UNINSURED DOCS.vbs"
@@ -440,7 +434,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "UPDATE WORKER SIGNATURE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UPDATE WORKER SIGNATURE.vbs"
@@ -449,7 +443,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW script
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "WAIVER OF PERSONAL SERVICE"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - WAIVER OF PERSONAL SERVICE.vbs"
