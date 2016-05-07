@@ -29,66 +29,57 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work to try and solve this issue, if needed." & vbCr &_ 
 			vbCr &_
 			"URL: " & url
 			StopScript
 END IF
 
-'DIALOGS---------------------------------------------------------------------------
-BeginDialog BULK_main_menu_dialog, 0, 0, 456, 340, "BULK Main Menu"
-  ButtonGroup ButtonPressed
-    PushButton 5, 35, 60, 10, "CALI to Excel", BULK_cali_to_excel_button
-    PushButton 5, 55, 60, 10, "Case Transfer", BULK_case_transfer_button
-    PushButton 5, 80, 100, 10, "Companion Case Finder - CP", BULK_cp_companion_case_finder_button
-    PushButton 5, 95, 110, 10, "Companion Case Finder - NCP", BULK_ncp_companion_case_finder_button
-    PushButton 5, 115, 60, 10, "Evaluate NOCS", BULK_evaluate_nocs_button
-    PushButton 5, 135, 90, 10, "Failure POF -- SSA, DFAS", BULK_failure_pof_rsdi_dfas_button
-    PushButton 5, 150, 135, 10, "FI Match Not Eligible For Levy Scrubber", BULK_L5000_button
-    PushButton 5, 170, 55, 10, "No Pay Report", BULK_no_pay_report_button
-    PushButton 5, 190, 110, 10, "Review Case Referred Scrubber", BULK_M8001_button
-    PushButton 5, 205, 130, 10, "Review Continued Interest Suspension", BULK_M6529_button
-    PushButton 5, 235, 100, 10, "Review Quarterly Wage Info", BULK_REVIEW_QW_button
-    PushButton 5, 250, 120, 10, "Review Pay Plan - DL is Suspended", BULK_E4111_suspended_button
-    PushButton 5, 270, 140, 10, "Review Pay Plan Recent Payment Activity", BULK_E4111_activity_button
-    PushButton 365, 5, 80, 10, "PRISM Scripts in SIR", SIR_button
-    CancelButton 395, 310, 50, 20
-  Text 65, 35, 370, 20, "-- This script builds a list in Microsoft Excel of case numbers, function types, program codes, interstate codes, and participant names based on a CALI caseload."
-  Text 65, 55, 380, 20, "-- This script allows users to transfer up to 15 cases to as many workers as they need OR to transfer an entire caseload to as many workers as needed."
-  Text 105, 80, 260, 10, "--- This script builds a list of companion cases for your CPs on a given CALI."
-  Text 115, 95, 260, 10, "-- This script builds a list of companion cases for your NCPs on a given CALI."
-  Text 65, 115, 370, 20, "-- This script evaluates D0800 (Review for Notice of Continued Services) worklist items and allows user to send docs."
-  Text 95, 135, 355, 10, "-- Clears E0014 (Failure Notice to POF review) worklist item when income is from RSDI (US Treasury) or DFAS."
-  Text 140, 150, 285, 15, "-- NEW 01/2016!!! Purges all L5000 (FI match rec'd, not eligible for levy) worklist items from your USWT."
-  Text 65, 170, 380, 10, "-- NEW 04/2016!!! Creates a list in Excel of the collection rate on a given caseload based on the inputted date range."
-  Text 115, 190, 315, 10, "-- NEW 01/2016!!! Purges all M8001 (review case referred) worklist items from your USWT."
-  Text 140, 205, 290, 25, "-- NEW 01/2016!!! Reviews M6529 (review for continued interest suspension) worklist items, presenting the information related and giving the worker the choice of whether or not to purge the worklist item."
-  Text 105, 235, 340, 10, "-- NEW 01/2016!!! Reviews all L2500 and L2501 (quarterly wage info for CP and NCP) from your USWT.  "
-  Text 130, 255, 340, 10, "-- NEW 02/2016!!! Scrubs E4111 (review payment plan) worklists when DL is already suspended."
-  Text 145, 270, 300, 20, "-- NEW 02/2016!!! Presents recent payment activity to the user to evaluate E4111 (review pay plan) worklists."
-EndDialog
+'Loading all scripts
+CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
+DIM ButtonPressed, button_placeholder
+DIM SIR_instructions_button
+DIM Dialog1
 
+Function declare_main_menu(menu_type, script_array)
+	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
+	  ButtonGroup ButtonPressed
+	 	'This starts here, but it shouldn't end here :)
+		vert_button_position = 30
+		button_placeholder = 100
+		FOR current_script = 0 to ubound(script_array)
+			IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
+				IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN 
+					'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
+					'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
+					PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
+					Text 			script_array(current_script).button_size + 10, 		vert_button_position, 	500, 										10, 			"--- " & script_array(current_script).description
+					'----------
+					vert_button_position = vert_button_position + 15	'Needs to increment the vert_button_position by 15px (used by both the text and buttons)
+					'----------
+					script_array(current_script).button = button_placeholder	'The .button property won't carry through the function. This allows it to escape the function. Thanks VBScript.
+				END IF
+			END IF
+			button_placeholder = button_placeholder + 1
+		NEXT
+		PushButton 445, 10, 65, 10, "SIR instructions", 	SIR_instructions_button
+		CancelButton 460, 320, 50, 15
+	EndDialog
+End function
 
-
-'THE SCRIPT-----------------------------------------------------------------------------------------------
-'Shows the dialog
 DO
-	Dialog BULK_main_menu_dialog
-	If buttonpressed = cancel then StopScript
-	IF ButtonPressed = SIR_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
-LOOP UNTIL ButtonPressed <> SIR_button
-IF ButtonPressed = BULK_cali_to_excel_button 					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - CALI TO EXCEL.vbs")
-IF ButtonPressed = BULK_case_transfer_button 					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - CASE TRANSFER.vbs")
-IF ButtonPressed = BULK_cp_companion_case_finder_button 			THEN CALL run_from_GitHub(script_repository & "BULK/BULK - CP COMPANION CASE FINDER.vbs")
-IF ButtonPressed = BULK_ncp_companion_case_finder_button			THEN CALL run_from_GitHub(script_repository & "BULK/BULK - NCP COMPANION CASE FINDER.vbs")
-IF ButtonPressed = BULK_failure_pof_rsdi_dfas_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - FAILURE POF RSDI DFAS.vbs")
-IF ButtonPressed = BULK_evaluate_nocs_button 					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - EVALUATE NOCS.vbs")
-IF ButtonPressed = BULK_no_pay_report_button					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - NO PAY REPORT.vbs")
-IF ButtonPressed = BULK_L5000_button						THEN CALL run_from_GitHub(script_repository & "BULK/BULK - L5000 WORKLIST SCRUBBER.vbs")
-IF ButtonPressed = BULK_M6529_button						THEN CALL run_from_GitHub(script_repository & "BULK/BULK - M6529.vbs")
-IF ButtonPressed = BULK_M8001_button						THEN CALL run_from_GitHub(script_repository & "BULK/BULK - M8001 WORKLIST SCRUBBER.vbs")
-IF ButtonPressed = BULK_REVIEW_QW_button					THEN CALL run_from_GitHub(script_repository & "BULK/BULK - REVIEW QW INFO.vbs")
-IF ButtonPressed = BULK_E4111_activity_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - E4111 WORKLIST SCRUBBER.vbs")
-IF ButtonPressed = BULK_E4111_suspended_button				THEN CALL run_from_GitHub(script_repository & "BULK/BULK - E4111 SUSP SCRUBBER.vbs")
+	CALL declare_main_menu("BULK", cs_scripts_array)
+	Dialog
+	IF ButtonPressed = 0 THEN script_end_procedure("")
+	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
+LOOP UNTIL ButtonPressed <> SIR_instructions_button
+
+'Determining the script selected from the value of ButtonPressed
+'Since we start at 100 and then go up, we will simply subtract 100 when determining the position in the array
+script_picked = ButtonPressed - 100
+
+'Running the selected script
+CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).script_type & "/" & cs_scripts_array(script_picked).file_name)
+
 
