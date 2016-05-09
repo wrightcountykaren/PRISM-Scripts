@@ -52,35 +52,38 @@ BeginDialog case_number_dialog, 0, 0, 176, 85, "Case number dialog"
 EndDialog
 
 'Adjustment Dialog-
-BeginDialog Adjustment_Dialog, 0, 0, 216, 220, "Adjustment(s)"
+BeginDialog Adjustment_Dialog, 0, 0, 216, 235, "Adjustment(s)"
   DropListBox 75, 5, 110, 10, "Please Select One:"+chr(9)+"Arrears Management"+chr(9)+"Direct Support"+chr(9)+"Error"+chr(9)+"Forgiveness"+chr(9)+"Interest Adjustment"+chr(9)+"Order"+chr(9)+"Other"+chr(9)+"Overpayment", Reason_List
   CheckBox 70, 40, 30, 10, "CCC", CCC_Obli_checkbox
   CheckBox 70, 50, 30, 10, "CCH", CCH_Obli_checkbox
   CheckBox 70, 60, 30, 10, "CMI", CMI_Obli_checkbox
   CheckBox 70, 70, 30, 10, "CMS", CMS_Obli_checkbox
   CheckBox 70, 80, 30, 10, "CSP", CSP_Obli_checkbox
+  CheckBox 70, 90, 25, 10, "CUF", CUF_Obli_checkbox
   CheckBox 110, 40, 30, 10, "JCC", JCC_Obli_checkbox
   CheckBox 110, 50, 30, 10, "JCH", JCH_Obli_checkbox
   CheckBox 110, 60, 30, 10, "JME", JME_Obli_checkbox
   CheckBox 110, 70, 30, 10, "JMI", JMI_Obli_checkbox
   CheckBox 110, 80, 30, 10, "JMS", JMS_Obli_checkbox
   CheckBox 145, 40, 30, 10, "Other", Other_Obli_checkbox
-  EditBox 85, 100, 50, 15, start_date
-  EditBox 155, 100, 50, 15, end_date
-  EditBox 85, 125, 50, 15, Amount_Adjusted
-  EditBox 50, 150, 150, 15, Descrip_Box
-  EditBox 70, 175, 50, 15, worker_signature
+  EditBox 85, 115, 50, 15, start_date
+  EditBox 155, 115, 50, 15, end_date
+  EditBox 85, 145, 50, 15, Amount_Adjusted
+  EditBox 50, 170, 150, 15, Descrip_Box
+  EditBox 70, 190, 130, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 105, 200, 50, 15
-    CancelButton 160, 200, 50, 15
-  Text 5, 10, 65, 10, "Adjustment Reason"
+    OkButton 100, 215, 50, 15
+    CancelButton 155, 215, 50, 15
   Text 5, 30, 65, 10, "Affected Obligations"
-  Text 5, 105, 75, 10, "Date Range (optional)"
-  Text 140, 105, 10, 10, "TO"
-  Text 5, 130, 75, 10, "Total Amount Adjusted"
-  Text 5, 155, 40, 10, "Description"
-  Text 5, 180, 60, 10, "Worker Signature"
+  Text 5, 120, 75, 10, "Date Range (optional):"
+  Text 140, 120, 10, 10, "TO"
+  Text 5, 150, 75, 10, "Total Amount Adjusted:"
+  Text 5, 175, 40, 10, "Description:"
+  Text 5, 195, 60, 10, "Worker Signature:"
+  Text 5, 10, 65, 10, "Adjustment Reason"
 EndDialog
+
+
 
 'Connecting to BlueZone
 EMConnect ""
@@ -109,7 +112,7 @@ Do
 	Dialog Adjustment_Dialog
 	If buttonpressed = 0 then stopscript
 	If Reason_List = "Please Select One:" THEN err_msg = err_msg & vbNewline & "Adjustment REASON must be completed."
-	If CCC_Obli_checkbox = 0 AND CCH_Obli_checkbox = 0 AND CMI_Obli_checkbox = 0 AND CMS_Obli_checkbox = 0 AND CSP_Obli_checkbox = 0 AND JCC_Obli_checkbox = 0 AND JCH_Obli_checkbox = 0 AND JME_Obli_checkbox = 0 AND JMI_Obli_checkbox =0 AND JMS_Obli_checkbox = 0 AND Other_Obli_checkbox = 0 THEN err_msg = err_msg & vbNewline & "You must check at least ONE obligation."    
+	If CCC_Obli_checkbox = 0 AND CCH_Obli_checkbox = 0 AND CMI_Obli_checkbox = 0 AND CMS_Obli_checkbox = 0 AND CSP_Obli_checkbox = 0 AND CUF_Obli_checkbox = 0 AND JCC_Obli_checkbox = 0 AND JCH_Obli_checkbox = 0 AND JME_Obli_checkbox = 0 AND JMI_Obli_checkbox =0 AND JMS_Obli_checkbox = 0 AND Other_Obli_checkbox = 0 THEN err_msg = err_msg & vbNewline & "You must check at least ONE obligation."    
 	If Amount_Adjusted = "" THEN err_msg = err_msg & vbNewline & "Adjustment AMOUNT must be completed."
 	If worker_signature = "" THEN err_msg = err_msg & vbNewline & "Sign your CAAD note."
 	If err_Msg <> "" THEN 
@@ -124,6 +127,7 @@ If CMS_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("
 If CMI_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CMI, ")
 If CCC_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CCC, ")
 If CSP_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CSP, ")
+If CUF_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("CUF, ")
 If JCH_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("JCH, ")
 If JMS_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("JMS, ")
 If JME_Obli_checkbox = checked then line_for_CAAD_note = line_for_CAAD_note & ("JME, ")
