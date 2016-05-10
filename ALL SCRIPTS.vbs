@@ -365,7 +365,7 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REDIRECT DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - DOCS FOR REDIRECTION.vbs"
+cs_scripts_array(script_num).file_name			= "ACTIONS - DOCS FOR REDIRECT.vbs"
 cs_scripts_array(script_num).description		= "Creates redirection docs and redirection worklist items."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
