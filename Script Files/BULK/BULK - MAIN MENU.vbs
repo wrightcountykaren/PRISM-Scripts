@@ -72,7 +72,7 @@ DO
 	CALL declare_main_menu("BULK", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
-	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/PRISM%20script%20wiki/Forms/AllPages.aspx")
+	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/default.aspx")
 LOOP UNTIL ButtonPressed <> SIR_instructions_button
 
 'Determining the script selected from the value of ButtonPressed
