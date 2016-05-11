@@ -432,6 +432,18 @@ Function PF24
   EMWaitReady 0, 0
 End function
 
+Function save_cord_doc
+  EMWriteScreen "M", 3, 29
+  transmit
+End function
+
+'End key functionality in PRISM
+Function clear_line_of_text(row, start_column)
+  EMSetCursor (row, start_column)
+  EMSendKey "<EraseEof>"
+  EMWaitReady 0, 0
+End function
+
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
 	PRISM_row = 1
@@ -953,3 +965,4 @@ CLASS doc_info
 		ttl_arrears = trim(ttl_arrears)
 	END PROPERTY		
 END CLASS
+
