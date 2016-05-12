@@ -58,7 +58,7 @@ script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
-cs_scripts_array(script_num).script_type		= "ACTIONS, NOTES"
+cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CASE TRANSFER.vbs"
 cs_scripts_array(script_num).description		= "Transfers single case and creates CAAD about why."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
