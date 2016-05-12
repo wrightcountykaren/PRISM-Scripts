@@ -8,6 +8,13 @@
 'the workgroups. This document is actively used by live scripts, so it needs to be
 'functionally complete at all times.
 '
+'
+'
+'****************************************************************************************
+'*******************KEEP LISTS IN ALPHABETICAL ORDER, PLEASE!!!***************************
+'****************************************************************************************
+'
+'
 'Here's the code to add, including stats gathering pieces (without comments of course):
 '
 ''LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
@@ -67,6 +74,21 @@ function back_to_SELF
   Loop until SELF_check = "SELF"
 End function
 
+
+' This is a custom function to change the format of a participant name.  The parameter is a string with the 
+' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
+FUNCTION change_client_name_to_FML(client_name)
+	client_name = trim(client_name)
+	length = len(client_name)
+	position = InStr(client_name, ", ")
+	last_name = Left(client_name, position-1)
+	first_name = Right(client_name, length-position-1)	
+	client_name = first_name & " " & last_name
+	client_name = lcase(client_name)
+	call fix_case(client_name, 1)
+	change_client_name_to_FML = client_name 'To make this a return function, this statement must set the value of the function name
+END FUNCTION
+
 Function check_for_PRISM(end_script)
 	PF11
 	PF10
@@ -80,50 +102,12 @@ Function check_for_PRISM(end_script)
 	END IF
 END FUNCTION
 
-'This code is helpful for bulk scripts. This script is used to select the caseload by the 8 digit worker ID code entered in the dialog.
-FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
-	DO
-		DO
-			CALL navigate_to_PRISM_screen("USWT")
-			err_msg = ""
-			'Grabbing the CSO name for the intro dialog.
-			CALL find_variable("Worker Id: ", cso_id, 8)
-			EMSetCursor 20, 13
-			PF1
-			CALL write_value_and_transmit(cso_id, 20, 35)
-			EMReadScreen cso_name, 24, 13, 55
-			cso_name = trim(cso_name)
-			PF3
-			
-			BeginDialog select_cso_dlg, 0, 0, 286, 145, " - Select CSO Caseload"
-			EditBox 70, 55, 65, 15, cso_id
-			Text 70, 80, 90, 10, cso_name
-			ButtonGroup ButtonPressed
-				OkButton 130, 125, 50, 15
-				PushButton 180, 125, 50, 15, "UPDATE CSO", update_cso_button
-				PushButton 230, 125, 50, 15, "STOP SCRIPT", stop_script_button
-			Text 10, 15, 265, 30, "This script will check for worklist items coded E0014 for the following Worker ID. If you wish to change the Worker ID, enter the desired Worker ID in the box and press UPDATE CSO. When you are ready to continue, press OK."
-			Text 10, 60, 50, 10, "Worker ID:"
-			Text 10, 80, 55, 10, "Worker Name:"
-		
-			EndDialog
-		
-			DIALOG select_cso_dlg
-				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
-				IF ButtonPressed = update_cso_button THEN 
-					CALL navigate_to_PRISM_screen("USWT")
-					CALL write_value_and_transmit(cso_id, 20, 13)
-					EMReadScreen cso_name, 24, 13, 55
-					cso_name = trim(cso_name)
-				END IF
-				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
-				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
-																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
-																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
-				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
-		LOOP UNTIL ButtonPressed = -1 
-	LOOP UNTIL err_msg = ""
-END FUNCTION
+Function clear_line_of_text(row, start_column)
+  EMSetCursor row, start_column
+  EMSendKey "<EraseEof>"
+  EMWaitReady 0, 0
+End function
+
 
 Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	For each item in array_to_convert
@@ -222,18 +206,7 @@ FUNCTION fix_case_for_name(name_variable)
 	name_variable = output_variable
 END FUNCTION
 
-'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
-'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
-FUNCTION send_dord_doc(recipient, dord_doc)
-	call navigate_to_PRISM_screen("DORD")
-	EMWriteScreen "C", 3, 29
-	transmit
-	EMWriteScreen "A", 3, 29
-	EMWriteScreen dord_doc, 6, 36
-	EMWriteScreen recipient, 11, 51
-	transmit
-END FUNCTION
-	
+
 'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the 
 'variable to be searched.  The function searches the variable and removes underscores.  Then, the fix case function is called to format
 'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.	
@@ -244,19 +217,6 @@ FUNCTION fix_read_data (search_string)
 	fix_read_data = search_string 'To make this a return function, this statement must set the value of the function name
 END FUNCTION
 
-' This is a custom function to change the format of a participant name.  The parameter is a string with the 
-' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
-FUNCTION change_client_name_to_FML(client_name)
-	client_name = trim(client_name)
-	length = len(client_name)
-	position = InStr(client_name, ", ")
-	last_name = Left(client_name, position-1)
-	first_name = Right(client_name, length-position-1)	
-	client_name = first_name & " " & last_name
-	client_name = lcase(client_name)
-	call fix_case(client_name, 1)
-	change_client_name_to_FML = client_name 'To make this a return function, this statement must set the value of the function name
-END FUNCTION
 
 function navigate_to_MAXIS_screen(x, y)
   EMSendKey "<enter>"
@@ -493,6 +453,11 @@ FUNCTION run_from_GitHub(url)
 	END IF
 END FUNCTION
 
+Function save_cord_doc
+  EMWriteScreen "M", 3, 29
+  transmit
+End function
+
 function script_end_procedure(closing_message)
 	If closing_message <> "" then MsgBox closing_message
 	If collecting_statistics = True then
@@ -547,6 +512,63 @@ function script_end_procedure_wsh(closing_message) 'For use when running a scrip
 	Wscript.Quit
 end function
 
+'This code is helpful for bulk scripts. This script is used to select the caseload by the 8 digit worker ID code entered in the dialog.
+FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
+	DO
+		DO
+			CALL navigate_to_PRISM_screen("USWT")
+			err_msg = ""
+			'Grabbing the CSO name for the intro dialog.
+			CALL find_variable("Worker Id: ", cso_id, 8)
+			EMSetCursor 20, 13
+			PF1
+			CALL write_value_and_transmit(cso_id, 20, 35)
+			EMReadScreen cso_name, 24, 13, 55
+			cso_name = trim(cso_name)
+			PF3
+			
+			BeginDialog select_cso_dlg, 0, 0, 286, 145, " - Select CSO Caseload"
+			EditBox 70, 55, 65, 15, cso_id
+			Text 70, 80, 90, 10, cso_name
+			ButtonGroup ButtonPressed
+				OkButton 130, 125, 50, 15
+				PushButton 180, 125, 50, 15, "UPDATE CSO", update_cso_button
+				PushButton 230, 125, 50, 15, "STOP SCRIPT", stop_script_button
+			Text 10, 15, 265, 30, "This script will check for worklist items coded E0014 for the following Worker ID. If you wish to change the Worker ID, enter the desired Worker ID in the box and press UPDATE CSO. When you are ready to continue, press OK."
+			Text 10, 60, 50, 10, "Worker ID:"
+			Text 10, 80, 55, 10, "Worker Name:"
+		
+			EndDialog
+		
+			DIALOG select_cso_dlg
+				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
+				IF ButtonPressed = update_cso_button THEN 
+					CALL navigate_to_PRISM_screen("USWT")
+					CALL write_value_and_transmit(cso_id, 20, 13)
+					EMReadScreen cso_name, 24, 13, 55
+					cso_name = trim(cso_name)
+				END IF
+				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
+				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
+																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
+																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
+				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+		LOOP UNTIL ButtonPressed = -1 
+	LOOP UNTIL err_msg = ""
+END FUNCTION
+
+'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
+'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
+FUNCTION send_dord_doc(recipient, dord_doc)
+	call navigate_to_PRISM_screen("DORD")
+	EMWriteScreen "C", 3, 29
+	transmit
+	EMWriteScreen "A", 3, 29
+	EMWriteScreen dord_doc, 6, 36
+	EMWriteScreen recipient, 11, 51
+	transmit
+END FUNCTION
+	
 Function step_through_handling 'This function will introduce "warning screens" before each transmit, which is very helpful for testing new scripts
 	'To use this function, simply replace the "Execute text_from_the_other_script" line with:
 	'Execute replace(text_from_the_other_script, "EMWaitReady 0, 0", "step_through_handling")
@@ -661,29 +683,13 @@ End function
 
 '-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
-FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
 SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
 req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
 req.send													'Sends request
 IF req.Status = 200 THEN									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & FuncLib_URL
-			script_end_procedure("Script ended due to error connecting to GitHub.")
 END IF
 
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
@@ -953,3 +959,4 @@ CLASS doc_info
 		ttl_arrears = trim(ttl_arrears)
 	END PROPERTY		
 END CLASS
+
