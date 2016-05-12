@@ -103,7 +103,7 @@ Function check_for_PRISM(end_script)
 END FUNCTION
 
 Function clear_line_of_text(row, start_column)
-  EMSetCursor (row, start_column)
+  EMSetCursor row, start_column
   EMSendKey "<EraseEof>"
   EMWaitReady 0, 0
 End function
@@ -392,11 +392,6 @@ Function PF24
   EMWaitReady 0, 0
 End function
 
-Function save_cord_doc
-  EMWriteScreen "M", 3, 29
-  transmit
-End function
-
 Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 	'Searches for the case number.
 	PRISM_row = 1
@@ -457,6 +452,11 @@ FUNCTION run_from_GitHub(url)
 				script_end_procedure("Script ended due to error connecting to GitHub.")
 	END IF
 END FUNCTION
+
+Function save_cord_doc
+  EMWriteScreen "M", 3, 29
+  transmit
+End function
 
 function script_end_procedure(closing_message)
 	If closing_message <> "" then MsgBox closing_message
