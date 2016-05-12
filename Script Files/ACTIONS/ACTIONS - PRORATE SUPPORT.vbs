@@ -1,4 +1,8 @@
-Option Explicit
+'Option Explicit  -- COMMENTED OUT PER VKC REQUEST
+'STATS GATHERING----------------------------------------------------------------------------------------------------
+name_of_script = "ACTIONS - PRORATE SUPPORT.vbs"
+start_time = timer
+'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
 Dim prorate_dialog, number_days, obligation_amt, month_to_prorate, days_in_month, leap_year, prorate_amt, ButtonPressed	
