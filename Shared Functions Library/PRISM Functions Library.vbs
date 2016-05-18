@@ -710,6 +710,47 @@ FUNCTION write_value_and_transmit(input_value, PRISM_row, PRISM_col)
 	transmit
 END FUNCTION
 
+Function write_variable_to_CORD_paragraph(variable)
+	If trim(variable) <> "" THEN
+		EMGetCursor noting_row, noting_col		'Needs to get the row and col to start. Doesn't need to get it in the array function because that uses EMWriteScreen.
+		noting_col = 6					'The noting col should always be 3 at this point, because it's the beginning. But, this will be dynamically recreated each time.
+		IF noting_row < 11 THEN noting_row = 11	'Making sure it is writing in the paragraph.
+		
+		'Backing out of the CORD paragraph
+		IF noting_row > 20 THEN 
+			MsgBox "The script is attempting to write in a spot that is not supported by PRISM. Please review your CORD document for accuracy and contact a scripts administrator to have this issue resolved.", vbCritical + vbSystemModal, "Critical CORD Paragraph Error!!"
+			EXIT FUNCTION
+		END IF
+
+		'Splits the contents of the variable into an array of words
+		variable_array = split(variable, " ")
+
+		FOR EACH word IN variable_array
+
+			'If the length of the word would go past col 80 (you can't write to col 80), it will kick it to the next line and indent the length of the bullet
+			If len(word) + noting_col > 75 then
+				noting_row = noting_row + 1
+				noting_col = 6
+			End if
+
+			'Writes the word and a space using EMWriteScreen
+			EMWriteScreen replace(word, ";", "") & " ", noting_row, noting_col
+
+			'Increases noting_col the length of the word + 1 (for the space)
+			noting_col = noting_col + (len(word) + 1)
+
+			'Backing out of the CORD paragraph
+			IF noting_row >= 20 THEN 
+				MsgBox "The script is attempting to write in a spot that is not supported by PRISM. Please review your CORD document for accuracy and a scripts administrator to have this issue resolved.", vbCritical + vbSystemModal, "Critical CORD Paragraph Error!!"
+				EXIT FUNCTION
+			END IF
+		NEXT
+
+		'After the array is processed, set the cursor on the following row, in col 3, so that the user can enter in information here (just like writing by hand). If you're on row 18 (which isn't writeable), hit a PF8. If the panel is at the very end (page 5), it will back out and go into another case note, as we did above.
+		EMSetCursor noting_row + 1, 6
+	End if
+End function
+
 
 '>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
 'This CLASS contains properties used to populate documents
