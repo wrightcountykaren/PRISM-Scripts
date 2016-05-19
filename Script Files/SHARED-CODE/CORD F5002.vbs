@@ -37,18 +37,6 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-FUNCTION Save_Cord_DOC
-EMSendKey "<Home>"
-EMSendKey "m"
-EMSendKey "<Enter>"
-EMWaitReady 0, 0
-END FUNCTION
-
-FUNCTION clear_line_of_text(row, start_column)
-  EMSetCursor row, start_column
-  EMSendKey "<EraseEof>"
-  EMWaitReady 0, 0
-END FUNCTION
 
 'Connects to Bluezone
 EMConnect ""
