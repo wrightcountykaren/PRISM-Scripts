@@ -459,7 +459,7 @@ Function save_cord_doc
 End function
 
 function script_end_procedure(closing_message)
-	If closing_message <> "" then MsgBox closing_message
+	If closing_message <> "" then MsgBox closing_message, vbInformation + vbSystemModal
 	If collecting_statistics = True then
 		stop_time = timer
 		script_run_time = stop_time - start_time
