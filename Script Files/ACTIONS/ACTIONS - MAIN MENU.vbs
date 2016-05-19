@@ -42,6 +42,8 @@ DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
 DIM Dialog1
 
+msgbox county_name
+
 Function declare_main_menu(menu_type, script_array)
 	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
