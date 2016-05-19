@@ -1,7 +1,7 @@
 'Option Explicit
 
 'STATS GATHERING ---------------------------
-name_of_script = "ACTIONS - F0029.vbs"
+name_of_script = "ACTIONS - F5002.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
