@@ -2,7 +2,7 @@
 name_of_script = "ACTIONS - MAIN MENU.vbs"
 start_time = timer
 
-msgbox county_name
+msgbox county_name & "2"
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
@@ -37,7 +37,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-msgbox county_name
+msgbox county_name & "3"
 
 'Loading all scripts
 CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
@@ -46,7 +46,7 @@ DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
 DIM Dialog1
 
-msgbox county_name
+msgbox county_name & "4"
 
 Function declare_main_menu(menu_type, script_array)
 	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
