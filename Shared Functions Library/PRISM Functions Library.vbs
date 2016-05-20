@@ -559,6 +559,8 @@ FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
 	LOOP UNTIL err_msg = ""
 END FUNCTION
 
+msgbox county_name & vbCr & "line 562"
+
 'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
 'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
 FUNCTION send_dord_doc(recipient, dord_doc)
@@ -752,8 +754,6 @@ Function write_variable_to_CORD_paragraph(variable)
 		EMSetCursor noting_row + 1, 6
 	End if
 End function
-
-msgbox county_name & vbCr & "line 756"
 
 '>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
 'This CLASS contains properties used to populate documents
