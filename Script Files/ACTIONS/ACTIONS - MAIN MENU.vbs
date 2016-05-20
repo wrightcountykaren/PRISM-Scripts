@@ -13,7 +13,7 @@ ElseIf beta_agency = True then		'For beta agencies and testers
 Else								'For most users
 	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 End if
-msgbox county_name & "3"
+msgbox county_name & "3" & vbCr & "line 16"
 Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
