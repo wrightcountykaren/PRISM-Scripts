@@ -13,6 +13,7 @@ ElseIf beta_agency = True then		'For beta agencies and testers
 Else								'For most users
 	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 End if
+msgbox county_name & "3"
 Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 req.open "GET", url, False									'Attempts to open the URL
 req.send													'Sends request
@@ -37,7 +38,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
-msgbox county_name & "3"
+msgbox county_name & "4"
 
 'Loading all scripts
 CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
@@ -45,8 +46,6 @@ CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
 DIM Dialog1
-
-msgbox county_name & "4"
 
 Function declare_main_menu(menu_type, script_array)
 	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
