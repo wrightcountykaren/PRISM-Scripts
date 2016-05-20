@@ -37,6 +37,8 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
+msgbox county_name
+
 'Loading all scripts
 CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
