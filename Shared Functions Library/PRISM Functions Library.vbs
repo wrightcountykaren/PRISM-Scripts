@@ -1003,3 +1003,4 @@ CLASS doc_info
 	END PROPERTY		
 END CLASS
 
+msgbox county_name & vbCr & "line 1006"
