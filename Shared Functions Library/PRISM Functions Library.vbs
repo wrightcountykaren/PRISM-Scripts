@@ -559,8 +559,6 @@ FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
 	LOOP UNTIL err_msg = ""
 END FUNCTION
 
-msgbox county_name & vbCr & "line 562"
-
 'This function requires a recipient (the recipient code from the DORD screen), and the document code (also from the DORD screen).
 'This function adds the document.  Some user involvement (resolving required labels, hard-copy printing) may be required.
 FUNCTION send_dord_doc(recipient, dord_doc)
@@ -684,17 +682,6 @@ IF variable <> "" THEN
   End if
 END IF
 End function
-
-'-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
-'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
-FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
-req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
-req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-END IF
 
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
