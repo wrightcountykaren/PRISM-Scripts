@@ -50,6 +50,8 @@
 '			StopScript
 'END IF
 
+msgbox county_name & vbcr & "line 53"
+
 'GLOBAL CONSTANTS----------------------------------------------------------------------------------------------------
 'Declares variables (thinking of option explicit in the future)
 Dim checked, unchecked, cancel, OK
