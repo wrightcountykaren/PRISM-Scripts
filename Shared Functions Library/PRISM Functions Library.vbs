@@ -74,6 +74,13 @@ function back_to_SELF
   Loop until SELF_check = "SELF"
 End function
 
+FUNCTION cancel_confirmation
+	If ButtonPressed = 0 then
+		cancel_confirm = MsgBox("Are you sure you want to cancel the script? Press YES to cancel. Press NO to return to the script.", vbYesNo)
+		If cancel_confirm = vbYes then script_end_procedure("CANCEL BUTTON SELECTED")     
+        'script_end_procedure text added for statistical purposes. If script was canceled prior to completion, the statistics will reflect this.
+	End if
+END FUNCTION
 
 ' This is a custom function to change the format of a participant name.  The parameter is a string with the 
 ' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
