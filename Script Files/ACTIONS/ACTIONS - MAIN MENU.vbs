@@ -2,6 +2,8 @@
 name_of_script = "ACTIONS - MAIN MENU.vbs"
 start_time = timer
 
+msgbox county_name
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
