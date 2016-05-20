@@ -40,7 +40,7 @@ END IF
 msgbox county_name & "3"
 
 'Loading all scripts
-CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
