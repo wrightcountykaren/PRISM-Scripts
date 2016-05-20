@@ -426,6 +426,14 @@ Function PRISM_case_number_validation(case_number_to_validate, outcome)
   End if
 End function
 
+function run_another_script(script_path)
+  Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+  Set fso_command = run_another_script_fso.OpenTextFile(script_path)
+  text_from_the_other_script = fso_command.ReadAll
+  fso_command.Close
+  Execute text_from_the_other_script
+end function
+
 'Runs a script from GitHub.
 FUNCTION run_from_GitHub(url)
 	Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
@@ -681,16 +689,6 @@ IF variable <> "" THEN
 END IF
 End function
 
-'-------------------------------------LOADING MAXIS FUNCTIONS BECAUSE THEY ARE MOSTLY SHARED
-'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
-FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
-req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
-req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-END IF
 
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
