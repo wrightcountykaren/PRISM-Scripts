@@ -753,6 +753,7 @@ Function write_variable_to_CORD_paragraph(variable)
 	End if
 End function
 
+msgbox county_name & vbCr & "line 756"
 
 '>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
 'This CLASS contains properties used to populate documents
@@ -1002,5 +1003,3 @@ CLASS doc_info
 		ttl_arrears = trim(ttl_arrears)
 	END PROPERTY		
 END CLASS
-
-msgbox county_name & vbCr & "line 1006"
