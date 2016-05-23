@@ -151,7 +151,7 @@ cs_scripts_array(script_num).script_name		= "DDPL CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DDPL CALCULATOR.vbs"
 cs_scripts_array(script_num).description		= "Calculates direct deposits made over user-provided date range."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -214,7 +214,7 @@ cs_scripts_array(script_num).script_name		= "FIND NAME ON CALI"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - FIND NAME ON CALI.vbs"
 cs_scripts_array(script_num).description		= "Searches CALI for a specific CP or NCP."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -277,7 +277,7 @@ cs_scripts_array(script_num).script_name		= "NCP LOCATE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NCP LOCATE.vbs"
 cs_scripts_array(script_num).description		= "NEW 04/2016!! Walks you through processing an NCP locate."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -322,7 +322,7 @@ cs_scripts_array(script_num).script_name		= "PALC CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PALC CALCULATOR.vbs"
 cs_scripts_array(script_num).description		= "Calculates voluntary and involuntary amounts from the PALC screen."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -349,7 +349,7 @@ cs_scripts_array(script_num).script_name		= "PRORATE SUPPORT"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PRORATE SUPPORT.vbs"
 cs_scripts_array(script_num).description		= "Calculator for determining pro-rated support for patrial months."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -367,7 +367,7 @@ cs_scripts_array(script_num).script_name		= "REDIRECT DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DOCS FOR REDIRECT.vbs"
 cs_scripts_array(script_num).description		= "Creates redirection docs and redirection worklist items."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -430,7 +430,7 @@ cs_scripts_array(script_num).script_name		= "UN UN DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UNREIMBURSED UNINSURED DOCS.vbs"
 cs_scripts_array(script_num).description		= "Prints DORD docs for collecting unreimbursed and uninsured expenses."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -439,7 +439,7 @@ cs_scripts_array(script_num).script_name		= "UPDATE WORKER SIGNATURE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UPDATE WORKER SIGNATURE.vbs"
 cs_scripts_array(script_num).description		= "NEW 04/2016!! Allows you to maintain a default signature that loads in all scripts."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
