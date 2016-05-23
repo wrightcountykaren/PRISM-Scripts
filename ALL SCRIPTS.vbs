@@ -295,7 +295,7 @@ cs_scripts_array(script_num).script_name		= "NO PAY REPORT"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - NO PAY REPORT.vbs"
 cs_scripts_array(script_num).description		= "Creates list in Excel of cases that have had no payment within given time period."
-cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -340,7 +340,7 @@ cs_scripts_array(script_num).script_name		= "PAY OR REPORT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - PAY OR REPORT.vbs"
 cs_scripts_array(script_num).description		= "CAAD note for contempt/''pay or report'' instances."
-cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
