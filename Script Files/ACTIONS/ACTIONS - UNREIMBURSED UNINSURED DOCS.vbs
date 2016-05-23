@@ -41,7 +41,6 @@ END IF
 
 'this is where the copy and paste from functions library ended
 
-
 'DIALOGS---------------------------------------------------------------------------
 DIM UnUn_Dialog, PRISM_case_number, CP, NCP, Percent, err_msg, ButtonPressed, case_number_is_valid, amount, important_checkbox, CAAD_checkbox, Enforce_checkbox, Aff_Service_checkbox, worker_signature
 
@@ -54,7 +53,6 @@ BeginDialog UnUn_Dialog, 0, 0, 296, 310, "Unreimbursed Uninsured Docs"
   CheckBox 15, 255, 120, 10, "Notice of Intent to Enforce UN/UN", Enforce_checkbox
   EditBox 210, 250, 40, 15, amount
   CheckBox 15, 265, 75, 10, "Affidavit of Service ", Aff_Service_checkbox
-  CheckBox 15, 275, 120, 10, "Important Information Attachment", important_checkbox
   EditBox 85, 210, 50, 15, worker_signature
   ButtonGroup ButtonPressed
     OkButton 185, 290, 50, 15
@@ -353,40 +351,9 @@ MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the 
 
 END IF
 
-'--------------------------------------WORD DOC---------------------------------
-DIM word_doc_open, objWord, objDoc, objSelection
-
-'creating the workd application object (if any of the Word docs are selected and making it visible)
-If _
-	important_checkbox = checked THEN
-		Set objWord = CreateObject("Word.Application")
-		objWord.Visible = True
-End If
-	
-'Opens important information notice for un/un
-IF important_checkbox = 1 THEN
- 	set objDoc = objWord.Documents.Add("G:\Scripts CS\Word Docs\Active\Important Information.dotx")	'Opens the specific Word doc 
-	'With objDoc
-		'.Formfields ("client_name").Result = CP_name
-		'.Formfields ("address_1").Result = cp_address
-		'.Formfields ("address_2").Result = cp_city_state_zip
-		'.Formfields ("case_number").Result = PRISM_case_number
-		'.Formfields ("client_name2").Result = CP_name
-		'.Formfields ("pin_sent").Result = IF CP_PIN_Notice_check = 1 
-		'.Formfields ("pin_not_sent").Result = IF CP_MNOnlineEDAK_check
-		'.Formfields ("mci").Result = CP_MCI
-		'.Formfields ("worker_name").Result = worker_name 
-		'.Formfields ("worker_phone").Result = worker_phone
- 	'END WITH
-END IF
-
-
-'reminder to print and mail documents
-IF important_checkbox = checked THEN MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "REMEMBER TO PRINT and MAIL WORD DOCUMENTS! " )
-
-
-
 script_end_procedure("")
+
+
 
 
 
