@@ -2,8 +2,6 @@
 name_of_script = "ACTIONS - MAIN MENU.vbs"
 start_time = timer
 
-msgbox county_name & "2"
-
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
@@ -19,7 +17,6 @@ req.send													'Sends request
 If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
-	msgbox county_name & "3" & vbCr & "line 22"
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
 	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
 			vbCr & _
@@ -46,7 +43,7 @@ DIM SIR_instructions_button
 DIM Dialog1
 
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
+	BeginDialog Dialog1, 0, 0, 400, 340, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
 	 	'This starts here, but it shouldn't end here :)
 		vert_button_position = 30
