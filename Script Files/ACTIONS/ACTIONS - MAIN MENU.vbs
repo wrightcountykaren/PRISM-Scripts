@@ -42,8 +42,17 @@ DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
 DIM Dialog1
 
+'Dynamically resizing the dlg
+FOR current_script = 0 to ubound(script_array)
+	IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
+		IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN num_of_scripts = num_of_scripts + 1
+	END IF
+NEXT
+
+dlg_height = (15 * num_of_scripts) + 100
+
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 400, 340, menu_type & " Scripts"
+	BeginDialog Dialog1, 0, 0, 516, dlg_height, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
 	 	'This starts here, but it shouldn't end here :)
 		vert_button_position = 30
