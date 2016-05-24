@@ -3,6 +3,7 @@
 name_of_script = "ACTIONS - Unreimbursed Uninsured Docs.vbs"
 start_time = timer
 
+
 'this is a function document
 DIM beta_agency 'remember to add
 
@@ -40,6 +41,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'this is where the copy and paste from functions library ended
+
 
 'DIALOGS---------------------------------------------------------------------------
 DIM UnUn_Dialog, PRISM_case_number, CP, NCP, Percent, err_msg, ButtonPressed, case_number_is_valid, amount, important_checkbox, CAAD_checkbox, Enforce_checkbox, Aff_Service_checkbox, worker_signature
@@ -92,7 +94,9 @@ Do
 		IF buttonpressed = 0 then stopscript		'Cancel
 		IF PRISM_case_number = "" THEN err_msg = err_msg & vbNewline & "Prism case number must be completed"
 		IF CP = 1 AND NCP = 1 AND Percent = "" THEN err_msg = err_msg & vbNewline & "Percent of Unreimbursed Uninsured Expense must be completed."
-		'IF both cp box and ncp box blank
+		IF CP = 1 AND NCP = 0 AND Percent = "" THEN err_msg = err_msg & vbNewline & "Percent of Unreimbursed Uninsured Expense must be completed."
+		IF CP = 0 AND NCP = 1 AND Percent = "" THEN err_msg = err_msg & vbNewline & "Percent of Unreimbursed Uninsured Expense must be completed."
+		IF CP = 0 AND NCP = 0 AND Percent <> "" THEN err_msg = err_msg & vbNewline & "You must select either CP or NCP if a percent of un/un is entered."
 		IF Enforce_checkbox = 1 and amount = "" THEN err_msg = err_msg & vbNewline & "Please add amount of un/un expenses."
 		IF CAAD_checkbox =1 AND worker_signature = "" THEN err_msg = err_msg & vbNewline & "Please sign your CAAD Note."
 		IF err_msg <> "" THEN 
@@ -133,7 +137,7 @@ Loop until err_msg = ""
 END IF
 
 
-'brings me to caad and creates DORD doc for NCP
+'creates DORD doc for NCP
 IF NCP = checked THEN 
 
 	CALL navigate_to_PRISM_screen ("DORD")
@@ -168,7 +172,7 @@ IF NCP = checked THEN
 	EMSetCursor 7, 5
 	EMWriteScreen "S", 7, 5
 
-	EMSendKey "<enter>" 
+	transmit
 	EMWriteScreen (Percent), 16, 15
 	transmit
 	PF3
@@ -177,7 +181,7 @@ IF NCP = checked THEN
 
 END IF
 
-'brings me to caad and creates DORD doc for CP
+'creates DORD doc for CP
 IF CP = checked THEN 
 
 	CALL navigate_to_PRISM_screen ("DORD")
@@ -213,7 +217,7 @@ IF CP = checked THEN
 	EMWriteScreen "S", 7, 5
 	
 	'enters the percent typed in the dialog box
-	EMSendKey "<enter>" 
+	transmit
 	EMWriteScreen (Percent), 16, 15
 	transmit
 	PF3
@@ -222,7 +226,8 @@ IF CP = checked THEN
 
 
 '''need to select legal heading
-MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue." )
+MsgBox "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue.", vbSystemModal, "Select Legal Heading"
+
 
 
 EMWriteScreen "B", 3, 29
@@ -238,8 +243,8 @@ IF CAAD_checkbox = 1 THEN
 	EMWriteScreen "free", 4, 54
 	EMSetCursor 16, 4
 'this will add information to the CAAD note of what emc docs sent 
-	CALL write_variable_in_CAAD ("CP returned Affidavit of Health Care Expenses, Notice to Collect UN MED Exp Req Party, and Copies of bills, receipts, EOB's")
-	CALL write_variable_in_CAAD (amount)
+	CALL write_variable_in_CAAD ("CP returned Affidavit of Health Care Expenses, Notice to Collect UN MED   Exp Req Party, and Copies of bills, receipts, EOB's.")
+	CALL write_variable_in_CAAD ("Amount requested $" & amount)
 	CALL write_variable_in_CAAD(worker_signature)
 	transmit
 	PF3
@@ -260,7 +265,7 @@ IF  Enforce_checkbox = 1 THEN
 	PF8	
 
 	EMWriteScreen "S", 11, 5
-	EMSendKey "<enter>" 
+	transmit 
 	
 	EMWriteScreen(amount), 16, 15
 	transmit
@@ -305,7 +310,8 @@ IF Aff_Service_checkbox = 1 AND confidential_checkbox = 0 THEN
 	transmit
 
 '''need to select legal heading
-MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue." )
+MsgBox "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue.", vbSystemModal, "Select Legal Heading"
+
 
 
 END IF
@@ -346,15 +352,10 @@ IF Aff_Service_checkbox = 1 AND confidential_checkbox = 1 THEN
 	transmit
 
 '''need to select legal heading
-MsgBox ( "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue." )
+MsgBox "IMPORTANT!!  IMPORTANT!!" & vbNewline & vbNewline & "First select the correct LEGAL HEADING and press enter, " & vbNewline & "then PRESS OK so script can continue.", vbSystemModal, "Select Legal Heading"
+
 
 
 END IF
 
 script_end_procedure("")
-
-
-
-
-
-
