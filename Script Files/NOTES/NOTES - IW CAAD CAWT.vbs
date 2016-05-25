@@ -116,7 +116,7 @@ Month_NonAccrual = Trim(Month_NonAccrual)
 Monthly = Monthly * 1
 Month_Accrual = Month_Accrual * 1
 Month_NonAccrual = Month_NonAccrual * 1
-
+total_arrears = total_arrears * 1
 
 'calculating monthly collection to put in dialog and caad and cawt
 IF total_arrears = 0 THEN Monthly = Month_Accrual + Month_NonAccrual  
