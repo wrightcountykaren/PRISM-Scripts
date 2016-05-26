@@ -199,28 +199,27 @@ excel_row = 2
 
 If CAFS_checkbox = checked then
 
-EMWriteScreen "CAFS", 21, 18 
-Transmit
+	EMWriteScreen "CAFS", 21, 18 
+	Transmit
 
-excel_row = 2
+	excel_row = 2
 
-Do
-	prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
-	EMWriteScreen Left (prism_case_number, 10), 4, 8
-	EMWriteScreen Right (prism_case_number, 2), 4, 19
-	EMWriteScreen "D", 3, 29
-	Transmit 
-	EMReadScreen amount_of_arrears, 10, 12, 68
-	ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
-	EMReadScreen monthly_accrual, 7, 9, 32
-	ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
-	EMReadScreen monthly_non_accrual, 7, 10, 32
-	ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
-	excel_row = excel_row + 1
+	Do
+		prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
+		EMWriteScreen Left (prism_case_number, 10), 4, 8
+		EMWriteScreen Right (prism_case_number, 2), 4, 19
+		EMWriteScreen "D", 3, 29
+		Transmit 
+		EMReadScreen amount_of_arrears, 10, 12, 68
+		ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
+		EMReadScreen monthly_accrual, 7, 9, 32
+		ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
+		EMReadScreen monthly_non_accrual, 7, 10, 32
+		ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
+
+		excel_row = excel_row + 1
 	
-
-Loop until prism_case_number = ""
-
+	Loop until prism_case_number = ""
 End If
 
 script_end_procedure("Success!!")
