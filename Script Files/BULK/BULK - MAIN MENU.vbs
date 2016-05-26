@@ -82,4 +82,3 @@ script_picked = ButtonPressed - 100
 'Running the selected script
 CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).script_type & "/" & cs_scripts_array(script_picked).file_name)
 
-
