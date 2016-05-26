@@ -5,9 +5,9 @@ start_time = timer
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
+	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 Else								'For most users
 	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
 End if
@@ -36,23 +36,14 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 'Loading all scripts
-CALL run_from_GitHub("https://raw.githubusercontent.com/RobertFewins-Kalb/Anoka-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
 DIM Dialog1
 
-'Dynamically resizing the dlg
-FOR current_script = 0 to ubound(script_array)
-	IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
-		IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN num_of_scripts = num_of_scripts + 1
-	END IF
-NEXT
-
-dlg_height = (15 * num_of_scripts) + 100
-
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 516, dlg_height, menu_type & " Scripts"
+	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
 	 	'This starts here, but it shouldn't end here :)
 		vert_button_position = 30
@@ -90,5 +81,4 @@ script_picked = ButtonPressed - 100
 
 'Running the selected script
 CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).script_type & "/" & cs_scripts_array(script_picked).file_name)
-
 
