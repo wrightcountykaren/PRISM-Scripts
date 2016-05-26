@@ -740,6 +740,7 @@ Function write_variable_to_CORD_paragraph(variable)
 	End if
 End function
 
+
 '>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
 'This CLASS contains properties used to populate documents
 ' These properties should not be used for other applications in scripts.
@@ -988,3 +989,4 @@ CLASS doc_info
 		ttl_arrears = trim(ttl_arrears)
 	END PROPERTY		
 END CLASS
+
