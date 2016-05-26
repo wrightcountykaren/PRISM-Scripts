@@ -74,6 +74,13 @@ function back_to_SELF
   Loop until SELF_check = "SELF"
 End function
 
+FUNCTION cancel_confirmation
+	If ButtonPressed = 0 then
+		cancel_confirm = MsgBox("Are you sure you want to cancel the script? Press YES to cancel. Press NO to return to the script.", vbYesNo)
+		If cancel_confirm = vbYes then script_end_procedure("CANCEL BUTTON SELECTED")     
+        'script_end_procedure text added for statistical purposes. If script was canceled prior to completion, the statistics will reflect this.
+	End if
+END FUNCTION
 
 ' This is a custom function to change the format of a participant name.  The parameter is a string with the 
 ' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
@@ -426,6 +433,14 @@ Function PRISM_case_number_validation(case_number_to_validate, outcome)
   End if
 End function
 
+function run_another_script(script_path)
+  Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+  Set fso_command = run_another_script_fso.OpenTextFile(script_path)
+  text_from_the_other_script = fso_command.ReadAll
+  fso_command.Close
+  Execute text_from_the_other_script
+end function
+
 'Runs a script from GitHub.
 FUNCTION run_from_GitHub(url)
 	Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
@@ -459,7 +474,7 @@ Function save_cord_doc
 End function
 
 function script_end_procedure(closing_message)
-	If closing_message <> "" then MsgBox closing_message
+	If closing_message <> "" then MsgBox closing_message, vbInformation + vbSystemModal
 	If collecting_statistics = True then
 		stop_time = timer
 		script_run_time = stop_time - start_time
@@ -680,6 +695,7 @@ IF variable <> "" THEN
   End if
 END IF
 End function
+
 
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
