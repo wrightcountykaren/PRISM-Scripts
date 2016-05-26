@@ -124,41 +124,56 @@ objExcel.Visible = True 'Set this to False to make the Excel spreadsheet go away
 Set objWorkbook = objExcel.Workbooks.Add() 
 objExcel.DisplayAlerts = True 'Set this to false to make alerts go away. This is necessary in production.
 
+ObjExcel.Cells(1, 1).Value = "Case Number"
+ObjExcel.Cells(1, 2).Value = "Function"
+ObjExcel.Cells(1, 3).Value = "Program"
+ObjExcel.Cells(1, 4).Value = "Interstate?"
+ObjExcel.Cells(1, 5).Value = "CP Name"
+ObjExcel.Cells(1, 6).Value = "NCP Name"
+If Payments_Checkbox = checked then ObjExcel.Cells(1, 7).Value = "Last Payment Date"
+If CAFS_checkbox = checked then
+	ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
+	ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
+	ObjExcel.Cells(1, 10).Value = "Monthly Non-Accrual"
+End If
+
+'Autofitting columns
+For col_to_autofit = 1 to 10
+	ObjExcel.columns(col_to_autofit).AutoFit()
+Next
+
 'sets row to fill info into Excel
 excel_row = 2
-
+prism_row = 8
 Do 'Loops script until the end of CALI
-	prism_row = 8
-	Do 'Copies Case Number, Function Type, Program Type, CP Name, and NCP Name to the Excel document
+	'Copies Case Number, Function Type, Program Type, CP Name, and NCP Name to the Excel document
+	EMReadScreen prism_case_number, 14, prism_row, 7 'Reads and copies case number
+	EMReadScreen function_type, 2, prism_row, 23 'Reads and copies function type
+	EMReadScreen program_type, 3, prism_row, 27 'Reads and copies program type
+	EMReadScreen interstate_code, 1, prism_row, 33 'Reads and copies intersate code
+	EMReadScreen CP_name, 26, prism_row, 38 'Reads and copies CP name
+	pf11
+	EMReadScreen NCP_name, 26, prism_row, 33 'Reads and copies NCP name
+	pf10
 	
-	
-		EMReadScreen prism_case_number, 14, prism_row, 7 'Reads and copies case number
-		EMReadScreen function_type, 2, prism_row, 23 'Reads and copies function type
-		EMReadScreen program_type, 3, prism_row, 27 'Reads and copies program type
-		EMReadScreen interstate_code, 1, prism_row, 33 'Reads and copies intersate code
-		EMReadScreen CP_name, 26, prism_row, 38 'Reads and copies CP name
-		pf11
-		EMReadScreen NCP_name, 26, prism_row, 33 'Reads and copies NCP name
-		pf10
-	
-		'Set rows in Excel for case number, funtion type, program type, CP name, and NCP name
-		ObjExcel.Cells(excel_row, 1).Value = prism_case_number
-		ObjExcel.Cells(excel_row, 2).Value = function_type
-		ObjExcel.Cells(excel_row, 3).Value = program_type
-		ObjExcel.Cells(excel_row, 4).Value = interstate_code
-		ObjExcel.Cells(excel_row, 5).Value = CP_name
-		ObjExcel.Cells(excel_row, 6).Value = NCP_name
+	'Set rows in Excel for case number, funtion type, program type, CP name, and NCP name
+	ObjExcel.Cells(excel_row, 1).Value = prism_case_number
+	ObjExcel.Cells(excel_row, 2).Value = function_type
+	ObjExcel.Cells(excel_row, 3).Value = program_type
+	ObjExcel.Cells(excel_row, 4).Value = interstate_code
+	ObjExcel.Cells(excel_row, 5).Value = CP_name
+	ObjExcel.Cells(excel_row, 6).Value = NCP_name
 
-		prism_row = prism_row + 1
-		excel_row = excel_row + 1
+	prism_row = prism_row + 1
+	excel_row = excel_row + 1
 
-		EmReadscreen end_of_data_check, 11, prism_row, 32
-		If end_of_data_check = "End of Data" then exit do
+	EmReadscreen end_of_data_check, 11, prism_row, 32
+	If end_of_data_check = "End of Data" then exit do
 
-	Loop Until prism_row = 19
-
-	pf8
-
+	IF prism_row = 19 THEN 
+		PF8
+		prism_row = 8
+	END IF
 Loop Until end_of_data_check = "End of Data"
 
 EMWriteScreen "PALC", 21, 18 
@@ -184,48 +199,27 @@ excel_row = 2
 
 If CAFS_checkbox = checked then
 
-EMWriteScreen "CAFS", 21, 18 
-Transmit
+	EMWriteScreen "CAFS", 21, 18 
+	Transmit
 
-excel_row = 2
+	excel_row = 2
 
-Do
-	prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
-	EMWriteScreen Left (prism_case_number, 10), 4, 8
-	EMWriteScreen Right (prism_case_number, 2), 4, 19
-	EMWriteScreen "D", 3, 29
-	Transmit 
-	EMReadScreen amount_of_arrears, 10, 12, 68
-	ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
-	EMReadScreen monthly_accrual, 7, 9, 32
-	ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
-	EMReadScreen monthly_non_accrual, 7, 10, 32
-	ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
-	excel_row = excel_row + 1
+	Do
+		prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
+		EMWriteScreen Left (prism_case_number, 10), 4, 8
+		EMWriteScreen Right (prism_case_number, 2), 4, 19
+		EMWriteScreen "D", 3, 29
+		Transmit 
+		EMReadScreen amount_of_arrears, 10, 12, 68
+		ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
+		EMReadScreen monthly_accrual, 7, 9, 32
+		ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
+		EMReadScreen monthly_non_accrual, 7, 10, 32
+		ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
+
+		excel_row = excel_row + 1
 	
-
-Loop until prism_case_number = ""
-
+	Loop until prism_case_number = ""
 End If
-
-ObjExcel.Cells(1, 1).Value = "Case Number"
-ObjExcel.Cells(1, 2).Value = "Function"
-ObjExcel.Cells(1, 3).Value = "Program"
-ObjExcel.Cells(1, 4).Value = "Interstate?"
-ObjExcel.Cells(1, 5).Value = "CP Name"
-ObjExcel.Cells(1, 6).Value = "NCP Name"
-If Payments_Checkbox = checked then
-ObjExcel.Cells(1, 7).Value = "Last Payment Date"
-End IF
-If CAFS_checkbox = checked then
-ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
-ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
-ObjExcel.Cells(1, 10).Value = "Monthly Non-Accrual"
-End If
-
-'Autofitting columns
-For col_to_autofit = 1 to 10
-	ObjExcel.columns(col_to_autofit).AutoFit()
-Next
 
 script_end_procedure("Success!!")

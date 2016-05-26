@@ -450,4 +450,3 @@ cs_scripts_array(script_num).file_name			= "NOTES - WAIVER OF PERSONAL SERVICE.v
 cs_scripts_array(script_num).description		= "Creates CAAD note of the date a CP signed the waiver of personal service document."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
-
