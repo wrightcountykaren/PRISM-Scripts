@@ -204,7 +204,6 @@ LOOP UNTIL err_msg = ""
 
 ReDim pay_or_report_dates_array(num_of_months, 1)
 
-county_attorney_array = split(county_attorney_array)
 CALL convert_array_to_droplist_items(county_attorney_array, CAO_array)
 
 CALL create_pay_or_report_dlg(num_of_months, pay_or_report_dates_array)
