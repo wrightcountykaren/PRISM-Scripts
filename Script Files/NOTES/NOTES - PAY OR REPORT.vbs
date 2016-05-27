@@ -78,16 +78,7 @@ FUNCTION find_second_friday(first_of_month, date_to_pay)
 END FUNCTION
 
 FUNCTION create_pay_or_report_dlg(num_of_months, pay_or_report_dates_array)
-	'Creating first of months and second Fridays
-	first_month = (month_list & "/01/" & year_list)
-	
-	FOR i = 0 to (num_of_months - 1)
-		pay_or_report_dates_array(i, 0) = DateAdd("M", i, first_month)
-		CALL find_second_friday(pay_or_report_dates_array(i, 0), pay_or_report_dates_array(i, 1))
-		pay_or_report_dates_array(i, 0) = CStr(pay_or_report_dates_array(i, 0))
-		pay_or_report_dates_array(i, 1) = CStr(pay_or_report_dates_array(i, 1))
-	NEXT
-	
+
 	BeginDialog pay_or_report_dialog, 0, 0, 291, (105 + (num_of_months * 20)), "Pay or Report"
 	EditBox 50, 10, 55, 15, Order_date
 	ComboBox 175, 11, 110, 15, ""+chr(9)+CAO_array, CAO_list
@@ -204,6 +195,16 @@ LOOP UNTIL err_msg = ""
 
 ReDim pay_or_report_dates_array(num_of_months, 1)
 
+'Creating first of months and second Fridays
+first_month = (month_list & "/01/" & year_list)
+	
+FOR i = 0 to (num_of_months - 1)
+	pay_or_report_dates_array(i, 0) = DateAdd("M", i, first_month)
+	CALL find_second_friday(pay_or_report_dates_array(i, 0), pay_or_report_dates_array(i, 1))
+	pay_or_report_dates_array(i, 0) = CStr(pay_or_report_dates_array(i, 0))
+	pay_or_report_dates_array(i, 1) = CStr(pay_or_report_dates_array(i, 1))
+NEXT
+	
 CALL convert_array_to_droplist_items(county_attorney_array, CAO_array)
 
 CALL create_pay_or_report_dlg(num_of_months, pay_or_report_dates_array)
