@@ -35,7 +35,8 @@ county_attorney_array = array("Select one:", "County Attorney 1", "County Attorn
 child_support_magistrates_array = array("Select one:", "Magistrate 1", "Magistrate 2", "Magistrate 3", "Magistrate 4", "Magistrate 5")  
 
 'An array of judges. "Select one:" should ALWAYS be in there, and ALWAYS be first.  Replace "Judge #" with your agency's judges names.
-county_attorney_array = array("Select one:", "Judge 1", "Judge 2", "Judge 3", "Judge 4", "Judge 5")  
+county_judge_array = array("Select one:", "Judge 1", "Judge 2", "Judge 3", "Judge 4", "Judge 5")  
+
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 
 'Making a list of offices to be used in various scripts
