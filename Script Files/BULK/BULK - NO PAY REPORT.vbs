@@ -342,7 +342,7 @@ FOR EACH prism_worker IN worker_array
 			
 					EMWriteScreen case_prefix, 20, 9 'Write case number in PALC screen
 					EMWriteScreen case_suffix, 20, 20
-					EMWriteScreen date, 20, 49
+					CALL create_mainframe_friendly_date(date, 20, 49, "YYYY")
 					transmit
 					
 					EMReadScreen cp_name, 30, 4, 12			
