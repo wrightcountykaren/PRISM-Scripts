@@ -103,7 +103,7 @@ Do
 		EMReadScreen case_alloc_amt, 10, row, 70													'Reading the amt allocated
 		IF case_alloc_amt = "          " THEN case_alloc_amt = 0
 		If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _	
-		proc_type = "PCA" or proc_type = "PIF" or proc_type = "STJ" or proc_type = "STS" or proc_type = "FTJ" then 		'If proc type is one of these, it's involuntary. Else, it's voluntary.
+		proc_type = "PCA" or proc_type = "PIF" or proc_type = "STJ" or proc_type = "STS" or proc_type = "FTJ" or proc_type = "FIN"  then 		'If proc type is one of these, it's involuntary. Else, it's voluntary.
 			total_involuntary_alloc = total_involuntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for involuntary
 		Else
 			total_voluntary_alloc = total_voluntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for voluntary
