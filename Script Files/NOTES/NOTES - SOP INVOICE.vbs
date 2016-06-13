@@ -133,6 +133,7 @@ If service_checkbox = 1 then call write_variable_in_CAAD("service was successful
 If service_checkbox = 0 then call write_variable_in_CAAD("service was not successful")
 If pay_yes_checkbox = 1 then call write_variable_in_CAAD("Invoice is OK to pay")
 If pay_yes_checkbox = 0 then call write_variable_in_CAAD("Do Not pay invoice")
+CALL write_bullet_and_variable_in_CAAD("Notes", notes)
 call write_variable_in_CAAD(worker_signature)
 transmit
 PF3
