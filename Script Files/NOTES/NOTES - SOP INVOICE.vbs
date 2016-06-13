@@ -53,7 +53,7 @@ BeginDialog service_of_process, 0, 0, 306, 205, "Service of Process"
   ComboBox 85, 75, 115, 15, "Select one, or type action..."+chr(9)+"Contempt"+chr(9)+"Establishment"+chr(9)+"Paternity", legal_action
   ComboBox 85, 105, 115, 15, "Select one, or type person served..."+chr(9)+"ALF"+chr(9)+"CP"+chr(9)+"NCP", person_served
   CheckBox 10, 140, 95, 10, "Service was successful", service_checkbox
-  CheckBox 110, 140, 70, 10, "Substitute Service", sub_service
+  CheckBox 110, 140, 70, 10, "Substitute Service", sub_service_checkbox
   CheckBox 200, 140, 80, 10, "Invoice is ok to pay", pay_yes_checkbox
   EditBox 30, 155, 155, 15, notes
   EditBox 80, 175, 60, 15, worker_signature
@@ -128,7 +128,7 @@ call write_bullet_and_variable_in_CAAD("invoice #",invoice_number)
 call write_bullet_and_variable_in_CAAD("$",dollar_amount)
 call write_bullet_and_variable_in_CAAD("Legal action", legal_action)
 call write_bullet_and_variable_in_CAAD("person served", person_served)  
-If sub_service = 1 then CALL write_variable_in_CAAD("Substitute Services was used")
+If sub_service_checkbox = 1 then CALL write_variable_in_CAAD("Substitute Services was used")
 If service_checkbox = 1 then call write_variable_in_CAAD("service was successful")
 If service_checkbox = 0 then call write_variable_in_CAAD("service was not successful")
 If pay_yes_checkbox = 1 then call write_variable_in_CAAD("Invoice is OK to pay")
