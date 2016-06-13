@@ -241,7 +241,7 @@ cs_scripts_array(script_num).script_name		= "GENETIC TESTING INVOICE"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - GENETIC TESTING INVOICE.vbs"
 cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording genetic testing invoices."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
