@@ -44,7 +44,7 @@ DIM service_of_process, prism_case_number, invoice_number, invoice_from, invoice
 
 'Calling dialog details for the Service of Process---------------------------------------------------------------------
 
-BeginDialog service_of_process, 0, 0, 306, 190, "Service of Process"
+BeginDialog service_of_process, 0, 0, 306, 205, "Service of Process"
   EditBox 85, 5, 65, 15, prism_case_number
   EditBox 230, 5, 65, 15, invoice_recd_date
   EditBox 85, 25, 90, 15, invoice_from
@@ -53,20 +53,24 @@ BeginDialog service_of_process, 0, 0, 306, 190, "Service of Process"
   ComboBox 85, 75, 115, 15, "Select one, or type action..."+chr(9)+"Contempt"+chr(9)+"Establishment"+chr(9)+"Paternity", legal_action
   ComboBox 85, 105, 115, 15, "Select one, or type person served..."+chr(9)+"ALF"+chr(9)+"CP"+chr(9)+"NCP", person_served
   CheckBox 10, 140, 95, 10, "Service was successful", service_checkbox
-  CheckBox 120, 140, 80, 10, "Invoice is ok to pay", pay_yes_checkbox
-  EditBox 80, 160, 60, 15, worker_signature
+  CheckBox 110, 140, 70, 10, "Substitute Service", sub_service
+  CheckBox 200, 140, 80, 10, "Invoice is ok to pay", pay_yes_checkbox
+  EditBox 30, 155, 155, 15, notes
+  EditBox 80, 175, 60, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 185, 165, 50, 15
-    CancelButton 240, 165, 50, 15
-  Text 45, 50, 35, 10, "$ Amount:"
-  Text 5, 75, 75, 20, "Legal Action: (choose one or type action)"
+    OkButton 175, 185, 50, 15
+    CancelButton 230, 185, 50, 15
   Text 5, 105, 70, 25, "Person Served: (choose from list or fill in name)"
-  Text 5, 165, 70, 10, "Sign your CAAD note:"
+  Text 5, 180, 70, 10, "Sign your CAAD note:"
   Text 15, 30, 65, 10, "Invoice Rec'd From:"
   Text 10, 10, 70, 10, "PRISM Case Number:"
   Text 180, 10, 50, 10, "Invoice Rec'd:"
   Text 195, 30, 35, 10, "Invoice #:"
+  Text 5, 75, 75, 20, "Legal Action: (choose one or type action)"
+  Text 5, 160, 30, 10, "Notes:"
+  Text 45, 50, 35, 10, "$ Amount:"
 EndDialog
+
 
 
 'Connecting to Bluezone
@@ -124,6 +128,7 @@ call write_bullet_and_variable_in_CAAD("invoice #",invoice_number)
 call write_bullet_and_variable_in_CAAD("$",dollar_amount)
 call write_bullet_and_variable_in_CAAD("Legal action", legal_action)
 call write_bullet_and_variable_in_CAAD("person served", person_served)  
+If sub_service = 1 then CALL write_variable_in_CAAD("Substitute Services was used")
 If service_checkbox = 1 then call write_variable_in_CAAD("service was successful")
 If service_checkbox = 0 then call write_variable_in_CAAD("service was not successful")
 If pay_yes_checkbox = 1 then call write_variable_in_CAAD("Invoice is OK to pay")
@@ -133,9 +138,3 @@ transmit
 PF3
 
 script_end_procedure("")                                                                     	'stopping the script
-
-
-
-
-
-
