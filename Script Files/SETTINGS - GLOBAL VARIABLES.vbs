@@ -35,7 +35,8 @@ county_attorney_array = array("Select one:", "County Attorney 1", "County Attorn
 child_support_magistrates_array = array("Select one:", "Magistrate 1", "Magistrate 2", "Magistrate 3", "Magistrate 4", "Magistrate 5")  
 
 'An array of judges. "Select one:" should ALWAYS be in there, and ALWAYS be first.  Replace "Judge #" with your agency's judges names.
-county_attorney_array = array("Select one:", "Judge 1", "Judge 2", "Judge 3", "Judge 4", "Judge 5")  
+county_judge_array = array("Select one:", "Judge 1", "Judge 2", "Judge 3", "Judge 4", "Judge 5")  
+
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 
 'Making a list of offices to be used in various scripts
@@ -65,8 +66,11 @@ With (CreateObject("Scripting.FileSystemObject"))
 	END IF
 END WITH
 
+'Here is the list of agency super users. These users will have access to the test scripts. Enter the list of users' log-in IDs in the quotes below, comma separated
+beta_users = ""
+
 'This is the URL of our script repository, and should only change if the agency is beta or standard, or if there's a scriptwriter in the group (which is determined by the default directory being C:\PRISM-Scripts\Script Files.
-If default_directory = "C:\PRISM-Scripts\Script Files\" then
+If default_directory = "C:\PRISM-Scripts\Script Files\" OR InStr(beta_users, UCASE(windows_user_ID)) <> 0 then
 	script_repository = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Script Files/"
 Else
 	If beta_agency = True then

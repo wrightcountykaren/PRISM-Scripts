@@ -1,10 +1,11 @@
-'option explicit  -- COMMENTED OUT PER VKC REQUEST 
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - SOP INVOICE.vbs"
+name_of_script = "NOTES - GENETIC TESTING INVOICE.vbs"
 start_time = timer
-'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
+STATS_counter = 1
+STATS_manualtime = 60
+STATS_denomination = "C"
+'END OF STATS BLOCK-------------------------------------------------------------------------------------------
 
-DIM beta_agency, row, col
 
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
@@ -40,37 +41,28 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 
-DIM service_of_process, prism_case_number, invoice_number, invoice_from, invoice_recd_date, dollar_amount, service_date, legal_action, person_served, service_checkbox, pay_yes_checkbox, worker_signature, buttonpressed, case_number_valid
+'Calling dialog details for the Genetic Testing Invoice---------------------------------------------------------------------
 
-'Calling dialog details for the Service of Process---------------------------------------------------------------------
-
-BeginDialog service_of_process, 0, 0, 306, 205, "Service of Process"
+BeginDialog genetic_test_invoice, 0, 0, 306, 115, "Genetic Testing Invoice"
   EditBox 85, 5, 65, 15, prism_case_number
   EditBox 230, 5, 65, 15, invoice_recd_date
   EditBox 85, 25, 90, 15, invoice_from
   EditBox 230, 25, 65, 15, invoice_number
   EditBox 85, 45, 65, 15, dollar_amount
-  ComboBox 85, 75, 115, 15, "Select one, or type action..."+chr(9)+"Contempt"+chr(9)+"Establishment"+chr(9)+"Paternity", legal_action
-  ComboBox 85, 105, 115, 15, "Select one, or type person served..."+chr(9)+"ALF"+chr(9)+"CP"+chr(9)+"NCP", person_served
-  CheckBox 10, 140, 95, 10, "Service was successful", service_checkbox
-  CheckBox 110, 140, 70, 10, "Substitute Service", sub_service_checkbox
-  CheckBox 200, 140, 80, 10, "Invoice is ok to pay", pay_yes_checkbox
-  EditBox 30, 155, 155, 15, notes
-  EditBox 80, 175, 60, 15, worker_signature
+  CheckBox 195, 50, 80, 10, "Invoice is ok to pay", pay_yes_checkbox
+  EditBox 40, 65, 245, 15, Edit7
+  EditBox 90, 90, 70, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 175, 185, 50, 15
-    CancelButton 230, 185, 50, 15
-  Text 5, 105, 70, 25, "Person Served: (choose from list or fill in name)"
-  Text 5, 180, 70, 10, "Sign your CAAD note:"
+    OkButton 190, 90, 50, 15
+    CancelButton 245, 90, 50, 15
+  Text 15, 95, 70, 10, "Sign your CAAD note:"
   Text 15, 30, 65, 10, "Invoice Rec'd From:"
   Text 10, 10, 70, 10, "PRISM Case Number:"
   Text 180, 10, 50, 10, "Invoice Rec'd:"
   Text 195, 30, 35, 10, "Invoice #:"
-  Text 5, 75, 75, 20, "Legal Action: (choose one or type action)"
-  Text 5, 160, 30, 10, "Notes:"
+  Text 15, 70, 25, 10, "Notes:"
   Text 45, 50, 35, 10, "$ Amount:"
 EndDialog
-
 
 
 'Connecting to Bluezone
@@ -89,23 +81,15 @@ End if
 
 'The script will not run unless the CAAD note is signed and there is a valid prism case number
 DO
-	DO
-		DO	
-			DO
-				DO
-					Dialog service_of_process
-					IF ButtonPressed = 0 THEN StopScript		                                       'Pressing Cancel stops the script
-					IF worker_signature = "" THEN MsgBox "You must sign your CAAD note!"                   'If worker sig is blank, message box pops saying you must sign caad note
-					CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
-					IF case_number_valid = False THEN MsgBox "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX"
-					IF IsDate(invoice_recd_date) = FALSE THEN MsgBox "You must enter a valid date!"
-					IF legal_action = "Select one, or type action..." THEN MsgBox "You must choose a Legal Action!"
-					IF person_served = "Select one, or type person served..." THEN MsgBox "You must choose a Person Served!"
-				LOOP UNTIL case_number_valid = True
-			LOOP UNTIL worker_signature <> ""                                                                  'Will keep popping up until worker signs note
-		LOOP UNTIL IsDate(invoice_recd_date) = TRUE
-	LOOP UNTIL legal_action <> "Select one, or type action..."
-LOOP UNTIL person_served <> "Select one, or type person served..."
+	err_msg = ""
+	Dialog genetic_test_invoice
+	IF ButtonPressed = 0 THEN StopScript		                                       'Pressing Cancel stops the script
+	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
+	IF case_number_valid = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
+	IF IsDate(invoice_recd_date) = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid date!"
+	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"                   
+	IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
+LOOP UNTIL err_msg = ""
 
 
 'Checks to make sure PRISM is open and you are logged in
@@ -119,18 +103,13 @@ EMWritescreen "A", 3, 29												'put the A on the action line
 
 'Writes info from dialog into CAAD
 EMWritescreen "FREE", 4, 54												'types free on caad code: line
-EMWritescreen "SOP Invoice", 16, 4									  	      'types title of the free caad on the first line of the note
+EMWritescreen "Genetic Testing Invoice", 16, 4								      'types title of the free caad on the first line of the note
 EMSetCursor 17, 4														'puts the cursor on the very next line to be ready to enter the info
 
 CALL write_bullet_and_variable_in_CAAD("Invoice Rec'd", invoice_recd_date)
 CALL write_bullet_and_variable_in_CAAD("Invoice Rec'd From", invoice_from)
 call write_bullet_and_variable_in_CAAD("invoice #",invoice_number)
 call write_bullet_and_variable_in_CAAD("$",dollar_amount)
-call write_bullet_and_variable_in_CAAD("Legal action", legal_action)
-call write_bullet_and_variable_in_CAAD("person served", person_served)  
-If sub_service_checkbox = 1 then CALL write_variable_in_CAAD("Substitute Services was used")
-If service_checkbox = 1 then call write_variable_in_CAAD("service was successful")
-If service_checkbox = 0 then call write_variable_in_CAAD("service was not successful")
 If pay_yes_checkbox = 1 then call write_variable_in_CAAD("Invoice is OK to pay")
 If pay_yes_checkbox = 0 then call write_variable_in_CAAD("Do Not pay invoice")
 CALL write_bullet_and_variable_in_CAAD("Notes", notes)
@@ -139,3 +118,4 @@ transmit
 PF3
 
 script_end_procedure("")                                                                     	'stopping the script
+
