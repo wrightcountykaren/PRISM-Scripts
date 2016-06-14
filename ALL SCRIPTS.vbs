@@ -58,10 +58,10 @@ script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - CASE TRANSFER.vbs"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - CASE TRANSFER.vbs"
 cs_scripts_array(script_num).description		= "Transfers single case and creates CAAD about why."
-cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -422,15 +422,6 @@ cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - SOP INVOICE.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "TRANSFER CASE(S)"
-cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - CASE TRANSFER.vbs"
-cs_scripts_array(script_num).description		= "Script for transfering multiple cases, from one caseload to multiple caseloads."
-cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
