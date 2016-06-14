@@ -36,13 +36,40 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 END IF
 
 '===== DIALOGS =====
-BeginDialog run_mode_dlg, 0, 0, 266, 60, "Select Run Mode"
-  DropListBox 135, 10, 125, 15, "Select one..."+chr(9)+"Specify Cases to Transfer"+chr(9)+"Transfer Caseload Top to Bottom", script_run_mode
+BeginDialog run_mode_dlg, 0, 0, 171, 80, "Select Run Mode"
+  DropListBox 10, 25, 150, 15, "Select one..."+chr(9)+"Transfer and CAAD note a single case"+chr(9)+"Specify Cases to Transfer"+chr(9)+"Transfer Caseload Top to Bottom", script_run_mode
   ButtonGroup ButtonPressed
-    OkButton 160, 40, 50, 15
-    CancelButton 210, 40, 50, 15
-  Text 10, 10, 125, 10, "Select a mode for this script to run."
+    OkButton 55, 50, 50, 15
+    CancelButton 110, 50, 50, 15
+  Text 10, 10, 125, 10, "Select a mode for this script to run:"
 EndDialog
+
+
+'Single case transfer dialog is here
+BeginDialog Case_Transfer_dialog, 0, 0, 316, 160, "Case Transfer"
+  EditBox 85, 5, 80, 15, prism_case_number
+  EditBox 50, 45, 35, 15, county
+  EditBox 50, 65, 35, 15, office
+  EditBox 50, 85, 35, 15, Team:
+  EditBox 50, 105, 35, 15, Position
+  EditBox 130, 45, 175, 15, transfer_reason
+  DropListBox 190, 70, 85, 15, "Select One..."+chr(9)+"Internal"+chr(9)+"External", transfer_type
+  CheckBox 130, 95, 115, 15, "Sent New Worker Letter to CP", letter_checkbox
+  EditBox 205, 115, 100, 15, worker_signature
+  ButtonGroup ButtonPressed
+    OkButton 200, 140, 50, 15
+    CancelButton 255, 140, 50, 15
+  Text 130, 120, 75, 10, "Sign your CAAD note:"
+  Text 10, 10, 70, 10, "PRISM Case Number:"
+  Text 20, 70, 20, 10, "Office:"
+  Text 15, 110, 30, 10, "Position:"
+  Text 130, 35, 60, 10, "Transfer Reason:"
+  Text 20, 50, 25, 10, "County:"
+  GroupBox 5, 30, 105, 105, "Transfer To:"
+  Text 130, 75, 55, 10, "Type of Transfer:"
+  Text 20, 90, 25, 10, "Team:"
+EndDialog
+
 
 BeginDialog list_of_workers_dlg, 0, 0, 266, 135, "Enter List of Workers/Positions"
   EditBox 5, 80, 255, 15, worker_list
@@ -52,6 +79,7 @@ BeginDialog list_of_workers_dlg, 0, 0, 266, 135, "Enter List of Workers/Position
   Text 10, 10, 245, 25, "Please enter a list of 8-digit worker numbers or 11-digit position numbers. You can use either the 8-digit number or the 11-digit number (the script can sort it out)."
   Text 10, 45, 250, 20, "You can also enter multiple worker or position numbers if you separate each with a comma."
 EndDialog
+
 
 BeginDialog number_of_workers_dlg, 0, 0, 226, 65, "How many workers?"
   EditBox 185, 15, 35, 15, number_of_workers
@@ -130,16 +158,102 @@ EMConnect ""
 CALL check_for_PRISM(True)
 
 ' >>>>> BACKING OUT TO MAIN MENU <<<<<
-DO
-	PF3
-	EMReadScreen at_the_main_menu, 9, 2, 34
-LOOP UNTIL at_the_main_menu = "Main Menu"
+'DO
+'	PF3
+'	EMReadScreen at_the_main_menu, 9, 2, 34
+'LOOP UNTIL at_the_main_menu = "Main Menu"
+
+'AUTO POPULATES PRISM CASE NUMBER INTO DIALOG
+CALL PRISM_case_number_finder(PRISM_case_number)
+office = "001"
 
 DO
 	DIALOG run_mode_dlg
 		IF ButtonPressed = stop_script_button THEN stopscript
 		IF script_run_mode = "Select one..." THEN MsgBox "Please select a script run mode."
 LOOP UNTIL script_run_mode <> "Select one..."
+
+'Pulls Single case transfer and CAAD note dialog open
+IF script_run_mode = "Transfer and CAAD note a single case" THEN 
+	DIALOG Case_Transfer_dialog
+		IF ButtonPressed = 0 THEN stopscript
+
+	'The script will caad note and transfer the case here
+	'Connects to BlueZone
+	EMConnect ""
+
+	'Brings Bluezone to the front
+	EMFocus
+
+	'Searches for the case number
+	row = 1
+	col = 1
+	EMSearch "Case: ", row, col
+	If row <> 0 then
+		EMReadScreen PRISM_case_number, 13, row, col + 6
+		PRISM_case_number = replace(PRISM_case_number, " ", "-")
+		If isnumeric(left(PRISM_case_number, 10)) = False or isnumeric(right(PRISM_case_number, 2)) = False then PRISM_case_number = ""
+	End if
+
+	'Makes sure you are not passworded out
+	CALL check_for_PRISM(True)
+
+	DO
+		err_msg = ""
+		Dialog Case_Transfer_dialog
+		IF ButtonPressed = 0 THEN StopScript		          
+		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
+		IF case_number_valid = False THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"	
+		IF transfer_reason = "" THEN err_msg = err_msg & VbNewline & "You must type a Transfer Reason!"
+		IF transfer_type = "Select One..." THEN err_msg = err_msg & VbNewline & "You must select the Type of Transfer!"
+		IF worker_signature = "" THEN err_msg = err_msg & VbNewline & "You must sign your CAAD note!"                  
+		IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"	
+	LOOP UNTIL err_msg = ""
+
+	'Navigates to CAAS screen to transfer case
+	CALL navigate_to_PRISM_screen("CAAS")
+
+	'Writes an M on CAAS to modify info on screen
+	EMWriteScreen "M", 3, 29
+
+	EMWriteScreen county, 9, 20
+	EMWriteScreen office, 10, 20
+	EMWriteScreen team, 11, 20
+	EMWriteScreen position, 12, 20
+
+	transmit
+
+	EMReadScreen office_name, 34, 10, 25
+	EMReadScreen position_name, 20, 12, 25
+
+	position_name = trim(position_name)
+	office_name = trim(office_name)
+
+
+	'Navigates to CAAD and adds note
+	CALL navigate_to_PRISM_screen("CAAD")
+
+	'Adds a new CAAD note
+	PF5
+
+	EMWriteScreen "A", 3, 29
+
+
+	'Writes the CAAD NOTE  
+	EMWriteScreen "FREE", 4, 54      'Types FREE on type of CAAD line
+	EMSetCursor 16, 4
+	CALL write_variable_in_CAAD(" ** " & transfer_type & " Case Transfer **")
+	CALL write_bullet_and_variable_in_CAAD("Transferred To", position_name & " at " & office_name) 
+	CALL write_bullet_and_variable_in_CAAD("Transfer Reason", Transfer_reason)
+	IF letter_checkbox = 1 THEN CALL write_variable_in_CAAD("* Sent New Worker letter to CP")
+	CALL write_variable_in_CAAD(worker_signature) 
+	transmit
+
+
+
+	MsgBox "Case has been transferred and CAAD noted. If you use OnBase as your EDMS System, don't forget to SCREEN SCRAPE if necessary."
+'stop indenting
+END IF
 
 IF script_run_mode = "Specify Cases to Transfer" THEN 
 	DIALOG list_of_workers_dlg
@@ -610,7 +724,4 @@ ELSEIF script_run_mode = "Transfer Caseload Top to Bottom" THEN
 	
 END IF	
 
-
 script_end_procedure("Success!!")
-
-
