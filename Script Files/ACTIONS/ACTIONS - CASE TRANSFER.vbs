@@ -175,9 +175,6 @@ LOOP UNTIL script_run_mode <> "Select one..."
 
 'Pulls Single case transfer and CAAD note dialog open
 IF script_run_mode = "Transfer and CAAD note a single case" THEN 
-	DIALOG Case_Transfer_dialog
-		IF ButtonPressed = 0 THEN stopscript
-
 	'The script will caad note and transfer the case here
 	'Connects to BlueZone
 	EMConnect ""
