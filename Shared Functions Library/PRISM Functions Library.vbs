@@ -583,6 +583,58 @@ FUNCTION send_dord_doc(recipient, dord_doc)
 	EMWriteScreen recipient, 11, 51
 	transmit
 END FUNCTION
+
+FUNCTION send_text_to_DORD(string_to_write, recipient)
+	call navigate_to_PRISM_screen("DORD")
+	EMWriteScreen "A", 3, 29
+	EMWriteScreen "F0104", 6, 36
+	EMWriteScreen recipient, 11, 51
+	transmit
+	
+	'This function will add a string to DORD docs.
+	IF len(string_to_write) > 1080 THEN 
+		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
+				"The text below is longer than the script can handle in one DORD document. The script will not add the text to the document." & vbCr & vbCr & _
+				string_to_write
+		EXIT FUNCTION
+	END IF
+
+	dord_rows_of_text = Int(len(string_to_write) / 60) + 1
+
+	ReDim write_array(dord_rows_of_text)
+	'Splitting the text
+	string_to_write = split(string_to_write)
+	array_position = 1
+	FOR EACH word IN string_to_write
+		IF len(write_array(array_position)) + len(word) <= 60 THEN 
+			write_array(array_position) = write_array(array_position) & word & " "
+		ELSE
+			array_position = array_position + 1
+			write_array(array_position) = write_array(array_position) & word & " "
+		END IF
+	NEXT
+	
+	PF14
+
+	'Selecting the "U" label type
+	CALL write_value_and_transmit("U", 20, 14)
+
+	'Writing the values
+	dord_row = 7
+	FOR i = 1 TO dord_rows_of_text
+		CALL write_value_and_transmit("S", dord_row, 5)
+		CALL write_value_and_transmit(write_array(i), 16, 15)
+
+		dord_row = dord_row + 1
+		IF i = 12 THEN 
+			PF8
+			dord_row = 7
+		END IF
+	NEXT
+	PF3
+	EMWriteScreen "M", 3, 29
+	transmit
+END FUNCTION
 	
 Function step_through_handling 'This function will introduce "warning screens" before each transmit, which is very helpful for testing new scripts
 	'To use this function, simply replace the "Execute text_from_the_other_script" line with:
