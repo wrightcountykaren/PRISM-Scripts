@@ -249,7 +249,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INTAKE DOCS RECEIVED"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - INTAKE DOCS RECEIVED.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Creates CAAD note for recording receipt of intake docs."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -276,7 +276,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MES FINANCIAL DOCS SENT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MES FINANCIAL DOCS SENT.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Creates CAAD note for recording documents sent to parties."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording documents sent to parties."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -384,7 +384,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
+cs_scripts_array(script_num).description		= "Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -393,7 +393,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN RECENT ACTIVITY"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 WORKLIST SCRUBBER.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
+cs_scripts_array(script_num).description		= "Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -402,7 +402,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW QW INFO"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
-cs_scripts_array(script_num).description		= "NEW 01/2016!! Purgres all M8001 (REVW Case Referred) worklist from your USWT."
+cs_scripts_array(script_num).description		= "Purgres all M8001 (REVW Case Referred) worklist from your USWT."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
