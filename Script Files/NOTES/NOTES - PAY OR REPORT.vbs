@@ -1,7 +1,21 @@
+'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
+Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+Set fso_command = run_another_script_fso.OpenTextFile("Q:\Blue Zone Scripts\Child Support\Script Files\SETTINGS - GLOBAL VARIABLES.vbs")
+text_from_the_other_script = fso_command.ReadAll
+fso_command.Close
+Execute text_from_the_other_script
+
+
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 name_of_script = "NOTES - PAY OR REPORT.vbs"
 start_time = timer
-'
+
+error_found = False
+DIM worker_signature
+DIM purge_condition
+DIM order_date
+DIM CAO_list
+
 'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
 Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
 If beta_agency = "" then 			'For scriptwriters only
@@ -77,8 +91,8 @@ FUNCTION find_second_friday(first_of_month, date_to_pay)
 	date_to_pay = DateAdd("D", 0, date_to_pay)
 END FUNCTION
 
-FUNCTION create_pay_or_report_dlg(num_of_months, pay_or_report_dates_array)
-
+FUNCTION create_pay_or_report_dlg(CAO_array, num_of_months, pay_or_report_dates_array)
+	
 	BeginDialog pay_or_report_dialog, 0, 0, 291, (105 + (num_of_months * 20)), "Pay or Report"
 	EditBox 50, 10, 55, 15, Order_date
 	ComboBox 175, 11, 110, 15, ""+chr(9)+CAO_array, CAO_list
@@ -162,18 +176,23 @@ second_year = Cstr(DatePart("YYYY", DateAdd("YYYY", 1, date)))
 third_year = Cstr(DatePart("YYYY", DateAdd("YYYY", 2, date)))
 
 '=====THE DIALOGS=====
-BeginDialog case_number_dialog, 0, 0, 176, 95, "Case number dialog"
-  EditBox 60, 5, 75, 15, PRISM_case_number
-  DropListBox 55, 25, 45, 10, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
-  DropListBox 105, 25, 35, 15, "Year..."+chr(9)+first_year+chr(9)+second_year+chr(9)+third_year, year_list
-  DropListBox 75, 45, 45, 15, "# of Months..."+chr(9)+"1"+chr(9)+"2"+chr(9)+"3"+chr(9)+"4"+chr(9)+"5"+chr(9)+"6", num_of_months
+BeginDialog case_number_dialog, 0, 0, 197, 146, "Case information dialog"
+  EditBox 60, 5, 80, 14, PRISM_case_number
+  EditBox 60, 26, 80, 14, court_file_number
+  EditBox 100, 45, 80, 14, county_attorney_case_number
+  DropListBox 70, 70, 50, 14, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
+  DropListBox 120, 70, 40, 14, "Year..."+chr(9)+first_year+chr(9)+second_year+chr(9)+third_year, year_list
+  DropListBox 70, 90, 50, 14, "# of Months..."+chr(9)+"1"+chr(9)+"2"+chr(9)+"3"+chr(9)+"4"+chr(9)+"5"+chr(9)+"6", num_of_months
   ButtonGroup ButtonPressed
-    OkButton 70, 75, 50, 15
-    CancelButton 120, 75, 50, 15
-  Text 5, 10, 50, 10, "Case number:"
-  Text 5, 30, 45, 10, "First month:"
-  Text 5, 50, 65, 10, "Number of Months"
+    OkButton 40, 110, 50, 14
+    CancelButton 100, 110, 50, 14
+  Text 0, 10, 50, 10, "Case number:"
+  Text 0, 30, 60, 10, "Court file number:"
+  Text 0, 50, 100, 10, "County attorney case number:"
+  Text 0, 70, 60, 10, "First report month:"
+  Text 0, 90, 70, 10, "Number of months:"
 EndDialog
+
 
 
 'The Script
@@ -182,6 +201,7 @@ EMConnect ""
 
 'Case number display dialog
 DO
+	
 	err_msg = ""
 	Dialog case_number_dialog
 	If buttonpressed = 0 then stopscript
@@ -190,6 +210,8 @@ DO
 		IF month_list = "Month..." THEN err_msg = err_msg & vbCr & "* Please select a month."
 		IF year_list = "Year..." THEN err_msg = err_msg & vbCr & "* Please select a year."
 		IF num_of_months = "# of Months..." THEN err_msg = err_msg & vbCr & "* Please select the number of months."
+		IF trim(court_file_number) = "" THEN err_msg = err_msg & vbCr & "* Please enter the court file number." 
+		IF trim(county_attorney_case_number) = "" THEN err_msg = err_msg & vbCr & "* Please enter the county attorney case number."
 		IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
 LOOP UNTIL err_msg = ""
 
@@ -197,17 +219,17 @@ ReDim pay_or_report_dates_array(num_of_months, 1)
 
 'Creating first of months and second Fridays
 first_month = (month_list & "/01/" & year_list)
-	
+
 FOR i = 0 to (num_of_months - 1)
 	pay_or_report_dates_array(i, 0) = DateAdd("M", i, first_month)
 	CALL find_second_friday(pay_or_report_dates_array(i, 0), pay_or_report_dates_array(i, 1))
 	pay_or_report_dates_array(i, 0) = CStr(pay_or_report_dates_array(i, 0))
 	pay_or_report_dates_array(i, 1) = CStr(pay_or_report_dates_array(i, 1))
 NEXT
-	
+
 CALL convert_array_to_droplist_items(county_attorney_array, CAO_array)
 
-CALL create_pay_or_report_dlg(num_of_months, pay_or_report_dates_array)
+CALL create_pay_or_report_dlg(CAO_array, num_of_months, pay_or_report_dates_array)
 
 CALL check_for_PRISM(False)
 
@@ -217,10 +239,13 @@ FOR k = 0 to (num_of_months - 1)
 	FOR j = 0 to 1
 		PF5									'adding a note
 		EMWriteScreen "FREE", 4,37					'adding a worklist
-		IF j = 0 THEN 								'array argument 0 is the pay date (first of the month)
-			EMWriteScreen "Check for purge payments, due today.", 10, 4		'adding a line in the worklist
+		IF j = 0 THEN
+			 								'array argument 0 is the pay date (first of the month)
+			EMWriteScreen "Check for purge payments, due today.  ", 10, 4		'adding a line in the worklist
+			EMWriteScreen "Court file: " & court_file_number & "  County attorney case number: " & county_attorney_case_number, 11, 4
 		ELSEIF j = 1 THEN 							'array argument 1 is the report date (second Friday of the month)
-			EMWriteScreen "Check for purge payments, report date.", 10, 4
+			EMWriteScreen "Check for purge payments, report date. ", 10, 4
+			EMWriteScreen "Court file: " & court_file_number & "  County attorney case number: " & county_attorney_case_number, 11, 4
 		END IF
 		CALL create_mainframe_friendly_date(pay_or_report_dates_array(k, j), 17, 21, "YYYY")		'creating the worklists in PRISM
 		transmit								'adding the worklist to CAWT
@@ -244,7 +269,9 @@ call write_new_line_in_PRISM_case_note("Pay or Report Information")
 call write_editbox_in_PRISM_case_note("Purge Condition", purge_condition, 6)  
 call write_editbox_in_PRISM_case_note("Order Date", Order_date, 6)
 call write_editbox_in_PRISM_case_note("County Attorney", CAO_list, 6)
+call write_bullet_and_variable_in_CAAD("Court File Number", court_file_number)
+call write_bullet_and_variable_in_CAAD("County Atty Case Number", county_attorney_case_number)
 call write_new_line_in_PRISM_case_note("---")	
 call write_new_line_in_PRISM_case_note(worker_signature)
 
-script_end_procedure("Success!!")
+script_end_procedure("Success!!  Press enter to save your CAAD note.")
