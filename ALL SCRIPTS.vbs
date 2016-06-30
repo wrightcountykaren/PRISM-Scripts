@@ -39,6 +39,16 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "ANOKA PATERNITY SANCTION"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - ANOKA PATERNITY SANCTION.vbs"
+cs_scripts_array(script_num).description		= "Takes actions on the case to apply or remove public assistance sanction for non-cooperation with child support."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA"
+
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVW"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ARREARS MGMT REVIEW.vbs"
@@ -413,6 +423,16 @@ cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ROP DETAIL.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note about the date parties signed Recognition of Parentage."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "SEND F0104 DORD MEMO"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - SEND F0104 DORD MEMO.vbs"
+cs_scripts_array(script_num).description		= "Script editor for sending F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
