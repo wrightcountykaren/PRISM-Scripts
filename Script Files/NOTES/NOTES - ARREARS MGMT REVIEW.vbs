@@ -102,7 +102,6 @@ DO
 		IF buttonpressed = 0 THEN stopscript
 		IF ButtonPressed = DHS_sir_button THEN 
 			CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/PRISM/User_docs/SIRMILO/Arrears_Management_Prevention_Policy/Pages/default.aspx")
-			stopscript
 		END IF
 		IF other_check = checked and other_reason_txt = "" THEN
 			error_msg = error_msg & vbCr & "Please enter reason detail for your arrears management request based on 'other circumstances'.  "
