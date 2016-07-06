@@ -39,16 +39,18 @@ BeginDialog PRISM_case_number_dialog, 0, 0, 186, 50, "PRISM case number dialog"
   Text 5, 10, 90, 20, "PRISM case number (XXXXXXXXXX-XX format):"
 EndDialog
 
-BeginDialog memo_dialog, 0, 0, 187, 86, "DORD Memo Dialog"
+BeginDialog memo_dialog, 0, 0, 187, 106, "DORD Memo Dialog"
   DropListBox 10, 20, 110, 20, "Select One"+chr(9)+"CPP - Custodial Parent"+chr(9)+"NCP - Noncustodial Parent"+chr(9)+"BOTH - CP and NCP"+chr(9)+"CPE - CP's Employer"+chr(9)+"NCE - NCP's Employer", recipient
   EditBox 10, 60, 90, 14, memo_text
   ButtonGroup ButtonPressed
-    PushButton 140, 10, 40, 14, "Preview", preview_button
-    OkButton 140, 30, 40, 14
-    CancelButton 140, 50, 40, 14
+    PushButton 140, 40, 40, 14, "Preview", preview_button
+    PushButton 140, 20, 40, 14, "SpellCheck", spell_button
+    OkButton 140, 60, 40, 14
+    CancelButton 140, 80, 40, 14
   Text 10, 10, 90, 10, "Select your recipient:"
   Text 10, 40, 90, 20, "Enter the memo text for your F0104 DORD Memo:"
 EndDialog
+
 
 
 
@@ -160,9 +162,26 @@ DO
 	Dialog memo_dialog
 	IF buttonpressed = 0 THEN stopscript
 	
+
+	IF buttonpressed = spell_button THEN
+		
+		'Copy memo text to a new Word document, run spell check, and return the spell checked text to the dialog, close the Word doc
+		Set objWord = CreateObject("Word.Application")
+		objWord.Visible = TRUE
+		SET objDoc = objWord.Documents.Add()
+		SET objSel = objWord.Selection
+		objSel.TypeText memo_text
+		objDoc.CheckGrammar
+		objSel.WholeStory
+		modified_text = objSel.Text 
+		memo_text = modified_text
+		objDoc.Close(0)
+	End IF
+
 	
 	IF buttonpressed = preview_button THEN
 		
+		'Preview memo text in a message box or display error message if there is no memo text.
 		IF recipient = "Select One" THEN
 			error_msg = error_msg & "Please specify the memo recipient.  "
 		END IF
@@ -177,8 +196,10 @@ DO
 	End IF
 
 
-LOOP UNTIL buttonpressed <> preview_button and error_msg = ""
+LOOP UNTIL buttonpressed <> preview_button and buttonpressed <> spell_button and error_msg = ""
 
+
+'Ensuring that all required fields are completed before continuing with export to DORD.
 DO
 	error_msg = ""
 
@@ -197,6 +218,7 @@ LOOP UNTIL error_msg = ""
 	
 check_for_PRISM(false)
 
+'Export information to DORD doc based on recipient selection.
 IF recipient = "BOTH - CP and NCP" THEN
 	memo_text_for_CP = memo_text
 	memo_text_for_NCP = memo_text
@@ -208,7 +230,3 @@ ELSE
 	CALL write_text_to_DORD (memo_text, recipient_code)
 END IF
 script_end_procedure("")
-
-
-
-
