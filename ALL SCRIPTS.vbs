@@ -265,6 +265,15 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LAC
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "INVOICES"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - INVOICES.vbs"
+cs_scripts_array(script_num).description		= "NEW 07/2016!! Creates CAAD note for recording invoices."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "IW CAAD CAWT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - IW CAAD CAWT.vbs"
