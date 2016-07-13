@@ -44,33 +44,32 @@ DIM beta_agency, row, col, case_number_valid, intake_docs_recd_dialog, paternity
 
 'THE DIALOG BOX-------------------------------------------------------------------------------------------------------------------
 
-BeginDialog intake_docs_recd_dialog, 0, 0, 341, 200, "Intake Documents Received"
+BeginDialog intake_docs_recd_dialog, 0, 0, 341, 180, "Intake Documents Received"
   EditBox 75, 5, 75, 15, prism_case_number
   EditBox 225, 5, 65, 15, date_recd
   CheckBox 15, 40, 165, 10, "Application for Support/Coll Services DHS-1958", app_supp_coll_services_check
-  CheckBox 195, 40, 75, 10, "$25 Application Fee", app_fee_check
   CheckBox 15, 55, 155, 10, "Referral to Support/Collections DHS-3163B", ref_supp_coll_app_check
-  CheckBox 195, 55, 130, 10, "Client Stmt of Good Cause DHS-2338", good_cause_check
   CheckBox 15, 70, 85, 10, "Role of County Attorney", role_county_atty_check
-  CheckBox 195, 70, 105, 10, "Notarized Affidavit of Arrears", aff_arrears_check
   CheckBox 15, 85, 100, 10, "Waiver of Personal Service", waiver_pers_service_check
-  CheckBox 195, 85, 50, 10, "Court Order", court_order_check
   CheckBox 15, 100, 105, 10, "Paternity Worksheet/Affidavit", paternity_wkst_check
-  CheckBox 195, 100, 125, 10, "Health/Dental Insurance Verification", insurance_check
   CheckBox 15, 115, 100, 10, "Marriage License/Certificate", marriage_check
-  CheckBox 195, 115, 95, 10, "Recognition of Parentage", rec_of_parentage_check
-  CheckBox 15, 130, 65, 10, "Birth Verification", birth_check
-  CheckBox 195, 130, 30, 10, "Photo", photo_check
-  EditBox 35, 145, 290, 15, other_recd
-  EditBox 75, 175, 115, 15, worker_signature
+  EditBox 40, 130, 130, 15, other_recd
+  CheckBox 195, 40, 130, 10, "Client Stmt of Good Cause DHS-2338", good_cause_check
+  CheckBox 195, 55, 105, 10, "Notarized Affidavit of Arrears", aff_arrears_check
+  CheckBox 195, 70, 50, 10, "Court Order", court_order_check
+  CheckBox 195, 85, 125, 10, "Health/Dental Insurance Verification", insurance_check
+  CheckBox 195, 100, 95, 10, "Recognition of Parentage", rec_of_parentage_check
+  CheckBox 195, 115, 30, 10, "Photo", photo_check
+  CheckBox 195, 130, 65, 10, "Birth Verification", birth_check
+  EditBox 85, 155, 115, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 225, 180, 50, 15
-    CancelButton 280, 180, 50, 15
+    OkButton 225, 155, 50, 15
+    CancelButton 280, 155, 50, 15
   Text 5, 10, 70, 10, "Prism Case Number:"
   Text 185, 10, 40, 15, "Date Rec'd:"
-  Text 15, 150, 20, 10, "Other:"
-  GroupBox 5, 25, 325, 145, "Documents Rec'd:"
-  Text 5, 180, 70, 10, "Sign your CAAD note:"
+  Text 15, 130, 20, 10, "Other:"
+  GroupBox 5, 25, 325, 125, "Documents Rec'd:"
+  Text 10, 160, 70, 10, "Sign your CAAD note:"
 EndDialog
 
 'THE SCRIPT CODE-------------------------------------------------------------------------------------------------------------------
@@ -122,7 +121,6 @@ EMWriteScreen "*Intake Documents Received*", 16, 4              'Types "Intake D
 EMSetCursor 17, 4                                               'Sets the cursor on the next line
 IF date_recd <> "" THEN CALL write_bullet_and_variable_in_CAAD("Date Rec'd", date_recd)  'Types in date received on the second lind of CAAD note
 IF app_supp_coll_services_check = checked THEN CALL write_variable_in_CAAD("* Application for Support/Coll Services DHS-1958")   'If any of the buttons are checked they will caad note
-IF app_fee_check = checked THEN CALL write_variable_in_CAAD("* $25 Application Fee")
 IF ref_supp_coll_app_check = checked THEN CALL write_variable_in_CAAD("* Referral to Supp/Coll DHS-3163B")
 IF good_cause_check = checked THEN CALL write_variable_in_CAAD("* Client Stmt of Good Cause DHS-2338")
 IF role_county_atty_check = checked THEN CALL write_variable_in_CAAD("* Role of the County Attorney")

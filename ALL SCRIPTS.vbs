@@ -39,6 +39,16 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "ANOKA PATERNITY SANCTION"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - ANOKA PATERNITY SANCTION.vbs"
+cs_scripts_array(script_num).description		= "Takes actions on the case to apply or remove public assistance sanction for non-cooperation with child support."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA"
+
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVW"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ARREARS MGMT REVIEW.vbs"
@@ -249,8 +259,17 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INTAKE DOCS RECEIVED"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - INTAKE DOCS RECEIVED.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Creates CAAD note for recording receipt of intake docs."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "INVOICES"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - INVOICES.vbs"
+cs_scripts_array(script_num).description		= "NEW 07/2016!! Creates CAAD note for recording invoices."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -276,8 +295,17 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MES FINANCIAL DOCS SENT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MES FINANCIAL DOCS SENT.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Creates CAAD note for recording documents sent to parties."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording documents sent to parties."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "MOD CAAD NOTE: CONTACT CHECKLIST"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - MOD CAAD NOTE: CONTACT CHECKLIST.vbs"
+cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording contact with Client regarding possible Mod."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -384,7 +412,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
+cs_scripts_array(script_num).description		= "Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -393,7 +421,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN RECENT ACTIVITY"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 WORKLIST SCRUBBER.vbs"
-cs_scripts_array(script_num).description		= "NEW 02/2016!! Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
+cs_scripts_array(script_num).description		= "Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -402,7 +430,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW QW INFO"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
-cs_scripts_array(script_num).description		= "NEW 01/2016!! Purgres all M8001 (REVW Case Referred) worklist from your USWT."
+cs_scripts_array(script_num).description		= "Purgres all M8001 (REVW Case Referred) worklist from your USWT."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
 script_num = script_num + 1
@@ -413,6 +441,16 @@ cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ROP DETAIL.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note about the date parties signed Recognition of Parentage."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "SEND F0104 DORD MEMO"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - SEND F0104 DORD MEMO.vbs"
+cs_scripts_array(script_num).description		= "Script editor for sending F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
