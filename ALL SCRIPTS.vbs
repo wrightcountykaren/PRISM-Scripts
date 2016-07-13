@@ -301,6 +301,15 @@ cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, HENNEPIN, MILLE LAC
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "MOD CAAD NOTE: CONTACT CHECKLIST"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - MOD CAAD NOTE: CONTACT CHECKLIST.vbs"
+cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording contact with Client regarding possible Mod."
+cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NCP LOCATE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NCP LOCATE.vbs"
