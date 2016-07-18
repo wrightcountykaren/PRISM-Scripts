@@ -213,7 +213,7 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "FEE SUPPRESSION OVERRIDE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - THIS SCRIPT IS UNAVAILABLE.vbs"
+cs_scripts_array(script_num).file_name			= "ACTIONS - FEE SUPPRESSION OVERRIDE.vbs"
 cs_scripts_array(script_num).description		= "Overrides a fee suppression."
 cs_scripts_array(script_num).agencies_that_use		= "BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
