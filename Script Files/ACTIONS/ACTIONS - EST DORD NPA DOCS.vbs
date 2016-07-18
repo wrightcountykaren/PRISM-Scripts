@@ -294,6 +294,8 @@ pf3
 
 pf9
 
+transmit
+
 CALL navigate_to_PRISM_screen ("CAAD")  
 
 PF5
