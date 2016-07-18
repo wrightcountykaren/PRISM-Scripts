@@ -1,5 +1,5 @@
 'Gathering stats+=====================
-'name_of_script = "ACTIONS - ESTB DORD DOCS FOR NPA CASE.vbs"
+'name_of_script = ACTIONS - ESTB DORD DOCS FOR NPA CASE.vbs
 'start_time = timer
 
 
