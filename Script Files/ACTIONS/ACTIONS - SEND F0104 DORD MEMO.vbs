@@ -28,6 +28,7 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			StopScript
 END IF
 
+buffer_size = 5 'number of lines to buffer when creating the array.  Due to wrapping, the array may need more lines than initially projected.
 
 
 'DIALOGS----------------------------------------------------------------------------------------------------
@@ -39,17 +40,18 @@ BeginDialog PRISM_case_number_dialog, 0, 0, 186, 50, "PRISM case number dialog"
   Text 5, 10, 90, 20, "PRISM case number (XXXXXXXXXX-XX format):"
 EndDialog
 
-BeginDialog memo_dialog, 0, 0, 187, 106, "DORD Memo Dialog"
-  DropListBox 10, 20, 110, 20, "Select One"+chr(9)+"CPP - Custodial Parent"+chr(9)+"NCP - Noncustodial Parent"+chr(9)+"BOTH - CP and NCP"+chr(9)+"CPE - CP's Employer"+chr(9)+"NCE - NCP's Employer", recipient
-  EditBox 10, 60, 90, 14, memo_text
+BeginDialog memo_dialog, 0, 0, 347, 106, "DORD Memo Dialog"
+  DropListBox 10, 20, 110, 20, "Select One"+chr(9)+"CPP - Custodial Parent"+chr(9)+"NCP - Noncustodial Parent"+chr(9)+"BOTH - CP and NCP"+chr(9)+"CPE - CP's Employer"+chr(9)+"NCE - NCP's Employer", recipient_code
+  EditBox 10, 60, 270, 14, memo_text
   ButtonGroup ButtonPressed
-    PushButton 140, 40, 40, 14, "Preview", preview_button
-    PushButton 140, 20, 40, 14, "SpellCheck", spell_button
-    OkButton 140, 60, 40, 14
-    CancelButton 140, 80, 40, 14
+    PushButton 290, 30, 40, 14, "Preview", preview_button
+    PushButton 290, 10, 40, 14, "SpellCheck", spell_button
+    OkButton 290, 50, 40, 14
+    CancelButton 290, 70, 40, 14
   Text 10, 10, 90, 10, "Select your recipient:"
   Text 10, 40, 90, 20, "Enter the memo text for your F0104 DORD Memo:"
 EndDialog
+
 
 
 
@@ -69,19 +71,21 @@ FUNCTION write_text_to_DORD(string_to_write, recipient)
 	EMWriteScreen "F0104", 6, 36
 	EMWriteScreen recipient, 11, 51
 	transmit
-	
-	'This function will add a string to DORD docs.
-	IF len(string_to_write) > 1080 THEN 
+
+
+	'This function will add a string to DORD docs.	
+	string_to_write_length = len(string_to_write)
+	IF string_to_write_length > 1080 THEN 
+		excess_string_text = string_to_write_length - 1080
 		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
-				"The text below is longer than the script can handle in one DORD document. The script will not add the text to the document." & vbCr & vbCr & _
-				string_to_write
+				"The text is longer than the script can handle in one DORD document. Here is your text:" & vbCr & vbCr & _
+				Left(string_to_write, 1080) & vbCR & vbCR & " The following text exceeds the capacity of the document:" & _
+				vbCR & vbCr & Right(string_to_write, excess_string_text) & vbCR & vbCr & "Please edit your document text."
 		EXIT FUNCTION
 	END IF
 
-	dord_rows_of_text = Int(len(string_to_write) / 60) + 1
 	
-	
-	ReDim write_array(dord_rows_of_text)
+	ReDim write_array(18) 'number of lines available to write
 	'Splitting the text
 	string_to_write = split(string_to_write)
 	array_position = 1
@@ -90,8 +94,15 @@ FUNCTION write_text_to_DORD(string_to_write, recipient)
 			write_array(array_position) = write_array(array_position) & word & " "
 		ELSE
 			array_position = array_position + 1
+			IF array_position > 18 THEN
+				MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
+				"The text is longer than the script can handle in one DORD document.  " _
+				& "Please revise your document text."
+				EXIT FUNCTION
+			END IF
 			write_array(array_position) = write_array(array_position) & word & " "
 		END IF
+
 	NEXT
 		
 	PF14
@@ -101,7 +112,7 @@ FUNCTION write_text_to_DORD(string_to_write, recipient)
 
 	'Writing the values
 	dord_row = 7
-	FOR i = 1 TO dord_rows_of_text
+	FOR i = 1 TO array_position
 		CALL write_value_and_transmit("S", dord_row, 5)
 		
 		CALL write_value_and_transmit(write_array(i), 16, 15)
@@ -116,9 +127,62 @@ FUNCTION write_text_to_DORD(string_to_write, recipient)
 	EMWriteScreen "M", 3, 29
 	transmit
 
-
-	
 END FUNCTION
+
+FUNCTION write_text_to_msgbox(message_text, recipient)
+'Preview memo text in a message box or display error message.
+	IF recipient = "Select One" THEN
+		error_msg = error_msg & "Please specify the memo recipient.  "
+	END IF
+	IF trim(message_text) = "" THEN
+		error_msg = error_msg & "Please enter the memo text. "
+	END IF
+	IF error_msg <> "" THEN
+		msgbox error_msg & "Please resolve to continue."
+	ELSE
+	
+	message_length = len(message_text)
+	
+	IF message_length > 1080 THEN 
+	excess_message_text = message_length - 1080
+		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
+				"The text is longer than the script can handle in one DORD document. Here is your text:" & vbCr & vbCr & _
+				Left(message_text, 1080) & vbCR & vbCR & " The following text exceeds the capacity of the document:" & _
+				vbCR & vbCr & Right(message_text, excess_message_text) & vbCR & vbCr & "Please edit your document text."
+		EXIT FUNCTION
+	END IF
+
+	msg_rows_of_text = Int(message_length / 60) + 1
+	
+	ReDim write_array(18) 'Number of rows available for writing
+	'Splitting the text
+	message_text = split(message_text)
+	array_position = 1
+	FOR EACH word IN message_text
+		IF len(write_array(array_position)) + len(word) <= 60 THEN 
+			write_array(array_position) = write_array(array_position) & word & " "
+		ELSE
+			array_position = array_position + 1
+			IF array_position > 18 THEN
+				MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
+				"The text is longer than the script can handle in one DORD document.  " _
+				& "Please revise your document text."
+				EXIT FUNCTION
+			END IF
+			write_array(array_position) = write_array(array_position) & word & " "
+		END IF
+
+	NEXT
+	
+	msgbox_text =  "Recipient: " & recipient & vbCr & vbCr & "*** PREVIEW *** " & vbCr
+	FOR ii = 1 TO array_position
+			msgbox_text = msgbox_text & write_array(ii) & vbCr
+	NEXT
+	msgbox msgbox_text
+	END IF
+END FUNCTION
+
+
 'THE SCRIPT----------------------------------------------------------------------------------------------------
  
 'Connects to BlueZone
@@ -180,19 +244,8 @@ DO
 
 	
 	IF buttonpressed = preview_button THEN
-		
-		'Preview memo text in a message box or display error message if there is no memo text.
-		IF recipient = "Select One" THEN
-			error_msg = error_msg & "Please specify the memo recipient.  "
-		END IF
-		IF trim(memo_text) = "" THEN
-			error_msg = error_msg & "Please enter the memo text. "
-		END IF
-		IF error_msg <> "" THEN
-			msgbox error_msg & "Please resolve to continue."
-		ELSE
-			msgbox "Recipient: " & recipient & vbCr & vbCr & "*** PREVIEW *** " & vbCr & memo_text
-		END IF
+		message_text = memo_text
+		CALL write_text_to_msgbox(message_text, recipient_code)
 	End IF
 
 
@@ -226,7 +279,8 @@ IF recipient = "BOTH - CP and NCP" THEN
 	CALL write_text_to_DORD (memo_text_for_CP, "CPP")
 	CALL write_text_to_DORD (memo_text_for_NCP, "NCP")
 ELSE
-	recipient_code = left(recipient, 3)
-	CALL write_text_to_DORD (memo_text, recipient_code)
+	recipient = left(recipient_code, 3)
+	CALL write_text_to_DORD (memo_text, recipient)
 END IF
 script_end_procedure("")
+
