@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - ANOKA PATERNITY SANCTION.vbs"
+name_of_script = "ACTIONS - ANOKA SANCTION.vbs"
 start_time = timer
 
 'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
