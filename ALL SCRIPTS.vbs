@@ -39,7 +39,7 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ANOKA PATERNITY SANCTION"
+cs_scripts_array(script_num).script_name		= "ANOKA SANCTION"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ANOKA PATERNITY SANCTION.vbs"
 cs_scripts_array(script_num).description		= "Takes actions on the case to apply or remove public assistance sanction for non-cooperation with child support."
