@@ -1,3 +1,4 @@
+
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 name_of_script = "NOTES - PAY OR REPORT.vbs"
 start_time = timer
@@ -174,7 +175,7 @@ BeginDialog case_number_dialog, 0, 0, 197, 146, "Case information dialog"
   EditBox 100, 45, 80, 14, county_attorney_case_number
   DropListBox 70, 70, 50, 14, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
   DropListBox 120, 70, 40, 14, "Year..."+chr(9)+first_year+chr(9)+second_year+chr(9)+third_year, year_list
-  DropListBox 70, 90, 50, 14, "# of Months..."+chr(9)+"1"+chr(9)+"2"+chr(9)+"3"+chr(9)+"4"+chr(9)+"5"+chr(9)+"6", num_of_months
+  DropListBox 70, 90, 50, 14, "# of Months..."+chr(9)+"6"+chr(9)+"5"+chr(9)+"4"+chr(9)+"3"+chr(9)+"2"+chr(9)+"1", num_of_months
   ButtonGroup ButtonPressed
     OkButton 40, 110, 50, 14
     CancelButton 100, 110, 50, 14
@@ -191,11 +192,14 @@ EndDialog
 'Connecting to BlueZone
 EMConnect ""
 
+CALL PRISM_case_number_finder(PRISM_case_number)
+
 'Case number display dialog
 DO
 	
 	err_msg = ""
 	Dialog case_number_dialog
+
 	If buttonpressed = 0 then stopscript
 		call PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 		If case_number_valid = False then err_msg = err_msg & vbCr & "* Please enter your PRISM case number in a valid format: ''XXXXXXXXXX-XX''"
@@ -235,9 +239,11 @@ FOR k = 0 to (num_of_months - 1)
 			 								'array argument 0 is the pay date (first of the month)
 			EMWriteScreen "Check for purge payments, due today.  ", 10, 4		'adding a line in the worklist
 			EMWriteScreen "Court file: " & court_file_number & "  County attorney case number: " & county_attorney_case_number, 11, 4
+			EMWriteScreen "County Attorney: " & CAO_list, 12, 4
 		ELSEIF j = 1 THEN 							'array argument 1 is the report date (second Friday of the month)
 			EMWriteScreen "Check for purge payments, report date. ", 10, 4
 			EMWriteScreen "Court file: " & court_file_number & "  County attorney case number: " & county_attorney_case_number, 11, 4
+			EMWriteScreen "County Attorney: " & CAO_list, 12, 4
 		END IF
 		CALL create_mainframe_friendly_date(pay_or_report_dates_array(k, j), 17, 21, "YYYY")		'creating the worklists in PRISM
 		transmit								'adding the worklist to CAWT
@@ -250,6 +256,7 @@ NEXT
 call navigate_to_PRISM_screen("CAAD")
 
 'Entering case number
+
 EMWriteScreen case_number, 20, 8
 'Add a new CAAD note
 PF5
@@ -266,4 +273,4 @@ call write_bullet_and_variable_in_CAAD("County Atty Case Number", county_attorne
 call write_new_line_in_PRISM_case_note("---")	
 call write_new_line_in_PRISM_case_note(worker_signature)
 
-script_end_procedure("Success!!  Press enter to save your CAAD note.")
+script_end_procedure("Success!! Press enter to save your CAAD note.")
