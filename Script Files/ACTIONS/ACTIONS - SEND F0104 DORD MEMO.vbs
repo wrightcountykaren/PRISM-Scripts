@@ -71,8 +71,7 @@ FUNCTION write_text_to_DORD(string_to_write, recipient)
 	EMWriteScreen "F0104", 6, 36
 	EMWriteScreen recipient, 11, 51
 	transmit
-
-
+	
 	'This function will add a string to DORD docs.	
 	string_to_write_length = len(string_to_write)
 	IF string_to_write_length > 1080 THEN 
@@ -272,7 +271,7 @@ LOOP UNTIL error_msg = ""
 check_for_PRISM(false)
 
 'Export information to DORD doc based on recipient selection.
-IF recipient = "BOTH - CP and NCP" THEN
+IF recipient_code = "BOTH - CP and NCP" THEN
 	memo_text_for_CP = memo_text
 	memo_text_for_NCP = memo_text
 
@@ -283,4 +282,3 @@ ELSE
 	CALL write_text_to_DORD (memo_text, recipient)
 END IF
 script_end_procedure("")
-
