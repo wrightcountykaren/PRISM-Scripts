@@ -1,5 +1,5 @@
 'Gathering stats
-name_of_script = "Action - CP NAME CHANGE.vbs"
+name_of_script = "Action - Employment Verification.vbs"
 start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 300
@@ -92,39 +92,39 @@ DO
 	If err_msg <> "" THEN msgbox "***NOTICE***" & vbcr & err_msg & vbNewline & vbNewline & "Please resolve for this script to continue."
 LOOP UNTIL err_msg = ""
 
+	'IF either of these are "select one" then we are blanking them out so they do not write in the CAAD note 
+If Med_cov_dropdown = "Select one..." then Med_cov_dropdown = ""
+If Den_cov_dropdown = "Select one..." then Den_cov_dropdown = ""
 
-'Enters "M" to modify
+	'Enters "M" to modify
 EMwritescreen "M", 3, 29
-'completes 1st screen of income verification
-EMwritescreen Income_Type, 7, 15
-EMwritescreen Begin_Date, 10, 14
-EMwritescreen Occupation, 12, 14
-EMwritescreen Verification_Date, 20, 7
-EMwritescreen Verification_Source, 20, 36 
+	'completes 1st screen of income verification
+EMwritescreen Income_Type, 7, 15			'this writes the the type of income they are receiving
+EMwritescreen Begin_Date, 10, 14			'this writes the day employment began
+EMwritescreen Occupation, 12, 14			'this writes their occupation
+EMwritescreen Verification_Date, 20, 7		'this writes the day the information was verified
+EMwritescreen Verification_Source, 20, 36 	'this writes who verified the information
 
-EMreadscreen Employer, 30, 9, 17
+EMreadscreen Employer, 30, 9, 17			'this reads the name of the employer so it can be added to the CAAD note
 
 PF11
-' Completes 2nd page of income verification
-EMwritescreen Wage, 11, 8
-'look at why/how the number adds 0's)
-EMwritescreen Frequency, 11, 27
-EMwritescreen Hours_Per_Period, 12, 20
-EMwritescreen Wage_Type, 12, 35 
-EMwritescreen Verification_Date, 13, 7
-Emwritescreen Income_Source, 13, 38
-Emwritescreen Med_cov_dropdown, 16, 18
-EMwritescreen Den_cov_dropdown, 17, 18
-
-If Med_cov_dropdown = "Select one..." then emwritescreen "_", 16, 18
-If Den_cov_dropdown = "Select one..." then emwritescreen "_", 17, 18
+	'Completes 2nd page of income verification
+EMwritescreen Wage, 11, 8				'this writes the amount of pay per pay period
+EMwritescreen Frequency, 11, 27			'this is the frequency of the pay periods
+EMwritescreen Hours_Per_Period, 12, 20		'this is the amount of hours in a pay period
+EMwritescreen Wage_Type, 12, 35 			'this is the type of way they are paid their wages
+EMwritescreen Verification_Date, 13, 7		'this is the date the information was verified
+Emwritescreen Income_Source, 13, 38			'this is who is paying 
+Emwritescreen Med_cov_dropdown, 16, 18		'this is if Med coverage is avail. If not answered it is coded above to leave blank
+EMwritescreen Den_cov_dropdown, 17, 18		'this is if Den coverage is avail. If not answered it is coded above to leave blank
 
 If Med_cov_dropdown = "N" then Emwritescreen Verification_Date, 16, 37
 If Den_cov_dropdown = "N" then Emwritescreen Verification_Date, 17, 37
 
 Transmit 
-
-' PLEASE HELP: how to prevent the transmit if anything red lines
+	
+EmReadscreen success_msg, 21, 24, 24
+	IF success_msg <> "modified successfully" THEN script_end_procedure("Problem updating this screen, please verify information!")
 
 PF3
 
@@ -137,24 +137,28 @@ EMwritescreen "M", 8, 5
 transmit
 
 emsetcursor 19, 4
-'updateds CAAD with information for the dialog box
-call write_bullet_and_variable_in_CAAD("Employer", Employer)
-call write_bullet_and_variable_in_CAAD("Income Type", Income_Type)
-call write_bullet_and_variable_in_CAAD ("Begin Date", Begin_Date)
-call write_bullet_and_variable_in_CAAD ("Verification Date", Verification_Date)
-call write_bullet_and_variable_in_CAAD ("Verification Source", Verification_Source)
-call write_bullet_and_variable_in_CAAD ("Wage", Wage)
-call write_bullet_and_variable_in_CAAD ("Frequency", Frequency)
-call write_bullet_and_variable_in_CAAD ("Income Source", Income_Source)
-' PLEASE HELP - this is needed for dental as well
-'if Med_cov_dropdown = "Select one..." then ("not answered")
-call write_bullet_and_variable_in_CAAD ("Medical Coverage", Med_cov_dropdown)	
-call write_bullet_and_variable_in_CAAD ("Dental Coverage", Den_cov_dropdown)
+	'updateds CAAD with information for the dialog box
 
+call write_bullet_and_variable_in_CAAD("Employer", Employer)						'writes the employer name 
+call write_bullet_and_variable_in_CAAD("Income Type", Income_Type)					'writes the income type
+call write_bullet_and_variable_in_CAAD ("Begin Date", Begin_Date)						'writes the date employment began
+call write_bullet_and_variable_in_CAAD ("Verification Date", Verification_Date)			'writes the date the information was verified
+call write_bullet_and_variable_in_CAAD ("Verification Source", Verification_Source)			'writes who verified the income
+call write_bullet_and_variable_in_CAAD ("Wage", "$" & Wage)							'writes the wage per pay period
+call write_bullet_and_variable_in_CAAD ("Frequency", Frequency)						'writes how often they are paid
+call write_bullet_and_variable_in_CAAD ("Income Source", Income_Source)					'writes where the income is coming from
+call write_bullet_and_variable_in_CAAD ("Medical Coverage", Med_cov_dropdown)				'writes if med coverage is avail, and the date if the med ins is not available
+call write_bullet_and_variable_in_CAAD ("Dental Coverage", Den_cov_dropdown)				'writes if den coverage is avail, and the date if the med ins is not available
 
 CALL write_variable_in_CAAD (worker_signature) 
 
-'add a CAWD work list if medical/dental are marked yes - "employment verification stated insureance is available  - please follow up for verification
+transmit
+
+MsgBox 	"If medical or dental insurance is avaible be sure to update NCPD/CPPD, or request the information" 
+
+
+
+
 
 
 
