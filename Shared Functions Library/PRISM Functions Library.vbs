@@ -2,7 +2,7 @@
 'HOW THIS SCRIPT WORKS:
 '
 'This script contains functions that the other BlueZone scripts use very commonly. The
-'other BlueZone scripts contain a few lines of code that run this script and get the 
+'other BlueZone scripts contain a few lines of code that run this script and get the
 'functions. This saves me time in writing and copy/pasting the same functions in
 'many different places. Only add functions to this script if they've been tested by
 'the workgroups. This document is actively used by live scripts, so it needs to be
@@ -33,7 +33,7 @@
 '	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 '	Execute req.responseText								'Executes the script code
 'ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Robert with details (and stops script).
-'	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+'	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_
 '			vbCr & _
 '			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 '			vbCr & _
@@ -44,7 +44,7 @@
 '			vbTab & vbTab & "responsible for network issues." & vbCr &_
 '			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 '			vbCr & _
-'			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+'			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_
 '			vbCr &_
 '			"URL: " & url
 '			StopScript
@@ -77,19 +77,19 @@ End function
 FUNCTION cancel_confirmation
 	If ButtonPressed = 0 then
 		cancel_confirm = MsgBox("Are you sure you want to cancel the script? Press YES to cancel. Press NO to return to the script.", vbYesNo)
-		If cancel_confirm = vbYes then script_end_procedure("CANCEL BUTTON SELECTED")     
+		If cancel_confirm = vbYes then script_end_procedure("CANCEL BUTTON SELECTED")
         'script_end_procedure text added for statistical purposes. If script was canceled prior to completion, the statistics will reflect this.
 	End if
 END FUNCTION
 
-' This is a custom function to change the format of a participant name.  The parameter is a string with the 
-' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
+' This is a custom function to change the format of a participant name.  The parameter is a string with the
+' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".
 FUNCTION change_client_name_to_FML(client_name)
 	client_name = trim(client_name)
 	length = len(client_name)
 	position = InStr(client_name, ", ")
 	last_name = Left(client_name, position-1)
-	first_name = Right(client_name, length-position-1)	
+	first_name = Right(client_name, length-position-1)
 	client_name = first_name & " " & last_name
 	client_name = lcase(client_name)
 	call fix_case(client_name, 1)
@@ -100,8 +100,8 @@ Function check_for_PRISM(end_script)
 	PF11
 	PF10
 	CALL find_variable("PLEASE ENTER YOUR ", timed_out, 8)
-	IF timed_out = "PASSWORD" THEN 
-		IF end_script = True THEN 
+	IF timed_out = "PASSWORD" THEN
+		IF end_script = True THEN
 			If PRISM_check <> "PRISM" then script_end_procedure("You do not appear to be in PRISM. You may be passworded out. Please check your PRISM screen and try again.")
 		ELSE
 			If PRISM_check <> "PRISM" then MsgBox "You do not appear to be in PRISM. You may be passworded out."
@@ -118,7 +118,7 @@ End function
 
 Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	For each item in array_to_convert
-		If output_droplist_box = "" then 
+		If output_droplist_box = "" then
 			output_droplist_box = item
 		Else
 			output_droplist_box = output_droplist_box & chr(9) & item
@@ -126,7 +126,7 @@ Function convert_array_to_droplist_items(array_to_convert, output_droplist_box)
 	Next
 End Function
 
-FUNCTION create_mainframe_friendly_date(date_variable, screen_row, screen_col, year_type) 
+FUNCTION create_mainframe_friendly_date(date_variable, screen_row, screen_col, year_type)
 	var_month = datepart("m", date_variable)
 	IF len(var_month) = 1 THEN var_month = "0" & var_month
 	EMWriteScreen var_month & "/", screen_row, screen_col
@@ -149,8 +149,8 @@ FUNCTION date_converter_PALC_PAPL (date_variable)
 	date_year = left (date_variable, 2)
 	date_day = right (date_variable, 2)
 	date_month = right (left (date_variable, 4), 2)
-	
-	date_variable = date_month & "/" & date_day & "/" & date_year 
+
+	date_variable = date_month & "/" & date_day & "/" & date_year
 END FUNCTION
 
 Function end_excel_and_script
@@ -173,7 +173,7 @@ Function find_variable(x, y, z) 'x is string, y is variable, z is length of new 
   If row <> 0 then EMReadScreen y, z, row, col + len(x)
 End function
 
-'This function fixes the case for a phrase. For example, "ROBERT P. ROBERTSON" becomes "Robert P. Robertson". 
+'This function fixes the case for a phrase. For example, "ROBERT P. ROBERTSON" becomes "Robert P. Robertson".
 '	It capitalizes the first letter of each word.
 Function fix_case(phrase_to_split, smallest_length_to_skip)									'Ex: fix_case(client_name, 3), where 3 means skip words that are 3 characters or shorter
 	phrase_to_split = split(phrase_to_split)											'splits phrase into an array
@@ -183,7 +183,7 @@ Function fix_case(phrase_to_split, smallest_length_to_skip)									'Ex: fix_cas
 			remaining_characters = LCase(right(word, len(word) -1))						'grabbing the remaining characters of the string, making lowercase and adding to variable
 			If len(word) > smallest_length_to_skip then								'skip any strings shorter than the smallest_length_to_skip variable
 				output_phrase = output_phrase & first_character & remaining_characters & " "		'output_phrase is the output of the function, this combines the first_character and remaining_characters
-			Else															
+			Else
 				output_phrase = output_phrase & word & " "							'just pops the whole word in if it's shorter than the smallest_length_to_skip variable
 			End if
 		End if
@@ -196,8 +196,8 @@ End function
 FUNCTION fix_case_for_name(name_variable)
 	name_variable = split(name_variable, " ")
 	FOR EACH client_name IN name_variable
-		IF client_name <> "" THEN 
-			IF InStr(client_name, "-") = 0 THEN 
+		IF client_name <> "" THEN
+			IF InStr(client_name, "-") = 0 THEN
 				client_name = UCASE(left(client_name, 1)) & LCASE(right(client_name, len(client_name) - 1))
 				output_variable = output_variable & " " & client_name
 			ELSE				'When the client has a hyphenated surname
@@ -214,10 +214,10 @@ FUNCTION fix_case_for_name(name_variable)
 END FUNCTION
 
 
-'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the 
+'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the
 'variable to be searched.  The function searches the variable and removes underscores.  Then, the fix case function is called to format
-'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.	
-FUNCTION fix_read_data (search_string) 
+'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.
+FUNCTION fix_read_data (search_string)
 	search_string = replace(search_string, "_", "")
 	call fix_case(search_string, 1)
 	search_string = trim(search_string)
@@ -233,7 +233,7 @@ function navigate_to_MAXIS_screen(x, y)
     row = 1
     col = 1
     EMSearch "Function: ", row, col
-    If row <> 0 then 
+    If row <> 0 then
       EMReadScreen MAXIS_function, 4, row, col + 10
       EMReadScreen STAT_note_check, 4, 2, 45
       row = 1
@@ -243,7 +243,7 @@ function navigate_to_MAXIS_screen(x, y)
       current_case_number = replace(current_case_number, "_", "")
       current_case_number = trim(current_case_number)
     End if
-    If current_case_number = case_number and MAXIS_function = ucase(x) and STAT_note_check <> "NOTE" then 
+    If current_case_number = case_number and MAXIS_function = ucase(x) and STAT_note_check <> "NOTE" then
       row = 1
       col = 1
       EMSearch "Command: ", row, col
@@ -415,12 +415,12 @@ Function PRISM_case_number_finder(variable_for_PRISM_case_number)
 			EMReadScreen variable_for_PRISM_case_number, 13, PRISM_row, PRISM_col + 13
 			variable_for_PRISM_case_number = replace(variable_for_PRISM_case_number, " ", "-")
 		End if
-	End if	
+	End if
 	If isnumeric(left(variable_for_PRISM_case_number, 10)) = False or isnumeric(right(variable_for_PRISM_case_number, 2)) = False then variable_for_PRISM_case_number = ""
 End function
 
 Function PRISM_case_number_validation(case_number_to_validate, outcome)
-  If len(case_number_to_validate) <> 13 then 
+  If len(case_number_to_validate) <> 13 then
     outcome = False
   Elseif isnumeric(left(case_number_to_validate, 10)) = False then
     outcome = False
@@ -450,7 +450,7 @@ FUNCTION run_from_GitHub(url)
 		Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 		Execute req.responseText								'Executes the script code
 	ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Robert with details (and stops script).
-		MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+		MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_
 				vbCr & _
 				"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 				vbCr & _
@@ -461,17 +461,12 @@ FUNCTION run_from_GitHub(url)
 				vbTab & vbTab & "responsible for network issues." & vbCr &_
 				vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 				vbCr & _
-				"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
+				"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_
 				vbCr &_
 				"URL: " & url
 				script_end_procedure("Script ended due to error connecting to GitHub.")
 	END IF
 END FUNCTION
-
-Function save_cord_doc
-  EMWriteScreen "M", 3, 29
-  transmit
-End function
 
 function script_end_procedure(closing_message)
 	If closing_message <> "" then MsgBox closing_message, vbInformation + vbSystemModal
@@ -479,7 +474,7 @@ function script_end_procedure(closing_message)
 		stop_time = timer
 		script_run_time = stop_time - start_time
 		'Getting user name
-		Set objNet = CreateObject("WScript.NetWork") 
+		Set objNet = CreateObject("WScript.NetWork")
 		user_ID = objNet.UserName
 
 		'Setting constants
@@ -506,7 +501,7 @@ function script_end_procedure_wsh(closing_message) 'For use when running a scrip
 		stop_time = timer
 		script_run_time = stop_time - start_time
 		'Getting user name
-		Set objNet = CreateObject("WScript.NetWork") 
+		Set objNet = CreateObject("WScript.NetWork")
 		user_ID = objNet.UserName
 
 		'Setting constants
@@ -541,7 +536,7 @@ FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
 			EMReadScreen cso_name, 24, 13, 55
 			cso_name = trim(cso_name)
 			PF3
-			
+
 			BeginDialog select_cso_dlg, 0, 0, 286, 145, " - Select CSO Caseload"
 			EditBox 70, 55, 65, 15, cso_id
 			Text 70, 80, 90, 10, cso_name
@@ -552,12 +547,12 @@ FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
 			Text 10, 15, 265, 30, "This script will check for worklist items coded E0014 for the following Worker ID. If you wish to change the Worker ID, enter the desired Worker ID in the box and press UPDATE CSO. When you are ready to continue, press OK."
 			Text 10, 60, 50, 10, "Worker ID:"
 			Text 10, 80, 55, 10, "Worker Name:"
-		
+
 			EndDialog
-		
+
 			DIALOG select_cso_dlg
 				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
-				IF ButtonPressed = update_cso_button THEN 
+				IF ButtonPressed = update_cso_button THEN
 					CALL navigate_to_PRISM_screen("USWT")
 					CALL write_value_and_transmit(cso_id, 20, 13)
 					EMReadScreen cso_name, 24, 13, 55
@@ -565,10 +560,10 @@ FUNCTION select_cso_caseload(ButtonPressed, cso_id, cso_name)
 				END IF
 				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
 				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
-																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
+																																				'The additional of IF ButtonPressed = -1 to the conditional statement is needed
 																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
 				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
-		LOOP UNTIL ButtonPressed = -1 
+		LOOP UNTIL ButtonPressed = -1
 	LOOP UNTIL err_msg = ""
 END FUNCTION
 
@@ -584,58 +579,6 @@ FUNCTION send_dord_doc(recipient, dord_doc)
 	transmit
 END FUNCTION
 
-FUNCTION send_text_to_DORD(string_to_write, recipient)
-	call navigate_to_PRISM_screen("DORD")
-	EMWriteScreen "A", 3, 29
-	EMWriteScreen "F0104", 6, 36
-	EMWriteScreen recipient, 11, 51
-	transmit
-	
-	'This function will add a string to DORD docs.
-	IF len(string_to_write) > 1080 THEN 
-		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
-				"The text below is longer than the script can handle in one DORD document. The script will not add the text to the document." & vbCr & vbCr & _
-				string_to_write
-		EXIT FUNCTION
-	END IF
-
-	dord_rows_of_text = Int(len(string_to_write) / 60) + 1
-
-	ReDim write_array(dord_rows_of_text)
-	'Splitting the text
-	string_to_write = split(string_to_write)
-	array_position = 1
-	FOR EACH word IN string_to_write
-		IF len(write_array(array_position)) + len(word) <= 60 THEN 
-			write_array(array_position) = write_array(array_position) & word & " "
-		ELSE
-			array_position = array_position + 1
-			write_array(array_position) = write_array(array_position) & word & " "
-		END IF
-	NEXT
-	
-	PF14
-
-	'Selecting the "U" label type
-	CALL write_value_and_transmit("U", 20, 14)
-
-	'Writing the values
-	dord_row = 7
-	FOR i = 1 TO dord_rows_of_text
-		CALL write_value_and_transmit("S", dord_row, 5)
-		CALL write_value_and_transmit(write_array(i), 16, 15)
-
-		dord_row = dord_row + 1
-		IF i = 12 THEN 
-			PF8
-			dord_row = 7
-		END IF
-	NEXT
-	PF3
-	EMWriteScreen "M", 3, 29
-	transmit
-END FUNCTION
-	
 Function step_through_handling 'This function will introduce "warning screens" before each transmit, which is very helpful for testing new scripts
 	'To use this function, simply replace the "Execute text_from_the_other_script" line with:
 	'Execute replace(text_from_the_other_script, "EMWaitReady 0, 0", "step_through_handling")
@@ -658,7 +601,7 @@ FUNCTION word_doc_open(doc_location, objWord, objDoc)
 	'Opens Word object
 	Set objWord = CreateObject("Word.Application")
 	objWord.Visible = True		'We want to see it
-	
+
 	'Opens the specific Word doc
 	set objDoc = objWord.Documents.Add(doc_location)
 END FUNCTION
@@ -669,12 +612,12 @@ FUNCTION word_doc_update_field(field_name, variable_for_field, objDoc)
 END FUNCTION
 
 Function write_bullet_and_variable_in_CAAD(bullet, variable)
-IF variable <> "" THEN  
+IF variable <> "" THEN
   spaces_count = 6	'Temporary just to make it work
 
-  EMGetCursor row, col 
+  EMGetCursor row, col
   EMReadScreen line_check, 2, 15, 2
-  If ((row = 20 and col + (len(bullet)) >= 78) or row = 21) and line_check = "26" then 
+  If ((row = 20 and col + (len(bullet)) >= 78) or row = 21) and line_check = "26" then
     MsgBox "You've run out of room in this case note. The script will now stop."
     StopScript
   End if
@@ -685,10 +628,10 @@ IF variable <> "" THEN
   End if
   variable_array = split(variable, " ")
   EMSendKey "* " & bullet & ": "
-  For each variable_word in variable_array 
-    EMGetCursor row, col 
+  For each variable_word in variable_array
+    EMGetCursor row, col
     EMReadScreen line_check, 2, 15, 2
-    If ((row = 20 and col + (len(variable_word)) >= 78) or row = 21) and line_check = "26" then 
+    If ((row = 20 and col + (len(variable_word)) >= 78) or row = 21) and line_check = "26" then
       MsgBox "You've run out of room in this case note. The script will now stop."
       StopScript
     End if
@@ -697,14 +640,14 @@ IF variable <> "" THEN
       EMWaitReady 0, 0
       EMSetCursor 16, 4
     End if
-    EMGetCursor row, col 
-    If (row < 20 and col + (len(variable_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count) 
+    EMGetCursor row, col
+    If (row < 20 and col + (len(variable_word)) >= 78) then EMSendKey "<newline>" & space(spaces_count)
 '    If (row = 16 and col = 4) then EMSendKey space(spaces_count)		'<<<REPLACED WITH BELOW IN ORDER TO TEST column issue
     If (col = 4) then EMSendKey space(spaces_count)
     EMSendKey variable_word & " "
-    If right(variable_word, 1) = ";" then 
-      EMSendKey "<backspace>" & "<backspace>" 
-      EMGetCursor row, col 
+    If right(variable_word, 1) = ";" then
+      EMSendKey "<backspace>" & "<backspace>"
+      EMGetCursor row, col
       If row = 20 then
         EMSendKey "<PF8>"
         EMWaitReady 0, 0
@@ -716,7 +659,7 @@ IF variable <> "" THEN
     End if
   Next
   EMSendKey "<newline>"
-  EMGetCursor row, col 
+  EMGetCursor row, col
   If (row = 20 and col + (len(bullet)) >= 78) or (row = 16 and col = 4) then
     EMSendKey "<PF8>"
     EMWaitReady 0, 0
@@ -726,33 +669,96 @@ END IF
 End Function
 
 Function write_variable_in_CAAD(variable)
-IF variable <> "" THEN  
-  EMGetCursor row, col 
-  EMReadScreen line_check, 2, 15, 2
-  If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then 
-    MsgBox "You've run out of room in this case note. The script will now stop."
-    StopScript
-  End if
-  If (row = 20 and col + (len(x)) >= 78 + 1 ) or row = 21 then
-    EMSendKey "<PF8>"
-    EMWaitReady 0, 0
-    EMSetCursor 16, 4
-  End if
-  EMSendKey variable & "<newline>"
-  EMGetCursor row, col 
-  If (row = 20 and col + (len(x)) >= 78) or (row = 21) then
-    EMSendKey "<PF8>"
-    EMWaitReady 0, 0
-    EMSetCursor 16, 4
-  End if
-END IF
+    IF variable <> "" THEN
+        EMGetCursor row, col
+        EMReadScreen line_check, 2, 15, 2
+        If ((row = 20 and col + (len(x)) >= 78) or row = 21) and line_check = "26" then
+            MsgBox "You've run out of room in this case note. The script will now stop."
+            StopScript
+        End if
+        If (row = 20 and col + (len(x)) >= 78 + 1 ) or row = 21 then
+            EMSendKey "<PF8>"
+            EMWaitReady 0, 0
+            EMSetCursor 16, 4
+        End if
+        EMSendKey variable & "<newline>"
+        EMGetCursor row, col
+        If (row = 20 and col + (len(x)) >= 78) or (row = 21) then
+            EMSendKey "<PF8>"
+            EMWaitReady 0, 0
+            EMSetCursor 16, 4
+        End if
+    END IF
 End function
+
+FUNCTION write_variable_in_DORD(string_to_write, recipient)
+	call navigate_to_PRISM_screen("DORD")
+	EMWriteScreen "A", 3, 29
+	EMWriteScreen "F0104", 6, 36
+	EMWriteScreen recipient, 11, 51
+	transmit
+
+	'This function will add a string to DORD docs.
+	IF len(string_to_write) > 1080 THEN
+		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
+				"The text below is longer than the script can handle in one DORD document. The script will not add the text to the document." & vbCr & vbCr & _
+				string_to_write
+		EXIT FUNCTION
+	END IF
+
+	dord_rows_of_text = Int(len(string_to_write) / 60) + 1
+
+	ReDim write_array(dord_rows_of_text)
+	'Splitting the text
+	string_to_write = split(string_to_write)
+	array_position = 1
+	FOR EACH word IN string_to_write
+		IF len(write_array(array_position)) + len(word) <= 60 THEN
+			write_array(array_position) = write_array(array_position) & word & " "
+		ELSE
+			array_position = array_position + 1
+			write_array(array_position) = write_array(array_position) & word & " "
+		END IF
+	NEXT
+
+	PF14
+
+	'Selecting the "U" label type
+	CALL write_value_and_transmit("U", 20, 14)
+
+	'Writing the values
+	dord_row = 7
+	FOR i = 1 TO dord_rows_of_text
+		CALL write_value_and_transmit("S", dord_row, 5)
+		CALL write_value_and_transmit(write_array(i), 16, 15)
+
+		dord_row = dord_row + 1
+		IF i = 12 THEN
+			PF8
+			dord_row = 7
+		END IF
+	NEXT
+	PF3
+	EMWriteScreen "M", 3, 29
+	transmit
+END FUNCTION
 
 
 '----------------------------------------------------------------------------------------------------DEPRECIATED FUNCTIONS LEFT HERE FOR COMPATIBILITY PURPOSES
 function PRISM_check_function													'DEPRECIATED 03/10/2015
 	call check_for_PRISM(True)	'Defaults to True because that's how we always did it.
 END function
+
+Function save_cord_doc
+    If datediff("d", #08/14/2016#, date) > 0 then MsgBox "This function (save_cord_doc) is being depreciated and removed for the September release. If you are seeing this pop-up, it's because you have a script which has this function, and requires updating. It can be replaced with the write_value_and_transmit function. This function must be replaced by September or it may become unavailable entirely. The script will continue."
+    EMWriteScreen "M", 3, 29
+    transmit
+End function
+
+Function send_text_to_DORD(string_to_write, recipient)
+    If datediff("d", #08/14/2016#, date) > 0 then MsgBox "This function (send_text_to_DORD) is being depreciated and removed for the September release. If you are seeing this pop-up, it's because you have a script which has this function, and requires updating. It can be replaced with the write_variable_in_DORD function. This function must be replaced by September or it may become unavailable entirely. The script will continue."
+    call write_variable_in_DORD(string_to_write, recipient)
+End function
 
 Function write_editbox_in_PRISM_case_note(bullet, variable, spaces_count)		'DEPRECIATED 03/10/2015
 	call write_bullet_and_variable_in_CAAD(bullet, variable)
@@ -772,9 +778,9 @@ Function write_variable_to_CORD_paragraph(variable)
 		EMGetCursor noting_row, noting_col		'Needs to get the row and col to start. Doesn't need to get it in the array function because that uses EMWriteScreen.
 		noting_col = 6					'The noting col should always be 3 at this point, because it's the beginning. But, this will be dynamically recreated each time.
 		IF noting_row < 11 THEN noting_row = 11	'Making sure it is writing in the paragraph.
-		
+
 		'Backing out of the CORD paragraph
-		IF noting_row > 20 THEN 
+		IF noting_row > 20 THEN
 			MsgBox "The script is attempting to write in a spot that is not supported by PRISM. Please review your CORD document for accuracy and contact a scripts administrator to have this issue resolved.", vbCritical + vbSystemModal, "Critical CORD Paragraph Error!!"
 			EXIT FUNCTION
 		END IF
@@ -797,7 +803,7 @@ Function write_variable_to_CORD_paragraph(variable)
 			noting_col = noting_col + (len(word) + 1)
 
 			'Backing out of the CORD paragraph
-			IF noting_row >= 20 THEN 
+			IF noting_row >= 20 THEN
 				MsgBox "The script is attempting to write in a spot that is not supported by PRISM. Please review your CORD document for accuracy and a scripts administrator to have this issue resolved.", vbCritical + vbSystemModal, "Critical CORD Paragraph Error!!"
 				EXIT FUNCTION
 			END IF
@@ -807,7 +813,6 @@ Function write_variable_to_CORD_paragraph(variable)
 		EMSetCursor noting_row + 1, 6
 	End if
 End function
-
 
 '>>>>> CLASSES!!!!!!!!!!!!!!!!!!!!! <<<<<
 'This CLASS contains properties used to populate documents
@@ -824,7 +829,7 @@ CLASS doc_info
 		EMReadScreen cp_name, 50, 5, 25
 		cp_name = trim(cp_name)
 	END PROPERTY
-	
+
 	' CP first name
 	PUBLIC PROPERTY GET cp_first_name
 		EMReadScreen at_screen, 4, 21, 75
@@ -836,37 +841,37 @@ CLASS doc_info
 	' CP last name
 	PUBLIC PROPERTY GET cp_last_name
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
 		EMReadScreen cp_last_name, 17, 8, 8
 		cp_last_name = trim(replace(cp_last_name, "_", ""))
-	END PROPERTY	
-	
+	END PROPERTY
+
 	' CP middle name
 	PUBLIC PROPERTY GET cp_middle_name
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
 		EMReadScreen cp_middle_name, 12, 8, 56
 		cp_middle_name = trim(replace(cp_middle_name, "_", ""))
 	END PROPERTY
-	
+
 	' CP middle initial
 	PUBLIC PROPERTY GET cp_middle_initial
 		cp_middle_initial = left(cp_middle_name, 1)
 	END PROPERTY
-	
+
 	' CP suffix
 	PUBLIC PROPERTY GET cp_suffix
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")	
+		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
 		EMReadScreen cp_suffix, 3, 8, 74
 		cp_suffix = trim(replace(cp_suffix, "_", ""))
 	END PROPERTY
-	
+
 	' CP date of birth
 	PUBLIC PROPERTY GET cp_dob
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
-		EMReadScreen cp_dob, 8, 6, 24		
+		EMReadScreen cp_dob, 8, 6, 24
 	END PROPERTY
 
 	' CP social security number
@@ -875,14 +880,14 @@ CLASS doc_info
 		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
 		EMReadScreen cp_ssn, 11, 6, 7
 	END PROPERTY
-	
+
 	' CP MCI
 	PUBLIC PROPERTY GET cp_mci
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "CPDE" THEN CALL navigate_to_PRISM_screen("CPDE")
 		EMReadScreen cp_mci, 10, 5, 7
-	END PROPERTY	
-	
+	END PROPERTY
+
 	' CP address
 	PUBLIC PROPERTY GET cp_addr
 		EMReadScreen at_screen, 4, 21, 75
@@ -906,14 +911,14 @@ CLASS doc_info
 		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
 		EMReadScreen cp_state, 2, 17, 39
 	END PROPERTY
-	
+
     ' CP address zip code
 	PUBLIC PROPERTY GET cp_zip
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "CPDD" THEN CALL navigate_to_PRISM_screen("CPDD")
 		EMReadScreen cp_zip, 10, 17, 50
 	END PROPERTY
-	
+
 	' >>>>>>>>>>>>><<<<<<<<<<<<<<
 	' >>>>> NCP Information <<<<<
 	' >>>>>>>>>>>>><<<<<<<<<<<<<<
@@ -924,7 +929,7 @@ CLASS doc_info
 		EMReadScreen ncp_name, 50, 5, 25
 		ncp_name = trim(ncp_name)
 	END PROPERTY
-	
+
 	' NCP first name
 	PUBLIC PROPERTY GET ncp_first_name
 		EMReadScreen at_screen, 4, 21, 75
@@ -936,37 +941,37 @@ CLASS doc_info
 	' NCP last name
 	PUBLIC PROPERTY GET ncp_last_name
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_last_name, 17, 8, 8
 		ncp_last_name = trim(replace(ncp_last_name, "_", ""))
-	END PROPERTY	
-	
+	END PROPERTY
+
 	' NCP middle name
 	PUBLIC PROPERTY GET ncp_middle_name
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_middle_name, 12, 8, 56
 		ncp_middle_name = trim(replace(ncp_middle_name, "_", ""))
 	END PROPERTY
-	
+
 	' NCP middle initial
 	PUBLIC PROPERTY GET ncp_middle_initial
 		ncp_middle_initial = left(ncp_middle_name, 1)
 	END PROPERTY
-	
+
 	' NCP suffix
 	PUBLIC PROPERTY GET ncp_suffix
 		EMReadScreen at_screen, 4, 21, 75
-		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")	
+		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_suffix, 3, 8, 74
 		ncp_suffix = trim(replace(ncp_suffix, "_", ""))
-	END PROPERTY	
-	
+	END PROPERTY
+
 	' NCP date of birth
 	PUBLIC PROPERTY GET ncp_dob
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
-		EMReadScreen ncp_dob, 8, 6, 24		
+		EMReadScreen ncp_dob, 8, 6, 24
 	END PROPERTY
 
 	' NCP SSN
@@ -975,13 +980,13 @@ CLASS doc_info
 		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_ssn, 11, 6, 7
 	END PROPERTY
-	
+
 	' NCP MCI
 	PUBLIC PROPERTY GET ncp_mci
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "NCDE" THEN CALL navigate_to_PRISM_screen("NCDE")
 		EMReadScreen ncp_mci, 10, 5, 7
-	END PROPERTY	
+	END PROPERTY
 
 	' NCP street address
 	PUBLIC PROPERTY GET ncp_addr
@@ -1006,14 +1011,14 @@ CLASS doc_info
 		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
 		EMReadScreen ncp_state, 2, 17, 39
 	END PROPERTY
-    
+
 	' NCP address zip code
 	PUBLIC PROPERTY GET ncp_zip
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "NCDD" THEN CALL navigate_to_PRISM_screen("NCDD")
 		EMReadScreen ncp_zip, 10, 17, 50
 	END PROPERTY
-	
+
 	' >>>>>>>>>>>>>>><<<<<<<<<<<<<<
 	' >>> Financial Information <<<
 	' >>>>>>>>>>>>>>><<<<<<<<<<<<<<
@@ -1024,7 +1029,7 @@ CLASS doc_info
 		EMReadScreen monthly_accrual, 8, 9, 31
 		monthly_accrual = trim(monthly_accrual)
 	END PROPERTY
-	
+
 	' monthly non-accrual
 	PUBLIC PROPERTY GET monthly_non_accrual
 		EMReadScreen at_screen, 4, 21, 75
@@ -1032,7 +1037,7 @@ CLASS doc_info
 		EMReadScreen monthly_non_accrual, 8, 10, 31
 		monthly_non_accrual = trim(monthly_non_accrual)
 	END PROPERTY
-	
+
 	' NPA arrears
 	PUBLIC PROPERTY GET npa_arrears
 		EMReadScreen at_screen, 4, 21, 75
@@ -1040,7 +1045,7 @@ CLASS doc_info
 		EMReadScreen npa_arrears, 8, 9, 70
 		npa_arrears = trim(npa_arrears)
 	END PROPERTY
-	
+
 	' PA arrears
 	PUBLIC PROPERTY GET pa_arrears
 		EMReadScreen at_screen, 4, 21, 75
@@ -1048,13 +1053,12 @@ CLASS doc_info
 		EMReadScreen pa_arrears, 8, 10, 70
 		pa_arrears = trim(pa_arrears)
 	END PROPERTY
-	
+
 	' Total arrears
 	PUBLIC PROPERTY GET ttl_arrears
 		EMReadScreen at_screen, 4, 21, 75
 		IF at_screen <> "CAFS" THEN CALL navigate_to_PRISM_screen("CAFS")
 		EMReadScreen ttl_arrears, 8, 11, 70
 		ttl_arrears = trim(ttl_arrears)
-	END PROPERTY		
+	END PROPERTY
 END CLASS
-
