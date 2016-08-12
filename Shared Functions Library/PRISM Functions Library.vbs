@@ -4,6 +4,10 @@
 '========== THIS LIBRARY IS DEPRECIATED AND SIMPLY FORWARDS TO THE UNIFIED BZS-FUNCLIB LIBRARY!!!!!
 'Some functions are included below for depreciation purposes.
 
+'Defining the script as a PRISM script just to ensure compatibility for the current ALL SCRIPTS.vbs business
+PRISM_script = true
+
+
 'LOADING THE STANDARD LIBRARY FROM GITHUB===================================================================================================
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
