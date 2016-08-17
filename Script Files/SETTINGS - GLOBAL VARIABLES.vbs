@@ -9,7 +9,10 @@ default_directory = "C:\PRISM-Scripts\Script Files\"
 collecting_statistics = False
 
 'This is the file path for the statistics Access database.
-stats_database_path = "Q:\Blue Zone Scripts\Statistics\usage statistics.accdb"
+stats_database_path = "C:\PRISM-Scripts\Databases for script usage\usage statistics.accdb"
+
+'This is the folder path for county-specific Word documents. Modify this with your shared-drive location for Word documents.
+word_documents_folder_path = "C:\PRISM-Scripts\Word files for script usage\"
 
 'This is used by scripts which tell the worker where to find a doc to send to a client (ie "Send form using Compass Pilot")
 EDMS_choice = "Compass Pilot"
