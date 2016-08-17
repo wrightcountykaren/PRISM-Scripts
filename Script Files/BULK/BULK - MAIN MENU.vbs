@@ -18,7 +18,7 @@ If req.Status = 200 Then									'200 means great success
 	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
 	Execute req.responseText								'Executes the script code
 ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
+	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_
 			vbCr & _
 			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
 			vbCr & _
@@ -29,14 +29,18 @@ ELSE														'Error message, tells user to try to reach github.com, otherwi
 			vbTab & vbTab & "responsible for network issues." & vbCr &_
 			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
 			vbCr & _
-			"Robert will work to try and solve this issue, if needed." & vbCr &_ 
+			"Robert will work to try and solve this issue, if needed." & vbCr &_
 			vbCr &_
 			"URL: " & url
 			StopScript
 END IF
 
 'Loading all scripts
-CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+If run_locally <> true then
+	CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+Else
+	CALL run_from_GitHub("C:\PRISM-Scripts\ALL SCRIPTS.vbs")
+End if
 
 DIM ButtonPressed, button_placeholder
 DIM SIR_instructions_button
@@ -50,7 +54,7 @@ Function declare_main_menu(menu_type, script_array)
 		button_placeholder = 100
 		FOR current_script = 0 to ubound(script_array)
 			IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
-				IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN 
+				IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN
 					'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
 					'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
 					PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
@@ -81,5 +85,3 @@ script_picked = ButtonPressed - 100
 
 'Running the selected script
 CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).script_type & "/" & cs_scripts_array(script_picked).file_name)
-
-
