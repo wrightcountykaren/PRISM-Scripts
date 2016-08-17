@@ -1,6 +1,9 @@
 'COUNTY CUSTOM VARIABLES----------------------------------------------------------------------------------------------------
 'The following variables are dynamically added via the installer. They can be modified manually to make changes without re-running the installer, but doing so should not be undertaken lightly.
 
+'Run locally: if this is set to "True", the scripts will run locally and bypass GitHub entirely. This is great for debugging or developing scripts. Only scriptwriters should do it. An agency should always be set to "false".
+run_locally = true
+
 'Default directory: used by the script to determine if we're scriptwriters or not (scriptwriters use a default directory traditionally).
 '	This is modified by the installer, which will determine if this is a scriptwriter or a production user.
 default_directory = "C:\PRISM-Scripts\Script Files\"
@@ -69,3 +72,6 @@ IF use_master_branch = TRUE THEN		'scriptwriters typically use the master branch
 ELSE							'Everyone else (who isn't a scriptwriter) typically uses the release branch
 	script_repository = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Script Files/"
 END IF
+
+'If run locally is set to "True", the scripts will totally bypass GitHub and run locally.
+IF run_locally = TRUE THEN script_repository = "C:\PRISM-Scripts\Script Files\"
