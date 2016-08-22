@@ -155,7 +155,7 @@ FUNCTION select_cso(ButtonPressed, cso_id, cso_name)
 			
 			BeginDialog select_cso_dlg, 0, 0, 286, 145, "Notice of Continued Service - Select CSO"
 			EditBox 70, 55, 65, 15, cso_id
-			Text 70, 80, 90, 10, cso_name
+			Text 70, 80, 155, 10, cso_name
 			EditBox 115, 100, 75, 15, worker_signature
 			ButtonGroup ButtonPressed
 				OkButton 130, 125, 50, 15
