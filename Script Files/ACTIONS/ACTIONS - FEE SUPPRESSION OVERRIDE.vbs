@@ -45,7 +45,7 @@ DIM beta_agency, row, col, worker_signature, ButtonPressed, Fee_Suppression_dial
 BeginDialog Fee_Suppression_dialog, 0, 0, 346, 170, "Fee Code Suppression"
   EditBox 45, 25, 75, 15, PRISM_Case_number
   EditBox 65, 45, 50, 15, Fee_date
-  CheckBox 15, 90, 320, 10, "Supervisor suppressed cost recovery fee.  Case is NPA due to MNSURE/METS interface issue.  ", CAAD_standard_checkbox
+  CheckBox 15, 90, 320, 10, "Suppressed cost recovery fee.  Case is NPA due to ongoing METS interface issue.  ", CAAD_standard_checkbox
   CheckBox 15, 110, 90, 10, "Enter text for CAAD note.", CAAD_text_checkbox
   EditBox 110, 105, 225, 15, CAAD_text
   EditBox 75, 130, 55, 15, worker_signature
@@ -92,16 +92,20 @@ LOOP UNTIL err_msg = ""
 
 'END LOOP
 
+'to pull up my prism 
+EMFocus
 
 'Checks to make sure PRISM is open and you are logged in
 CALL check_for_PRISM(True)
 
-'fixes date to the correct format xx/xx/xxxx
-CALL create_mainframe_friendly_date(FEE_date, 10, 17, "YYYY")
 
 'Goes to CAST screen and PF11 over 							
 CALL navigate_to_PRISM_screen("CAST")										
-PF11																
+PF11	
+															
+'fixes date to the correct format xx/xx/xxxx
+CALL create_mainframe_friendly_date(FEE_date, 10, 17, "YYYY")
+
 
 'Updates State Fee Cd: to M in order to suppress the 2% fee and adds date
 EMWritescreen "M", 9, 17
@@ -110,6 +114,12 @@ EMWritescreen FEE_date, 10, 17
 EMWritescreen "M", 3, 29
 transmit
 
+EMReadScreen mod_success,21 , 24, 22
+IF mod_success <> "modified successfully" THEN 
+	Msgbox "Cast was not modified correctly, please reneter information correctly.  Script Ended."
+	StopScript
+END IF
+
 'Writes info into CAAD for standard note
 IF CAAD_standard_checkbox = 1 THEN 		
 	CALL Navigate_to_PRISM_screen ("CAAD")										'navigates to CAADescreen "FREE", 4, 54												'types title of the free caad on the first line of the note	
@@ -117,7 +127,7 @@ IF CAAD_standard_checkbox = 1 THEN
 	EMWriteScreen "Free", 4, 54
 	EMWriteScreen "*Cost Recovery Fee Override*", 16, 4								'writes this as a title line for the caad note.
 	EMSetCursor 17, 4													                    
-	CALL write_variable_in_CAAD ("Supervisor suppressed cost recovery fee until "  &  Fee_date &  ".  Case is NPA due to MNSure/METS interface issue.")  
+	CALL write_variable_in_CAAD ("Per state recommendation, suppressed cost recovery fee until "  &  Fee_date &  ".  Case is NPA due to ongoing METS interface issue.")  
 	CALL write_variable_in_CAAD(worker_signature)							  		'adds worker initials from dialog box
 	transmit 
 	PF3
@@ -135,5 +145,10 @@ IF CAAD_text_checkbox = 1 THEN
 	PF3
 END IF
 
+'Goes to CAST screen and PF11 over 							
+CALL navigate_to_PRISM_screen("CAST")										
+PF11	
+
 script_end_procedure("")                                                                     	'stopping the script
+
 
