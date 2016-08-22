@@ -9,15 +9,15 @@ class cs_script
 	public property get button_size	'This part determines the size of the button dynamically by determining the length of the script name, multiplying that by 3.5, rounding the decimal off, and adding 10 px
 		button_size = round ( len( script_name ) * 4.3 ) + 10
 	end property
-	
-	public agencies_that_use	
+
+	public agencies_that_use
 end class
 
 all_counties = "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
 
-'The following is the list of all scripts. 
+'The following is the list of all scripts.
 '>>>> THESE MUST BE MAINTAINED IN ALPHABETICAL ORDER ACCORDING TO THE SCRIPT_NAME PROPERTY <<<<<
-script_num = 0 
+script_num = 0
 
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
@@ -256,6 +256,15 @@ cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENN
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "INFO"
+cs_scripts_array(script_num).script_type		= "UTILITIES"
+cs_scripts_array(script_num).file_name			= "UTILITIES - INFO.vbs"
+cs_scripts_array(script_num).description		= "Displays information about your BlueZone Scripts installation."
+cs_scripts_array(script_num).agencies_that_use		= all_counties
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INTAKE DOCS RECEIVED"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - INTAKE DOCS RECEIVED.vbs"
@@ -487,4 +496,3 @@ cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - WAIVER OF PERSONAL SERVICE.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note of the date a CP signed the waiver of personal service document."
 cs_scripts_array(script_num).agencies_that_use		= "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
-
