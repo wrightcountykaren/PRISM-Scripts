@@ -2,38 +2,37 @@
 'name_of_script = "ACTIONS - NONPAY LTR.vbs"
 'start_time = timer
 '
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 'case number dialog-
@@ -92,7 +91,7 @@ FUNCTION send_non_pay_memo
 		dord_row = dord_row + 1
 	LOOP UNTIL dord_row = 19
 	transmit
-	
+
 	EMWriteScreen "As you are aware, you have a court ordered obligation to     ", 16, 15
 	transmit
 	EMWriteScreen "pay child support. As of this date, it has been over 30 days", 16, 15
@@ -138,18 +137,18 @@ FUNCTION send_non_pay_memo
 	transmit
 	EMWriteScreen "number listed below.", 16, 15
 	transmit
-	
+
 	PF3
 
 	EMWriteScreen "M", 3, 29
-	transmit	
+	transmit
 
 	PF9
-	PF3	
+	PF3
 END FUNCTION
 
 FUNCTION add_caad_code(CAAD_code)
-	CALL navigate_to_PRISM_screen("CAAD")	
+	CALL navigate_to_PRISM_screen("CAAD")
 	PF5
 	EMWriteScreen CAAD_code, 4, 54
 END FUNCTION
@@ -164,25 +163,25 @@ call PRISM_case_number_finder(PRISM_case_number)
 
 'Case number display dialog
 Do
-	
+
 	Dialog case_number_dialog
 	If buttonpressed = 0 then stopscript
 	call PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 	If case_number_valid = False then MsgBox "Your case number is not valid. Please make sure it uses the following format: ''XXXXXXXXXX-XX''"
 Loop until case_number_valid = True
-			
+
 	Do
 		EMReadScreen PRISM_check, 5, 1, 36
 		If PRISM_check <> "PRISM" then MsgBox "You appear to have timed out, or are out of PRISM. Navigate to PRISM and try again."
 	Loop until PRISM_check = "PRISM"
 	Dialog NONPAY_LTR_DIALOG
-	
-	
+
+
 	IF ButtonPressed = Cancel_button THEN stopscript
-	If ButtonPressed = NonPay_button then 
+	If ButtonPressed = NonPay_button then
 		CALL send_non_pay_memo
 		purge_msg = MsgBox ("Do you want to purge E0002 worklist item?", vbYesNo)
-		IF purge_msg = vbYes THEN 
+		IF purge_msg = vbYes THEN
 			CALL navigate_to_PRISM_screen("CAWT")
 			Do
 				CALL write_value_and_transmit("E0002", 20, 29)
@@ -192,17 +191,17 @@ Loop until case_number_valid = True
 					transmit
 					transmit
 					PF3
-				end if	
+				end if
 			Loop until worklist_check <> "E0002"
 		END IF
 		CALL add_caad_code("E9685")
 		script_end_procedure("The script has sent the requested DORD document and is now waiting for you to transmit to confirm the CAAD Note.")
 	End If
-	If ButtonPressed = PAPD_button then 
+	If ButtonPressed = PAPD_button then
 		CALL send_non_compliance_dord
 		purge_msg = MsgBox ("Do you want to purge E4111 worklist item?", vbYesNo)
-		IF purge_msg = vbYes THEN 
-			CALL navigate_to_PRISM_screen("CAWT")	
+		IF purge_msg = vbYes THEN
+			CALL navigate_to_PRISM_screen("CAWT")
 			Do
 				CALL write_value_and_transmit("E4111", 20, 29)
 				EMReadScreen worklist_check, 5, 8, 8
@@ -210,7 +209,7 @@ Loop until case_number_valid = True
 					EMWriteScreen "P", 8, 4
 					transmit
 					transmit
-					PF3	
+					PF3
 				End if
 			Loop until worklist_check <> "E4111"
 		END IF
