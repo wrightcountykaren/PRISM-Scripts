@@ -4,40 +4,39 @@
 name_of_script = "ACTIONS - REDIRECT DOCS.vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
-thirty_days_away = DateAdd("d", 30, date) 
+thirty_days_away = DateAdd("d", 30, date)
 month_after = DateAdd("m", 1, thirty_days_away)
 redirection_month = DatePart("m", month_after)
 redirection_year = DatePart("yyyy", month_after)
@@ -200,15 +199,15 @@ CALL write_value_and_transmit(total_amount, 16, 15)
 PF3
 CALL write_value_and_transmit("M", 3, 29)	'At this point, the notice to the CP is ready to be printed
 
-'Enters worklist explaining to start redirection effective for the following month. 
+'Enters worklist explaining to start redirection effective for the following month.
 CALL navigate_to_PRISM_screen("CAWT")
 
 PF5
 EMWriteScreen "A", 3, 30
 EMWriteScreen "FREE", 4, 37
-EMWriteScreen "The redirection should be effective the 1st of next month", 10, 4 
+EMWriteScreen "The redirection should be effective the 1st of next month", 10, 4
 EMWriteScreen "30", 17, 52
-Transmit 
+Transmit
 
 '________________________________________________________________________________________________________________________________________________________________________________________ CAREGIVER NOTICE
 
@@ -263,13 +262,13 @@ CALL write_value_and_transmit(total_amount, 16, 15)
 PF3
 CALL write_value_and_transmit("M", 3, 29)		'At this point, the notice to the caregiver is ready to be printed
 
-'Enters worklist explaining to start redirection effective for the following month. 
+'Enters worklist explaining to start redirection effective for the following month.
 CALL navigate_to_PRISM_screen("CAWT")
 PF5
 EMWriteScreen "A", 3, 30
 EMWriteScreen "FREE", 4, 37
-EMWriteScreen "The redirection should be effective the 1st of next month", 10, 4 
+EMWriteScreen "The redirection should be effective the 1st of next month", 10, 4
 EMWriteScreen "30", 17, 52
-Transmit 
+Transmit
 
 script_end_procedure("DORD docs are created but incomplete.  Please modify to select appropriate legal headings.")
