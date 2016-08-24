@@ -3,38 +3,37 @@ name_of_script = "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 Dim ncp_button, cp_button, ncp_attorney_button, cp_attorney_button, summons_and_complaint, Amended_Summons_and_Complaint, Findings_Conclusion_Order, des_information, Amended_Findings_Conclusion_Order, Amended_Motion, motion, supporting_affidavit, financial_statement, Amended_Supporting_Affidavit, Notice_of_Hearing, Genetic_Blood_Test_Order, Notice_of_Intervention, Genetic_Blood_Test_results, Notice_of_Registration, Notice_of_Settlement_Conference, Aff_of_Default_and_ID, Your_Privacy_Rights, Case_Financial_Summary, Case_Information_Sheet, Case_Payment_History, Confidential_Info_Form, Important_Statement_of_Rights, sealed_financial_doc, Request_for_Hearing, guidelines_worksheet, Notice_of_Judgment_Renewal, confidential_yes, confidential_no, date_box, certified_mail_yes, certified_mail_no, other_line_1, other_line_2
 BeginDialog AffOfServDialog, 0, 0, 301, 380, "Affidavit of Service By Mail"
@@ -111,7 +110,7 @@ End if
 'Starts dialog
 					Dialog AffOfServDialog
      					IF ButtonPressed = 0 THEN StopScript
-												
+
 'goes to correct case
 EMWriteScreen "CAST", 21,18
 Transmit
@@ -133,7 +132,7 @@ EMWriteScreen "A", 3, 29
 EMWriteScreen "        ", 4, 50
 EMWriteScreen "       ", 4, 59
 EMWriteScreen "F0016", 6, 36
-EMWriteScreen "CPP", 11, 51													
+EMWriteScreen "CPP", 11, 51
 Transmit
 
 'entering user labels
@@ -204,7 +203,7 @@ End IF
 
 
 EMSendKey (PF8)
-If Genetic_Blood_Test_Order = checked then                                         						
+If Genetic_Blood_Test_Order = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -216,7 +215,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Notice_of_Intervention = checked then                                         						
+If Notice_of_Intervention = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -278,7 +277,7 @@ Transmit
 End IF
 Transmit
 
-If Important_Statement_of_Rights = checked then                                         						
+If Important_Statement_of_Rights = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -290,7 +289,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Request_for_Hearing = checked then                                         						
+If Request_for_Hearing = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -358,7 +357,7 @@ EMWriteScreen "A", 3, 29
 EMWriteScreen "        ", 4, 50
 EMWriteScreen "       ", 4, 59
 EMWriteScreen "F0016", 6, 36
-EMWriteScreen "NCP", 11, 51													
+EMWriteScreen "NCP", 11, 51
 Transmit
 
 'entering user labels
@@ -429,7 +428,7 @@ End IF
 
 
 EMSendKey (PF8)
-If Genetic_Blood_Test_Order = checked then                                         						
+If Genetic_Blood_Test_Order = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -441,7 +440,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Notice_of_Intervention = checked then                                         						
+If Notice_of_Intervention = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -503,7 +502,7 @@ Transmit
 End IF
 Transmit
 
-If Important_Statement_of_Rights = checked then                                         						
+If Important_Statement_of_Rights = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -515,7 +514,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Request_for_Hearing = checked then                                         						
+If Request_for_Hearing = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -586,7 +585,7 @@ EMWriteScreen "A", 3, 29
 EMWriteScreen "        ", 4, 50
 EMWriteScreen "       ", 4, 59
 EMWriteScreen "F0016", 6, 36
-EMWriteScreen "CPA", 11, 51													
+EMWriteScreen "CPA", 11, 51
 Transmit
 
 'entering user labels
@@ -657,7 +656,7 @@ End IF
 
 
 EMSendKey (PF8)
-If Genetic_Blood_Test_Order = checked then                                         						
+If Genetic_Blood_Test_Order = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -669,7 +668,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Notice_of_Intervention = checked then                                         						
+If Notice_of_Intervention = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -731,7 +730,7 @@ Transmit
 End IF
 Transmit
 
-If Important_Statement_of_Rights = checked then                                         						
+If Important_Statement_of_Rights = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -743,7 +742,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Request_for_Hearing = checked then                                         						
+If Request_for_Hearing = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -814,7 +813,7 @@ EMWriteScreen "A", 3, 29
 EMWriteScreen "        ", 4, 50
 EMWriteScreen "       ", 4, 59
 EMWriteScreen "F0016", 6, 36
-EMWriteScreen "NCA", 11, 51													
+EMWriteScreen "NCA", 11, 51
 Transmit
 
 'entering user labels
@@ -885,7 +884,7 @@ End IF
 
 
 EMSendKey (PF8)
-If Genetic_Blood_Test_Order = checked then                                         						
+If Genetic_Blood_Test_Order = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -897,7 +896,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Notice_of_Intervention = checked then                                         						
+If Notice_of_Intervention = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -959,7 +958,7 @@ Transmit
 End IF
 Transmit
 
-If Important_Statement_of_Rights = checked then                                         						
+If Important_Statement_of_Rights = checked then
 EMWriteScreen "S", 7, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -971,7 +970,7 @@ Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
-If Request_for_Hearing = checked then                                         						
+If Request_for_Hearing = checked then
 EMWriteScreen "S", 9, 5
 Transmit
 EMWriteScreen "x", 16, 15
@@ -1029,5 +1028,3 @@ EMSendKey (PF3)
 End If
 
 script_end_procedure("")
-
-
