@@ -46,28 +46,26 @@ DIM SIR_instructions_button
 DIM Dialog1
 
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
+	BeginDialog Dialog1, 0, 0, 516, 440, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
 	 	'This starts here, but it shouldn't end here :)
 		vert_button_position = 30
 		button_placeholder = 100
 		FOR current_script = 0 to ubound(script_array)
 			IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
-				IF InStr(script_array(current_script).agencies_that_use, UCASE(replace(county_name, " County", ""))) <> 0 THEN
-					'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
-					'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
-					PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
-					Text 			script_array(current_script).button_size + 10, 		vert_button_position, 	500, 										10, 			"--- " & script_array(current_script).description
-					'----------
-					vert_button_position = vert_button_position + 15	'Needs to increment the vert_button_position by 15px (used by both the text and buttons)
-					'----------
-					script_array(current_script).button = button_placeholder	'The .button property won't carry through the function. This allows it to escape the function. Thanks VBScript.
-				END IF
+								'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
+				'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
+				PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
+				Text 			script_array(current_script).button_size + 10, 		vert_button_position, 	500, 										10, 			"--- " & script_array(current_script).description
+				'----------
+				vert_button_position = vert_button_position + 15	'Needs to increment the vert_button_position by 15px (used by both the text and buttons)
+				'----------
+				script_array(current_script).button = button_placeholder	'The .button property won't carry through the function. This allows it to escape the function. Thanks VBScript.
 			END IF
 			button_placeholder = button_placeholder + 1
 		NEXT
-	
-		CancelButton 460, 320, 50, 15
+		PushButton 445, 10, 65, 10, "SIR instructions", 	SIR_instructions_button
+		CancelButton 460, 420, 50, 15
 	EndDialog
 End function
 
