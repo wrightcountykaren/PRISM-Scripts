@@ -2,31 +2,37 @@
 name_of_script = "ACTIONS - ANOKA SANCTION.vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
-req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'VARIABLES THAT NEED DECLARING----------------------------------------------------------------------------------------------------
 checked = 1
@@ -53,7 +59,7 @@ BeginDialog sanction_dialog, 0, 0, 277, 336, "Paternity Sanction"
   CheckBox 20, 100, 140, 10, "Update CAST file location to SANC", cast_noncoop_check
   CheckBox 20, 110, 170, 10, "Add FREE worklist to send reminder in 28 days", CAWD_noncoop_check
   CheckBox 20, 120, 230, 10, "Create WORD memo to FAS and/or CCA worker re: noncooperation", FAS_or_CCA_Memo_noncoop_check
-  CheckBox 20, 130, 170, 10, "Send DORD Memo to CP", sanction_memo_check    
+  CheckBox 20, 130, 170, 10, "Send DORD Memo to CP", sanction_memo_check
   CheckBox 20, 180, 140, 10, "Enter CAAD note", caad_coop_check
   CheckBox 20, 190, 140, 10, "Update GCSC for cooperation", gcsc_coop_check
   CheckBox 20, 200, 140, 10, "Update CAST file location ", cast_coop_check
@@ -107,9 +113,9 @@ FUNCTION send_text_to_DORD(string_to_write, recipient)
 	EMWriteScreen "F0104", 6, 36
 	EMWriteScreen recipient, 11, 51
 	transmit
-	
+
 	'This function will add a string to DORD docs.
-	IF len(string_to_write) > 1080 THEN 
+	IF len(string_to_write) > 1080 THEN
 		MsgBox "*** NOTICE!!! ***" & vbCr & vbCr & _
 				"The text below is longer than the script can handle in one DORD document. The script will not add the text to the document." & vbCr & vbCr & _
 				string_to_write
@@ -123,14 +129,14 @@ FUNCTION send_text_to_DORD(string_to_write, recipient)
 	string_to_write = split(string_to_write)
 	array_position = 1
 	FOR EACH word IN string_to_write
-		IF len(write_array(array_position)) + len(word) <= 60 THEN 
+		IF len(write_array(array_position)) + len(word) <= 60 THEN
 			write_array(array_position) = write_array(array_position) & word & " "
 		ELSE
 			array_position = array_position + 1
 			write_array(array_position) = write_array(array_position) & word & " "
 		END IF
 	NEXT
-	
+
 	PF14
 
 	'Selecting the "U" label type
@@ -143,7 +149,7 @@ FUNCTION send_text_to_DORD(string_to_write, recipient)
 		CALL write_value_and_transmit(write_array(i), 16, 15)
 
 		dord_row = dord_row + 1
-		IF i = 12 THEN 
+		IF i = 12 THEN
 			PF8
 			dord_row = 7
 		END IF
@@ -153,10 +159,10 @@ FUNCTION send_text_to_DORD(string_to_write, recipient)
 	transmit
 
 
-	
+
 END FUNCTION
 'THE SCRIPT----------------------------------------------------------------------------------------------------
- 
+
 'Connects to BlueZone
 EMConnect ""
 
@@ -188,7 +194,7 @@ call navigate_to_PRISM_screen("CAPS")
 EMSetCursor 4, 8
 EMSendKey replace(PRISM_case_number, "-", "")									'Entering the specific case indicated
 EMWriteScreen "d", 3, 29												'Setting the screen as a display action
-transmit	
+transmit
 														'Transmitting into it
 EMReadScreen CP_name, 30, 6, 12
 
@@ -201,7 +207,7 @@ EMReadScreen CH_F, 12, 9, 34
 EMReadScreen CH_M, 12, 9, 56
 EMReadScreen CH_L, 17, 9, 8
 EMReadScreen CH_S, 3, 9, 74
-childs_name = fix_read_data(CH_F) & " " & fix_read_data(CH_M) & " " & fix_read_data(CH_L)	
+childs_name = fix_read_data(CH_F) & " " & fix_read_data(CH_M) & " " & fix_read_data(CH_L)
 If trim(CH_S) <> "" then childs_name = childs_Name & " " & ucase(fix_read_data(CH_S))
 
 'Go back to CAPS for all the kids' info
@@ -209,7 +215,7 @@ call navigate_to_PRISM_screen("CAPS")
 EMSetCursor 4, 8
 EMSendKey replace(PRISM_case_number, "-", "")									'Entering the specific case indicated
 EMWriteScreen "d", 3, 29												'Setting the screen as a display action
-transmit	
+transmit
 'Getting all child/DOB info
 PRISM_row = 18
 Do
@@ -230,19 +236,19 @@ DO
 	error_msg = ""
 	Dialog sanction_dialog
 	If buttonpressed = 0 then stopscript
-	
-	
+
+
 	If buttonpressed = check_sanction_applied_check then
-		If all_checked = false then 
+		If all_checked = false then
 			caad_noncoop_check = checked
 			gcsc_noncoop_check = checked
 			cast_noncoop_check = checked
 			cawd_noncoop_check = checked
 			FAS_or_CCA_Memo_noncoop_check = checked
 			sanction_memo_check = checked
-			
+
 			If sanction_reason = "Select One" then
-				error_msg = error_msg & "Please select a sanction reason.  " 
+				error_msg = error_msg & "Please select a sanction reason.  "
 			End If
 			all_checked = true
 		elseif all_checked = true then
@@ -271,7 +277,7 @@ DO
 			cast_coop_check = unchecked
 			cawd_coop_check = unchecked
 			FAS_or_CCA_Memo_coop_check = unchecked
-			all_checked = true			
+			all_checked = true
 		End if
 	End if
 	If sanction_reason = "Attend CAO Appointment" and CAO_contact = "Select One" then
@@ -295,8 +301,8 @@ If gcsc_coop_check = checked then
 End If
 
 
-	
-'Resetting file locations		
+
+'Resetting file locations
 If cast_noncoop_check = checked then
 	set_file_loc_on_CAST("SANC")
 End if
@@ -305,7 +311,7 @@ If cast_coop_check = checked then
 	set_file_loc_on_CAST("     ")
 End if
 
-'Creating the Word application object (if any of the Word options are selected), and making it visible 
+'Creating the Word application object (if any of the Word options are selected), and making it visible
 If _
 	FAS_or_CCA_Memo_noncoop_check = checked or _
 	FAS_or_CCA_Memo_coop_check = checked then
@@ -359,7 +365,7 @@ If sanction_memo_check = checked then
 		memo_text = memo_text & "provide requested information.  The sanction will be removed after you ________________."
 	END IF
 	memo_text = memo_text & "  Contact me if you have questions regarding this matter."
-	
+
 	CALL send_text_to_DORD (memo_text, "CPP")
 End If
 
@@ -390,9 +396,9 @@ End if
 
 'Creating worklist
 If CAWD_noncoop_check = checked then
-	
+
 	call navigate_to_PRISM_screen("CAWD")
-	PF5	
+	PF5
 	EMWriteScreen "FREE", 4, 37
 	EMWriteScreen "*** SANCTIONED " & date & "!  Send reminder!", 10, 4
 	EMWriteScreen dateadd("d", date, 28), 17, 21
@@ -403,15 +409,15 @@ IF CAWD_coop_check = checked then
 	call navigate_to_PRISM_screen("CAWT")
 	EMWriteScreen "FREE", 20, 29
 	transmit
-	
+
 	CAWT_row = 8
 	DO
-	
+
 		EMReadScreen end_of_data, 11, CAWT_row, 32
 		IF end_of_data <> "End of Data" THEN
-		
+
 			EMReadScreen worklist_text, 14, CAWT_row, 15
-			IF worklist_text = "*** SANCTIONED" THEN	
+			IF worklist_text = "*** SANCTIONED" THEN
 				EMWriteScreen "P", CAWT_row, 4
 				transmit
 				transmit
@@ -419,11 +425,7 @@ IF CAWD_coop_check = checked then
 		CAWT_row = CAWT_row + 1
 		END IF
 	LOOP UNTIL end_of_data = end_of_data
-	
+
 END IF
 call navigate_to_PRISM_screen("CAAD")
 script_end_procedure("")
-
-
-
-
