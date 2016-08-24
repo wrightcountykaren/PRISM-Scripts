@@ -3,38 +3,37 @@ name_of_script = "ACTIONS - FIND NAME ON CALI.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 ' Set up dialog box
 'BeginDialog CALI_search_dialog, 0, 0, 216, 115, "CALI Search Criteria"
@@ -74,8 +73,8 @@ BeginDialog CALI_search_dialog, 0, 0, 211, 170, "CALI Search Criteria"
 EndDialog
 
 '***********************************************************************************************************************************************
-'If the user is already on the CALI screen when the script is run, results may be inaccurate.  Also, if the user runs the script when the 
-'position listing screen is open, the screen must be exited before the script can run properly.  This function checks to see if either of 
+'If the user is already on the CALI screen when the script is run, results may be inaccurate.  Also, if the user runs the script when the
+'position listing screen is open, the screen must be exited before the script can run properly.  This function checks to see if either of
 'these circumstances apply.  If the position list is open, the script exits the list, and if the CALI screen is open, navigates away so that
 'the report will function properly.
 FUNCTION refresh_CALI_screen
@@ -84,7 +83,7 @@ FUNCTION refresh_CALI_screen
 			PF3
 		END IF
 	EMReadScreen check_for_caseload_list, 13, 2, 32
-		If check_for_caseload_list = "Caseload List" THEN	
+		If check_for_caseload_list = "Caseload List" THEN
 			CALL navigate_to_PRISM_screen("MAIN")
 			transmit
 		END IF
@@ -104,10 +103,10 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 			PF3
 		END IF
 	EMReadScreen check_for_caseload_list, 13, 2, 32
-		If check_for_caseload_list = "Caseload List" THEN	
+		If check_for_caseload_list = "Caseload List" THEN
 			CALL navigate_to_PRISM_screen("MAIN")
 			transmit
-		END IF	
+		END IF
 	CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered, and display the desired CALI listing
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
@@ -120,15 +119,15 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 	name = UCASE(name) 'convert the name that the user entered as search criteria to all caps (or names won't be found!)
 
 	'Set up variables for loop for searching through CALI listing of CP's for the search criteria
-	cali_row = 8  'navigates to the first case listed in CALI 
-	found = FALSE 
+	cali_row = 8  'navigates to the first case listed in CALI
+	found = FALSE
 	found_once = FALSE
-	DO 
-		EMReadScreen end_of_data, 11, cali_row, 32   
+	DO
+		EMReadScreen end_of_data, 11, cali_row, 32
 		EMReadScreen CP_name, 35, cali_row, 38
-		'	msgbox "Search for " & name & " in " & CP_name & "."	
+		'	msgbox "Search for " & name & " in " & CP_name & "."
 
-		'If the name we are searching for is in the CALI list of CP's, display a message box to the user to indicate whether 
+		'If the name we are searching for is in the CALI list of CP's, display a message box to the user to indicate whether
 		'we continue searching for another match.  If the user does not wish to continue searching, the matched case
 		'CAST screen is displayed.
 
@@ -139,15 +138,15 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 			found_once = TRUE
 			IF msg = 7 THEN
 				EMWriteScreen "D", cali_row, 3
-				transmit		
-				found = TRUE 
+				transmit
+				found = TRUE
 				stopscript
-			END IF 
-		END IF 
-		IF end_of_data <> "End of Data" THEN
-			cali_row = cali_row + 1			
+			END IF
 		END IF
-		IF cali_row = 19 THEN    'Navigate to a new page 
+		IF end_of_data <> "End of Data" THEN
+			cali_row = cali_row + 1
+		END IF
+		IF cali_row = 19 THEN    'Navigate to a new page
 			cali_row = 8
 			PF8
 		END IF
@@ -162,15 +161,15 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 	EMWriteScreen CALI_position, 20, 49
 	transmit
 	end_of_data = " "
-	cali_row = 8  'navigates to the first case listed in CALI 
+	cali_row = 8  'navigates to the first case listed in CALI
 	found = FALSE
 	PF11
-	DO 
-		EMReadScreen end_of_data, 11, cali_row, 32   
-		EMReadScreen NCP_name, 35, cali_row, 33			
+	DO
+		EMReadScreen end_of_data, 11, cali_row, 32
+		EMReadScreen NCP_name, 35, cali_row, 33
 		'	msgbox "Search for " & name & " in " & NCP_name & "."
 
-		'If the name we are searching for is in the CALI list of NCP's, display a message box to the user to indicate whether 
+		'If the name we are searching for is in the CALI list of NCP's, display a message box to the user to indicate whether
 		'we continue searching for another match.  If the user does not wish to continue searching, the matched case
 		'CAST screen is displayed.
 		IF INSTR(NCP_name, name) > 0 THEN
@@ -181,14 +180,14 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 			IF msg = 7 THEN
 				EMWriteScreen "D", cali_row, 3
 				transmit
-				found = TRUE 
+				found = TRUE
 				stopscript
 			END IF
-		END IF 			
-		IF end_of_data <> "End of Data" THEN
-			cali_row = cali_row + 1		
 		END IF
-		IF cali_row = 19 THEN    'Navigate to a new page 
+		IF end_of_data <> "End of Data" THEN
+			cali_row = cali_row + 1
+		END IF
+		IF cali_row = 19 THEN    'Navigate to a new page
 			cali_row = 8
 			PF8
 		END IF
@@ -196,19 +195,19 @@ FUNCTION find_name_in_CALI(name, CALI_office, CALI_team, CALI_position)
 
 ' Determine whether any match was found, and display appropriate message.
 	IF found_once = TRUE THEN
-		msgbox name & " was not found again on your CALI list." 
-	ELSE			
-		msgbox name & " was not found on your CALI list." 
-	END IF 	
+		msgbox name & " was not found again on your CALI list."
+	ELSE
+		msgbox name & " was not found on your CALI list."
+	END IF
 END FUNCTION
 '**********************************************************************************************
-' 
+'
 '**********************************************************************************************
 EMConnect "" 'Connect to PRISM
 
 DO
 	err_msg = ""
-	dialog CALI_search_dialog 'Display the dialog 
+	dialog CALI_search_dialog 'Display the dialog
 		CALL check_for_PRISM (false) 'Check to see if PRISM is locked
 
 		IF buttonpressed = 0 THEN stopscript  'If cancel is pressed, end script
@@ -221,9 +220,9 @@ DO
 			transmit
 				'Check to see if the user entered a first name, a last name, both or neither
 				'If neither, prompt the user to enter search criteria.
-				'Otherwise, call the custom function with the appropriate parameters	
+				'Otherwise, call the custom function with the appropriate parameters
 			IF LEN(last_name) = 0 and LEN(first_name) = 0 THEN
-				DO	
+				DO
 					msgbox "Please enter either a first and/or last name for the search."
 					dialog CALI_search_dialog
 				LOOP UNTIL LEN(last_name) <> 0 OR LEN(first_name) <> 0
@@ -233,7 +232,7 @@ DO
 				CALL find_name_in_CALI (last_name, office, unit, position)
 			ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
 				CALL find_name_in_CALI (last_name & ", " & first_name, office, unit, position)
-			END IF 
+			END IF
 			script_end_procedure("")
 		ELSEIF ButtonPressed = find_CALI_button THEN  'The user selected to search a specific CALI listing
 			CALL check_for_PRISM (false)
@@ -243,21 +242,21 @@ DO
 			IF IsNumeric(CALI_position) = FALSE THEN err_msg = err_msg & vbCr & "* Please enter a valid, 2-digit position number."
 			IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
 		END IF
-LOOP UNTIL err_msg = ""			
-		
+LOOP UNTIL err_msg = ""
+
 CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered
 EMWriteScreen "             ", 20, 58  'and display the desired CALI listing
 EMWriteScreen "  ", 20, 69
 transmit
 
 'Check to see if the user entered a first name, a last name, or both.
-     'Call the custom function with the appropriate parameters.	
+     'Call the custom function with the appropriate parameters.
 IF LEN(last_name) = 0 and LEN(first_name) > 0 THEN
 	CALL find_name_in_CALI (first_name, CALI_office, CALI_team, CALI_position)
 ELSEIF LEN(last_name) > 0 and LEN(first_name) = 0 THEN
 	CALL find_name_in_CALI (last_name, CALI_office, CALI_team, CALI_position)
 ELSEIF LEN(last_name) > 0 and LEN(first_name) > 0 THEN
 	CALL find_name_in_CALI (last_name & ", " & first_name, CALI_office, CALI_team, CALI_position)
-END IF 
-	
+END IF
+
 script_end_procedure("")
