@@ -7,38 +7,37 @@ STATS_manualtime = 90
 STATS_denomination = "C"
 'End of STATS Block===========================================================================================================================
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'THE DIALOG-----------------------------------------------------------------------------------------------------------------
 
@@ -137,10 +136,10 @@ call navigate_to_PRISM_screen("SSTD")
 call navigate_to_PRISM_screen("SSSD")
 	sssd_message = msgbox ("Review for SSI Benefits", vbOkCancel, "Check SSSD")
 	If sssd_message = vbCancel then stopscript
-call navigate_to_PRISM_screen("NCDE")		
+call navigate_to_PRISM_screen("NCDE")
 	EMReadScreen ncp_ssn, 11, 6, 7 			'pulling ncp ssn from ncde
 	ncp_ssn=replace(ncp_ssn, "-", "")			'replacing - in ssn with no space
-call navigate_to_PRISM_screen("NEBR")	
+call navigate_to_PRISM_screen("NEBR")
 	EmWriteScreen ncp_ssn, 20, 7				'writing ssn without - in SSN blank
 	transmit
 	nebr_message = msgbox ("Review New Hires", vbOkCancel, "Check NEBR")
@@ -154,13 +153,13 @@ call navigate_to_PRISM_screen("NCCB")
 'rentering case # in case worker looks at ncp's other cases
 call navigate_to_PRISM_screen("CAST")
 	EMWriteScreen "D", 3, 29
-	EMWriteScreen PRISM_case_number, 4, 8 
+	EMWriteScreen PRISM_case_number, 4, 8
 	EMWriteScreen right(PRISM_case_number, 2), 4, 19
-	transmit 
+	transmit
 call navigate_to_PRISM_screen("NCDD")
-	other_message = msgbox ("Check the following Systems/Websites as needed:"& vbCR & "   -MAXIS" & vbCR & "   -MMIS" & vbCR & "   -MEC2" & vbCR & "   -DOC Websites" & vbCR & "   -Odyssey and/or MNCIS" & vbCR & "   -DVS Website", vbOkCancel, "Check Other") 
+	other_message = msgbox ("Check the following Systems/Websites as needed:"& vbCR & "   -MAXIS" & vbCR & "   -MMIS" & vbCR & "   -MEC2" & vbCR & "   -DOC Websites" & vbCR & "   -Odyssey and/or MNCIS" & vbCR & "   -DVS Website", vbOkCancel, "Check Other")
 	If other_message = vbCancel then stopscript
-'checkng for last time Locates and CB headers were done on case. 
+'checkng for last time Locates and CB headers were done on case.
 call navigate_to_PRISM_screen("CAAT")
 	EMWriteScreen "D0001", 20, 29
 	transmit
@@ -185,8 +184,8 @@ call navigate_to_PRISM_screen("CPDD")
 call navigate_to_PRISM_screen("NCDD")
 	EMReadScreen ncp_address, 1, 10, 46
 	If ncp_address = "Y" Then ncp_address_locate = "known"
-	If ncp_address = "N" Then ncp_address_locate = "unknown"			
-	
+	If ncp_address = "N" Then ncp_address_locate = "unknown"
+
 locate_message = msgbox ("Past locate actions taken:"& vbCR & vbCR & "CP Locate last sent:  " & cp_locate_date & vbCR & "NCP Locate last sent:  " & ncp_locate_date & vbCR & "Credit Bureau Header requested:  " & credit_header_date & vbCR & vbCR & "CP Address:  " & cp_address_locate & vbCR & "NCP Address:  " & ncp_address_locate , vbOkCancel, "Locate Status")
 
 
@@ -197,13 +196,13 @@ FIAD_checkbox = Checked
 NCLA_checkbox = Checked
 LOID_checkbox = Checked
 NCUIFCUI_checkbox = Checked
-DOLR_checkbox = Checked	
+DOLR_checkbox = Checked
 SSA_checkbox = Checked
 new_hire_checkbox = Checked
 NCMR_checkbox = Checked
 
 
-	
+
 DO
 	err_msg = ""
 	Dialog Locate_Dialog
@@ -213,61 +212,61 @@ DO
 		Msgbox "Please sign your CAAD note."
 	END IF
 LOOP UNTIL err_msg = ""
-	
+
 
 'brings worker to DORD and creates DORD Doc for CP Locate
-If CP_Locate_checkbox = checked THEN 
-	call navigate_to_PRISM_screen("DORD") 
- 	EMWriteScreen "C", 3, 29 
- 	transmit 
-	EMWriteScreen "A", 3, 29 
- 	EMWriteScreen "F0460", 6, 36 
- 	transmit 
+If CP_Locate_checkbox = checked THEN
+	call navigate_to_PRISM_screen("DORD")
+ 	EMWriteScreen "C", 3, 29
+ 	transmit
+	EMWriteScreen "A", 3, 29
+ 	EMWriteScreen "F0460", 6, 36
+ 	transmit
 END IF
 
 
 'brings worker to DORD and creates DORD Doc for NCP Locate
-If NCP_Locate_checkbox = checked THEN 
-	call navigate_to_PRISM_screen("NCDE")		
-	EMReadScreen ncp_MCI, 10, 4, 7 
-	call navigate_to_PRISM_screen ("DORD") 
- 	EMWriteScreen "C", 3, 29 
- 	transmit 
+If NCP_Locate_checkbox = checked THEN
+	call navigate_to_PRISM_screen("NCDE")
+	EMReadScreen ncp_MCI, 10, 4, 7
+	call navigate_to_PRISM_screen ("DORD")
+ 	EMWriteScreen "C", 3, 29
+ 	transmit
 	EMWriteScreen "A", 3, 29
-	EmWriteScreen ncp_MCI, 4, 15 
-	EmWriteScreen "__", 4, 26 
-	EMWriteScreen "F0465", 6, 36 
- 	transmit 
+	EmWriteScreen ncp_MCI, 4, 15
+	EmWriteScreen "__", 4, 26
+	EMWriteScreen "F0465", 6, 36
+ 	transmit
 	call navigate_to_PRISM_screen("CAST")
 	EMWriteScreen "D", 3, 29
-	EMWriteScreen PRISM_case_number, 4, 8 
+	EMWriteScreen PRISM_case_number, 4, 8
 	EMWriteScreen right(PRISM_case_number, 2), 4, 19
-	transmit 
+	transmit
 
 END IF
 
 
 'brings worker to DORD and creates DORD Doc for Full Credit Report
-If full_report_checkbox = checked THEN 
-	call navigate_to_PRISM_screen("DORD") 
- 	EMWriteScreen "C", 3, 29 
- 	transmit 
-	EMWriteScreen "A", 3, 29 
- 	EMWriteScreen "F0444", 6, 36 
- 	transmit 
+If full_report_checkbox = checked THEN
+	call navigate_to_PRISM_screen("DORD")
+ 	EMWriteScreen "C", 3, 29
+ 	transmit
+	EMWriteScreen "A", 3, 29
+ 	EMWriteScreen "F0444", 6, 36
+ 	transmit
 
 END IF
 
 
 'adding CAAD note for header request
 If header_report_checkbox = checked THEN
-	call navigate_to_PRISM_screen("NCDE")		
-	EMReadScreen ncp_MCI, 10, 4, 7 
-	call navigate_to_PRISM_screen("CAAD") 
+	call navigate_to_PRISM_screen("NCDE")
+	EMReadScreen ncp_MCI, 10, 4, 7
+	call navigate_to_PRISM_screen("CAAD")
 	PF5
- 	EMWriteScreen "L0161", 4, 54 
-	EmWriteScreen ncp_MCI, 10, 30  
- 	transmit 
+ 	EMWriteScreen "L0161", 4, 54
+	EmWriteScreen ncp_MCI, 10, 30
+ 	transmit
 
 
 
@@ -287,7 +286,7 @@ If DOLR_checkbox = Checked THEN screens_checked = screens_checked & "DOLR" & ", 
 If SSA_checkbox = Checked THEN screens_checked = screens_checked & "SSSD/SSTD" & ", "
 If new_hire_checkbox = Checked THEN screens_checked = screens_checked & "NEBR" & ", "
 If NCMR_checkbox = Checked THEN screens_checked = screens_checked & "NCMR" & ", "
-If Other_cases_checkbox = Checked THEN screens_checked = screens_checked & "& Other PRISM Cases." 
+If Other_cases_checkbox = Checked THEN screens_checked = screens_checked & "& Other PRISM Cases."
 
 'adding script so systems/websites checked show on one continuous line in CAAD
 If MAXIS_checkbox = Checked THEN systems_checked = systems_checked & "MAXIS" & ", "
@@ -301,28 +300,28 @@ If DVS_checkbox = Checked THEN systems_checked = systems_checked & "& DVS Websit
 If Called_CP_checkbox = Checked THEN client_contact = client_contact & "Called CP" & ", "
 If Called_NCP_checkbox = Checked THEN client_contact = client_contact & "Called NCP" & ", "
 If CP_locate_checkbox = Checked THEN client_contact = client_contact & "Sending Locate Form to CP" & ", "
-If NCP_locate_checkbox = Checked THEN client_contact = client_contact & "Sending Locate Form to NCP." 
+If NCP_locate_checkbox = Checked THEN client_contact = client_contact & "Sending Locate Form to NCP."
 
 'adding script so credit bureau actions checked show on one continuous line in CAAD
 If header_report_checkbox = Checked THEN credit_bureau = credit_bureau & "Requesting Credit Bureau Header" & ", "
-If full_report_checkbox = Checked THEN credit_bureau = credit_bureau & "Sending Notice of Credit Bureau Inquiry To NCP." 
+If full_report_checkbox = Checked THEN credit_bureau = credit_bureau & "Sending Notice of Credit Bureau Inquiry To NCP."
 
 'adding CAWT note
-If worklist_checkbox = Checked THEN 
+If worklist_checkbox = Checked THEN
 Call navigate_to_PRISM_screen ("CAWT")
 PF5
 EMwritescreen "free", 4, 37
 EMSetCursor 10, 4
 CALL write_variable_in_CAAD ("Complete Locate Review")
 EMWritescreen worklist_days, 17, 52
-transmit 
+transmit
 
-End if 
+End if
 'adding CAAD note
-call navigate_to_PRISM_screen("CAAD") 
+call navigate_to_PRISM_screen("CAAD")
 	PF5
- 	EMWriteScreen "FREE", 4, 54 
-	EMSetCursor 16, 4	
+ 	EMWriteScreen "FREE", 4, 54
+	EMSetCursor 16, 4
 	CALL write_variable_in_CAAD ("Locate Review")
 	CALL write_bullet_and_variable_in_CAAD ("PRISM screens Reviewed", screens_checked)
 	CALL write_bullet_and_variable_in_CAAD ("Systems/Websites Reviewed", systems_checked)
