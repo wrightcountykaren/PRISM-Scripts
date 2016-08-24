@@ -3,42 +3,41 @@ name_of_script = "ACTIONS - FEE SUSPENSION OVERRIDE.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 'DIMMING variables
-DIM beta_agency, row, col, worker_signature, ButtonPressed, Fee_Suppression_dialog, PRISM_case_number, Fee_date, CAAD_standard_checkbox,CAAD_text_checkbox, CAAD_text 
+DIM beta_agency, row, col, worker_signature, ButtonPressed, Fee_Suppression_dialog, PRISM_case_number, Fee_date, CAAD_standard_checkbox,CAAD_text_checkbox, CAAD_text
 
 'THE DIALOG----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,13 +63,13 @@ EndDialog
 'THE SCRIPT------------------------------------------------------------------------------------------------------------------------------------------------
 
 'Connecting to Bluezone
-EMConnect ""			
+EMConnect ""
 
 'brings me to the CAPS screen
 CALL navigate_to_PRISM_screen ("CAST")
 
 'this auto fills prism case number in dialog
-EMReadScreen PRISM_case_number, 13, 4, 8 
+EMReadScreen PRISM_case_number, 13, 4, 8
 
 
 'adding LOOP to make sure info in dialog box is entered correctly
@@ -84,71 +83,69 @@ DO
 	IF CAAD_standard_checkbox = 0 AND CAAD_text_checkbox = 0 THEN err_msg = err_msg & vbNewline & "Please select one CAAD note option."
 	IF CAAD_standard_checkbox = 1 AND CAAD_text_checkbox = 1 THEN err_msg = err_msg & vbNewline & "Please select only one CAAD note option."
 	IF CAAD_text_checkbox = 1 AND CAAD_text = "" THEN err_msg = err_msg & vbNewline & "Please enter the text for your CAAD note."
- 	IF err_msg <> "" THEN 
+ 	IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 
-LOOP UNTIL err_msg = "" 							                     	
+LOOP UNTIL err_msg = ""
 
 'END LOOP
 
-'to pull up my prism 
+'to pull up my prism
 EMFocus
 
 'Checks to make sure PRISM is open and you are logged in
 CALL check_for_PRISM(True)
 
 
-'Goes to CAST screen and PF11 over 							
-CALL navigate_to_PRISM_screen("CAST")										
-PF11	
-															
+'Goes to CAST screen and PF11 over
+CALL navigate_to_PRISM_screen("CAST")
+PF11
+
 'fixes date to the correct format xx/xx/xxxx
 CALL create_mainframe_friendly_date(FEE_date, 10, 17, "YYYY")
 
 
 'Updates State Fee Cd: to M in order to suppress the 2% fee and adds date
 EMWritescreen "M", 9, 17
-EMSetCursor 10, 17									        			
+EMSetCursor 10, 17
 EMWritescreen FEE_date, 10, 17
 EMWritescreen "M", 3, 29
 transmit
 
 EMReadScreen mod_success,21 , 24, 22
-IF mod_success <> "modified successfully" THEN 
+IF mod_success <> "modified successfully" THEN
 	Msgbox "Cast was not modified correctly, please reneter information correctly.  Script Ended."
 	StopScript
 END IF
 
 'Writes info into CAAD for standard note
-IF CAAD_standard_checkbox = 1 THEN 		
-	CALL Navigate_to_PRISM_screen ("CAAD")										'navigates to CAADescreen "FREE", 4, 54												'types title of the free caad on the first line of the note	
+IF CAAD_standard_checkbox = 1 THEN
+	CALL Navigate_to_PRISM_screen ("CAAD")										'navigates to CAADescreen "FREE", 4, 54												'types title of the free caad on the first line of the note
 	PF5
 	EMWriteScreen "Free", 4, 54
 	EMWriteScreen "*Cost Recovery Fee Override*", 16, 4								'writes this as a title line for the caad note.
-	EMSetCursor 17, 4													                    
-	CALL write_variable_in_CAAD ("Per state recommendation, suppressed cost recovery fee until "  &  Fee_date &  ".  Case is NPA due to ongoing METS interface issue.")  
-	CALL write_variable_in_CAAD(worker_signature)							  		'adds worker initials from dialog box
-	transmit 
-	PF3
-END IF
-
-IF CAAD_text_checkbox = 1 THEN
-	CALL Navigate_to_PRISM_screen ("CAAD")										'navigates to CAADescreen "FREE", 4, 54												'types title of the free caad on the first line of the note	
-	PF5
-	EMWriteScreen "Free", 4, 54
-	EMWriteScreen "*Cost Recovery Fee Override*", 16, 4								'writes this as a title line for the caad note.
-	EMSetCursor 17, 4												
-	CALL write_variable_in_CAAD(CAAD_text) 
+	EMSetCursor 17, 4
+	CALL write_variable_in_CAAD ("Per state recommendation, suppressed cost recovery fee until "  &  Fee_date &  ".  Case is NPA due to ongoing METS interface issue.")
 	CALL write_variable_in_CAAD(worker_signature)							  		'adds worker initials from dialog box
 	transmit
 	PF3
 END IF
 
-'Goes to CAST screen and PF11 over 							
-CALL navigate_to_PRISM_screen("CAST")										
-PF11	
+IF CAAD_text_checkbox = 1 THEN
+	CALL Navigate_to_PRISM_screen ("CAAD")										'navigates to CAADescreen "FREE", 4, 54												'types title of the free caad on the first line of the note
+	PF5
+	EMWriteScreen "Free", 4, 54
+	EMWriteScreen "*Cost Recovery Fee Override*", 16, 4								'writes this as a title line for the caad note.
+	EMSetCursor 17, 4
+	CALL write_variable_in_CAAD(CAAD_text)
+	CALL write_variable_in_CAAD(worker_signature)							  		'adds worker initials from dialog box
+	transmit
+	PF3
+END IF
+
+'Goes to CAST screen and PF11 over
+CALL navigate_to_PRISM_screen("CAST")
+PF11
 
 script_end_procedure("")                                                                     	'stopping the script
-
-
