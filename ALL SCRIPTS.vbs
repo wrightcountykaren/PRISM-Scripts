@@ -108,14 +108,6 @@ cs_scripts_array(script_num).description		= "Creates B0170 CAAD note for request
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CP NAME CHANGE"
-cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - CP NAME CHANGE.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Updates CP name and alias. Modifies M1000 CAAD note."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CSENET INFO"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CSENET INFO.vbs"
@@ -220,14 +212,6 @@ cs_scripts_array(script_num).description		= "Creates various docs related to CS 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "GENETIC TESTING INVOICE"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - GENETIC TESTING INVOICE.vbs"
-cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording genetic testing invoices."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INFO"
 cs_scripts_array(script_num).script_type		= "UTILITIES"
 cs_scripts_array(script_num).file_name			= "UTILITIES - INFO.vbs"
@@ -308,14 +292,6 @@ cs_scripts_array(script_num).description		= "Creates list in Excel of cases that
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NO PAYMENT MONTHS ONE-FOUR"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - NO PAYMENT MONTHS ONE-FOUR.vbs"
-cs_scripts_array(script_num).description		= "CAAD template documenting non-payment enforcement actions."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NOTICE OF CONT'D SERVICE"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - EVALUATE NOCS.vbs"
@@ -328,14 +304,6 @@ cs_scripts_array(script_num).script_name		= "PALC CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PALC CALCULATOR.vbs"
 cs_scripts_array(script_num).description		= "Calculates voluntary and involuntary amounts from the PALC screen."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "PAYMENT PLAN REVIEW"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - PAYMENT PLAN REVIEW.vbs"
-cs_scripts_array(script_num).description		= "CAAD template related to payment plan."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -391,15 +359,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW QW INFO"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
-cs_scripts_array(script_num).description		= "Purgres all M8001 (REVW Case Referred) worklist from your USWT."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ROP DETAIL"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - ROP DETAIL.vbs"
-cs_scripts_array(script_num).description		= "Creates CAAD note about the date parties signed Recognition of Parentage."
+cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -408,14 +368,6 @@ cs_scripts_array(script_num).script_name		= "SEND F0104 DORD MEMO"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - SEND F0104 DORD MEMO.vbs"
 cs_scripts_array(script_num).description		= "Script editor for sending F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "SOP INVOICE"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - SOP INVOICE.vbs"
-cs_scripts_array(script_num).description		= "Creates CAAD note that the Service of Process invoice was received, details about the service, and if the invoice is OK to pay."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
