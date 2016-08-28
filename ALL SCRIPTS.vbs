@@ -359,7 +359,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW QW INFO"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
-cs_scripts_array(script_num).description		= "Purgres all M8001 (REVW Case Referred) worklist from your USWT."
+cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
