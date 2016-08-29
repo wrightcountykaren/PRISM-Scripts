@@ -1,39 +1,38 @@
-'GATHERING STATS---------------------------------------------------------------------------------------------------- 
-name_of_script = "BULK - FAILURE POF - RSDI DFAS.vbs" 
-start_time = timer 
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "BULK - FAILURE POF - RSDI DFAS.vbs"
+start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 ' >>>>> THE SCRIPT <<<<<
 EMConnect ""
@@ -56,7 +55,7 @@ DO
 		EMWriteScreen "s", USWT_row, 4
 		transmit
 		'Selecting the worklist brings the user to NCP's PAPL screen
-		
+
 		purge = false 'Reset the purge variable
 
 		' >>>>> MAKING SURE THAT THERE IS INFORMATION ON PAPL <<<<
@@ -67,28 +66,28 @@ DO
 			EMReadScreen PAPL_most_recent_pay_date, 6, 7, 7
 			Call date_converter_PALC_PAPL(PAPL_most_recent_pay_date)
 			pmt_year = Right(PAPL_most_recent_pay_date, 2) 'string variables added to track the payment month and 2-digit year.
-			pmt_month = Left(PAPL_most_recent_pay_date, 2)	
-			
-						
+			pmt_month = Left(PAPL_most_recent_pay_date, 2)
+
+
 			' >>>> CHECKING THAT THE DATE IN THE PAYMENT ID IS FROM THE CURRENT MONTH MINUS 1 <<<<<
 			current_month_minus1 = DateAdd("m", -1, date) 'variable for the current date minus one - this returns a date format
 			c_month = datepart("m", current_month_minus1)
 			IF len(c_month) = 1 THEN c_month = "0" & c_month
-			
-			
-			c_year = Right(CStr(current_month_minus1), 2) 'string variables added to track the current month minus 1 month and year. 
+
+
+			c_year = Right(CStr(current_month_minus1), 2) 'string variables added to track the current month minus 1 month and year.
 			'c_month = Left(CStr(current_month_minus1), 2)
-			
+
 			IF pmt_year >= c_year THEN
-				If  pmt_month >= c_month THEN  
+				If  pmt_month >= c_month THEN
  				' >>>>> IF THE PAYMENT IS FROM LAST MONTH OR CURRENT MONTH, THE SCRIPT GRABS THE EMPLOYER/SOURCE ID <<<<<
-				'We want this to occur if the payment occurred last month or in the current month.				
+				'We want this to occur if the payment occurred last month or in the current month.
 					PF11
 					EMReadScreen PAPL_name, 30, 7, 38
 					' >>>>> LISTING OUT THE CONDITIONS THAT CAN BE PURGED AUTOMATICALLY <<<<<
 					IF InStr(PAPL_name, "DFAS") <> 0 OR _
-					   InStr(PAPL_name, "U S SOCIAL") <> 0 OR _ 
-					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN 
+					   InStr(PAPL_name, "U S SOCIAL") <> 0 OR _
+					   InStr(PAPL_name, "U S DEPT OF TREASURY") <> 0 THEN
 						purge = True
 					 	COUNT = COUNT + 1
 					   	Msgbox USWT_case_number & " worklist selected for purge!"
@@ -99,18 +98,18 @@ DO
 			END IF
 		End If
 
-		
+
 		Call navigate_to_PRISM_screen ("CAWT")
 		EMWriteScreen "E0014", 20, 29
 		EMWriteScreen USWT_case_number, 20, 8
 		transmit
 
 		' >>>>> IF THE WORKLIST ITEM IS ELIGIBLE TO BE PURGED, THE SCRIPT PURGES...
-		IF purge = True THEN 
+		IF purge = True THEN
 			CAWT_row = 8
-			DO 
+			DO
 				EMReadScreen CAWD_type, 5, cawt_row, 8
-				If cawd_type = "E0014" then	
+				If cawd_type = "E0014" then
 					EMWriteScreen "P", caWT_row, 4
 					transmit
 					transmit
@@ -130,12 +129,12 @@ DO
 				NEXT
 			END IF
 			USWT_row = USWT_row + 1
-			IF USWT_row = 19 THEN 
+			IF USWT_row = 19 THEN
 				PF8
 				USWT_row = 7
 				SCROLL = SCROLL + 1
 			END IF
-		
+
 	End If
 LOOP UNTIL USWT_type <> "E0014"
 
