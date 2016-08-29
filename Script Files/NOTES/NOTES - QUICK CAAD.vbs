@@ -79,15 +79,16 @@ BeginDialog quick_CAAD_search_dialog, 0, 0, 356, 120, "Quick CAAD search dialog"
   ButtonGroup ButtonPressed
     OkButton 245, 100, 50, 15
     CancelButton 300, 100, 50, 15
-  EditBox 110, 15, 55, 15, CAAD_code_to_search
-  GroupBox 5, 5, 165, 30, "Option A"
-  Text 10, 20, 95, 10, "Enter a CAAD code to search:"
-  EditBox 110, 50, 110, 15, CAAD_description_to_search
+  EditBox 115, 15, 55, 15, CAAD_code_to_search
+  EditBox 115, 50, 105, 15, CAAD_description_to_search
+  GroupBox 5, 5, 170, 30, "Option A"
+  Text 10, 20, 100, 10, "Enter a CAAD code to search:"
   GroupBox 5, 40, 220, 30, "Option B"
   Text 10, 55, 100, 10, "Enter a description to search:"
   GroupBox 230, 5, 120, 90, "Instructions"
   Text 235, 15, 110, 75, "Enter a five-digit CAAD code (ex: M9901) into Option A, or (alternatively) enter a description to search for in Option B. If a description is searched, the script will return any matches one by one, and allow you to indicate whether-or-not it is the correct CAAD code."
 EndDialog
+
 
 
 
@@ -113,6 +114,8 @@ If ButtonPressed = search_CAAD_codes_button then
 		Dialog quick_CAAD_search_dialog
 		If ButtonPressed = cancel then exit do
 
+		If CAAD_code_to_search = "" and CAAD_description_to_search = "" then MsgBox "You must enter either a CAAD code or description to search."
+
 
 		If CAAD_code_to_search <> "" then
 			EMSetCursor 4, 54		'Where the code is entered, we need to set the cursor there to read the help details
@@ -133,7 +136,9 @@ If ButtonPressed = search_CAAD_codes_button then
 		End if
 
 
-	Loop until ButtonPressed = cancel
+	Loop until ButtonPressed = cancel or (CAAD_code_to_search <> "" or CAAD_description_to_search <> "")
+
+	ButtonPressed = 0	'Needs to blank out so it goes back to the main dialog
 
 End if
 
