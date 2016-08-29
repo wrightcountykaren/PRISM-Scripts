@@ -28,6 +28,14 @@ cs_scripts_array(script_num).description		= "Creates CAAD note for documenting a
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "ADMIN REDIRECT"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - ADMIN REDIRECT.vbs"
+cs_scripts_array(script_num).description		= "Creates redirection docs and redirection worklist items."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "AFFIDAVIT OF SERVICE DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL DOCS.vbs"
@@ -344,14 +352,6 @@ cs_scripts_array(script_num).script_name		= "QUARTERLY REVIEWS"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - QUARTERLY REVIEWS.vbs"
 cs_scripts_array(script_num).description		= "CAAD note for quarterly review processes."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "REDIRECT DOCS"
-cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - DOCS FOR REDIRECT.vbs"
-cs_scripts_array(script_num).description		= "Creates redirection docs and redirection worklist items."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
