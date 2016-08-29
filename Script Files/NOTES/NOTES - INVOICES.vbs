@@ -8,38 +8,37 @@ STATS_denomination = "C"
 
 DIM beta_agency, row, col
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 DIM service_of_process, prism_case_number, invoice_number, invoice_from, invoice_recd_date, dollar_amount, service_date, legal_action, person_served, service_checkbox, pay_yes_checkbox, worker_signature, buttonpressed, case_number_valid
@@ -133,7 +132,7 @@ EndDialog
 
 'THE SCRIPT--------------------------------------------------------------------------------------------------------------------------
 'Connecting to Bluezone
-EMConnect ""			
+EMConnect ""
 
 'Searches for the case number
 row = 1
@@ -155,7 +154,7 @@ LOOP UNTIL script_run_mode <> "Select one..."
 	EMConnect ""
 
 'Pulls the appropriate dialog open
-IF script_run_mode = "Genetic Testing Invoice" THEN 
+IF script_run_mode = "Genetic Testing Invoice" THEN
 	'Searches for the case number
 	row = 1
 	col = 1
@@ -174,7 +173,7 @@ IF script_run_mode = "Genetic Testing Invoice" THEN
 		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 		IF case_number_valid = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
 		IF IsDate(invoice_recd_date) = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid date!"
-		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"                   
+		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"
 		IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
 	LOOP UNTIL err_msg = ""
 
@@ -218,9 +217,9 @@ IF script_run_mode = "SOP Invoice" THEN
 
 	'The script will not run unless the CAAD note is signed and there is a valid prism case number
 	DO
-		err_msg = ""	
+		err_msg = ""
 		Dialog service_of_process
-		IF ButtonPressed = 0 THEN StopScript		                   
+		IF ButtonPressed = 0 THEN StopScript
 		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 		IF case_number_valid = False THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
 		IF IsDate(invoice_recd_date) = "" THEN err_msg = err_msg & VbNewline & "You must enter a valid date!"
@@ -228,7 +227,7 @@ IF script_run_mode = "SOP Invoice" THEN
 		IF person_served = "Select one, or type person served..." THEN err_msg = err_msg & VbNewline & "You must select a type of legal action!"
 		IF worker_signature = "" THEN err_msg = err_msg & VbNewline & "You must select a type of legal action!"
 	LOOP UNTIL err_msg = ""
-			                                                                 
+
 	'Checks to make sure PRISM is open and you are logged in
 	CALL check_for_PRISM(True)
 
@@ -247,7 +246,7 @@ IF script_run_mode = "SOP Invoice" THEN
 	call write_bullet_and_variable_in_CAAD("invoice #",invoice_number)
 	call write_bullet_and_variable_in_CAAD("$",dollar_amount)
 	call write_bullet_and_variable_in_CAAD("Legal action", legal_action)
-	call write_bullet_and_variable_in_CAAD("person served", person_served)  
+	call write_bullet_and_variable_in_CAAD("person served", person_served)
 	If sub_service_checkbox = 1 then CALL write_variable_in_CAAD("Substitute Services was used")
 	If service_checkbox = 1 then call write_variable_in_CAAD("service was successful")
 	If service_checkbox = 0 then call write_variable_in_CAAD("service was not successful")
@@ -258,11 +257,11 @@ IF script_run_mode = "SOP Invoice" THEN
 	transmit
 	PF3
 
-	script_end_procedure("")                     
+	script_end_procedure("")
 
 END IF
 
-IF script_run_mode = "General Invoice" THEN 
+IF script_run_mode = "General Invoice" THEN
 	'Searches for the case number
 	row = 1
 	col = 1
@@ -281,7 +280,7 @@ IF script_run_mode = "General Invoice" THEN
 		CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 		IF case_number_valid = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
 		IF IsDate(invoice_recd_date) = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid date!"
-		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"                   
+		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"
 		IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
 	LOOP UNTIL err_msg = ""
 
