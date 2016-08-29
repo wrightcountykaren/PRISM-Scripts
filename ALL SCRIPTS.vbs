@@ -124,22 +124,6 @@ cs_scripts_array(script_num).description		= "Creates T0111 CAAD note with text c
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "DATE OF HEARING (EXPRO)"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - DATE OF THE HEARING (EXPRO).vbs"
-cs_scripts_array(script_num).description		= "Date of hearing template for expro."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "DATE OF HEARING (JUDICIAL)"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - DATE OF THE HEARING (JUDICIAL).vbs"
-cs_scripts_array(script_num).description		= "Date of hearing template for judicial."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "DDPL CALC"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DDPL CALCULATOR.vbs"
@@ -232,6 +216,14 @@ cs_scripts_array(script_num).script_name		= "GENERIC ENFORCEMENT INTAKE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - GENERIC ENFORCEMENT INTAKE.vbs"
 cs_scripts_array(script_num).description		= "Creates various docs related to CS intake as well as DORD docs and enters CAAD."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "HEARING NOTES"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - HEARING NOTES.vbs"
+cs_scripts_array(script_num).description		= "New 08/2016!!! - CAAD note template for sending details about hearing notes."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
