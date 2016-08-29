@@ -1,53 +1,52 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 
-'name_of_script = "ACTIONS - EMC DORD Docs.vbs"
+name_of_script = "ACTIONS - EMC DORD DOCS.vbs"
 start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 120
 STATS_denomination = "C"
-'End of stats block------------------------------------------------------------------------------------------------- 
+'End of stats block-------------------------------------------------------------------------------------------------
 
 'this is a function document
 DIM beta_agency 'remember to add
 
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Robert with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'this is where the copy and paste from functions library ended
 
 'DIALOG--------------------------------------------------------
-DIM EMC, CH_F, CPdord, CPfollowup, NCPdord, PRISM_case_number, ButtonPressed      
+DIM EMC, CH_F, CPdord, CPfollowup, NCPdord, PRISM_case_number, ButtonPressed
 
 BeginDialog EMC, 0, 0, 191, 160, "Emancipation Doc's"
   EditBox 55, 0, 70, 15, PRISM_case_number
@@ -74,21 +73,21 @@ CALL check_for_PRISM(True)
 
 'brings me to the CAPS screen to auto fill prims case number in dialog
 CALL navigate_to_PRISM_screen ("CAPS")
-EMReadScreen PRISM_case_number, 13, 4, 8 
+EMReadScreen PRISM_case_number, 13, 4, 8
 
-'''find child that is going to be 18 
+'''find child that is going to be 18
 DIM Row, Child_Active, Child_Age, CH_MCI, CH_M, CH_L, CH_S, Child_DOB, childs_name
 
 	call navigate_to_PRISM_screen("CHDE")
 	EMWriteScreen "B", 3, 29
 	transmit
-	
+
 
 	'BEGINNING LOOP TO FIND CHILD
 	Row = 8
 	Do
 		EMReadScreen Child_Active, 1, Row, 35
-		If Child_Active = " " Then 
+		If Child_Active = " " Then
 			MsgBox "Unable to find child within 3 months of being 18 years old and up to age 19! Please process worklist manually! Script Ended.", VBExclamation
 			StopScript
 		ElseIf Child_Active = "Y" Then
@@ -96,7 +95,7 @@ DIM Row, Child_Active, Child_Age, CH_MCI, CH_M, CH_L, CH_S, Child_DOB, childs_na
 			'CONFIRMING CHILD'S 18TH BIRTHDAY WILL BE IN THE NEXT 3 MOS but not over age 19
 			'BY CALCULATING CHILD'S DOB FROM TODAY'S DATE (MUST BE BETWEEN 213 AND 229 MONTHS)
 			Child_Age = DateDiff("m", Child_DOB, Date)
-			If (Child_Age >= 213) And (Child_Age <= 229) Then	
+			If (Child_Age >= 213) And (Child_Age <= 229) Then
 				EMReadScreen CH_MCI, 10, Row, 67
 				Exit Do
 			End If
@@ -114,7 +113,7 @@ EMReadScreen CH_F, 12, 9, 34
 EMReadScreen CH_M, 12, 9, 56
 EMReadScreen CH_L, 17, 9, 8
 EMReadScreen CH_S, 3, 9, 74
-childs_name = fix_read_data(CH_F) & " " & fix_read_data(CH_M) & " " & fix_read_data(CH_L)	
+childs_name = fix_read_data(CH_F) & " " & fix_read_data(CH_M) & " " & fix_read_data(CH_L)
 childs_name = trim(childs_name)
 
 
@@ -127,12 +126,12 @@ CALL navigate_to_PRISM_screen ("CAPS")
 'THE LOOP--------------------------------------------------------------------------
 DIM err_msg
 
-Do	
+Do
 	err_msg = ""
 	Dialog EMC				'Shows name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
 		IF CH_F = "" THEN err_msg = err_msg & vbNewline & "Please enterd child's name."
-		IF err_msg <> "" THEN 
+		IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 		END IF
 
@@ -145,7 +144,7 @@ Loop until err_msg = ""
 DIM Child_Row, Child_Col
 
 'send emc letter to CP Dord F0300
-IF CPdord = 1 THEN 
+IF CPdord = 1 THEN
 	CALL navigate_to_PRISM_screen("DORD")
 	EMWriteScreen "C", 3, 29
 	transmit
@@ -160,7 +159,7 @@ IF CPdord = 1 THEN
 END IF
 
 'send emc follow upletter to CP Dord F0306
-IF CPfollowup = 1 THEN 
+IF CPfollowup = 1 THEN
 	CALL navigate_to_PRISM_screen("DORD")
 	EMWriteScreen "C", 3, 29
 	EMSendKey "<enter>"
@@ -175,7 +174,7 @@ IF CPfollowup = 1 THEN
 END IF
 
 'send emc letter to NCP Dord F0302
-IF NCPdord = 1 THEN 
+IF NCPdord = 1 THEN
 	CALL navigate_to_PRISM_screen("DORD")
 	EMWriteScreen "C", 3, 29
 	EMSendKey "<enter>"
@@ -191,5 +190,3 @@ END IF
 '---------------------------------END DORD DOCS------------------------------------
 
 script_end_procedure("")
-
-

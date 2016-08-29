@@ -108,6 +108,14 @@ cs_scripts_array(script_num).description		= "Creates B0170 CAAD note for request
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "COURT PREP WORKSHEET"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "ACTIONS - COURT PREP WORKSHEET.vbs"
+cs_scripts_array(script_num).description		= "Runs a court prep worksheet in anticipation of court dates, getting info from PRISM and putting it into a Word doc."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CSENET INFO"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CSENET INFO.vbs"
@@ -144,6 +152,14 @@ cs_scripts_array(script_num).script_name		= "E-FILING"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - E-FILING.vbs"
 cs_scripts_array(script_num).description		= "NEW 04/2016!! Template for adding CAAD note about e-filing."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "EMC DORD DOCS"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - EMC DORD DOCS.vbs"
+cs_scripts_array(script_num).description		= "Sends emancipation DORD docs."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
