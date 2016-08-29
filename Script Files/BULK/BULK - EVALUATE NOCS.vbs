@@ -7,38 +7,37 @@ DIM initial_run_through
 DIM worker_signature
 DIM cso_name
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 '=====DIALOGS=====
@@ -60,13 +59,13 @@ FUNCTION build_NOCS_dlg(i, nocs_array)
 
 	'nocs_array(i, 7) >> The specific DORD doc to be sent. Because the dialog uses check boxes, the incoming value has to be converted from text
 	'to a 1/0 value in the check boxes.
-	IF nocs_array(i, 7) = "F0111" THEN 
-		f0111_checkbox = 1 
+	IF nocs_array(i, 7) = "F0111" THEN
+		f0111_checkbox = 1
 		f0115_checkbox = 0
 	ELSEIF nocs_array(i, 7) = "F0115" THEN
-		f0111_checkbox = 0 
+		f0111_checkbox = 0
 		f0115_checkbox = 1
-	ELSEIF nocs_array(i, 7) = "NONE" THEN 
+	ELSEIF nocs_array(i, 7) = "NONE" THEN
 		f0111_checkbox = 0
 		f0115_checkbox = 0
 	END IF
@@ -75,12 +74,12 @@ FUNCTION build_NOCS_dlg(i, nocs_array)
 	BeginDialog NOCS_dlg, 0, 0, 311, 330, "Notice of Continued Service"
 	  Text 70, 15, 105, 10, nocs_array(i, 0) 'Prism case number
 	  Text 10, 70, 50, 10, "Program Code:"
-	  Text 65, 70, 55, 10, nocs_array(i, 3) 'Program code 
+	  Text 65, 70, 55, 10, nocs_array(i, 3) 'Program code
 	  Text 215, 70, 50, 10, "Full Services?"
 	  Text 270, 70, 55, 10, nocs_array(i, 4) 'Full services indicator
 	  Text 120, 70, 65, 10, "IV-D Cooperation?"
 	  Text 190, 70, 10, 10, nocs_array(i, 6) 'IV-D cooperation code
-	  Text 10, 95, 110, 10, "Program Code Effective Date:" 
+	  Text 10, 95, 110, 10, "Program Code Effective Date:"
 	  EditBox 120, 90, 80, 15, nocs_array(i, 5) ' Effective date of program change from CATH
 	  CheckBox 95, 130, 165, 10, "F0111 - NPA Notice of Continued Services", f0111_checkbox
 	  CheckBox 95, 145, 165, 10, "F0115 - MA/MCRE Notice of Continued Services", f0115_checkbox
@@ -118,7 +117,7 @@ FUNCTION build_NOCS_dlg(i, nocs_array)
 			IF (nocs_array(i, 8) = 1 AND IsDate(nocs_array(i, 9)) = False) THEN err_msg = err_msg & vbCr & "* You must format the Worklist Date as a date."					'If the user checks to generate a FREE worklist item but does not enter the date as a date, err_msg is updated.
 			IF nocs_array(i, 13) = "" AND ButtonPressed <> skip_case_button THEN err_msg = err_msg & vbCr & "* You must authorize the work as accurate. Please sign off on your work."			'If the user tries to move off the case without using the "SKIP CASE" button (using the "OK" button), err_msg is updated.
 			IF ButtonPressed = -1 AND err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbcr & err_msg & vbCr & vbCr & "You must resolve for the script to continue."			'IF err_msg is not blank (meaning one or more of the error conditions above is/are met) the script will display the error(s) to the user.
-			
+
 			IF ButtonPressed = skip_case_button AND initial_run_through = True THEN 		'IF the user elects to skip this case and this is the first time through...
 				nocs_array(i, 7) = "NONE"		'Do not send a DORD doc
 				nocs_array(i, 8) = 0			'Do not create FREE worklist
@@ -128,15 +127,15 @@ FUNCTION build_NOCS_dlg(i, nocs_array)
 															'... If the user is double checking their work (meaning this is NOT the first time they are running through the dialogs), pressing "SKIP CASE" will not reset the values in the dialog.
 	LOOP UNTIL ButtonPressed = skip_case_button OR (ButtonPressed = -1 AND err_msg = "")		'In order to get out of the do/loop, the user must press either the "SKIP CASE" button, OR press "OK" and have a null err_msg
 
-	
+
 	'Converting the value for the DORD doc to be sent BACK to human speak.
-	IF nocs_array(i, 7) <> "NONE" THEN 
+	IF nocs_array(i, 7) <> "NONE" THEN
 		IF f0111_checkbox = 1 THEN nocs_array(i, 7) = "F0111"
 		IF f0115_checkbox = 1 THEN nocs_array(i, 7) = "F0115"
 		IF f0111_checkbox = 0 AND f0115_checkbox = 0 THEN nocs_array(i, 7) = "NONE"
 	END IF
-	
-END FUNCTION 
+
+END FUNCTION
 
 '	This is the dialog to select the CSO. The script will run off the 8 digit worker ID code entered here.
 FUNCTION select_cso(ButtonPressed, cso_id, cso_name)
@@ -152,7 +151,7 @@ FUNCTION select_cso(ButtonPressed, cso_id, cso_name)
 			EMReadScreen cso_name, 24, 13, 55
 			cso_name = trim(cso_name)
 			PF3
-			
+
 			BeginDialog select_cso_dlg, 0, 0, 286, 145, "Notice of Continued Service - Select CSO"
 			EditBox 70, 55, 65, 15, cso_id
 			Text 70, 80, 155, 10, cso_name
@@ -166,10 +165,10 @@ FUNCTION select_cso(ButtonPressed, cso_id, cso_name)
 			Text 10, 80, 55, 10, "Worker Name:"
 			Text 10, 105, 100, 10, "Please sign your CAAD notes:"
 			EndDialog
-		
+
 			DIALOG select_cso_dlg
 				IF ButtonPressed = stop_script_button THEN script_end_procedure("The script has stopped.")
-				IF ButtonPressed = update_cso_button THEN 
+				IF ButtonPressed = update_cso_button THEN
 					CALL navigate_to_PRISM_screen("USWT")
 					CALL write_value_and_transmit(cso_id, 20, 13)
 					EMReadScreen cso_name, 24, 13, 55
@@ -177,11 +176,11 @@ FUNCTION select_cso(ButtonPressed, cso_id, cso_name)
 				END IF
 				IF cso_id = "" THEN err_msg = err_msg & vbCr & "* You must enter a Worker ID."
 				IF len(cso_id) <> 8 THEN err_msg = err_msg & vbCr & "* You must enter a valid, 8-digit Worker ID."
-				IF (ButtonPressed = -1 AND worker_signature = "") THEN err_msg = err_msg & vbCr & "* Please sign your CAAD note."		'<< If the worker tries to continue without signing, the warning bell will sound. 
-																																		'The additional of IF ButtonPressed = -1 to the conditional statement is needed 
+				IF (ButtonPressed = -1 AND worker_signature = "") THEN err_msg = err_msg & vbCr & "* Please sign your CAAD note."		'<< If the worker tries to continue without signing, the warning bell will sound.
+																																		'The additional of IF ButtonPressed = -1 to the conditional statement is needed
 																																		'to allow the worker to update the CSO's worker ID without getting a warning message.
 				IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
-		LOOP UNTIL ButtonPressed = -1 
+		LOOP UNTIL ButtonPressed = -1
 	LOOP UNTIL err_msg = ""
 END FUNCTION
 
@@ -202,7 +201,7 @@ DO
 	prism_case_number = replace(prism_case_number, " ", "-")
 	IF uswt_type_id = "D0800" THEN cases_array = cases_array & prism_case_number & " "
 	uswt_row = uswt_row + 1
-	IF uswt_row = 19 THEN 
+	IF uswt_row = 19 THEN
 		PF8
 		uswt_row = 7
 	END IF
@@ -226,7 +225,7 @@ ReDim nocs_array(number_of_cases, 13)
 'nocs_array(i, 7) >> DORD doc to send
 'nocs_array(i, 8) >> generate a "FREE" worklist ("Y" or "N")
 'nocs_array(i, 9) >> FREE worklist date
-'nocs_array(i, 10) >> FREE worklist notes 
+'nocs_array(i, 10) >> FREE worklist notes
 'nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
 'nocs_array(i, 12) >> CAAD note "Other Notes"
 'nocs_array(i, 13) >> worker authorization..."I authorize this information is correct."" This is part of the multidimensional array for the do-looping. We do not want the worker to have to re-authorize work.
@@ -234,7 +233,7 @@ ReDim nocs_array(number_of_cases, 13)
 position_number = 0
 FOR EACH prism_case_number IN cases_array
 '	nocs_array(i, 0) >> PRISM_case_number
-	IF prism_case_number <> "" THEN 
+	IF prism_case_number <> "" THEN
 		nocs_array(position_number, 0) = prism_case_number
 		position_number = position_number + 1
 	END IF
@@ -276,7 +275,7 @@ FOR i = 0 to number_of_cases
 		EMReadScreen case_program_code, 17, cath_row, 11
 		IF case_program_code <> "CASE PROGRAM CODE" THEN
 			cath_row = cath_row + 1
-			IF cath_row = 20 THEN 
+			IF cath_row = 20 THEN
 				PF8
 				cath_row = 8
 			END IF
@@ -284,11 +283,11 @@ FOR i = 0 to number_of_cases
 			EMReadScreen program_change_date, 8, cath_row, 2
 			date_converter_PALC_PAPL (program_change_date)
 			nocs_array(i, 5) = program_change_date
-			
+
 			EXIT DO
 		END IF
 	LOOP
-NEXT	
+NEXT
 
 CALL navigate_to_PRISM_screen("GCSC")
 FOR i = 0 to number_of_cases
@@ -305,10 +304,10 @@ FOR i = 0 to number_of_cases
 	CALL write_value_and_transmit("D", 3, 29)
 	EMReadScreen ivd_coop_code, 1, 15, 25
 	IF ivd_coop_code = "_" THEN ivd_coop_code = "Y"			'IF there has never been non-coop for good cause, the panel will be coded "_" which is effectively a "Y"
-	nocs_array(i, 6) = ivd_coop_code 
+	nocs_array(i, 6) = ivd_coop_code
 	'Default PURGE value = False
 	nocs_array(i, 11) = 0
-	
+
 	IF nocs_array(i, 3) = "NPA" THEN			'IF the case is NPA THEN
 		IF nocs_array(i, 4) = "Y" THEN 			'IF the case is FULL SERVICE
 			nocs_array(i, 7) = "F0111"				'Send the F0111
@@ -350,7 +349,7 @@ objExcel.Cells(1, 12).Value = "PURGE?"
 objExcel.Cells(1, 12).Font.Bold = True
 
 'Updating the Excel spreadsheet with initial information
-FOR i = 0 to number_of_cases 
+FOR i = 0 to number_of_cases
 	FOR j = 0 to 11
 		objExcel.Cells(i + 2, j + 1).Value = nocs_array(i, j)
 	NEXT
@@ -373,26 +372,26 @@ DO
 		NEXT
 		'Building the dialog
 		CALL build_NOCS_dlg(i, nocs_array)
-		
+
 		'Updating the Excel spreadsheet in real time.
 		FOR j = 0 to 11
 			objExcel.Cells(excel_row, j + 1).Value = nocs_array(i, j)
-			IF j = 8 THEN 
+			IF j = 8 THEN
 				IF nocs_array(i, 8) = 1 THEN objExcel.Cells(excel_row, j + 1).Value = "Y"
 				IF nocs_array(i, 8) = 0 THEN objExcel.Cells(excel_row, j + 1).Value = "N"
 			END IF
-			IF j = 11 THEN 
+			IF j = 11 THEN
 				IF nocs_array(i, j) = 1 THEN objExcel.Cells(excel_row, j + 1).Value = "Y"
 				IF nocs_array(i, j) = 0 THEN objExcel.Cells(excel_row, j + 1).Value = "N"
 			END IF
 		NEXT
 		excel_row = excel_row + 1
 	NEXT
-	
+
 	FOR select_column = 1 to 12
 		objExcel.Cells(excel_row - 1, select_column).Interior.ColorIndex = 2
 	NEXT
-	
+
 	DIALOG confirm_dlg
 		IF ButtonPressed <> -1 THEN initial_run_through = False
 LOOP UNTIL ButtonPressed = -1
@@ -419,11 +418,11 @@ NEXT
 CALL navigate_to_PRISM_screen("CAAD")
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 12) >> CAAD note "Other Notes"
-	IF nocs_array(i, 12) <> "" THEN 
+	IF nocs_array(i, 12) <> "" THEN
 		EMWriteScreen left(nocs_array(i, 0), 10), 20, 8
 		EMWriteScreen right(nocs_array(i, 0), 2), 20, 19
 		transmit
-	
+
 		PF5
 		EMWriteScreen "FREE", 4, 54
 		EMSetCursor 16, 4
@@ -443,7 +442,7 @@ FOR i = 0 to number_of_cases
 	EMWriteScreen nocs_array(i, 0), 4, 15
 	EMWriteScreen right(nocs_array(i, 0), 2), 4, 26
 	transmit
-	IF nocs_array(i, 7) <> "NONE" THEN 
+	IF nocs_array(i, 7) <> "NONE" THEN
 		CALL write_value_and_transmit("A", 3, 29)
 		EMWriteScreen "        ", 4, 50
 		EMWriteScreen "       ", 4, 59
@@ -460,14 +459,14 @@ NEXT
 
 'Now the script needs generate the FREE worklist and insert the free text
 CALL navigate_to_PRISM_screen("USWT")
-FOR i = 0 to number_of_cases 
+FOR i = 0 to number_of_cases
 '	nocs_array(i, 2) >> NCP name
 '	nocs_array(i, 3) >> program_code (NPA, non-NPA; pulled from CALI)
 '	nocs_array(i, 4) >> full_service (whether or not the case is full service; pulled from CAST)
 '	nocs_array(i, 6) >> IV-D Cooperation Code
 '	nocs_array(i, 8) >> generate a "FREE" worklist ("Y" or "N")
 '	nocs_array(i, 9) >> FREE worklist date
-'	nocs_array(i, 10) >> FREE worklist notes 
+'	nocs_array(i, 10) >> FREE worklist notes
 	IF nocs_array(i, 8) = 1 THEN
 		PF5
 		EMWriteScreen left(nocs_array(i, 0), 10), 4, 8
@@ -489,14 +488,14 @@ number_of_cases_purged = 0
 FOR i = 0 to number_of_cases
 '	nocs_array(i, 0) >> PRISM_case_number
 '	nocs_array(i, 11) >> Purge? (1 for Yes, 0 for No)
-	IF nocs_array(i, 11) = True THEN 
+	IF nocs_array(i, 11) = True THEN
 		CALL navigate_to_PRISM_screen("CAWT")
 		CALL write_value_and_transmit("D0800", 20, 29)
-		EMWriteScreen left(nocs_array(i, 0), 10), 20, 8	
+		EMWriteScreen left(nocs_array(i, 0), 10), 20, 8
 		EMWritescreen right(nocs_array(i, 0), 2), 20, 19
 		transmit
-		
-	
+
+
 		DO
 			EMReadscreen cawd_type, 5, 8, 8
 			IF cawd_type = "D0800" THEN
@@ -510,5 +509,3 @@ FOR i = 0 to number_of_cases
 NEXT
 
 script_end_procedure("Success!! " &  number_of_cases_purged  & " items have been purged.")
-
-
