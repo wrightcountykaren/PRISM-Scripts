@@ -43,12 +43,11 @@ Function write_line_to_text_file(new_line_for_writing, file_location)
 			Set TextFileObj = CreateObject("Scripting.FileSystemObject")		'Create another FSO
 			Set text_command = TextFileObj.OpenTextFile(file_location)			'Open the text file
 			text_raw = text_command.ReadAll										'Read the text file
-			IF text_raw <> "" THEN text_array = split(text_raw, vbNewLine)		'Split by new lines
 			text_command.Close													'Closes the file
 		END IF
 	END WITH
 
-	'Now it updates the favorite CAAD notes
+	'Now it updates the text file
 	With (CreateObject("Scripting.FileSystemObject"))							'Creating an FSO
 		If .FileExists(file_location) Then create_new_file = true				'Setting this variable now so the script can apply the logic later
 		Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
@@ -58,6 +57,29 @@ Function write_line_to_text_file(new_line_for_writing, file_location)
 		Else																	'If the file doesn't exist, it should simply add the new details without a new line
 			text_command.Write new_line_for_writing 							'Writes the new in a new file
 		End if																	'End of if...then statement
+		text_command.Close														'Closes the file
+	END WITH
+End function
+
+'This is a special function which clears a line from the text file used by this script
+Function clear_line_from_text_file(line_for_clearing, file_location)
+	'Now it determines the favorite CAAD notes
+	With (CreateObject("Scripting.FileSystemObject"))							'Creating an FSO
+		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then		'If the file exists...
+			Set TextFileObj = CreateObject("Scripting.FileSystemObject")		'Create another FSO
+			Set text_command = TextFileObj.OpenTextFile(file_location)			'Open the text file
+			text_raw = text_command.ReadAll										'Read the text file
+			text_command.Close													'Closes the file
+		END IF
+	END WITH
+
+	text_filtered = replace(text_raw, line_for_clearing & vbNewLine, "")
+
+	'Now it updates the text file
+	With (CreateObject("Scripting.FileSystemObject"))							'Creating an FSO
+		Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
+		Set text_command = TextFileObj.OpenTextFile(file_location, 2)			'Open the text file for writing
+		text_command.Write text_filtered			 							'Writes the new in a new file
 		text_command.Close														'Closes the file
 	END WITH
 End function
@@ -108,6 +130,22 @@ Do
 			dialog_row = dialog_row + 15																					'Go up 15 pixels
 		Next
 		PushButton 5, 185, 80, 10, "search CAAD codes...", search_CAAD_codes_button											'Provides a search feature
+		PushButton 90, 185, 80, 10, "delete saved codes...", delete_saved_codes_button										'Provides a delete feature
+	EndDialog
+
+	'THIS IS A DYNAMIC DIALOG! DON'T OPEN ME IN DIALOG EDITOR!!!!
+	BeginDialog quick_CAAD_delete_codes_dialog, 0, 0, 300, 200, "Quick CAAD: delete codes dialog"
+	  ButtonGroup ButtonPressed
+		OkButton 245, 180, 50, 15
+		dialog_row = 5																										'Starting here so that the contents display in a pretty manner
+		'Iterate through each item in the array determined above, then display them
+		For i = 0 to ubound(favorite_CAAD_notes_array)																		'i is a counter in this case
+			If favorite_CAAD_notes_array(i) = "" then exit for 																'If it's blank, we should stop because we're likely at the end of the file
+			number_to_pass_to_the_button = 1000 + i																			'Add 1000 to the counter to get a ButtonPressed value we can use
+			PushButton 5, dialog_row, 30, 10, "delete", number_to_pass_to_the_button										'Show the delete button
+			Text 40, dialog_row, 255, 10, favorite_CAAD_notes_array(i)														'Show the description
+			dialog_row = dialog_row + 15																					'Go up 15 pixels
+		Next
 	EndDialog
 
 	BeginDialog quick_CAAD_search_dialog, 0, 0, 360, 120, "Quick CAAD search dialog"
@@ -197,6 +235,23 @@ Do
 				Next
 			End if
 		Loop until ButtonPressed = cancel or (CAAD_code_to_search <> "" or CAAD_description_to_search <> "")
+
+		ButtonPressed = 0	'Needs to blank out so it goes back to the main dialog
+
+	ElseIf ButtonPressed = delete_saved_codes_button then
+		Do
+			Dialog quick_CAAD_delete_codes_dialog
+			If ButtonPressed = OK then exit do
+
+			'Iterates through the array of favorite CAAD notes, and compares with the ButtonPressed value... If the ButtonPressed = i + 1000 (see above), it will have found the right CAAD code, and will clear that string from the text file
+			For i = 0 to ubound(favorite_CAAD_notes_array)
+				If ButtonPressed = i + 1000 then
+					quick_CAAD_warning_box = MsgBox("Are you sure you want to clear this one?", vbOKCancel + vbQuestion)
+					If quick_CAAD_warning_box = vbOK then call clear_line_from_text_file(favorite_CAAD_notes_array(i), file_location)
+				End if
+			Next
+
+		Loop until quick_CAAD_warning_box <> vbCancel
 
 		ButtonPressed = 0	'Needs to blank out so it goes back to the main dialog
 
