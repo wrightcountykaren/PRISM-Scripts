@@ -356,6 +356,14 @@ cs_scripts_array(script_num).description		= "CAAD note for quarterly review proc
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "QUICK CAAD"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - QUICK CAAD.vbs"
+cs_scripts_array(script_num).description		= "NEW 08/2016!!! - Quickly add links to CAAD codes you frequently use. Includes a search feature."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
