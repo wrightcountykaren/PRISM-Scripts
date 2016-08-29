@@ -34,15 +34,16 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
-'Using a custom function to convert the county_attorney_array (on the global variables) into a list for the dialog
-call convert_array_to_droplist_items(county_attorney_array, county_attorney_list)
+'Using custom functions to convert arrays from global variables into a list for the dialog.
+call convert_array_to_droplist_items(county_attorney_array, county_attorney_list)			'County attorneys
+call convert_array_to_droplist_items(county_judge_array, county_judge_list)					'County judges
 
 'This dialog has been modified to show a dynamic county_attorney_list. As such, it can't be directly edited using dialog editor, without re-adding the preceding variable.
 BeginDialog date_of_the_hearing_jud_dialog, 0, 0, 321, 260, "Date of the Hearing Judicial"
   Text 5, 5, 80, 10, "Motion before the Court"
   ComboBox 85, 5, 155, 15, "Select one or type in other motion:"+chr(9)+"Initial Contempt of Court"+chr(9)+"Contempt Review"+chr(9)+"Continued Contempt Motion"+chr(9)+"Paternity Action", motion_before_court
   Text 5, 25, 65, 10, "District Court Judge"
-  DropListBox 75, 25, 85, 15, "Select one:"+chr(9)+"James Cunningham"+chr(9)+"John P. Dehen"+chr(9)+"Thomas M. Fitzpatrick"+chr(9)+"Bethany Fountain-Lindberg"+chr(9)+"Tammi A. Fredrickson"+chr(9)+"Sean C. Gibbs"+chr(9)+"Sharon L. Hall"+chr(9)+"Jenny Walker-Jasper"+chr(9)+"Jonathan N. Jasper"+chr(9)+"Lawrence R. Johnson"+chr(9)+"Kristin C. Larson"+chr(9)+"Nancy J. Logering"+chr(9)+"Douglas B. Meslow"+chr(9)+"Daniel O'Fallon"+chr(9)+"Alan Pendleton"+chr(9)+"Dyanna Street"+chr(9)+"Barry A. Sullivan", district_court_judge
+  DropListBox 75, 25, 85, 15, county_judge_list, district_court_judge
   Text 5, 45, 55, 10, "County Attorney"
   DropListBox 65, 45, 85, 15, county_attorney_list, CAO_list
   CheckBox 5, 70, 50, 10, "NCP present", NCP_present_check
