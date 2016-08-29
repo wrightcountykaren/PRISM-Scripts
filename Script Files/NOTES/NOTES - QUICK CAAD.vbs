@@ -38,24 +38,27 @@ END IF
 'This is a special function which writes to the text file used by this script
 Function write_line_to_text_file(new_line_for_writing, file_location)
 	'Now it determines the favorite CAAD notes
-	With (CreateObject("Scripting.FileSystemObject"))								'Creating an FSO
-		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then			'If the file exists...
-			Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
-			Set text_command = TextFileObj.OpenTextFile(file_location)				'Open the text file
-			text_raw = text_command.ReadAll											'Read the text file
-			IF text_raw <> "" THEN text_array = split(text_raw, vbNewLine)			'Split by new lines
-			text_command.Close														'Closes the file
+	With (CreateObject("Scripting.FileSystemObject"))							'Creating an FSO
+		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then		'If the file exists...
+			Set TextFileObj = CreateObject("Scripting.FileSystemObject")		'Create another FSO
+			Set text_command = TextFileObj.OpenTextFile(file_location)			'Open the text file
+			text_raw = text_command.ReadAll										'Read the text file
+			IF text_raw <> "" THEN text_array = split(text_raw, vbNewLine)		'Split by new lines
+			text_command.Close													'Closes the file
 		END IF
 	END WITH
 
 	'Now it updates the favorite CAAD notes
-	With (CreateObject("Scripting.FileSystemObject"))								'Creating an FSO
-		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then			'If the favoriteCAADnotes.txt file exists...
-			Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
-			Set text_command = TextFileObj.OpenTextFile(file_location, 2, True)		'Open the text file for writing
-			text_command.Write text_raw & vbNewLine & new_line_for_writing 			'Writes the new line
-			text_command.Close														'Closes the file
-		END IF
+	With (CreateObject("Scripting.FileSystemObject"))							'Creating an FSO
+		If .FileExists(file_location) Then create_new_file = true				'Setting this variable now so the script can apply the logic later
+		Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
+		Set text_command = TextFileObj.OpenTextFile(file_location, 2, True)		'Open the text file for writing
+		If create_new_file = true Then											'If the file existed, it should write as a new line (this avoids a vbNewLine being entered as the first item in the file)
+			text_command.Write text_raw & vbNewLine & new_line_for_writing 		'Writes the new line in an existing file
+		Else																	'If the file doesn't exist, it should simply add the new details without a new line
+			text_command.Write new_line_for_writing 							'Writes the new in a new file
+		End if																	'End of if...then statement
+		text_command.Close														'Closes the file
 	END WITH
 End function
 
@@ -83,7 +86,11 @@ Do
 			favorite_CAAD_notes_raw = favorite_CAAD_notes_command.ReadAll															'Read the text file <<<<<CAN THIS READ ONE LINE
 			IF favorite_CAAD_notes_raw <> "" THEN favorite_CAAD_notes_array = split(favorite_CAAD_notes_raw, vbNewLine)				'Split by new lines
 			favorite_CAAD_notes_command.Close																						'Closes the file
-		END IF
+		Else																														'...if the file doesn't exist...
+			MsgBox "Welcome to the Quick CAAD script! This appears to be your first time running this." & vbNewLine & vbNewLine & _
+				"You can use this script to store several CAAD codes you may use frequently. To start, navigate to the search screen and search for a CAAD code to add."
+				favorite_CAAD_notes_array = array()
+		End if
 	END WITH
 
 
