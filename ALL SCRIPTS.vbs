@@ -397,9 +397,9 @@ script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "UPDATE WORKER SIGNATURE"
-cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - UPDATE WORKER SIGNATURE.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Allows you to maintain a default signature that loads in all scripts."
+cs_scripts_array(script_num).script_type		= "UTILITIES"
+cs_scripts_array(script_num).file_name			= "UTILITIES - UPDATE WORKER SIGNATURE.vbs"
+cs_scripts_array(script_num).description		= "Allows you to maintain a default signature that loads in all scripts."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
