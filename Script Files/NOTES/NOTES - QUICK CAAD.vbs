@@ -108,6 +108,8 @@ Do
 
 			'If the CAAD_code_to_search is entered, this will process that first. Otherwise it will go through the description to search.
 			If CAAD_code_to_search <> "" then
+				navigate_to_PRISM_screen("CAAD")																										'Gets to CAAD
+				PF5																																		'Gets to the "add" menu
 				EMSetCursor 4, 54																														'Where the code is entered, we need to set the cursor there to read the help details
 				PF1																																		'Loads help
 				EMWriteScreen CAAD_code_to_search, 20, 28																								'Write the search string at 20, 28 on the screen
