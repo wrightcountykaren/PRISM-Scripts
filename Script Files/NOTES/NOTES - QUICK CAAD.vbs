@@ -93,9 +93,6 @@ Do
 		End if
 	END WITH
 
-
-
-
 	'THIS IS A DYNAMIC DIALOG! DON'T OPEN ME IN DIALOG EDITOR!!!!
 	BeginDialog quick_CAAD_dialog, 0, 0, 300, 200, "Quick CAAD dialog"
 	  ButtonGroup ButtonPressed
@@ -170,9 +167,35 @@ Do
 					PF3											'Gets out of the screen!
 					CAAD_code_to_search = ""					'Blanks this out so we don't leave the search dialog
 				End if
+			ElseIf CAAD_description_to_search <> "" then
+				navigate_to_PRISM_screen("CAAD")																																	'Gets to CAAD
+				PF5																																									'Gets to the "add" menu
+				EMSetCursor 4, 54																																					'Where the code is entered, we need to set the cursor there to read the help details
+				PF1																																									'Loads help
+				For PRISM_row = 13 to 19																																			'Available rows in PRISM for reading
+					EMReadScreen CAAD_code_check, 5, PRISM_row, 18																													'Checks the code
+					EMReadScreen CAAD_description_check, 55, PRISM_row, 24																											'Checks the description
+					If instr(CAAD_description_check, ucase(CAAD_description_to_search)) > 0 then																					'If the search string is found in the description then it generates a notice
+						match_notice = MsgBox("A match has been found!" & vbNewLine & vbNewLine & _
+						"Is CAAD code " & CAAD_code_check & ": " & trim(CAAD_description_check) & " what you're looking for?" & vbNewLine & vbNewLine & _
+						"Press ''Yes'' to add this to your Quick CAAD list, ''No'' to keep searching, or ''Cancel'' to return to the primary menu.", vbYesNoCancel + vbQuestion)	'Yes adds it, No keeps searching, cancel returns to the menu
+						If match_notice = vbCancel then Exit For																													'Return to the menu
+						If match_notice = vbYes then																																'If yes...
+							call write_line_to_text_file(CAAD_code_check & ", " & trim(CAAD_description_check), file_location)														'Uses custom function to write to the file
+							Exit for																																				'Return to the menu
+						End if
+					End if
+					EMReadScreen end_of_data_check, 19, 14, 36																	'Are we out of data to scan?
+					If end_of_data_check = "*** End of Data ***" then															'If so, we should alert the worker then exit this section and return to the main menu
+						MsgBox "No match found!"
+						Exit for
+					End if
+					If PRISM_row = 19 then																						'If we're at the end, it should reset to row 13 so it keeps looping
+						PRISM_row = 13
+						PF8																										'Gets to next screen to keep searching
+					End if
+				Next
 			End if
-
-
 		Loop until ButtonPressed = cancel or (CAAD_code_to_search <> "" or CAAD_description_to_search <> "")
 
 		ButtonPressed = 0	'Needs to blank out so it goes back to the main dialog
