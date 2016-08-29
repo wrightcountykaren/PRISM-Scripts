@@ -34,6 +34,8 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+Do
+
 'Before loading dialogs, needs to scan the My Documents folder for a file called favoriteCAADnotes.txt. If this file is found, details about CAAD notes will be pre-loaded. Otherwise, it won't be.
 'Needs to determine MyDocs directory before proceeding.
 Set wshshell = CreateObject("WScript.Shell")
@@ -91,6 +93,8 @@ EndDialog
 
 EMConnect ""
 
+
+
 Dialog quick_CAAD_dialog
 If ButtonPressed = cancel then StopScript
 
@@ -132,6 +136,8 @@ If ButtonPressed = search_CAAD_codes_button then
 	Loop until ButtonPressed = cancel
 
 End if
+
+Loop until ButtonPressed <> cancel
 
 'Now it goes to the selected note
 navigate_to_PRISM_screen("CAAD")			'Navigates to CAAD
