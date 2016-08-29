@@ -90,28 +90,28 @@ Do
 
 
 	'THIS IS A DYNAMIC DIALOG! DON'T OPEN ME IN DIALOG EDITOR!!!!
-	BeginDialog quick_CAAD_dialog, 0, 0, 200, 105, "Quick CAAD dialog"
+	BeginDialog quick_CAAD_dialog, 0, 0, 300, 200, "Quick CAAD dialog"
 	  ButtonGroup ButtonPressed
-	    OkButton 90, 85, 50, 15
-	    CancelButton 145, 85, 50, 15
+	    OkButton 190, 180, 50, 15
+	    CancelButton 245, 180, 50, 15
 		dialog_row = 5																										'Starting here so that the contents display in a pretty manner
 		'Iterate through each item in the array determined above, then display them
 		For i = 0 to ubound(favorite_CAAD_notes_array)																		'i is a counter in this case
 			If favorite_CAAD_notes_array(i) = "" then exit for 																'If it's blank, we should stop because we're likely at the end of the file
 			number_to_pass_to_the_button = 1000 + i																			'Add 1000 to the counter to get a ButtonPressed value we can use
 			PushButton 5, dialog_row, 30, 10, left(favorite_CAAD_notes_array(i), 5), number_to_pass_to_the_button			'Show the 5-most characters of the CAAD code (each one is five characters) as a button
-			Text 40, dialog_row, 150, 10, right(favorite_CAAD_notes_array(i), len(favorite_CAAD_notes_array(i)) - 7)		'Show the rest as a description
+			Text 40, dialog_row, 255, 10, right(favorite_CAAD_notes_array(i), len(favorite_CAAD_notes_array(i)) - 7)		'Show the rest as a description
 			dialog_row = dialog_row + 15																					'Go up 15 pixels
 		Next
-		PushButton 5, 90, 80, 10, "search CAAD codes...", search_CAAD_codes_button											'Provides a search feature
+		PushButton 5, 185, 80, 10, "search CAAD codes...", search_CAAD_codes_button											'Provides a search feature
 	EndDialog
 
-	BeginDialog quick_CAAD_search_dialog, 0, 0, 356, 120, "Quick CAAD search dialog"
+	BeginDialog quick_CAAD_search_dialog, 0, 0, 360, 120, "Quick CAAD search dialog"
+	EditBox 115, 15, 55, 15, CAAD_code_to_search
+	EditBox 115, 50, 105, 15, CAAD_description_to_search
 	  ButtonGroup ButtonPressed
 	    OkButton 245, 100, 50, 15
 	    CancelButton 300, 100, 50, 15
-	  EditBox 115, 15, 55, 15, CAAD_code_to_search
-	  EditBox 115, 50, 105, 15, CAAD_description_to_search
 	  GroupBox 5, 5, 170, 30, "Option A"
 	  Text 10, 20, 100, 10, "Enter a CAAD code to search:"
 	  GroupBox 5, 40, 220, 30, "Option B"
