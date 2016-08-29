@@ -1,51 +1,50 @@
-'GATHERING STATS---------------------------------------------------------------------------------------------------- 
-name_of_script = "BULK - M6529.vbs" 
-start_time = timer 
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "BULK - M6529.vbs"
+start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'This function takes a date and addes leading zeros if necessary to format MM/DD/YYYY
 FUNCTION change_date_format(date_to_format)
 		month3 = DatePart("M", date_to_format)
 		day3 = DatePart("D", date_to_format)
 		year3 = DatePart("YYYY", date_to_format)
-		if len(month3) = 1 then 
+		if len(month3) = 1 then
 			month3_s = "0" & month3
 		else
 			month3_s = month3
 		end if
-		if len(day3) = 1 then 
+		if len(day3) = 1 then
 			day3_s = "0" & day3
 		else
 			day3_s = day3
@@ -54,19 +53,19 @@ FUNCTION change_date_format(date_to_format)
 		change_date_format = date_to_format
 END FUNCTION
 
-' >>>>> DETERMINING FIRST DAY OF THE MONTH <<<<< 
+' >>>>> DETERMINING FIRST DAY OF THE MONTH <<<<<
 current_month = DatePart("M", date)
 if len(current_month) = 1 then current_month_s = "0" & current_month
 current_year = DatePart("YYYY", date)
 current_date = current_month_s & "/01/" & current_year
 
 
-' >>>>> DETERMINING LAST DAY OF THE MONTH <<<<< 
+' >>>>> DETERMINING LAST DAY OF THE MONTH <<<<<
 next_month = DateAdd("M", 1, current_date)
 next_month_minus1 = DateAdd("D", -1, next_month)
 next_month_minus1_s = change_date_format(next_month_minus1)
 
-'>>>>>> DETERMINING A DATE 3 MONTHS AGO  <<<<<<	
+'>>>>>> DETERMINING A DATE 3 MONTHS AGO  <<<<<<
 current_month_minus3 = DateAdd("M", -3, date) 'variable for the current date minus three - this returns a date format
 current_month_minus3_s = change_date_format(current_month_minus3)
 
@@ -78,7 +77,7 @@ Call navigate_to_Prism_screen("USWT")
 
 ' >>>>> SELECTING THE SPECIFIC WORKLIST INFO <<<<<
 EMWriteScreen "M6529", 20, 30
-EMWriteScreen current_date, 20, 48   'Select worklists that are due this calendar month 
+EMWriteScreen current_date, 20, 48   'Select worklists that are due this calendar month
 EMWriteScreen next_month_minus1_s, 20, 63
 transmit
 
@@ -90,24 +89,24 @@ DO
 	EMReadScreen USWT_type, 5, USWT_row, 45
 	EMReadScreen USWT_date, 8, USWT_row, 73
 	IF USWT_type = "M6529" THEN
-		
+
 		EMReadScreen USWT_case_number, 13, USWT_row, 8
 		EMWriteScreen "D", USWT_row, 4
 		transmit
-		
+
 		purge = false 'Reset the purge variable
 		Call navigate_to_Prism_screen("CAFS")
 		EMReadScreen monthly_accrual, 13, 9, 26
 		EMReadScreen monthly_nonaccrual, 13, 10, 26
 		total_due = (ccur(monthly_accrual) + ccur(monthly_nonaccrual))*1.2*3
-		
+
 
 		Call navigate_to_PRISM_screen ("PALC")
 
-		
+
 		EMWriteScreen current_month_minus3_s, 20, 35  'Checks for payments for the last three months
-		transmit	
-					
+		transmit
+
 		row = 9		'Setting variable for the do...loop
 
 Do
@@ -118,18 +117,18 @@ Do
 	EMReadScreen pmt_ID_YY, 2, row, 7
 	EMReadScreen pmt_ID_MM, 2, row, 9
 	EMReadScreen pmt_ID_DD, 2, row, 11
-	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY	
-					
+	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY
+
 		EMReadScreen proc_type, 3, row, 25														'Reading the proc type
-		EMReadScreen case_alloc_amt, 10, row, 70	
+		EMReadScreen case_alloc_amt, 10, row, 70
 		If trim(case_alloc_amt) = "" then case_alloc_amt = 0												'Reading the amt allocated
-		If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _	
+		If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _
 		proc_type = "PCA" or proc_type = "PIF" or proc_type = "STJ" or proc_type = "STS" or proc_type = "FTJ" then 		'If proc type is one of these, it's involuntary. Else, it's voluntary.
 			total_involuntary_alloc = total_involuntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for involuntary
 		Else
 			total_voluntary_alloc = total_voluntary_alloc + abs(case_alloc_amt)							'Adds the alloc amt for voluntary
 		End if
-	
+
 	row = row + 1														'Increases the row variable by one, to check the next row
 	EMReadScreen end_of_data_check, 19, row, 28									'Checks to see if we've reached the end of the list
 	If end_of_data_check = "*** End of Data ***" then exit do							'Exits do if we have
@@ -144,22 +143,22 @@ If total_voluntary_alloc = "" then total_voluntary_alloc = "0"
 msgbox_text = "---PAYMENT BREAKDOWN FOR " & current_month_minus3 & " THROUGH " & date & "---" & chr(10) & chr(10)_
 			& "Involuntary: " & formatCurrency(ccur(total_involuntary_alloc)) & chr(10) & "Voluntary: " & formatCurrency(ccur(total_voluntary_alloc)) _
 			& chr(10) & chr(10) & "Monthly accrual: " & formatCurrency(ccur(monthly_accrual)) & chr(10) _
-			& "Monthly Non-accrual: " & formatCurrency(ccur(monthly_nonaccrual)) & chr(10) & chr(10) & chr(10) _ 
+			& "Monthly Non-accrual: " & formatCurrency(ccur(monthly_nonaccrual)) & chr(10) & chr(10) & chr(10) _
 			& "Total due: " & formatCurrency(ccur(total_due)) &chr(10)& "Continue Interest Suspension?"
 
 continue = msgbox (msgbox_text, 4, "Continue Interest Suspension?")
 
-IF continue = 6 then 
+IF continue = 6 then
 'msgbox "User selected to continue the interest suspension."
-purge = true 
+purge = true
 count = count + 1
-END IF	
+END IF
 	IF continue = 7 then 'User selected not to add the employer
 'msgbox "User selected to end the interest suspension."
 count = count + 1
 END IF
 
-	
+
 		Call navigate_to_PRISM_screen ("CAWT")
 		EMWriteScreen "M6529", 20, 29
 		EMWriteScreen current_date, 20, 47
@@ -188,10 +187,10 @@ END IF
 caad_text = "---PAYMENT BREAKDOWN FOR " & current_month_minus3 & " THROUGH " & date & "---  "_
 			& "Involuntary: " & formatCurrency(ccur(total_involuntary_alloc)) & " " & "Voluntary: " & formatCurrency(ccur(total_voluntary_alloc)) _
 			& "  " & "Monthly accrual: " & formatCurrency(ccur(monthly_accrual)) & " " _
-			& "Monthly Non-accrual: " & formatCurrency(ccur(monthly_nonaccrual)) & "     " _ 
+			& "Monthly Non-accrual: " & formatCurrency(ccur(monthly_nonaccrual)) & "     " _
 			& "Total due: " & formatCurrency(ccur(total_due)) & " "
-			write_variable_in_CAAD(caad_text) 
-			transmit				
+			write_variable_in_CAAD(caad_text)
+			transmit
 		END IF
 
 total_voluntary_alloc = "0"
@@ -212,14 +211,13 @@ total_involuntary_alloc = "0"
 				NEXT
 			END IF
 			USWT_row = USWT_row + 1
-			IF USWT_row = 19 THEN 
+			IF USWT_row = 19 THEN
 				PF8
 				USWT_row = 7
 				SCROLL = SCROLL + 1
 			END IF
-		
+
 	End If
 LOOP UNTIL USWT_type <> "M6529"
 
 script_end_procedure("Success!  " & Count & " worklists have been processed.")
-
