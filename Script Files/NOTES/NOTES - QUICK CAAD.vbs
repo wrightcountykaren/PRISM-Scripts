@@ -34,6 +34,39 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+
+'This is a special function which writes to the text file used by this script
+Function write_line_to_text_file(new_line_for_writing, file_location)
+	'Now it determines the favorite CAAD notes
+	With (CreateObject("Scripting.FileSystemObject"))								'Creating an FSO
+		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then			'If the file exists...
+			Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
+			Set text_command = TextFileObj.OpenTextFile(file_location)				'Open the text file
+			text_raw = text_command.ReadAll											'Read the text file
+			IF text_raw <> "" THEN text_array = split(text_raw, vbNewLine)			'Split by new lines
+			text_command.Close														'Closes the file
+		END IF
+	END WITH
+
+	'Now it updates the favorite CAAD notes
+	With (CreateObject("Scripting.FileSystemObject"))								'Creating an FSO
+		If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then			'If the favoriteCAADnotes.txt file exists...
+			Set TextFileObj = CreateObject("Scripting.FileSystemObject")			'Create another FSO
+			Set text_command = TextFileObj.OpenTextFile(file_location, 2, True)		'Open the text file for writing
+			text_command.Write text_raw & vbNewLine & new_line_for_writing 			'Writes the new line
+			text_command.Close														'Closes the file
+		END IF
+	END WITH
+End function
+
+'Needs to determine MyDocs directory before proceeding.
+Set wshshell = CreateObject("WScript.Shell")
+user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
+
+'Sets location of files as the user_myDocs_folder from above
+file_location = user_myDocs_folder & "favoriteCAADnotes.txt"
+
+
 'This is a large do...loop which will constantly re-read the text file in case changes were made. If the script is just being used (and not modified), it will only iterate once through this.
 Do
 
@@ -121,23 +154,9 @@ Do
 					add_to_quick_CAAD = MsgBox("The code was found! Would you like to add this to the Quick CAAD button?", vbYesNo + vbQuestion)		'...ask the user if they want to update...
 					If add_to_quick_CAAD = vbNo then exit do																							'...If they don't, take them back to the main dialog...
 					If add_to_quick_CAAD = vbYes then																									'...If they do, time to add the file!
-						EMReadScreen CAAD_description_to_add, 54, 13, 24
-
-						'Needs to determine MyDocs directory before proceeding.
-						Set wshshell = CreateObject("WScript.Shell")
-						user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
-
-						'Now it updates the favorite CAAD notes
-						With (CreateObject("Scripting.FileSystemObject"))																						'Creating an FSO
-							If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then																	'If the favoriteCAADnotes.txt file exists...
-								Set get_favorite_CAAD_notes = CreateObject("Scripting.FileSystemObject")														'Create another FSO
-								Set favorite_CAAD_notes_command = get_favorite_CAAD_notes.OpenTextFile(user_myDocs_folder & "favoriteCAADnotes.txt", 2, True)	'Open the text file for writing
-								favorite_CAAD_notes_command.Write favorite_CAAD_notes_raw & vbNewLine & CAAD_code_to_search & ", " & CAAD_description_to_add	'Writes the new line
-								favorite_CAAD_notes_command.Close																								'Closes the file
-							END IF
-						END WITH
-
-						PF3		'Gets out of the screen!
+						EMReadScreen CAAD_description_to_add, 54, 13, 24																				'Reads the description for good measure
+						call write_line_to_text_file(CAAD_code_to_search & ", " & CAAD_description_to_add, file_location)								'Uses custom function to write to the file
+						PF3																																'Gets out of the screen!
 					End if
 				Else
 					MsgBox "Your CAAD code was not found."		'Yells at you
