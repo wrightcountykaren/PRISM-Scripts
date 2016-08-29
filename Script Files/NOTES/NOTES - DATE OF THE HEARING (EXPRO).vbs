@@ -2,39 +2,37 @@
 name_of_script = "NOTES - DATE OF THE HEARING (EXPRO).vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
-
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 BeginDialog date_of_the_hearing_expro_dialog, 0, 0, 321, 220, "Date of the Hearing ExPRO"
   Text 5, 5, 80, 10, "Motion before the Court"
   ComboBox 85, 5, 165, 15, "Select one or type in other motion:"+chr(9)+"MES 256 Action"+chr(9)+"Motion to Set"+chr(9)+"Continuance"+chr(9)+"License Suspension Appeal"+chr(9)+"COLA motion"+chr(9)+"Modification/RAM"+chr(9)+"UFM - Register for Modificaion", motion_before_court
@@ -91,7 +89,7 @@ Loop until case_number_valid = True
 Do
 	Do
 		Do
-			Do 	
+			Do
 				Do
 					'Shows dialog, validates that PRISM is up and not timed out, with transmit
 					Dialog date_of_the_hearing_expro_dialog
@@ -108,7 +106,7 @@ Do
 		Loop until motion_before_court <> "" and motion_before_court <> "Select one or type in other motion:"
 		'Makes sure worker selects county attorney
 		If CAO_list = "Select one:" then MsgBox "Please select a County Attorney"
-	Loop until CAO_list <> "Select one:"			
+	Loop until CAO_list <> "Select one:"
 	'Makes sure worker selects child support magistrate
 	If child_support_magistrate = "Select one:" then MsgBox "Please select a Child Support Magistrate"
 Loop until child_support_magistrate <> "Select one:"
@@ -123,34 +121,34 @@ call enter_PRISM_case_number(PRISM_case_number, 20, 8)
 
 PF5					'Did this because you have to add a new note
 
-EMWriteScreen "M3909", 4, 54  'adds correct caad code 
+EMWriteScreen "M3909", 4, 54  'adds correct caad code
 
 EMSetCursor 16, 4			'Because the cursor does not default to this location
 
-call write_editbox_in_PRISM_case_note("Motion before the Court", motion_before_court, 4) 
+call write_editbox_in_PRISM_case_note("Motion before the Court", motion_before_court, 4)
 call write_editbox_in_PRISM_case_note("Child Support Magistrate", child_support_magistrate, 4)
 call write_editbox_in_PRISM_case_note("County Attorney", CAO_list, 4)
 if NCP_present_check = 1 then
 	call write_new_line_in_PRISM_case_note("* NCP present")
 	call write_editbox_in_PRISM_case_note("Represented by", NCP_represented_by, 4)
-else 
+else
 	call write_new_line_in_PRISM_case_note ("* NCP not present")
 end if
 if CP_present_check = 1 then
 	call write_new_line_in_PRISM_case_note("* CP present")
 	call write_editbox_in_PRISM_case_note("Represented by", CP_represented_by, 4)
-else 
+else
 	call write_new_line_in_PRISM_case_note ("* CP not present")
 end if
 call write_editbox_in_PRISM_case_note("Details of the Hearing", details_of_the_hearing, 4)
-if DL_addressed_check = 1 then 
+if DL_addressed_check = 1 then
 	call write_new_line_in_PRISM_case_note("* Drivers license addressed")
 	call write_editbox_in_PRISM_case_note("Details of drivers license", dl_details, 4)
 end if
 if review_hearing_date <> "" then
 	call write_editbox_in_PRISM_case_note("Review Hearing date", review_hearing_date, 4)
 end if
-call write_new_line_in_PRISM_case_note("---")	
+call write_new_line_in_PRISM_case_note("---")
 call write_new_line_in_PRISM_case_note(worker_signature)
 
 script_end_procedure("")
