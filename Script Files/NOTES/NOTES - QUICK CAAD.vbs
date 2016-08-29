@@ -34,13 +34,43 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
-BeginDialog quick_CAAD_dialog, 0, 0, 196, 105, "Quick CAAD dialog"
+'Before loading dialogs, needs to scan the My Documents folder for a file called favoriteCAADnotes.txt. If this file is found, details about CAAD notes will be pre-loaded. Otherwise, it won't be.
+'Needs to determine MyDocs directory before proceeding.
+Set wshshell = CreateObject("WScript.Shell")
+user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
+
+'Now it determines the favorite CAAD notes
+With (CreateObject("Scripting.FileSystemObject"))																				'Creating an FSO
+	If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then															'If the favoriteCAADnotes.txt file exists...
+		Set get_favorite_CAAD_notes = CreateObject("Scripting.FileSystemObject")												'Create another FSO
+		Set favorite_CAAD_notes_command = get_favorite_CAAD_notes.OpenTextFile(user_myDocs_folder & "favoriteCAADnotes.txt")	'Open the text file
+		favorite_CAAD_notes_raw = favorite_CAAD_notes_command.ReadAll															'Read the text file <<<<<CAN THIS READ ONE LINE
+		IF favorite_CAAD_notes_raw <> "" THEN favorite_CAAD_notes_array = split(favorite_CAAD_notes_raw, vbNewLine)				'Split by new lines
+		favorite_CAAD_notes_command.Close																						'Closes the file
+	END IF
+END WITH
+
+
+BeginDialog quick_CAAD_dialog, 0, 0, 200, 105, "Quick CAAD dialog"
   ButtonGroup ButtonPressed
-    OkButton 85, 85, 50, 15
-    CancelButton 140, 85, 50, 15
-    PushButton 5, 5, 30, 10, "M3909", CAAD_M3909_button
-    PushButton 5, 90, 75, 10, "search CAAD codes...", search_CAAD_codes_button
-  Text 40, 5, 150, 10, "DATE OF HEARING"
+    OkButton 90, 85, 50, 15
+    CancelButton 145, 85, 50, 15
+
+	dialog_row = 5	'Starting here
+
+	'For each CAAD_code in favorite_CAAD_notes_array
+	For i = 0 to ubound(favorite_CAAD_notes_array)
+
+		number_to_pass_to_the_button = 1000 + i
+
+		PushButton 5, dialog_row, 30, 10, left(favorite_CAAD_notes_array(i), 5), number_to_pass_to_the_button
+		Text 40, dialog_row, 150, 10, right(favorite_CAAD_notes_array(i), len(favorite_CAAD_notes_array(i)) - 7)
+		dialog_row = dialog_row + 15
+
+	Next
+
+    PushButton 5, 90, 80, 10, "search CAAD codes...", search_CAAD_codes_button
+
 EndDialog
 
 BeginDialog quick_CAAD_search_dialog, 0, 0, 356, 120, "Quick CAAD search dialog"
@@ -64,22 +94,46 @@ EMConnect ""
 Dialog quick_CAAD_dialog
 If ButtonPressed = cancel then StopScript
 
-If ButtonPressed = search_CAAD_codes_button then
-	Dialog quick_CAAD_search_dialog
-	If ButtonPressed = cancel then StopScript
+For i = 0 to ubound(favorite_CAAD_notes_array)
 
-	If CAAD_code_to_search <> "" then
-		EMSetCursor 4, 54		'Where the code is entered, we need to set the cursor there to read the help details
-		PF1						'Loads help
-		EMWriteScreen CAAD_code_to_search, 20, 28
-		transmit
-		EMReadScreen CAAD_code_check, 5, 13, 18
-		If CAAD_code_check = CAAD_code_to_search then
-			MsgBox "found!"
-		Else
-			MsgBox "Your CAAD code was not found."
-		End if
+	If ButtonPressed = i + 1000 then
+		CAAD_code_to_write = left(favorite_CAAD_notes_array(i), 5)
 	End if
+
+Next
+
+If ButtonPressed = search_CAAD_codes_button then
+	Do
+
+
+		Dialog quick_CAAD_search_dialog
+		If ButtonPressed = cancel then exit do
+
+
+		If CAAD_code_to_search <> "" then
+			EMSetCursor 4, 54		'Where the code is entered, we need to set the cursor there to read the help details
+			PF1						'Loads help
+			EMWriteScreen CAAD_code_to_search, 20, 28
+			transmit
+			EMReadScreen CAAD_code_check, 5, 13, 18
+			If CAAD_code_check = CAAD_code_to_search then
+				add_to_quick_CAAD = MsgBox("The code was found! Would you like to add this to the Quick CAAD button?", vbYesNo + vbQuestion)
+				If add_to_quick_CAAD = vbNo then StopScript
+				If add_to_quick_CAAD = vbYes then
+					'Needs to open up file, manually modify it to include this function, then close the file and re-run the script
+				End if
+			Else
+				MsgBox "Your CAAD code was not found."
+				PF3
+			End if
+		End if
+
+
+	Loop until ButtonPressed = cancel
+
 End if
 
-'If ButtonPressed = CAAD_M3909_button then EMWriteScreen "M3909", 4, 54
+'Now it goes to the selected note
+navigate_to_PRISM_screen("CAAD")			'Navigates to CAAD
+PF5											'Adds a new note
+EMWriteScreen CAAD_code_to_write, 4, 54		'Writes the code
