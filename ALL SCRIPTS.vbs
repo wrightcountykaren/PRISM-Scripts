@@ -164,6 +164,14 @@ cs_scripts_array(script_num).description		= "Sends emancipation DORD docs."
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "EMPLOYMENT VERIFICATION"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - EMPLOYMENT VERIFICATION.vbs"
+cs_scripts_array(script_num).description		= "NEW 08/2016!!! Complete an Employment Verification in NCID or CPID, includes info on CAAD note."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ENFORCEMENT INTAKE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ENFORCEMENT INTAKE.vbs"
