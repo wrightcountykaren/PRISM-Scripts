@@ -124,6 +124,7 @@ Do
 				Else
 					MsgBox "Your CAAD code was not found."
 					PF3
+					CAAD_code_to_search = ""					'Blanks this out so we don't leave the search dialog
 				End if
 			End if
 
