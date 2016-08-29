@@ -55,6 +55,7 @@ Do
 
 
 
+
 	'THIS IS A DYNAMIC DIALOG! DON'T OPEN ME IN DIALOG EDITOR!!!!
 	BeginDialog quick_CAAD_dialog, 0, 0, 200, 105, "Quick CAAD dialog"
 	  ButtonGroup ButtonPressed
@@ -63,6 +64,7 @@ Do
 		dialog_row = 5																										'Starting here so that the contents display in a pretty manner
 		'Iterate through each item in the array determined above, then display them
 		For i = 0 to ubound(favorite_CAAD_notes_array)																		'i is a counter in this case
+			If favorite_CAAD_notes_array(i) = "" then exit for 																'If it's blank, we should stop because we're likely at the end of the file
 			number_to_pass_to_the_button = 1000 + i																			'Add 1000 to the counter to get a ButtonPressed value we can use
 			PushButton 5, dialog_row, 30, 10, left(favorite_CAAD_notes_array(i), 5), number_to_pass_to_the_button			'Show the 5-most characters of the CAAD code (each one is five characters) as a button
 			Text 40, dialog_row, 150, 10, right(favorite_CAAD_notes_array(i), len(favorite_CAAD_notes_array(i)) - 7)		'Show the rest as a description
@@ -119,11 +121,27 @@ Do
 					add_to_quick_CAAD = MsgBox("The code was found! Would you like to add this to the Quick CAAD button?", vbYesNo + vbQuestion)		'...ask the user if they want to update...
 					If add_to_quick_CAAD = vbNo then exit do																							'...If they don't, take them back to the main dialog...
 					If add_to_quick_CAAD = vbYes then																									'...If they do, time to add the file!
-						'Needs to open up file, manually modify it to include this function, then close the file and re-run the script
+						EMReadScreen CAAD_description_to_add, 54, 13, 24
+
+						'Needs to determine MyDocs directory before proceeding.
+						Set wshshell = CreateObject("WScript.Shell")
+						user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
+
+						'Now it updates the favorite CAAD notes
+						With (CreateObject("Scripting.FileSystemObject"))																						'Creating an FSO
+							If .FileExists(user_myDocs_folder & "favoriteCAADnotes.txt") Then																	'If the favoriteCAADnotes.txt file exists...
+								Set get_favorite_CAAD_notes = CreateObject("Scripting.FileSystemObject")														'Create another FSO
+								Set favorite_CAAD_notes_command = get_favorite_CAAD_notes.OpenTextFile(user_myDocs_folder & "favoriteCAADnotes.txt", 2, True)	'Open the text file for writing
+								favorite_CAAD_notes_command.Write favorite_CAAD_notes_raw & vbNewLine & CAAD_code_to_search & ", " & CAAD_description_to_add	'Writes the new line
+								favorite_CAAD_notes_command.Close																								'Closes the file
+							END IF
+						END WITH
+
+						PF3		'Gets out of the screen!
 					End if
 				Else
-					MsgBox "Your CAAD code was not found."
-					PF3
+					MsgBox "Your CAAD code was not found."		'Yells at you
+					PF3											'Gets out of the screen!
 					CAAD_code_to_search = ""					'Blanks this out so we don't leave the search dialog
 				End if
 			End if
