@@ -1,7 +1,7 @@
 'Option Explicit
 
 'STATS GATHERING ---------------------------
-name_of_script = "ACTIONS - REDIRECT DOCS.vbs"
+name_of_script = "ACTIONS - ADMIN REDIRECT.vbs"
 start_time = timer
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
