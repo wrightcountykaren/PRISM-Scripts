@@ -33,13 +33,18 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 	END IF
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
+
+'Using custom functions to convert arrays from global variables into a list for the dialog.
+call convert_array_to_droplist_items(county_attorney_array, county_attorney_list)										'County attorneys
+call convert_array_to_droplist_items(child_support_magistrates_array, child_support_magistrates_list)					'County judges
+
 BeginDialog date_of_the_hearing_expro_dialog, 0, 0, 321, 220, "Date of the Hearing ExPRO"
   Text 5, 5, 80, 10, "Motion before the Court"
   ComboBox 85, 5, 165, 15, "Select one or type in other motion:"+chr(9)+"MES 256 Action"+chr(9)+"Motion to Set"+chr(9)+"Continuance"+chr(9)+"License Suspension Appeal"+chr(9)+"COLA motion"+chr(9)+"Modification/RAM"+chr(9)+"UFM - Register for Modificaion", motion_before_court
   Text 5, 25, 85, 10, "Child Support Magistrate"
-  DropListBox 90, 25, 85, 15, "Select one:"+chr(9)+"Beverly Anderson"+chr(9)+"Jeffery Bangma"+chr(9)+"Kim Brandell"+chr(9)+"Alyssa Berg"+chr(9)+"James Brinegar"+chr(9)+"Jill Prohofsky"+chr(9)+"Patricia Marty-Villaume"+chr(9)+"Susan Williams", child_support_magistrate
+  DropListBox 90, 25, 85, 15, child_support_magistrates_list, child_support_magistrate
   Text 180, 25, 55, 10, "County Attorney"
-  DropListBox 235, 25, 85, 15, "Select one:"+chr(9)+"Tonya D.F. Berzat"+chr(9)+"Michael S. Barone"+chr(9)+"Paul C. Clabo"+chr(9)+"Dorrie B. Estebo"+chr(9)+"Francine P. Mocchi"+chr(9)+"Rachel Morrison"+chr(9)+"D. Marie Sieber"+chr(9)+"Brett Schading", CAO_list
+  DropListBox 235, 25, 85, 15, county_attorney_list, CAO_list
   CheckBox 5, 50, 50, 10, "NCP present", NCP_present_check
   Text 60, 50, 60, 10, "Represented by:"
   EditBox 115, 50, 85, 15, NCP_represented_by
