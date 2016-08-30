@@ -66,7 +66,7 @@ _[(back to top)](#bluezone-scripts--dhs-maxis-scripts)_
 Issue list
 ---
 
-We have an [issue list](https://github.com/MN-CS-Script-Team/PRISM-Scripts/issues) maintained on GitHub. Both scriptwriters and non-scriptwriters should feel free to create/report issues on the issue list (doing so requires a GitHub account). 
+We have an [issue list](https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues) maintained on GitHub. Both scriptwriters and non-scriptwriters should feel free to create/report issues on the issue list (doing so requires a GitHub account). 
 
 Scriptwriters are encouraged to tackle any issues on the issue list, so long as they meet the following conditions: 
 * The scriptwriter has time in the near future to complete and test the issue (note that many issues have a "milestone", which may have an associated due date).
