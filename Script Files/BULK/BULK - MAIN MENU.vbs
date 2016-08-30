@@ -36,9 +36,9 @@ END IF
 
 'Loading all scripts
 If run_locally <> true then
-	CALL run_from_GitHub("https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
+	CALL run_from_GitHub("https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/ALL%20SCRIPTS.vbs")
 Else
-	CALL run_from_GitHub("C:\PRISM-Scripts\ALL SCRIPTS.vbs")
+	CALL run_from_GitHub("C:\DHS-PRISM-Scripts\ALL SCRIPTS.vbs")
 End if
 
 DIM ButtonPressed, button_placeholder
