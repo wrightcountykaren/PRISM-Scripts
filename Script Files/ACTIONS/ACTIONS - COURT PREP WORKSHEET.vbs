@@ -461,7 +461,7 @@ Set objWord = CreateObject("Word.Application")
 objWord.Visible = True
 
 'Creating document
-set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Court Prep Worksheet.dotx")
+set objDoc = objWord.Documents.Add(word_documents_folder_path & "Court Prep Worksheet.dotx")
 set objSelection = objWord.Selection
 	With objDoc
 		.FormFields("NCP_NameFML").Result = NCP_name
