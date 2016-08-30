@@ -6,16 +6,16 @@ run_locally = true
 
 'Default directory: used by the script to determine if we're scriptwriters or not (scriptwriters use a default directory traditionally).
 '	This is modified by the installer, which will determine if this is a scriptwriter or a production user.
-default_directory = "C:\PRISM-Scripts\Script Files\"
+default_directory = "C:\DHS-PRISM-Scripts\Script Files\"
 
 'This is used for determining whether script_end_procedure will also log usage info in an Access table.
 collecting_statistics = False
 
 'This is the file path for the statistics Access database.
-stats_database_path = "C:\PRISM-Scripts\Databases for script usage\usage statistics.accdb"
+stats_database_path = "C:\DHS-PRISM-Scripts\Databases for script usage\usage statistics.accdb"
 
 'This is the folder path for county-specific Word documents. Modify this with your shared-drive location for Word documents.
-word_documents_folder_path = "C:\PRISM-Scripts\Word files for script usage\"
+word_documents_folder_path = "C:\DHS-PRISM-Scripts\Word files for script usage\"
 
 'This is used by scripts which tell the worker where to find a doc to send to a client (ie "Send form using Compass Pilot")
 EDMS_choice = "Compass Pilot"
@@ -68,10 +68,10 @@ If InStr(beta_users, UCASE(windows_user_ID)) <> 0 then use_master_branch = true
 
 'This is the URL of our script repository, and should only change if the agency is a scriptwriting agency. Scriptwriters can elect to use the master branch, allowing them to test new tools, etc.
 IF use_master_branch = TRUE THEN		'scriptwriters typically use the master branch
-	script_repository = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Script Files/"
+	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/Script Files/"
 ELSE							'Everyone else (who isn't a scriptwriter) typically uses the release branch
-	script_repository = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Script Files/"
+	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/release/Script Files/"
 END IF
 
 'If run locally is set to "True", the scripts will totally bypass GitHub and run locally.
-IF run_locally = TRUE THEN script_repository = "C:\PRISM-Scripts\Script Files\"
+IF run_locally = TRUE THEN script_repository = "C:\DHS-PRISM-Scripts\Script Files\"
