@@ -334,8 +334,7 @@ End if
 
 'NCP Welcome Letter
 If NCP_welcome_ltr_check = checked then
-'	set objDoc = objWord.Documents.Add("E:\Enforcement Script\NCP Case opening- Welcome Letter.dotm")
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\NCP Case opening- Welcome Letter.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "NCP Case opening- Welcome Letter.dotm")
 	With objDoc
 		.FormFields("NCPName").Result = NCP_name
 		.FormFields("NCPAddress").Result = ncp_address
@@ -353,7 +352,7 @@ End if
 
 'NCP Court Order Summary
 If ncp_court_order_summary_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\Court Order Summary Notice.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Court Order Summary Notice.dotm")
 	With objDoc
 		.FormFields("NCPName").Result = NCP_name
 		.FormFields("NCPAddress").Result = ncp_address
@@ -370,7 +369,7 @@ End if
 
 'Arrears Reported
 If arrears_reported_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\NCP Arrears Reported Ltr.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "NCP Arrears Reported Ltr.dotm")
 	With objDoc
 		.FormFields("NCPName").Result = NCP_name
 		.FormFields("NCPName1").Result = NCP_name
@@ -387,7 +386,7 @@ End if
 
 'CP Welcome Letter
 If CP_welcome_ltr_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\CP Case Opening - Welcome Letter.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "CP Case Opening - Welcome Letter.dotm")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CPAddress").Result = CP_address
@@ -406,7 +405,7 @@ End if
 
 'CP Statment of Arrears
 If CP_Stmt_of_Arrears_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\CP Stmt of Support Cover Letter.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "CP Stmt of Support Cover Letter.dotm")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CPAddress").Result = CP_address
@@ -426,7 +425,7 @@ End if
 
 'Child Care Verification
 If child_care_verif_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\Childcare Verification Letter.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Childcare Verification Letter.dotm")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CPName1").Result = CP_name
@@ -445,7 +444,7 @@ End if
 
 'CP New Order Summary
 If CP_new_order_summary_check = checked then
-	set objDoc = objWord.Documents.Add("Q:\Blue Zone Scripts\Word documents for script use\Enforcement Script\CP New Order Summary.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "CP New Order Summary.dotm")
 	With objDoc
 		.FormFields("CPName").Result = CP_name
 		.FormFields("CPName1").Result = CP_name
