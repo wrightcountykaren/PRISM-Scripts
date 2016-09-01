@@ -551,10 +551,10 @@ Loop until PRISM_check = "PRISM"
 
 	'Setting cursor in write area and writing note details
 	EMSetCursor 16, 4
-	call write_new_line_in_PRISM_case_note("* Used court prep worksheet script and reviewed case for court prep.")
+	call write_variable_in_CAAD("* Used court prep worksheet script and reviewed case for court prep.")
 
-	call write_new_line_in_PRISM_case_note("---")
-	call write_new_line_in_PRISM_case_note(worker_signature)
+	call write_variable_in_CAAD("---")
+	call write_variable_in_CAAD(worker_signature)
 
 
 script_end_procedure("")
