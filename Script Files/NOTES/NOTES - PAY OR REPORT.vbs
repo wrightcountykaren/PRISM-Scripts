@@ -264,9 +264,9 @@ EMWriteScreen "FREE", 4, 54
 'The CAAD Note
 EMSetCursor 16, 4					'Because the cursor does not default to this location
 call write_variable_in_CAAD("Pay or Report Information")
-call write_editbox_in_PRISM_case_note("Purge Condition", purge_condition, 6)
-call write_editbox_in_PRISM_case_note("Order Date", Order_date, 6)
-call write_editbox_in_PRISM_case_note("County Attorney", CAO_list, 6)
+call write_bullet_and_variable_in_CAAD("Purge Condition", purge_condition)
+call write_bullet_and_variable_in_CAAD("Order Date", Order_date)
+call write_bullet_and_variable_in_CAAD("County Attorney", CAO_list)
 call write_bullet_and_variable_in_CAAD("Court File Number", court_file_number)
 call write_bullet_and_variable_in_CAAD("County Atty Case Number", county_attorney_case_number)
 call write_variable_in_CAAD("---")
