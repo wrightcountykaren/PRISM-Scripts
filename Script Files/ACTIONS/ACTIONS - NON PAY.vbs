@@ -309,7 +309,7 @@ Loop until case_number_valid = True
 
 		Set objWord = CreateObject("Word.Application")
 		objWord.Visible = True
-		set objDoc = objWord.Documents.Add("L:\Child Support\Contempts\Initial Contempt Docs.dotm")
+		set objDoc = objWord.Documents.Add(word_documents_folder_path & "Initial Contempt Docs.dotm")
 		With objDoc
 		.FormFields("CP").Result = CP_name
 		.FormFields("CP1").Result = CP_name
