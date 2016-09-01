@@ -183,6 +183,9 @@ Do
 			If ButtonPressed = cancel then exit do																										'Exit do (so we can get out to the main dialog)
 			If CAAD_code_to_search = "" and CAAD_description_to_search = "" then MsgBox "You must enter either a CAAD code or description to search."	'Error message
 
+			'Checks for PRISM (password out) before we continue
+			call check_for_PRISM(true)
+
 			'If the CAAD_code_to_search is entered, this will process that first. Otherwise it will go through the description to search.
 			If CAAD_code_to_search <> "" then
 				navigate_to_PRISM_screen("CAAD")																										'Gets to CAAD
@@ -258,6 +261,9 @@ Do
 	End if
 
 Loop until ButtonPressed <> cancel
+
+'Checks for PRISM (password out) before we continue
+call check_for_PRISM(true)
 
 'Now it goes to the selected note
 navigate_to_PRISM_screen("CAAD")			'Navigates to CAAD
