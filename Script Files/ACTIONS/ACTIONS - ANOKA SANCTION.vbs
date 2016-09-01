@@ -385,11 +385,11 @@ If caad_coop_check = checked OR caad_noncoop_check = checked OR caad_note <> "" 
 
 	'Setting cursor in write area and writing note details
 	EMSetCursor 16, 4
-	If FAS_or_CCA_Memo_noncoop_check = checked then call write_new_line_in_PRISM_case_note("*** Noncooperation/Sanction request emailed to FAS and/or CCA workers")
-	If FAS_or_CCA_Memo_coop_check = checked then call write_new_line_in_PRISM_case_note("*** Noncooperation cured - Lift sanction request emailed to FAS and/or CCA workers")
-	call write_new_line_in_PRISM_case_note(CAAD_note)
-	call write_new_line_in_PRISM_case_note("---")
-	call write_new_line_in_PRISM_case_note(worker_signature)
+	If FAS_or_CCA_Memo_noncoop_check = checked then call write_variable_in_CAAD("*** Noncooperation/Sanction request emailed to FAS and/or CCA workers")
+	If FAS_or_CCA_Memo_coop_check = checked then call write_variable_in_CAAD("*** Noncooperation cured - Lift sanction request emailed to FAS and/or CCA workers")
+	call write_variable_in_CAAD(CAAD_note)
+	call write_variable_in_CAAD("---")
+	call write_variable_in_CAAD(worker_signature)
 
 	transmit
 End if
