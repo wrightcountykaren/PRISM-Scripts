@@ -364,6 +364,15 @@ cs_scripts_array(script_num).description		= "NEW 08/2016!!! - Quickly add links 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "RECORD IW INFO"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - RECORD IW INFO.vbs"
+cs_scripts_array(script_num).description		= "NEW 09/2016!!! - Record IW withholding info in a CAAD note, worklist, or view in a message box."
+
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
