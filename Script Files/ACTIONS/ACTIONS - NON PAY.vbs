@@ -35,6 +35,7 @@ END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
+
 'case number dialog-
 BeginDialog case_number_dialog, 0, 0, 176, 85, "Case number dialog"
   EditBox 60, 5, 75, 15, PRISM_case_number
@@ -44,20 +45,31 @@ BeginDialog case_number_dialog, 0, 0, 176, 85, "Case number dialog"
   Text 5, 10, 50, 10, "Case number:"
 EndDialog
 'NONPAY LTR DIAL0G -
-BeginDialog NONPAY_LTR_DIALOG, 0, 0, 177, 106, "NONPAY LTR Dialog"
+BeginDialog NONPAY_LTR_DIALOG, 0, 0, 176, 146, "NONPAY LTR Dialog"
   ButtonGroup ButtonPressed
     PushButton 10, 20, 60, 10, "Non Pay Ltr", NonPay_button
     PushButton 10, 60, 100, 10, "Non Compliance w Pay Plan", PAPD_button
+    PushButton 10, 110, 100, 10, "Send CP Initial Docs", Initial_docs_button
     CancelButton 0, 0, 0, 0
   Text 10, 40, 140, 20, "Send DL Non Compliance Ltr"
   Text 10, 0, 140, 20, "Send Nonpay Letter and E9685 CAAD"
+  Text 10, 90, 150, 20, "Send CP Initial Contempt Ltr, Role of CAO, Special Services Assessment and M2123 CAAD"
   ButtonGroup ButtonPressed
-    PushButton 10, 90, 70, 10, "Cancel", Cancel_button
+    PushButton 10, 130, 70, 10, "Cancel", Cancel_button
 EndDialog
 
 
 
+
+
 '************FUNCTIONS **************************
+FUNCTION fix_read_data (search_string) 
+	search_string = replace(search_string, "_", "")
+	call fix_case(search_string, 1)
+	search_string = trim(search_string)
+	fix_read_data = search_string 'To make this a return function, this statement must set the value of the function name
+END FUNCTION
+
 FUNCTION send_non_compliance_dord
 	CALL navigate_to_PRISM_screen("DORD")
 	EMWriteScreen "A", 3, 29
@@ -91,7 +103,7 @@ FUNCTION send_non_pay_memo
 		dord_row = dord_row + 1
 	LOOP UNTIL dord_row = 19
 	transmit
-
+	
 	EMWriteScreen "As you are aware, you have a court ordered obligation to     ", 16, 15
 	transmit
 	EMWriteScreen "pay child support. As of this date, it has been over 30 days", 16, 15
@@ -137,18 +149,18 @@ FUNCTION send_non_pay_memo
 	transmit
 	EMWriteScreen "number listed below.", 16, 15
 	transmit
-
+	
 	PF3
 
 	EMWriteScreen "M", 3, 29
-	transmit
+	transmit	
 
 	PF9
-	PF3
+	PF3	
 END FUNCTION
 
 FUNCTION add_caad_code(CAAD_code)
-	CALL navigate_to_PRISM_screen("CAAD")
+	CALL navigate_to_PRISM_screen("CAAD")	
 	PF5
 	EMWriteScreen CAAD_code, 4, 54
 END FUNCTION
@@ -163,55 +175,175 @@ call PRISM_case_number_finder(PRISM_case_number)
 
 'Case number display dialog
 Do
-
+	
 	Dialog case_number_dialog
 	If buttonpressed = 0 then stopscript
 	call PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 	If case_number_valid = False then MsgBox "Your case number is not valid. Please make sure it uses the following format: ''XXXXXXXXXX-XX''"
 Loop until case_number_valid = True
-
+			
 	Do
 		EMReadScreen PRISM_check, 5, 1, 36
 		If PRISM_check <> "PRISM" then MsgBox "You appear to have timed out, or are out of PRISM. Navigate to PRISM and try again."
 	Loop until PRISM_check = "PRISM"
+	
 	Dialog NONPAY_LTR_DIALOG
-
-
+	
+	
 	IF ButtonPressed = Cancel_button THEN stopscript
-	If ButtonPressed = NonPay_button then
+	If ButtonPressed = NonPay_button then 
 		CALL send_non_pay_memo
-		purge_msg = MsgBox ("Do you want to purge E0002 worklist item?", vbYesNo)
-		IF purge_msg = vbYes THEN
-			CALL navigate_to_PRISM_screen("CAWT")
-			Do
-				CALL write_value_and_transmit("E0002", 20, 29)
-				EMReadscreen worklist_check, 5, 8, 8
-				If worklist_check = "E0002" then
+		purge_msg = MsgBox ("Do you want to purge this worklist item?", vbYesNo)
+		IF purge_msg = vbYes THEN 
+			DO	
+				CALL navigate_to_PRISM_screen("CAWT")			
+				EMWriteScreen PRISM_case_number, 20, 8
+				EMWriteScreen "E0002", 20, 29
+				transmit
+				EMReadScreen cawt_type, 5, 8, 8
+				If cawt_type = "E0002" then 
 					EMWriteScreen "P", 8, 4
 					transmit
 					transmit
 					PF3
-				end if
-			Loop until worklist_check <> "E0002"
+				End If	
+			Loop until cawt_type <> "E0002"
 		END IF
 		CALL add_caad_code("E9685")
 		script_end_procedure("The script has sent the requested DORD document and is now waiting for you to transmit to confirm the CAAD Note.")
 	End If
-	If ButtonPressed = PAPD_button then
+	If ButtonPressed = PAPD_button then 
 		CALL send_non_compliance_dord
-		purge_msg = MsgBox ("Do you want to purge E4111 worklist item?", vbYesNo)
-		IF purge_msg = vbYes THEN
-			CALL navigate_to_PRISM_screen("CAWT")
+		purge_msg = MsgBox ("Do you want to purge this worklist item?", vbYesNo)
+		IF purge_msg = vbYes THEN 
 			Do
-				CALL write_value_and_transmit("E4111", 20, 29)
-				EMReadScreen worklist_check, 5, 8, 8
-				If worklist_check = "E4111" then
+				CALL navigate_to_PRISM_screen("CAWT")
+				EMWriteScreen PRISM_case_number, 20, 8
+				EMWriteScreen "E4111", 20, 29
+				transmit
+				EMReadScreen cawt_type, 5, 8, 8
+				
+				If cawt_type = "E4111" then
 					EMWriteScreen "P", 8, 4
 					transmit
 					transmit
 					PF3
-				End if
-			Loop until worklist_check <> "E4111"
-		END IF
+				End If
+			Loop until cawt_type <> "E4111"
+		END if	
 		script_end_procedure("The script has sent the requested DORD document.")
 	END IF
+	If ButtonPressed = Initial_docs_button then
+
+		'Clearing case info from PRISM
+		call navigate_to_PRISM_screen("REGL")
+		transmit
+
+		'Navigating to CAPS
+		call navigate_to_PRISM_screen("CAPS")
+
+		'Entering case number and transmitting
+		EMSetCursor 4, 8
+		EMSendKey replace(PRISM_case_number, "-", "")									'Entering the specific case indicated
+		EMWriteScreen "d", 3, 29												'Setting the screen as a display action
+		transmit															'Transmitting into it
+
+		'Get information to pull into documents
+		EMReadScreen NCP_MCI, 10, 8, 11 
+		EMReadScreen CP_MCI, 10, 4, 8 	
+		
+		'Getting worker info for case note
+		EMSetCursor 5, 53
+		PF1
+		EMReadScreen worker_name, 27, 6, 50
+		EMReadScreen worker_phone, 12, 8, 35
+		PF3
+
+		'Cleaning up worker info
+		worker_name = trim(worker_name)
+		call fix_case(worker_name, 1)
+		worker_name = change_client_name_to_FML(worker_name)		
+
+
+		'NCP Name
+		call navigate_to_PRISM_screen("NCDE")
+		EMWriteScreen NCP_MCI, 4, 7
+		EMReadScreen NCP_F, 12, 8, 34
+		EMReadScreen NCP_M, 12, 8, 56
+		EMReadScreen NCP_L, 17, 8, 8
+		EMReadScreen NCP_S, 3, 8, 74
+		NCP_name = fix_read_data(NCP_F) & " " & fix_read_data(NCP_M) & " " & fix_read_data(NCP_L)	
+		If trim(NCP_S) <> "" then NCP_name = NCP_Name & " " & ucase(fix_read_data(NCP_S))
+		NCP_name = trim(NCP_name)
+
+		'CP Name											
+		call navigate_to_PRISM_screen("CPDE")
+		EMWriteScreen CP_MCI, 4, 7
+		EMReadScreen CP_F, 12, 8, 34
+		EMReadScreen CP_M, 12, 8, 56
+		EMReadScreen CP_L, 17, 8, 8
+		EMReadScreen CP_S, 3, 8, 74
+		CP_name = fix_read_data(CP_F) & " " & fix_read_data(CP_M) & " " & fix_read_data(CP_L)	
+		If trim(CP_S) <> "" then CP_name = CP_Name & " " & ucase(fix_read_data(CP_S))
+		CP_name = trim(CP_Name)
+
+		'CP Address
+		'Navigating to CPDD to pull address info
+		call navigate_to_PRISM_screen("CPDD")
+		EMReadScreen cp_street_line_1, 30, 15, 11
+		EMReadScreen cp_street_line_2, 30, 16, 11
+		EMReadScreen cp_city_state_zip, 49, 17, 11
+
+		'Cleaning up address info
+		cp_street_line_1 = replace(cp_street_line_1, "_", "")
+		call fix_case(cp_street_line_1, 1)
+		cp_street_line_2 = replace(cp_street_line_2, "_", "")
+		if trim (cp_street_line_2) <> "" then
+			cp_address = cp_street_line_1 & chr(13) & cp_street_line_2
+		else
+			cp_address = cp_street_line_1
+		end if
+		call fix_case(cp_street_line_2, 1)
+		cp_city_state_zip = replace(replace(replace(cp_city_state_zip, "_", ""), "    St: ", ", "), "    Zip: ", " ")
+		call fix_case(cp_city_state_zip, 2)
+
+		Set objWord = CreateObject("Word.Application")
+		objWord.Visible = True
+		set objDoc = objWord.Documents.Add(word_documents_folder_path & "Initial Contempt Docs.dotm")
+		With objDoc
+		.FormFields("CP").Result = CP_name
+		.FormFields("CP1").Result = CP_name
+		.FormFields("CP_Address").Result = CP_address
+		.FormFields("CP_CSZ").Result = cp_city_state_zip
+		.FormFields("CaseNumber").Result = PRISM_case_number
+		.FormFields("CaseNumber1").Result = PRISM_case_number
+		.FormFields("NCP").Result = NCP_name
+		.FormFields("NCP1").Result = NCP_name
+		.FormFields("NCP2").Result = NCP_name
+		.FormFields("NCP3").Result = NCP_name
+		.FormFields("party_name").Result = CP_name
+		.FormFields("party_name1").Result = CP_name
+		.FormFields("party_name2").Result = CP_name
+		.FormFields("party_name3").Result = CP_name
+		.FormFields("Address").Result = CP_address
+		.FormFields("CSZ").Result = cp_city_state_zip
+		.FormFields("Case_Number").Result = PRISM_case_number
+		.FormFields("Case_Number1").Result = PRISM_case_number
+		.FormFields("other_party").Result = NCP_name
+		.FormFields("other_party1").Result = NCP_name
+		.FormFields("other_party2").Result = NCP_name
+		.FormFields("other_party3").Result = NCP_name
+		.FormFields("other_party4").Result = NCP_name
+		.FormFields("other_party5").Result = NCP_name
+		.FormFields("other_party6").Result = NCP_name
+		.FormFields("due_date").Result = dateadd("d", date, 10)
+		.FormFields("due_date1").Result = dateadd("d", date, 10)
+		.FormFields("CaseWorkerName").Result = worker_name
+		.FormFields("CaseWorkerPhone").Result = worker_phone
+			
+	End With
+		CALL add_caad_code("M2123")
+		EMSetCursor 16, 4
+		CALL write_new_line_in_PRISM_case_note("    * CP Initial Contempt Letter, Role of County Attorney, and Special Services Coverletter and Assessment sent to CP.")
+		transmit
+ end if
