@@ -53,7 +53,7 @@ BeginDialog NONPAY_LTR_DIALOG, 0, 0, 176, 146, "NONPAY LTR Dialog"
     CancelButton 0, 0, 0, 0
   Text 10, 40, 140, 20, "Send DL Non Compliance Ltr"
   Text 10, 0, 140, 20, "Send Nonpay Letter and E9685 CAAD"
-  Text 10, 90, 150, 20, "Send CP Initial Contempt Ltr, Role of CAO, Special Services Assessment and M2123 CAAD"
+  Text 10, 80, 150, 25, "Send CP Initial Contempt Ltr, Role of CAO, Special Services Assessment and M2123 CAAD"
   ButtonGroup ButtonPressed
     PushButton 10, 130, 70, 10, "Cancel", Cancel_button
 EndDialog
@@ -347,3 +347,4 @@ Loop until case_number_valid = True
 		CALL write_new_line_in_PRISM_case_note("    * CP Initial Contempt Letter, Role of County Attorney, and Special Services Coverletter and Assessment sent to CP.")
 		transmit
  end if
+
