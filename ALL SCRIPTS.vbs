@@ -68,6 +68,14 @@ cs_scripts_array(script_num).description		= "Builds a list in Excel of case numb
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CASE INITIATION DOCS RECEIVED"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - CASE INITIATION DOCS RECEIVED.vbs"
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - CASE TRANSFER.vbs"
@@ -240,14 +248,6 @@ cs_scripts_array(script_num).script_name		= "INFO"
 cs_scripts_array(script_num).script_type		= "UTILITIES"
 cs_scripts_array(script_num).file_name			= "UTILITIES - INFO.vbs"
 cs_scripts_array(script_num).description		= "Displays information about your BlueZone Scripts installation."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "INTAKE DOCS RECEIVED"
-cs_scripts_array(script_num).script_type		= "NOTES"
-cs_scripts_array(script_num).file_name			= "NOTES - INTAKE DOCS RECEIVED.vbs"
-cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
