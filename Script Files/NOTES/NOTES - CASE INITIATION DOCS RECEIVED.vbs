@@ -1,6 +1,6 @@
 'option explicit
 'GATHERING STATS=================================
-name_of_script = "NOTES - INTAKE DOCS RECEIVED.vbs"
+name_of_script = "NOTES - CASE INITIATION DOCS RECEIVED.vbs"
 start_time = timer
 
 
@@ -43,7 +43,7 @@ DIM beta_agency, row, col, case_number_valid, intake_docs_recd_dialog, paternity
 
 'THE DIALOG BOX-------------------------------------------------------------------------------------------------------------------
 
-BeginDialog intake_docs_recd_dialog, 0, 0, 341, 180, "Intake Documents Received"
+BeginDialog case_initiation_docs_recd_dialog, 0, 0, 341, 180, "Case Initiation Documents Received"
   EditBox 75, 5, 75, 15, prism_case_number
   EditBox 225, 5, 65, 15, date_recd
   CheckBox 15, 40, 165, 10, "Application for Support/Coll Services DHS-1958", app_supp_coll_services_check
@@ -92,7 +92,7 @@ End if
 Do
 	err_msg = ""
 	'Shows dialog, validates that PRISM is up and not timed out, with transmit
-	Dialog intake_docs_recd_dialog
+	Dialog case_initiation_docs_recd_dialog
 	If buttonpressed = 0 then stopscript
 	CALL Prism_case_number_validation(PRISM_case_number, case_number_valid)
 	IF case_number_valid = False THEN err_msg = err_msg & vbNewLine & "Your case number is not valid. Please make sure it is in the following format: XXXXXXXXXX-XX.  "
@@ -116,7 +116,7 @@ EMWriteScreen "A", 3, 29
 
 'Writes the CAAD note
 EMWriteScreen "FREE", 4, 54                                     'Type of CAAD note
-EMWriteScreen "*Intake Documents Received*", 16, 4              'Types "Intake Documents Received" on first line of CAAD note
+EMWriteScreen "*Case Initiation Documents Received*", 16, 4     'Types "Case Initiation Documents Received" on first line of CAAD note
 EMSetCursor 17, 4                                               'Sets the cursor on the next line
 IF date_recd <> "" THEN CALL write_bullet_and_variable_in_CAAD("Date Rec'd", date_recd)  'Types in date received on the second lind of CAAD note
 IF app_supp_coll_services_check = checked THEN CALL write_variable_in_CAAD("* Application for Support/Coll Services DHS-1958")   'If any of the buttons are checked they will caad note
