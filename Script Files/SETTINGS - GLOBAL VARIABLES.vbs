@@ -47,6 +47,9 @@ county_judge_array = array("Judge 1", "Judge 2", "Judge 3", "Judge 4", "Judge 5"
 'This is used by scripts which tell the worker where to find a doc to send to a client (ie "Send form using Compass Pilot")
 EDMS_choice = "Compass Pilot"
 
+'This is the county's email support address. It can be a distribution list or an individual.
+support_email_address = "jean.valjean@paris.fr"
+
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 '**DO NOT EDIT BELOW THIS LINE UNLESS YOU ARE ABSOLUTELY SURE OF WHAT YOU ARE DOING**
 
