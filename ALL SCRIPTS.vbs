@@ -116,6 +116,14 @@ cs_scripts_array(script_num).description		= "Builds list in Excel of companion c
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CONTEMPT HEARING"
+cs_scripts_array(script_num).script_type		= "NOTES"
+cs_scripts_array(script_num).file_name			= "NOTES - CONTEMPT HEARING.vbs"
+cs_scripts_array(script_num).description		= "Creates a hearing date CAAD note for a contempt hearing."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COURT ORDER REQUEST"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - COURT ORDER REQUEST.vbs"
