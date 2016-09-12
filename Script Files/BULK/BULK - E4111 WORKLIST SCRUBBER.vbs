@@ -1,39 +1,38 @@
-'GATHERING STATS---------------------------------------------------------------------------------------------------- 
-name_of_script = "BULK - E4111 WORKLIST SCRUBBER.vbs" 
-start_time = timer 
+'GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "BULK - E4111 WORKLIST SCRUBBER.vbs"
+start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 ' >>>>> THE SCRIPT <<<<<
 EMConnect ""
@@ -52,10 +51,10 @@ SCROLL = 0
 
 ' >>>>> STARTING THE DO LOOP. THE SCRIPT NEEDS TO HANDLE THESE CASES ONE AT A TIME <<<<<
 DO
-		'reset variables	
+		'reset variables
 	total_voluntary_alloc = 0
 	total_involuntary_alloc = 0
-			
+
 	EMReadScreen USWT_type, 5, USWT_row, 45
 	IF USWT_type = "E4111" THEN
 		EMReadScreen USWT_case_number, 13, USWT_row, 8
@@ -70,13 +69,13 @@ DO
 		EMReadScreen arrs_pmt, 13, 14, 16
 		curr_pmt = replace(curr_pmt, "_", "0")
 		arrs_pmt = replace(arrs_pmt, "_", "0")
-		
+
 		pay_plan_pmt = ccur(curr_pmt) + ccur(arrs_pmt)
 
 		Call navigate_to_PRISM_screen ("PALC")
 		current_month_minus1 = DateAdd("m", -1, date)
 	'	current_month = DateAdd("m", 0, date)
-	'	current_day_minus1 = DateAdd("d", -1, current_day_minus1)	
+	'	current_day_minus1 = DateAdd("d", -1, current_day_minus1)
 		c_month = datepart("m", current_month_minus1)
 			IF len(c_month) = 1 THEN c_month = "0" & c_month
 		c_begin_date = c_month & "/01/" & datepart("yyyy", current_month_minus1)
@@ -98,20 +97,20 @@ Do
 	EMReadScreen pmt_ID_YY, 2, row, 7
 	EMReadScreen pmt_ID_MM, 2, row, 9
 	EMReadScreen pmt_ID_DD, 2, row, 11
-	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY	
-					
+	pmt_ID_date = pmt_ID_MM & "/" & pmt_ID_DD & "/" & pmt_ID_YY
+
 		EMReadScreen proc_type, 3, row, 25														'Reading the proc type
-		EMReadScreen case_alloc_amt, 10, row, 70		
+		EMReadScreen case_alloc_amt, 10, row, 70
 		EMReadScreen payment_type, 1, row, 55 										'Reading the amt allocated
 		If payment_type = "I" then               ' check to make sure the payment status is identified, not refunded
-			If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _	
+			If proc_type = "FTS" or proc_type = "MCE" or proc_type = "NOC" or proc_type = "IFC" or proc_type = "OST" or _
 			proc_type = "PCA" or proc_type = "PIF" or proc_type = "STJ" or proc_type = "STS" or proc_type = "FTJ" then 		'If proc type is one of these, it's involuntary. Else, it's voluntary.
 				total_involuntary_alloc = total_involuntary_alloc + ccur(case_alloc_amt)							'Adds the alloc amt for involuntary
 			Else
 				total_voluntary_alloc = total_voluntary_alloc + ccur(case_alloc_amt)							'Adds the alloc amt for voluntary)
 			End if
 		End if
-	
+
 	row = row + 1														'Increases the row variable by one, to check the next row
 	EMReadScreen end_of_data_check, 19, row, 28									'Checks to see if we've reached the end of the list
 	If end_of_data_check = "*** End of Data ***" then exit do							'Exits do if we have
@@ -134,7 +133,7 @@ purge = false 'Reset the purge variable
 If purge_box = "2" then stopscript  'user clicked cancel
 If purge_box = "6" then purge = true  'user clicked yes
 If purge_box = "7" then purge = false	'user clicked no
-	
+
 
 		' >>>>> CHECKING THE INFORMATION ON ENFL <<<<
 		EMReadScreen end_of_data, 11, ENFL_row, 32
@@ -150,17 +149,17 @@ If purge_box = "7" then purge = false	'user clicked no
 						Msgbox "E4111 worklist for " & ENFL_case_no & " will be purged."
 					End If
 				End If
-			
-		END IF	
-	
-		
+
+		END IF
+
+
 		Call navigate_to_PRISM_screen ("CAWT")
 		EMWriteScreen "E4111", 20, 29
 		EMWriteScreen USWT_case_number, 20, 8
 		transmit
 
 		' >>>>> IF THE WORKLIST ITEM IS ELIGIBLE TO BE PURGED, THE SCRIPT PURGES...
-		IF purge = True THEN 
+		IF purge = True THEN
 			cawt_row = 8
 			Do
 				EMReadScreen cawd_type, 5, cawt_row, 8
@@ -183,12 +182,12 @@ If purge_box = "7" then purge = false	'user clicked no
 				NEXT
 			END IF
 			USWT_row = USWT_row + 1
-			IF USWT_row = 19 THEN 
+			IF USWT_row = 19 THEN
 				PF8
 				USWT_row = 7
 				SCROLL = SCROLL + 1
 			END IF
-			
+
 
 		ELSE
 		'  ...  IF THE WORKLIST ITEM IS NOT ELIGIBLE TO BE PURGED, THE SCRIPT INCREASES USWT_ROW + 1 <<<<<
@@ -203,12 +202,12 @@ If purge_box = "7" then purge = false	'user clicked no
 				NEXT
 			END IF
 			USWT_row = USWT_row + 1
-			IF USWT_row = 19 THEN 
+			IF USWT_row = 19 THEN
 				PF8
 				USWT_row = 7
 				SCROLL = SCROLL + 1
 			END IF
-			
+
 		END IF
 	END IF
 

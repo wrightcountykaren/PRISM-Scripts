@@ -6,38 +6,37 @@ STATS_manualtime = 60
 STATS_denomination = "C"
 'END OF STATS BLOCK-------------------------------------------------------------------------------------------------
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'THE SCRIPT-----------------------------------------------------------------------------------------------------------------------
 'THE DIALOG---------------------------------------------------
@@ -82,7 +81,7 @@ DO
 	IF case_number_valid = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
 	IF action_type = "" THEN err_msg = err_msg & vbNewline & "You must enter a type of legal action!"
 	IF doc_efiled = "" THEN err_msg = err_msg & vbNewline & "You must enter the type of documents you E-Filed!"
-	IF efile_status_dropdown = "Select One..." THEN err_msg = err_msg & vbNewline & "You must select an E-Filing Status!" 
+	IF efile_status_dropdown = "Select One..." THEN err_msg = err_msg & vbNewline & "You must select an E-Filing Status!"
 	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"
 	IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
 LOOP UNTIL err_msg = ""
@@ -94,7 +93,7 @@ CALL navigate_to_PRISM_screen("CAAD")
 CALL enter_PRISM_case_number(PRISM_case_number, 20, 8)
 
 'ADDS NEW CAAD NOTE WITH FREE CAAD CODE
-PF5 
+PF5
 EMWritescreen "FREE", 4, 54
 
 'SETS THE CURSOR
@@ -114,7 +113,7 @@ transmit
 IF efile_status_dropdown = "Accepted" THEN Msgbox "***REMINDER***" & vbNewline & "Do you need to update the LEHD screen with new court file number?"
 
 'ADDS A WORKLIST IF THE CHECKBOX TO ADD ONE IS CHECKED
-IF worklist_checkbox = CHECKED THEN 
+IF worklist_checkbox = CHECKED THEN
 	CALL navigate_to_PRISM_screen("CAWT")
 	PF5
 	EMWritescreen "FREE", 4, 37
@@ -127,7 +126,7 @@ IF worklist_checkbox = CHECKED THEN
 END IF
 
 'REMINDS WORKER TO FINISH AND SAVE THEIR WORKLIST
-IF worklist_checkbox = CHECKED THEN 
+IF worklist_checkbox = CHECKED THEN
 	script_end_procedure("Please finish and save your worklist")
 ELSE
 	script_end_procedure("")

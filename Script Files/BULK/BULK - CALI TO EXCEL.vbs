@@ -3,39 +3,37 @@ name_of_script = "BULK - CALI TO EXCEL.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
-
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 Dim CAFS_checkbox
 
@@ -68,8 +66,8 @@ EndDialog
 'change team, position
 
 '***********************************************************************************************************************************************
-'If the user is already on the CALI screen when the script is run, results may be inaccurate.  Also, if the user runs the script when the 
-'position listing screen is open, the screen must be exited before the script can run properly.  This function checks to see if either of 
+'If the user is already on the CALI screen when the script is run, results may be inaccurate.  Also, if the user runs the script when the
+'position listing screen is open, the screen must be exited before the script can run properly.  This function checks to see if either of
 'these circumstances apply.  If the position list is open, the script exits the list, and if the CALI screen is open, navigates away so that
 'the report will function properly.
 FUNCTION refresh_CALI_screen
@@ -78,7 +76,7 @@ FUNCTION refresh_CALI_screen
 			PF3
 		END IF
 	EMReadScreen check_for_caseload_list, 13, 2, 32
-		If check_for_caseload_list = "Caseload List" THEN	
+		If check_for_caseload_list = "Caseload List" THEN
 			CALL navigate_to_PRISM_screen("MAIN")
 			transmit
 		END IF
@@ -91,7 +89,7 @@ check_for_PRISM(TRUE)
 
 DIALOG CALI_to_excel_Dialog
 	IF ButtonPressed = 0 THEN StopScript
-	
+
 	IF action_dropdown = "Run for another CALI list" THEN
 		Dialog CALI_selection_dialog
 	END IF
@@ -101,10 +99,10 @@ DIALOG CALI_to_excel_Dialog
 			PF3
 		END IF
 	EMReadScreen check_for_caseload_list, 13, 2, 32
-		If check_for_caseload_list = "Caseload List" THEN	
+		If check_for_caseload_list = "Caseload List" THEN
 			CALL navigate_to_PRISM_screen("MAIN")
 			transmit
-		END IF	
+		END IF
 	CALL navigate_to_PRISM_screen("CALI")  'Navigate to CALI, remove any case number entered, and display the desired CALI listing
 	EMWriteScreen "             ", 20, 58
 	EMWriteScreen "  ", 20, 69
@@ -119,49 +117,64 @@ DIALOG CALI_to_excel_Dialog
 	IF error_message_on_bottom_of_screen <> "" THEN script_end_procedure("The caseload you entered is invalid.  The script will now end.")
 
 'EXCEL BLOCK
-Set objExcel = CreateObject("Excel.Application") 
+Set objExcel = CreateObject("Excel.Application")
 objExcel.Visible = True 'Set this to False to make the Excel spreadsheet go away. This is necessary in production.
-Set objWorkbook = objExcel.Workbooks.Add() 
+Set objWorkbook = objExcel.Workbooks.Add()
 objExcel.DisplayAlerts = True 'Set this to false to make alerts go away. This is necessary in production.
+
+ObjExcel.Cells(1, 1).Value = "Case Number"
+ObjExcel.Cells(1, 2).Value = "Function"
+ObjExcel.Cells(1, 3).Value = "Program"
+ObjExcel.Cells(1, 4).Value = "Interstate?"
+ObjExcel.Cells(1, 5).Value = "CP Name"
+ObjExcel.Cells(1, 6).Value = "NCP Name"
+If Payments_Checkbox = checked then ObjExcel.Cells(1, 7).Value = "Last Payment Date"
+If CAFS_checkbox = checked then
+	ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
+	ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
+	ObjExcel.Cells(1, 10).Value = "Monthly Non-Accrual"
+End If
+
+'Autofitting columns
+For col_to_autofit = 1 to 10
+	ObjExcel.columns(col_to_autofit).AutoFit()
+Next
 
 'sets row to fill info into Excel
 excel_row = 2
-
+prism_row = 8
 Do 'Loops script until the end of CALI
-	prism_row = 8
-	Do 'Copies Case Number, Function Type, Program Type, CP Name, and NCP Name to the Excel document
-	
-	
-		EMReadScreen prism_case_number, 14, prism_row, 7 'Reads and copies case number
-		EMReadScreen function_type, 2, prism_row, 23 'Reads and copies function type
-		EMReadScreen program_type, 3, prism_row, 27 'Reads and copies program type
-		EMReadScreen interstate_code, 1, prism_row, 33 'Reads and copies intersate code
-		EMReadScreen CP_name, 26, prism_row, 38 'Reads and copies CP name
-		pf11
-		EMReadScreen NCP_name, 26, prism_row, 33 'Reads and copies NCP name
-		pf10
-	
-		'Set rows in Excel for case number, funtion type, program type, CP name, and NCP name
-		ObjExcel.Cells(excel_row, 1).Value = prism_case_number
-		ObjExcel.Cells(excel_row, 2).Value = function_type
-		ObjExcel.Cells(excel_row, 3).Value = program_type
-		ObjExcel.Cells(excel_row, 4).Value = interstate_code
-		ObjExcel.Cells(excel_row, 5).Value = CP_name
-		ObjExcel.Cells(excel_row, 6).Value = NCP_name
+	'Copies Case Number, Function Type, Program Type, CP Name, and NCP Name to the Excel document
+	EMReadScreen prism_case_number, 14, prism_row, 7 'Reads and copies case number
+	EMReadScreen function_type, 2, prism_row, 23 'Reads and copies function type
+	EMReadScreen program_type, 3, prism_row, 27 'Reads and copies program type
+	EMReadScreen interstate_code, 1, prism_row, 33 'Reads and copies intersate code
+	EMReadScreen CP_name, 26, prism_row, 38 'Reads and copies CP name
+	pf11
+	EMReadScreen NCP_name, 26, prism_row, 33 'Reads and copies NCP name
+	pf10
 
-		prism_row = prism_row + 1
-		excel_row = excel_row + 1
+	'Set rows in Excel for case number, funtion type, program type, CP name, and NCP name
+	ObjExcel.Cells(excel_row, 1).Value = prism_case_number
+	ObjExcel.Cells(excel_row, 2).Value = function_type
+	ObjExcel.Cells(excel_row, 3).Value = program_type
+	ObjExcel.Cells(excel_row, 4).Value = interstate_code
+	ObjExcel.Cells(excel_row, 5).Value = CP_name
+	ObjExcel.Cells(excel_row, 6).Value = NCP_name
 
-		EmReadscreen end_of_data_check, 11, prism_row, 32
-		If end_of_data_check = "End of Data" then exit do
+	prism_row = prism_row + 1
+	excel_row = excel_row + 1
 
-	Loop Until prism_row = 19
+	EmReadscreen end_of_data_check, 11, prism_row, 32
+	If end_of_data_check = "End of Data" then exit do
 
-	pf8
-
+	IF prism_row = 19 THEN
+		PF8
+		prism_row = 8
+	END IF
 Loop Until end_of_data_check = "End of Data"
 
-EMWriteScreen "PALC", 21, 18 
+EMWriteScreen "PALC", 21, 18
 Transmit
 
 excel_row = 2
@@ -184,48 +197,27 @@ excel_row = 2
 
 If CAFS_checkbox = checked then
 
-EMWriteScreen "CAFS", 21, 18 
-Transmit
+	EMWriteScreen "CAFS", 21, 18
+	Transmit
 
-excel_row = 2
+	excel_row = 2
 
-Do
-	prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
-	EMWriteScreen Left (prism_case_number, 10), 4, 8
-	EMWriteScreen Right (prism_case_number, 2), 4, 19
-	EMWriteScreen "D", 3, 29
-	Transmit 
-	EMReadScreen amount_of_arrears, 10, 12, 68
-	ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
-	EMReadScreen monthly_accrual, 7, 9, 32
-	ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
-	EMReadScreen monthly_non_accrual, 7, 10, 32
-	ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
-	excel_row = excel_row + 1
-	
+	Do
+		prism_case_number = Trim(ObjExcel.Cells(excel_row, 1).Value)
+		EMWriteScreen Left (prism_case_number, 10), 4, 8
+		EMWriteScreen Right (prism_case_number, 2), 4, 19
+		EMWriteScreen "D", 3, 29
+		Transmit
+		EMReadScreen amount_of_arrears, 10, 12, 68
+		ObjExcel.Cells(excel_row, 8).Value = amount_of_arrears
+		EMReadScreen monthly_accrual, 7, 9, 32
+		ObjExcel.Cells(excel_row, 9).Value = monthly_accrual
+		EMReadScreen monthly_non_accrual, 7, 10, 32
+		ObjExcel.Cells(excel_row, 10).Value = monthly_non_accrual
 
-Loop until prism_case_number = ""
+		excel_row = excel_row + 1
 
+	Loop until prism_case_number = ""
 End If
-
-ObjExcel.Cells(1, 1).Value = "Case Number"
-ObjExcel.Cells(1, 2).Value = "Function"
-ObjExcel.Cells(1, 3).Value = "Program"
-ObjExcel.Cells(1, 4).Value = "Interstate?"
-ObjExcel.Cells(1, 5).Value = "CP Name"
-ObjExcel.Cells(1, 6).Value = "NCP Name"
-If Payments_Checkbox = checked then
-ObjExcel.Cells(1, 7).Value = "Last Payment Date"
-End IF
-If CAFS_checkbox = checked then
-ObjExcel.Cells(1, 8).Value = "Amount Of Arrears"
-ObjExcel.Cells(1, 9).Value = "Monthly Accrual"
-ObjExcel.Cells(1, 10).Value = "Monthly Non-Accrual"
-End If
-
-'Autofitting columns
-For col_to_autofit = 1 to 10
-	ObjExcel.columns(col_to_autofit).AutoFit()
-Next
 
 script_end_procedure("Success!!")

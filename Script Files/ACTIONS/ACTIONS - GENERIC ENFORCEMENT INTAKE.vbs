@@ -2,38 +2,37 @@
 name_of_script = "ACTIONS - GENERIC ENFORCEMENT INTAKE.vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'VARIABLES THAT NEED DECLARING----------------------------------------------------------------------------------------------------
 checked = 1
@@ -103,25 +102,25 @@ FUNCTION send_dord_doc(recipient, dord_doc)
 	EMWriteScreen recipient, 11, 51
 	transmit
 END FUNCTION
-	
-'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the 
+
+'This is a custom function to fix data that we are reading from PRISM that includes underscores.  The parameter is a string for the
 'variable to be searched.  The function searches the variable and removes underscores.  Then, the fix case function is called to format
-'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.	
-FUNCTION fix_read_data (search_string) 
+'the string in the correct case.  Finally, the data is trimmed to remove any excess spaces.
+FUNCTION fix_read_data (search_string)
 	search_string = replace(search_string, "_", "")
 	call fix_case(search_string, 1)
 	search_string = trim(search_string)
 	fix_read_data = search_string 'To make this a return function, this statement must set the value of the function name
 END FUNCTION
 
-' This is a custom function to change the format of a participant name.  The parameter is a string with the 
-' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".  
+' This is a custom function to change the format of a participant name.  The parameter is a string with the
+' client's name formatted like "Levesseur, Wendy K", and will change it to "Wendy K LeVesseur".
 FUNCTION change_client_name_to_FML(client_name)
 	client_name = trim(client_name)
 	length = len(client_name)
 	position = InStr(client_name, ", ")
 	last_name = Left(client_name, position-1)
-	first_name = Right(client_name, length-position-1)	
+	first_name = Right(client_name, length-position-1)
 	client_name = first_name & " " & last_name
 	client_name = lcase(client_name)
 	call fix_case(client_name, 1)
@@ -211,8 +210,8 @@ If NCP_PIN_Notice_Check = checked then 'Send PIN Notice
 End if
 
 'If F0924 is indicated on the dialog then it navigates to DORD to send it.
-If NCP_health_ins_verif_check = checked then 
-	call send_dord_doc("NCP", "F0924") 
+If NCP_health_ins_verif_check = checked then
+	call send_dord_doc("NCP", "F0924")
 End if
 
 'If F0100 is indicated on the dialog then it navigates to DORD to send it.
@@ -221,7 +220,7 @@ If dord_F0100_check = checked then
 End if
 
 'If F0109 is indicated on the dialog then it navigates to DORD to send it.
-If dord_F0109_check = checked then 
+If dord_F0109_check = checked then
 	call send_dord_doc("NCP", "F0109")
 End if
 
@@ -258,7 +257,7 @@ If t_10_day_tickler_check = checked then
 	EMWriteScreen "A", 8, 4
 	transmit
 
-	'Setting type as "free" and writing note	
+	'Setting type as "free" and writing note
 	EMWriteScreen "FREE", 4, 37
 	EMWriteScreen "*** Call NCP to answer any questions NCP has about case setup.", 10, 4
 	EMWriteScreen dateadd("d", date, 10), 17, 21
@@ -270,7 +269,7 @@ If t_30_day_to_load_arrears_check = checked then
 	EMWriteScreen "A", 8, 4
 	transmit
 
-	'Setting type as "free" and writing note	
+	'Setting type as "free" and writing note
 	EMWriteScreen "FREE", 4, 37
 	EMWriteScreen "Load arrears?", 10, 4
 	EMWriteScreen dateadd("d", date, 30), 17, 21
@@ -282,7 +281,7 @@ If t_30_day_case_review_check = checked then
 	EMWriteScreen "A", 8, 4
 	transmit
 
-	'Setting type as "free" and writing note	
+	'Setting type as "free" and writing note
 	EMWriteScreen "FREE", 4, 37
 	EMWriteScreen "30 Day Case Review", 10, 4
 	EMWriteScreen t_30_day_cawd_txt, 11, 4
@@ -295,7 +294,7 @@ If t_60_day_case_review_check = checked then
 	EMWriteScreen "A", 8, 4
 	transmit
 
-	'Setting type as "free" and writing note	
+	'Setting type as "free" and writing note
 	EMWriteScreen "FREE", 4, 37
 	EMWriteScreen t_60_day_cawd_txt, 10, 4
 	EMWriteScreen dateadd("d", date, 60), 17, 21
@@ -318,23 +317,23 @@ EMWriteScreen caad_type, 4, 54
 
 'Setting cursor in write area and writing note details
 EMSetCursor 16, 4
-	call write_new_line_in_PRISM_case_note(add_caad_txt)
-	call write_new_line_in_PRISM_case_note("* The following documents were sent:")
-	If NCP_PIN_Notice_check = checked then call write_new_line_in_PRISM_case_note("    * F0999 - PIN Notice to NCP")
-	If NCP_health_ins_verif_check = checked then call write_new_line_in_PRISM_case_note("    * F0924 - Health Insurance Verification to NCP")
-	If dord_F0100_check = checked then call write_new_line_in_PRISM_case_note("    * F0100 sent to NCP")
-	If dord_F0109_check = checked then call write_new_line_in_PRISM_case_note("    * F0109 sent to NCP")
-	If dord_F0107_check = checked then call write_new_line_in_PRISM_case_note("    * F0107 sent to NCP")
-	If CP_PIN_Notice_check = checked then call write_new_line_in_PRISM_case_note("    * F0999 - PIN Notice to CP")
-	If CP_health_ins_verif_check = checked then call write_new_line_in_PRISM_case_note("    * F0924 - Health Insurance Verification to CP")
-	call write_new_line_in_PRISM_case_note("---")
-	call write_new_line_in_PRISM_case_note("* The following worklists created:")
-	If t_10_day_tickler_check = checked then call write_new_line_in_PRISM_case_note("    * 10 day tickler to call NCP")
-	If t_30_day_to_load_arrears_check = checked then call write_new_line_in_PRISM_case_note("    * 30 day tickler to load arrears")
-	If t_30_day_case_review_check = checked then call write_new_line_in_PRISM_case_note("    * 30 day case review")	
-	If t_60_day_case_review_check = checked then call write_new_line_in_PRISM_case_note("    * FREE worklist")	
-	call write_new_line_in_PRISM_case_note("---")
-	call write_new_line_in_PRISM_case_note(worker_signature)
+	call write_variable_in_CAAD(add_caad_txt)
+	call write_variable_in_CAAD("* The following documents were sent:")
+	If NCP_PIN_Notice_check = checked then call write_variable_in_CAAD("    * F0999 - PIN Notice to NCP")
+	If NCP_health_ins_verif_check = checked then call write_variable_in_CAAD("    * F0924 - Health Insurance Verification to NCP")
+	If dord_F0100_check = checked then call write_variable_in_CAAD("    * F0100 sent to NCP")
+	If dord_F0109_check = checked then call write_variable_in_CAAD("    * F0109 sent to NCP")
+	If dord_F0107_check = checked then call write_variable_in_CAAD("    * F0107 sent to NCP")
+	If CP_PIN_Notice_check = checked then call write_variable_in_CAAD("    * F0999 - PIN Notice to CP")
+	If CP_health_ins_verif_check = checked then call write_variable_in_CAAD("    * F0924 - Health Insurance Verification to CP")
+	call write_variable_in_CAAD("---")
+	call write_variable_in_CAAD("* The following worklists created:")
+	If t_10_day_tickler_check = checked then call write_variable_in_CAAD("    * 10 day tickler to call NCP")
+	If t_30_day_to_load_arrears_check = checked then call write_variable_in_CAAD("    * 30 day tickler to load arrears")
+	If t_30_day_case_review_check = checked then call write_variable_in_CAAD("    * 30 day case review")
+	If t_60_day_case_review_check = checked then call write_variable_in_CAAD("    * FREE worklist")
+	call write_variable_in_CAAD("---")
+	call write_variable_in_CAAD(worker_signature)
 '	transmit
 
 script_end_procedure("")

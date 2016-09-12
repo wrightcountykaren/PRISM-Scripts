@@ -4,44 +4,42 @@ start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 120
 STATS_denomination = "C"
-'End of stats block 
+'End of stats block
 
 'this is a function document
 DIM beta_agency 'remember to add
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
-'this is where the copy and paste from functions library ended
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 
@@ -74,7 +72,7 @@ EndDialog
 'Connecting to BlueZone
 EMConnect ""
 
-'to pull up my prism 
+'to pull up my prism
 EMFocus
 
 'checks to make sure we are in PRISM
@@ -84,7 +82,7 @@ CALL check_for_PRISM(True)
 CALL navigate_to_PRISM_screen ("CAST")
 
 'it is reading the case number and putting in dialog box
-EMReadScreen PRISM_case_number, 13, 4, 8 
+EMReadScreen PRISM_case_number, 13, 4, 8
 
 'taking me to cast so i can read the employer to put in dialog box
 CALL navigate_to_PRISM_screen ("NCID")
@@ -93,7 +91,7 @@ EMWriteScreen "B", 3, 29
 Transmit
 
 'it is reading the case number and putting in dialog box
-EMReadScreen Employer_Name, 20, 8, 51 
+EMReadScreen Employer_Name, 20, 8, 51
 
 'Calculating pay period amounts to put in cawt and caad
 Dim total_arrears, Month_Accrual, Month_NonAccrual
@@ -116,15 +114,15 @@ Month_NonAccrual = Trim(Month_NonAccrual)
 Monthly = Monthly * 1
 Month_Accrual = Month_Accrual * 1
 Month_NonAccrual = Month_NonAccrual * 1
-
+total_arrears = total_arrears * 1
 
 'calculating monthly collection to put in dialog and caad and cawt
-IF total_arrears = 0 THEN Monthly = Month_Accrual + Month_NonAccrual  
+IF total_arrears = 0 THEN Monthly = Month_Accrual + Month_NonAccrual
 IF total_arrears >= Month_Accrual AND Month_NonAccrual = 0  THEN Monthly = (Month_Accrual + Month_NonAccrual) * 1.2
 IF total_arrears >= Month_Accrual AND Month_NonAccrual > 0  THEN Monthly = (Month_Accrual + Month_NonAccrual)
 IF total_arrears > Month_NonAccrual AND Month_Accrual = 0 THEN Monthly = Month_NonAccrual * 1.2
 IF total_arrears < Month_Accrual AND total_arrears <> 0 AND Month_NonAccrual = 0 THEN Monthly = Month_Accrual
-IF total_arrears < Month_Accrual AND total_arrears <> 0 AND Month_NonAccrual > 0  THEN Monthly = (Month_Accrual + Month_NonAccrual) 
+IF total_arrears < Month_Accrual AND total_arrears <> 0 AND Month_NonAccrual > 0  THEN Monthly = (Month_Accrual + Month_NonAccrual)
 
 Monthly = trim(Monthly)
 
@@ -139,15 +137,15 @@ total_arrears = FormatCurrency(total_arrears)
 'THE LOOP----------------------------------------
 'adding a loop
 Do
-	err_msg = ""	
-	Dialog IW_Dialog	'shows name of dialog		
+	err_msg = ""
+	Dialog IW_Dialog	'shows name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
 		IF PRISM_case_number = "" THEN err_msg = err_msg & vbNewline & "Prism case number must be completed"
 		IF Monthly = "" THEN err_msg = err_msg & vbNewline & "Total monthly Collection on IW Notice must be completed."
 		IF Employer_Name = "" THEN err_msg = err_msg & vbNewline & "Employer Name must be completed."
 		IF IWType = "Select one..." THEN err_msg = err_msg & vbNewline & "IW Type must be completed.  "
 		IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "Please sign your CAAD Note."
-		IF err_msg <> "" THEN 
+		IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 		END IF
 
@@ -189,11 +187,9 @@ EMWriteScreen "free", 4, 37
 EMSetCursor 10, 4
 	CALL write_variable_in_CAAD ("Did " & IWType & " IW start from "  &  Employer_Name  &  Monthly  &  " per month"  &  " yet?")
 CALL write_variable_in_CAAD ("weekly: $" & WeekPay & "  biweekly: $" & BiWeekPay & "  semimonthly: $"& SemiMoPay)
-EMWriteScreen "30", 17, 52 
+EMWriteScreen "30", 17, 52
 transmit
 PF3
 End IF
 
 script_end_procedure("")
-
-

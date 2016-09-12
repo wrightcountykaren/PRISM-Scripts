@@ -3,45 +3,43 @@ start_time = timer
 STATS_Counter = 1
 STATS_manualtime = 120
 STATS_denomination = "C"
-'End of stats block 
+'End of stats block
 
 
 'this is a function document
 DIM beta_agency 'remember to add
 
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)---------------------------------------------------------------
-Dim URL, REQ, FSO					'Declares variables to be good to option explicit users
-If beta_agency = "" then 			'For scriptwriters only
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-ElseIf beta_agency = True then		'For beta agencies and testers
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/beta/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-Else								'For most users
-	url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/release/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-End if
-Set req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, False									'Attempts to open the URL
-req.send													'Sends request
-If req.Status = 200 Then									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Robert Kalb, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Robert Kalb and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Robert will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
-'this is where the copy and paste from functions library ended
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
 
@@ -86,7 +84,7 @@ Month_Accrual = CDbl(Month_Accrual)
 Month_NonAccrual = CDbl(Month_NonAccrual)
 
 
-Current_Support = Month_Accrual + Month_NonAccrual 
+Current_Support = Month_Accrual + Month_NonAccrual
 Current_Support = Trim(Current_Support)
 Current_Support = FormatNumber(Current_Support)
 
@@ -99,7 +97,7 @@ Do
 		IF Current_Support = "" THEN err_msg = err_msg & vbNewline & "Current Support must be completed"
 		'IF CP = 0 AND NCP = 0 THEN err_msg = vbNewline & "Either CP or NCP must be selected."
 
-		IF err_msg <> "" THEN 
+		IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & "Please resolve for the script to continue."
 		END IF
 LOOP UNTIL err_msg = ""
@@ -127,10 +125,10 @@ MoTotal = FormatNumber(Mototal)
 
 'takes you to palc so you can see the amount that is being received on the case
 CALL navigate_to_PRISM_screen ("PALC")
- 
+
 
 'msgbox needed to show calculations, weekly, biweekly, semi monthly, and monthly with 20%
-IF Percent = checked THEN 
+IF Percent = checked THEN
 	MsgBox ("Monthly: $" & MoTotal & VbNewline & VbNewline & _
 		"Weekly: $" & WeekPay & VbNewline & VbNewline & _
 		"Bi-Weekly: $" & BiWeekPay & VbNewline & VbNewline & _
@@ -140,11 +138,11 @@ IF Percent = checked THEN
 END IF
 
 'without 20%
-IF Percent = 0 THEN 
+IF Percent = 0 THEN
 	MsgBox ("Monthly: $" & MoTotal & VbNewline & VbNewline & _
 		"Weekly: $" & WeekPay & VbNewline & VbNewline & _
 		"Bi-Weekly: $" & BiWeekPay & VbNewline & VbNewline & _
-		"Semi-Monthly: $" & SemiMoPay) 
+		"Semi-Monthly: $" & SemiMoPay)
 
 
 END IF
