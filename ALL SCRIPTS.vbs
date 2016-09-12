@@ -84,6 +84,14 @@ cs_scripts_array(script_num).description		= "Transfers single case and creates C
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
+cs_scripts_array(script_num).script_type		= "BULK"
+cs_scripts_array(script_num).file_name			= "BULK - CASE TRANSFER.vbs"
+cs_scripts_array(script_num).description		= "Gives the user the ability to quickly transfer mulitple cases."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CLIENT CONTACT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CLIENT CONTACT.vbs"
