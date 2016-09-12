@@ -1,5 +1,3 @@
-use_master_branch = TRUE
-
 'Gathering stats-------------------------------------------------------------------------------------
 name_of_script = "BULK - CASE TRANSFER.vbs"
 start_time = timer
