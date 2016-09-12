@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - MOD CAAD NOTE: CONTACT CHECKLIST.vbs"
+name_of_script = "NOTES - MOD CAAD NOTE - CONTACT CHECKLIST.vbs"
 start_time = timer
 STATS_counter = 1
 STATS_manualtime = 300
@@ -69,7 +69,7 @@ BeginDialog Modification_Case_Note, 0, 0, 371, 440, "MOD CAAD NOTE: CONTACT CHEC
   Text 15, 370, 65, 10, "Other discussions:"
   EditBox 95, 365, 265, 15, Other_editbox
   Text 205, 385, 65, 10, "Worker's Signature"
-  EditBox 200, 400, 160, 15, Workers_Signature
+  EditBox 200, 400, 160, 15, worker_signature
   ButtonGroup ButtonPressed
     OkButton 255, 420, 50, 15
     CancelButton 310, 420, 50, 15
@@ -133,6 +133,6 @@ IF Verify_employer_checkbox = 1 then call write_bullet_and_variable_in_CAAD("Ver
 IF Verify_email_checkbox = 1 then call write_bullet_and_variable_in_CAAD("Verified and updated Client's email", Email_editbox)
 IF Electronic_financial_statements_checkbox = 1 then call write_variable_in_CAAD("Offered financial statement electronically. Advised would not start review until received back.")
 call write_bullet_and_variable_in_CAAD("Other discussions", Other_editbox)
-call write_variable_in_CAAD(Workers_Signature)
+call write_variable_in_CAAD(worker_signature)
 
 script_end_procedure("")
