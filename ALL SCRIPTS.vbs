@@ -382,8 +382,8 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "RETURNED MAIL"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "RETURNED MAIL.vbs"
-cs_scripts_array(script_num).description		= "Updates address to new or unknown, and creates CAAD note."
+cs_scripts_array(script_num).file_name			= "ACTIONS - RETURNED MAIL.vbs"
+cs_scripts_array(script_num).description		= "NEW 09/2016!!! - Updates address to new or unknown, and creates CAAD note."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
