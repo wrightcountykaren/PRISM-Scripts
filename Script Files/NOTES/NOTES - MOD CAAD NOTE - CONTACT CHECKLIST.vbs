@@ -97,7 +97,7 @@ Do
 	cancel_confirmation
 	CALL Prism_case_number_validation(prism_case_number, case_number_valid)
 	IF Contact_Type_dropdown = "" THEN err_msg = err_msg & vbNEWline & "You must select a contact type!"
-	IF Workers_Signature = "" THEN err_msg = err_msg & vbNEWline & "You must sign your CAAD note"
+	IF worker_signature = "" THEN err_msg = err_msg & vbNEWline & "You must sign your CAAD note"
 	IF Who_requested_editbox = "" THEN err_msg = err_msg & vbNEWline & "You must enter in who you discussed Modification Options with!"
 	IF (Change_Options = "Income Change (ask why)" or Change_Options = "Other") and Change_type = "" THEN err_msg = err_msg & vbNEWline & "Please provide more detail!"
 	IF err_msg <> "" THEN MsgBox "***Notice***" & vbNEWline & err_msg &vbNEWline & vbNEWline & "Please resolve for the script"
