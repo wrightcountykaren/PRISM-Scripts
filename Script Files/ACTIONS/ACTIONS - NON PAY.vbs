@@ -137,7 +137,7 @@ FUNCTION send_non_pay_memo
 
 	EMWriteScreen "to discuss your employment status or sources of income.", 16, 15
 	transmit
-	EMWriteScreen "Please make a payment today. Your current arreas balance", 16, 15
+	EMWriteScreen "Please make a payment today. Your current arrears balance", 16, 15
 	transmit
 	EMWriteScreen "is $" & arrears_balance & ". If you have any questions or concerns", 16, 15
 	transmit
