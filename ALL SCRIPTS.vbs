@@ -36,7 +36,7 @@ cs_scripts_array(script_num).description		= "Creates redirection docs and redire
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "AFFIDAVIT OF SERVICE DOCS"
+cs_scripts_array(script_num).script_name		= "AFFIDAVIT OF SERVICE BY MAIL DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL DOCS.vbs"
 cs_scripts_array(script_num).description		= "Sends Affidavits of Service to multiple participants on the case."
@@ -103,7 +103,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "COLA"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - COLA.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!!! Leads you through performing a COLA. Adds CAAD note when completed."
+cs_scripts_array(script_num).description		= "Leads you through performing a COLA. Adds CAAD note when completed."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -156,7 +156,7 @@ cs_scripts_array(script_num).description		= "Creates T0111 CAAD note with text c
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "DDPL CALC"
+cs_scripts_array(script_num).script_name		= "DDPL CALCULATOR"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - DDPL CALCULATOR.vbs"
 cs_scripts_array(script_num).description		= "Calculates direct deposits made over user-provided date range."
@@ -196,18 +196,18 @@ cs_scripts_array(script_num).description		= "Intake workflow on enforcement case
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "EST DORD NPA DOCS"
+cs_scripts_array(script_num).script_name		= "ESTB DORD DOCS FOR NPA CASE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - EST DORD NPA DOCS.vbs"
-cs_scripts_array(script_num).description		= "NEW 01/2016!! Generates DORD docs for NPA case."
+cs_scripts_array(script_num).file_name			= "ACTIONS - ESTB DORD DOCS FOR NPA CASE.vbs"
+cs_scripts_array(script_num).description		= "Generates establishment DORD docs for NPA case."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ESTB DORD PA DOCS"
+cs_scripts_array(script_num).script_name		= "ESTB DORD DOCS FOR PA CASE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ESTB DORD DOCS FOR PA CASE.vbs"
-cs_scripts_array(script_num).description		= "NEW 01/2016!! Generates DORD docs for PA case."
+cs_scripts_array(script_num).description		= "Generates establishment DORD docs for PA case."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -284,10 +284,10 @@ cs_scripts_array(script_num).description		= "NEW 04/2016!! Creates CAAD and CAWT
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "IW CALC"
+cs_scripts_array(script_num).script_name		= "IW CALCULATOR"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - IW CALCULATOR.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Calculator for determining the amount of IW over a given period."
+cs_scripts_array(script_num).description		= "Calculator for determining the amount of IW over a given period."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -311,7 +311,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NCP LOCATE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NCP LOCATE.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Walks you through processing an NCP locate."
+cs_scripts_array(script_num).description		= "Walks you through processing an NCP locate."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -340,7 +340,7 @@ cs_scripts_array(script_num).description		= "Evaluates D0800 (REVW for Notice of
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "PALC CALC"
+cs_scripts_array(script_num).script_name		= "PALC CALCULATOR"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PALC CALCULATOR.vbs"
 cs_scripts_array(script_num).description		= "Calculates voluntary and involuntary amounts from the PALC screen."
@@ -423,12 +423,12 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "SEND F0104 DORD MEMO"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - SEND F0104 DORD MEMO.vbs"
-cs_scripts_array(script_num).description		= "Script editor for sending F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
+cs_scripts_array(script_num).description		= "Sends F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "UN UN DOCS"
+cs_scripts_array(script_num).script_name		= "UNREIMBURSED UNINSURED DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UNREIMBURSED UNINSURED DOCS.vbs"
 cs_scripts_array(script_num).description		= "Prints DORD docs for collecting unreimbursed and uninsured expenses."
