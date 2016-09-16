@@ -108,18 +108,10 @@ cs_scripts_array(script_num).description		= "Leads you through performing a COLA
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "COMPANION CASE FINDER - CP"
+cs_scripts_array(script_num).script_name		= "CP COMPANION CASE FINDER"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CP COMPANION CASE FINDER.vbs"
 cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "COMPANION CASE FINDER - NCP"
-cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - NCP COMPANION CASE FINDER.vbs"
-cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for NCPs on your CALI."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -308,6 +300,14 @@ cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "NCP COMPANION CASE FINDER"
+cs_scripts_array(script_num).script_type		= "BULK"
+cs_scripts_array(script_num).file_name			= "BULK - NCP COMPANION CASE FINDER.vbs"
+cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for NCPs on your CALI."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NCP LOCATE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - NCP LOCATE.vbs"
@@ -332,9 +332,9 @@ cs_scripts_array(script_num).description		= "Creates list in Excel of cases that
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NOTICE OF CONT'D SERVICE"
+cs_scripts_array(script_num).script_name		= "NOTICE OF CONTINUED SERVICE"
 cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - EVALUATE NOCS.vbs"
+cs_scripts_array(script_num).file_name			= "BULK - NOTICE OF CONTINUED SERVICE.vbs"
 cs_scripts_array(script_num).description		= "Evaluates D0800 (REVW for Notice of Cont'd Services) worklist and allows user to send DORD docs."
 
 script_num = script_num + 1
@@ -396,9 +396,17 @@ cs_scripts_array(script_num).description		= "NEW 09/2016!!! - Updates address to
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "REVIEW QW INFO"
+cs_scripts_array(script_num).script_type		= "BULK"
+cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
+cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
 cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - E4111 SUSP SCRUBBER.vbs"
+cs_scripts_array(script_num).file_name			= "BULK - REVW PAY PLAN - DL IS SUSP.vbs"
 cs_scripts_array(script_num).description		= "Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
 
 script_num = script_num + 1
@@ -406,16 +414,8 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "REVW PAY PLAN RECENT ACTIVITY"
 cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - E4111 WORKLIST SCRUBBER.vbs"
+cs_scripts_array(script_num).file_name			= "BULK - REVW PAY PLAN RECENT ACTIVITY.vbs"
 cs_scripts_array(script_num).description		= "Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "REVW QW INFO"
-cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - REVIEW QW INFO.vbs"
-cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
