@@ -223,7 +223,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "EMPLOYMENT VERIFICATION"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - EMPLOYMENT VERIFICATION.vbs"
-cs_scripts_array(script_num).description		= "NEW 08/2016!!! Complete an Employment Verification in NCID or CPID, includes info on CAAD note."
+cs_scripts_array(script_num).description		= "NEW 08/2016!! - Complete an Employment Verification in NCID or CPID, includes info on CAAD note."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -311,7 +311,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "HEARING NOTES"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - HEARING NOTES.vbs"
-cs_scripts_array(script_num).description		= "NEW 08/2016!!! - CAAD note template for sending details about hearing notes."
+cs_scripts_array(script_num).description		= "NEW 08/2016!! - CAAD note template for sending details about hearing notes."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -487,7 +487,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "QUICK CAAD"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - QUICK CAAD.vbs"
-cs_scripts_array(script_num).description		= "NEW 08/2016!!! - Quickly add links to CAAD codes you frequently use. Includes a search feature."
+cs_scripts_array(script_num).description		= "NEW 08/2016!! - Quickly add links to CAAD codes you frequently use. Includes a search feature."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -495,7 +495,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "RECORD IW INFO"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - RECORD IW INFO.vbs"
-cs_scripts_array(script_num).description		= "NEW 09/2016!!! - Record IW withholding info in a CAAD note, worklist, or view in a message box."
+cs_scripts_array(script_num).description		= "NEW 09/2016!! - Record IW withholding info in a CAAD note, worklist, or view in a message box."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -503,7 +503,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "RETURNED MAIL"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - RETURNED MAIL.vbs"
-cs_scripts_array(script_num).description		= "NEW 09/2016!!! - Updates address to new or unknown, and creates CAAD note."
+cs_scripts_array(script_num).description		= "NEW 09/2016!! - Updates address to new or unknown, and creates CAAD note."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
