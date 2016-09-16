@@ -52,7 +52,7 @@ cs_scripts_array(script_num).description		= "Takes actions on the case to apply 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVW"
+cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVIEW"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - ARREARS MGMT REVIEW.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note for documenting an arrears management review."
@@ -148,22 +148,6 @@ cs_scripts_array(script_num).description		= "Leads you through performing a COLA
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CP COMPANION CASE FINDER"
-cs_scripts_array(script_num).script_type		= "BULK"
-cs_scripts_array(script_num).file_name			= "BULK - CP COMPANION CASE FINDER.vbs"
-cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CPDD"
-cs_scripts_array(script_num).script_type		= "NAV"
-cs_scripts_array(script_num).file_name			= "NAV - CPDD.vbs"
-cs_scripts_array(script_num).description		= "Navigates to the CPDD screen."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CONTEMPT HEARING"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CONTEMPT HEARING.vbs"
@@ -188,6 +172,22 @@ cs_scripts_array(script_num).description		= "Runs a court prep worksheet in anti
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CP COMPANION CASE FINDER"
+cs_scripts_array(script_num).script_type		= "BULK"
+cs_scripts_array(script_num).file_name			= "BULK - CP COMPANION CASE FINDER.vbs"
+cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CPDD"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CPDD.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CPDD screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CSENET INFO"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CSENET INFO.vbs"
@@ -207,7 +207,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "E-FILING"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - E-FILING.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Template for adding CAAD note about e-filing."
+cs_scripts_array(script_num).description		= "Template for adding CAAD note about e-filing."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -311,7 +311,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "HEARING NOTES"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - HEARING NOTES.vbs"
-cs_scripts_array(script_num).description		= "New 08/2016!!! - CAAD note template for sending details about hearing notes."
+cs_scripts_array(script_num).description		= "NEW 08/2016!!! - CAAD note template for sending details about hearing notes."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -327,7 +327,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "INVOICES"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - INVOICES.vbs"
-cs_scripts_array(script_num).description		= "NEW 07/2016!! Creates CAAD note for recording invoices."
+cs_scripts_array(script_num).description		= "NEW 07/2016!! - Creates CAAD note for recording invoices."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -335,7 +335,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "IW CAAD CAWT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - IW CAAD CAWT.vbs"
-cs_scripts_array(script_num).description		= "NEW 04/2016!! Creates CAAD and CAWT about IW."
+cs_scripts_array(script_num).description		= "Creates CAAD and CAWT about IW."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -367,7 +367,7 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MOD CAAD NOTE - CONTACT CHECKLIST"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MOD CAAD NOTE - CONTACT CHECKLIST.vbs"
-cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording contact with Client regarding possible Mod."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording contact with Client regarding possible Mod."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
