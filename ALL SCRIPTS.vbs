@@ -12,8 +12,6 @@ class cs_script
 
 end class
 
-all_counties = "ANOKA, BELTRAMI, DAKOTA, HENNEPIN, MILLE LACS, OLMSTED, RAMSEY, RENVILLE, SCOTT, STEARNS, WASHINGTON, WRIGHT"
-
 'The following is the list of all scripts.
 '>>>> THESE MUST BE MAINTAINED IN ALPHABETICAL ORDER ACCORDING TO THE SCRIPT_NAME PROPERTY <<<<<
 script_num = 0
