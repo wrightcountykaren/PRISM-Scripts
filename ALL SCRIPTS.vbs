@@ -60,6 +60,22 @@ cs_scripts_array(script_num).description		= "Creates CAAD note for documenting a
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAAD"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAAD.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAAD screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAFS"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAFS.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAFS screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CALI TO EXCEL"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CALI TO EXCEL.vbs"
@@ -68,10 +84,26 @@ cs_scripts_array(script_num).description		= "Builds a list in Excel of case numb
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAPS"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAPS.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAPS screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE INITIATION DOCS RECEIVED"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - CASE INITIATION DOCS RECEIVED.vbs"
 cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAST"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAST.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAST screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -88,6 +120,14 @@ cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CASE TRANSFER.vbs"
 cs_scripts_array(script_num).description		= "Gives the user the ability to quickly transfer mulitple cases."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAWT"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAWT.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAWT screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -112,6 +152,14 @@ cs_scripts_array(script_num).script_name		= "CP COMPANION CASE FINDER"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CP COMPANION CASE FINDER.vbs"
 cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CPDD"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CPDD.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CPDD screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -180,6 +228,14 @@ cs_scripts_array(script_num).description		= "NEW 08/2016!!! Complete an Employme
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "ENFL"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - ENFL.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the ENFL screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "ENFORCEMENT INTAKE"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - ENFORCEMENT INTAKE.vbs"
@@ -224,6 +280,14 @@ cs_scripts_array(script_num).script_name		= "FIND NAME ON CALI"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - FIND NAME ON CALI.vbs"
 cs_scripts_array(script_num).description		= "Searches CALI for a specific CP or NCP."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "FIND THAT SCREEN IN PRISM"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - FIND THAT SCREEN IN PRISM.vbs"
+cs_scripts_array(script_num).description		= "Displays a list of PRISM screens which you can then select."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -284,6 +348,14 @@ cs_scripts_array(script_num).description		= "Calculator for determining the amou
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "MAXIS SCREEN FINDER"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - MAXIS SCREEN FINDER.vbs"
+cs_scripts_array(script_num).description		= "Displays a list of MAXIS screens you can select."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MES FINANCIAL DOCS SENT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MES FINANCIAL DOCS SENT.vbs"
@@ -296,6 +368,22 @@ cs_scripts_array(script_num).script_name		= "MOD CAAD NOTE - CONTACT CHECKLIST"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - MOD CAAD NOTE - CONTACT CHECKLIST.vbs"
 cs_scripts_array(script_num).description		= "NEW 06/2016!! Creates CAAD note for recording contact with Client regarding possible Mod."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "NCDD"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - NCDD.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the NCDD screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "NCID"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - NCID.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the NCID screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -340,6 +428,14 @@ cs_scripts_array(script_num).description		= "Evaluates D0800 (REVW for Notice of
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "PALC"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - PALC.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the PALC screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PALC CALCULATOR"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - PALC CALCULATOR.vbs"
@@ -348,10 +444,26 @@ cs_scripts_array(script_num).description		= "Calculates voluntary and involuntar
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "PAPL"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - PAPL.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the PAPL screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PAY OR REPORT"
 cs_scripts_array(script_num).script_type		= "NOTES"
 cs_scripts_array(script_num).file_name			= "NOTES - PAY OR REPORT.vbs"
 cs_scripts_array(script_num).description		= "CAAD note for contempt/''pay or report'' instances."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "PESE"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - PESE.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the PESE screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -428,6 +540,14 @@ cs_scripts_array(script_num).description		= "Sends F0104 DORD Memo Docs, with op
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "SUCW"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - SUCW.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the SUCW screen."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "UNREIMBURSED UNINSURED DOCS"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - UNREIMBURSED UNINSURED DOCS.vbs"
@@ -440,6 +560,14 @@ cs_scripts_array(script_num).script_name		= "UPDATE WORKER SIGNATURE"
 cs_scripts_array(script_num).script_type		= "UTILITIES"
 cs_scripts_array(script_num).file_name			= "UTILITIES - UPDATE WORKER SIGNATURE.vbs"
 cs_scripts_array(script_num).description		= "Allows you to maintain a default signature that loads in all scripts."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "USWD"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - USWD.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the USWD screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
