@@ -98,14 +98,6 @@ cs_scripts_array(script_num).description		= "Creates CAAD note for recording rec
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CAST"
-cs_scripts_array(script_num).script_type		= "NAV"
-cs_scripts_array(script_num).file_name			= "NAV - CAST.vbs"
-cs_scripts_array(script_num).description		= "Navigates to the CAST screen."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
 cs_scripts_array(script_num).script_type		= "ACTIONS"
 cs_scripts_array(script_num).file_name			= "ACTIONS - CASE TRANSFER.vbs"
@@ -118,6 +110,14 @@ cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - CASE TRANSFER.vbs"
 cs_scripts_array(script_num).description		= "Gives the user the ability to quickly transfer mulitple cases."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "CAST"
+cs_scripts_array(script_num).script_type		= "NAV"
+cs_scripts_array(script_num).file_name			= "NAV - CAST.vbs"
+cs_scripts_array(script_num).description		= "Navigates to the CAST screen."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
@@ -402,18 +402,18 @@ cs_scripts_array(script_num).description		= "Walks you through processing an NCP
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NON PAY"
-cs_scripts_array(script_num).script_type		= "ACTIONS"
-cs_scripts_array(script_num).file_name			= "ACTIONS - NON PAY.vbs"
-cs_scripts_array(script_num).description		= "Sends DORD doc and creates CAAD related to Non-Pay."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "NO PAY REPORT"
 cs_scripts_array(script_num).script_type		= "BULK"
 cs_scripts_array(script_num).file_name			= "BULK - NO PAY REPORT.vbs"
 cs_scripts_array(script_num).description		= "Creates list in Excel of cases that have had no payment within given time period."
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "NON PAY"
+cs_scripts_array(script_num).script_type		= "ACTIONS"
+cs_scripts_array(script_num).file_name			= "ACTIONS - NON PAY.vbs"
+cs_scripts_array(script_num).description		= "Sends DORD doc and creates CAAD related to Non-Pay."
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
