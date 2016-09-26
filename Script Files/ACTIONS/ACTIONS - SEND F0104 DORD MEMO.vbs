@@ -193,6 +193,9 @@ END FUNCTION
 'Connects to BlueZone
 EMConnect ""
 
+'Checking for PRISM that is not timed out...
+CALL check_for_PRISM(TRUE)
+
 'Finds the PRISM case number using a custom function
 CALL PRISM_case_number_finder(PRISM_case_number)
 
@@ -208,6 +211,9 @@ Do
 	EMReadScreen PRISM_check, 5, 1, 36
 	IF PRISM_check <> "PRISM" THEN MsgBox "You seem to be locked out of PRISM. Are you in PRISM right now? Are you passworded out? Check your BlueZone screen and try again."
 LOOP UNTIL PRISM_check = "PRISM"
+
+'Checking that the user is not in a timed out PRISM
+CALL check_for_PRISM(FALSE)
 
 'Clearing case info from PRISM
 CALL navigate_to_PRISM_screen("REGL")
@@ -255,6 +261,7 @@ DO
 
 
 LOOP UNTIL buttonpressed <> preview_button and buttonpressed <> spell_button and error_msg = ""
+
 
 
 'Ensuring that all required fields are completed before continuing with export to DORD.
