@@ -107,10 +107,6 @@ If row <> 0 then
 End if
 
 
-'Starts dialog
-					Dialog AffOfServDialog
-     					IF ButtonPressed = 0 THEN StopScript
-
 'goes to correct case
 EMWriteScreen "CAST", 21,18
 Transmit
@@ -119,6 +115,20 @@ EMWriteScreen "D", 3, 29
 	EMWriteScreen Left (prism_case_number, 10), 4, 8
 	EMWriteScreen Right (prism_case_number, 2), 4, 19
 Transmit
+
+Do
+	err_msg = ""
+	Dialog AffOfServDialog 'Shows name of dialog
+		IF buttonpressed = 0 then stopscript		'Cancel
+		IF ncp_button = 0 AND cp_button = 0 AND NCP_Attorney_button = 0 AND CP_Attorney_button = 0 THEN err_msg = err_msg & vbNewline & "Please select the receipiant for your Affidavit."
+		IF date_box = "" THEN err_msg = err_msg & vbNewline & "The date served must be completed." 
+		IF summons_and_complaint = 0 AND Amended_Summons_and_Complaint = 0 AND Findings_Conclusion_Order = 0 AND Amended_Findings_Conclusion_Order = 0 AND motion = 0 AND Amended_Motion = 0 AND supporting_affidavit = 0 AND Amended_Supporting_Affidavit = 0 AND financial_statement = 0 AND des_information = 0 AND Genetic_Blood_Test_Order = 0 AND Genetic_Blood_Test_results = 0 AND Notice_of_Intervention = 0 AND Notice_of_Hearing = 0 AND Notice_of_Registration = 0 AND Notice_of_Settlement_Conference = 0 AND Aff_of_Default_and_ID = 0 AND Case_Financial_Summary = 0 AND Case_Payment_History = 0 AND Case_Information_Sheet = 0 AND Confidential_Info_Form = 0 AND sealed_financial_doc = 0 AND Important_Statement_of_Rights = 0 AND Your_Privacy_Rights = 0 AND Request_for_Hearing = 0 AND Notice_of_Judgment_Renewal = 0 AND guidelines_worksheet = 0 AND other_line_1 = "" AND other_line_2 = "" THEN err_msg = err_msg & vbNewline & "At least one document must be selected."
+		IF err_msg <> "" THEN 
+			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
+		END IF
+
+LOOP UNTIL err_msg = ""
+
 '---------------------------------------------------------------------------------------------------------Creates DORD doc if CP checked
 IF cp_button = checked then
 'goes to DORD
@@ -342,7 +352,22 @@ End IF
 EMSendKey (PF3)
 EMWriteScreen "M", 3, 29
 Transmit
-EMSendKey (PF3)
+
+'''need to select legal heading
+BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  ButtonGroup ButtonPressed
+    OkButton 60, 75, 50, 15
+    CancelButton 115, 75, 50, 15
+  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  Text 5, 40, 55, 10, "2. Press ENTER"
+  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+EndDialog
+
+			Dialog LH_dialog  'name of dialog
+			IF buttonpressed = 0 then stopscript		'Cancel
+
+'EMSendKey (PF3)
 End If
 '--------------------------------------------------------------------------------------------------------------------------------------Creates DORD doc if NCP checked
 
@@ -567,7 +592,22 @@ End IF
 EMSendKey (PF3)
 EMWriteScreen "M", 3, 29
 Transmit
-EMSendKey (PF3)
+
+'''need to select legal heading
+BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  ButtonGroup ButtonPressed
+    OkButton 60, 75, 50, 15
+    CancelButton 115, 75, 50, 15
+  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  Text 5, 40, 55, 10, "2. Press ENTER"
+  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+EndDialog
+
+			Dialog LH_dialog  'name of dialog
+			IF buttonpressed = 0 then stopscript		'Cancel
+
+'EMSendKey (PF3)
 
 End If
 
@@ -795,7 +835,22 @@ End IF
 EMSendKey (PF3)
 EMWriteScreen "M", 3, 29
 Transmit
-EMSendKey (PF3)
+
+'''need to select legal heading
+BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  ButtonGroup ButtonPressed
+    OkButton 60, 75, 50, 15
+    CancelButton 115, 75, 50, 15
+  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  Text 5, 40, 55, 10, "2. Press ENTER"
+  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+EndDialog
+
+			Dialog LH_dialog  'name of dialog
+			IF buttonpressed = 0 then stopscript		'Cancel
+
+'EMSendKey (PF3)
 
 
 End If
@@ -1023,8 +1078,24 @@ End IF
 EMSendKey (PF3)
 EMWriteScreen "M", 3, 29
 Transmit
-EMSendKey (PF3)
+
+'''need to select legal heading
+BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  ButtonGroup ButtonPressed
+    OkButton 60, 75, 50, 15
+    CancelButton 115, 75, 50, 15
+  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  Text 5, 40, 55, 10, "2. Press ENTER"
+  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+EndDialog
+
+			Dialog LH_dialog  'name of dialog
+			IF buttonpressed = 0 then stopscript		'Cancel
+
+'EMSendKey (PF3)
 
 End If
 
 script_end_procedure("")
+
