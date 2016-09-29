@@ -41,7 +41,7 @@ END IF
 
 'Calling the Returned Mail Dialog--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 BeginDialog returned_mail_dialog, 0, 0, 441, 195, "Returned Mail Received"
-  EditBox 85, 5, 95, 15, prism_number
+  EditBox 85, 5, 95, 15, PRISM_case_number
   CheckBox 100, 30, 25, 10, "CP", rm_cp_checkbox
   CheckBox 135, 30, 50, 10, "NCP/ALF", rm_ncp_checkbox
   EditBox 225, 25, 80, 15, rm_other
@@ -81,7 +81,7 @@ EMConnect ""
 
 'Checks for prism case number and navigates to CAST for that case
 CALL check_for_prism(TRUE)
-CALL PRISM_case_number_finder(prism_number)
+CALL PRISM_case_number_finder(PRISM_case_number)
 CALL navigate_to_PRISM_screen("CAST")
 EMReadScreen function_code, 2, 5, 78
 
@@ -90,7 +90,7 @@ DO
 	err_msg = ""
 	Dialog returned_mail_dialog
 	IF ButtonPressed = 0 THEN StopScript		                                       
-	CALL PRISM_case_number_validation(prism_number, case_number_valid)
+	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 	IF case_number_valid = FALSE THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
 	IF forwarding_addr = "Select One..." THEN err_msg = err_msg & vbNewline & "You must answer if there was a forwarding address given!"
 	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"       
@@ -98,8 +98,19 @@ DO
 	IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
 LOOP UNTIL err_msg = ""
 
+'Cleaning up inputs a bit
+IF postal_resp_code = "Select One or Leave Blank..." then postal_resp_code = ""		'Blanking this out if they didn't select anything
+
 'Checks to make sure PRISM is open and you are logged in
 CALL check_for_PRISM(True)
+
+'Clears out the existing PRISM case number, if it doesn't match the currnet case
+CALL PRISM_case_number_finder(PRISM_case_number_to_check)
+If PRISM_case_number_to_check <> PRISM_case_number then 
+	REGL
+	call enter_PRISM_case_number(PRISM_case_number, 4, 8)
+	call write_value_and_transmit("d", 3, 29)
+End if
 
 'Cutting postal response to three characters
 source= left(source_code, 3)
