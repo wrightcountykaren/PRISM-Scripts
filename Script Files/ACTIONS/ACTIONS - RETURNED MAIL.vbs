@@ -119,16 +119,27 @@ postal_resp=left(postal_resp_code, 3)
 
 'Navigates to CPDD, NCDD or CAAD note for other address
 IF rm_cp_checkbox = CHECKED THEN 
-'Do we need to add a new address or set address to unknown?
+	
+	'Navigates to CAAD and enters the CAAD note for returned mail
+	CALL navigate_to_PRISM_screen("CAAD")
+	PF5
+	CALL create_mainframe_friendly_date(date_received, 4, 37, "YYYY")
+	EMWritescreen "R0011", 4, 54
+	EMSetCursor 16, 4
+	CALL write_variable_in_CAAD(misc_notes)
+	CALL write_variable_in_CAAD("---" & worker_signature)
+	transmit	
+
+	'Do we need to add a new address or set address to unknown?
 	IF updated_ADDR = "Update to New Forwarding Address" THEN
 		CALL navigate_to_PRISM_screen("CPDD")
 		EMWritescreen "M", 3, 29
 		EMWritescreen source, 19, 38
 		EMWritescreen postal_resp, 19, 62
 		transmit
-'Erasing the current address in PRISM
+		'Erasing the current address in PRISM
 		EMWritescreen "M", 3, 29	
-		EMWritescreen date_received, 10, 18
+		CALL create_mainframe_friendly_date(date_received, 10, 18, "YYYY")
 		EMWritescreen "N", 10, 46	
 		EMSetCursor 14, 11	
 		EMSendkey  "<EraseEof>"
@@ -163,10 +174,11 @@ IF rm_cp_checkbox = CHECKED THEN
 		EMSetCursor 19, 62	
 		EMSendkey  "<EraseEof>"
 		EMWaitReady 0, 0
-'Adding the new forwarding address in PRISM		
+	
+		'Adding the new forwarding address in PRISM		
 		CALL navigate_to_PRISM_screen("CPDD")
 		EMwritescreen "M", 3, 29
-		EMWritescreen date_received, 10, 18
+		CALL create_mainframe_friendly_date(date_received, 10, 18, "YYYY")
 		EMWritescreen "Y", 10, 46
 		EMwritescreen new_addr, 15, 11
 		EMWritescreen new_CITY, 17, 11
@@ -177,7 +189,7 @@ IF rm_cp_checkbox = CHECKED THEN
 		EMWritescreen postal_resp, 19, 62
 		transmit
 
-'Shows error message if one exists
+		'Shows error message if one exists
 		EMReadScreen standardization_msg, 6, 4, 35
 		IF standardization_msg = "Code-1" THEN
 			EMReadscreen error_msg, 29, 12, 25
@@ -185,7 +197,7 @@ IF rm_cp_checkbox = CHECKED THEN
 				PF6
 				PF3	
 				Msgbox "PRISM reports this message: " & trim(error_msg) & ". Please review and/or update the address if applicable! The R0011 CAAD note will not be entered. Script will now stop."
-				stopscript
+				script_end_procedure("")
 			END IF	
 			PF6
 		END IF
@@ -193,26 +205,17 @@ IF rm_cp_checkbox = CHECKED THEN
 		IF function_code = "OL" or function_code = "ON" or function_code = "PL" or function_code = "PN" THEN
 			MsgBox "** Review case to see if maintaining county request needs to be made **"
 		END IF
-'Navigates to CAAD and enters the CAAD note for returned mail
-CALL navigate_to_PRISM_screen("CAAD")
-	PF5
-	EMWritescreen date_received, 4, 37
-	EMWritescreen "R0011", 4, 54
-	EMSetCursor 16, 4
-	CALL write_variable_in_CAAD(misc_notes)
-	CALL write_variable_in_CAAD("---" & worker_signature)
-	transmit	
 
-'Erases the address
+	'Erases the address
 	ELSEIF updated_ADDR = "Update to Unknown" THEN
 		CALL navigate_to_PRISM_screen("CPDD")
 		EMWritescreen "M", 3, 29
 		EMWritescreen source, 19, 38
 		EMWritescreen postal_resp, 19, 62
 		transmit
-
+		
 		EMWritescreen "M", 3, 29	
-		EMWritescreen date_received, 10, 18
+		CALL create_mainframe_friendly_date(date_received, 10, 18, "YYYY")
 		EMWritescreen "N", 10, 46	
 		EMSetCursor 14, 11	
 		EMSendkey  "<EraseEof>"
@@ -247,21 +250,23 @@ CALL navigate_to_PRISM_screen("CAAD")
 		EMSetCursor 19, 62	
 		EMSendkey  "<EraseEof>"
 		EMWaitReady 0, 0
-		transmit
+		transmit		
 	END IF
 END IF
 
 'Navigates to CAAD to write a case note
 IF rm_ncp_checkbox = CHECKED THEN
+	'Creating the CAAD note for the NCP.
 	CALL navigate_to_PRISM_screen("CAAD")
 	PF5
-	EMWritescreen date_received, 4, 37
+	CALL create_mainframe_friendly_date(date_received, 4, 37, "YYYY")
 	EMWritescreen "R0010", 4, 54
 	EMSetCursor 16, 4
 	CALL write_variable_in_CAAD(misc_notes)
 	CALL write_variable_in_CAAD("---" & worker_signature)
 	transmit
-'Erases the old address
+	
+	'Erases the old address
 	IF updated_ADDR = "Update to New Forwarding Address" THEN
 		CALL navigate_to_PRISM_screen("NCDD")
 		EMWritescreen "M", 3, 29
@@ -270,7 +275,7 @@ IF rm_ncp_checkbox = CHECKED THEN
 		transmit
 
 		EMWritescreen "M", 3, 29	
-		EMWritescreen date_received, 10, 18
+		CALL create_mainframe_friendly_date(date_received, 10, 18, "YYYY")
 		EMWritescreen "N", 10, 46	
 		EMSetCursor 14, 11	
 		EMSendkey  "<EraseEof>"
@@ -306,9 +311,9 @@ IF rm_ncp_checkbox = CHECKED THEN
 		EMSendkey  "<EraseEof>"
 		EMWaitReady 0, 0
 		
-'Enteres the new forwarding address
+		'Enteres the new forwarding address
 		EMwritescreen "M", 3, 29
-		EMWritescreen date_received, 10, 18
+		CALL create_mainframe_friendly_date(date_received, 10, 18, "YYYY")
 		EMWritescreen "Y", 10, 46
 		EMwritescreen new_addr, 15, 11
 		EMWritescreen new_CITY, 17, 11
@@ -318,7 +323,7 @@ IF rm_ncp_checkbox = CHECKED THEN
 		EMWritescreen source, 19, 38
 		EMWritescreen postal_resp, 19, 62
 		transmit
-'Shows error message if there is one		
+		'Shows error message if there is one		
 		EMReadScreen standardization_msg, 6, 4, 35
 		IF standardization_msg = "Code-1" THEN
 			EMReadscreen error_msg, 29, 12, 25
@@ -326,21 +331,12 @@ IF rm_ncp_checkbox = CHECKED THEN
 				PF6
 				PF3	
 				Msgbox "PRISM reports this message: " & trim(error_msg) & ". Please review and/or update the address if applicable! The R0010 CAAD note will not be entered. Script will now stop"
-				stopscript
+				script_end_procedure("")
 			END IF	
 			PF6
 		END IF
-'Navigates to caad and enters the returned mail note		
-CALL navigate_to_PRISM_screen("CAAD")
-	PF5
-	EMWritescreen date_received, 4, 37
-	EMWritescreen "R0010", 4, 54
-	EMSetCursor 16, 4
-	CALL write_variable_in_CAAD(misc_notes)
-	CALL write_variable_in_CAAD("---" & worker_signature)
-	transmit		
 
-'Erases address and saves it
+	'Erases address and saves it
 	ELSEIF updated_ADDR = "Update to Unknown" THEN
 		CALL navigate_to_PRISM_screen("NCDD")
 		EMWritescreen "M", 3, 29
@@ -399,6 +395,5 @@ IF rm_other <> "" THEN
 	CALL write_variable_in_CAAD("---" & worker_signature)
 	transmit
 END IF
-
 
 script_end_procedure("")
