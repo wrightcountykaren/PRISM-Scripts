@@ -56,7 +56,7 @@ Function declare_main_menu(menu_type, script_array)
 		vert_button_position = 30
 		button_placeholder = 100
 		FOR current_script = 0 to ubound(script_array)
-			IF InStr(script_array(current_script).script_type, menu_type) <> 0 THEN
+			IF InStr(script_array(current_script).category, menu_type) <> 0 THEN
 								'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
 				'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
 				PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
@@ -85,4 +85,4 @@ LOOP UNTIL ButtonPressed <> SIR_instructions_button
 script_picked = ButtonPressed - 100
 
 'Running the selected script
-CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).script_type & "/" & cs_scripts_array(script_picked).file_name)
+CALL run_from_GitHub(script_repository & cs_scripts_array(script_picked).category & "/" & cs_scripts_array(script_picked).file_name)
