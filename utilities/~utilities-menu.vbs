@@ -74,7 +74,7 @@ Function declare_main_menu(menu_type, script_array)
 End function
 
 DO
-	CALL declare_main_menu("UTILITIES", cs_scripts_array)
+	CALL declare_main_menu("utilities", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
 

@@ -74,7 +74,7 @@ Function declare_main_menu(menu_type, script_array)
 End function
 
 DO
-	CALL declare_main_menu("BULK", cs_scripts_array)
+	CALL declare_main_menu("bulk", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
 	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/Shared%20Documents/Forms/All%20BULK%20Scripts.aspx")
