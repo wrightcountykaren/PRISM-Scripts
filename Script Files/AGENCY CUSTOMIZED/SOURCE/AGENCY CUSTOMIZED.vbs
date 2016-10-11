@@ -1,3 +1,5 @@
+MsgBox "Note, you appear to be using the old redirect files. You likely need to reinstall your scripts."
+
 '------------------------------------HEADER STARTS HERE------------------------------------
 
 EMConnect ""
