@@ -1,5 +1,5 @@
-'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - MAIN MENU.vbs"
+''GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "UTILITIES - MAIN MENU.vbs"
 start_time = timer
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
@@ -74,10 +74,10 @@ Function declare_main_menu(menu_type, script_array)
 End function
 
 DO
-	CALL declare_main_menu("actions", cs_scripts_array)
+	CALL declare_main_menu("UTILITIES", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
-	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/Shared%20Documents/Forms/All%20ACTIONS%20Scripts.aspx")
+
 LOOP UNTIL ButtonPressed <> SIR_instructions_button
 
 'Determining the script selected from the value of ButtonPressed

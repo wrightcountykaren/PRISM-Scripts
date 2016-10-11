@@ -1,5 +1,5 @@
-'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - MAIN MENU.vbs"
+''GATHERING STATS----------------------------------------------------------------------------------------------------
+name_of_script = "BULK - MAIN MENU.vbs"
 start_time = timer
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
@@ -50,7 +50,7 @@ DIM SIR_instructions_button
 DIM Dialog1
 
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 516, 440, menu_type & " Scripts"
+	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
 	  ButtonGroup ButtonPressed
 	 	'This starts here, but it shouldn't end here :)
 		vert_button_position = 30
@@ -69,15 +69,15 @@ Function declare_main_menu(menu_type, script_array)
 			button_placeholder = button_placeholder + 1
 		NEXT
 		PushButton 445, 10, 65, 10, "SIR instructions", 	SIR_instructions_button
-		CancelButton 460, 420, 50, 15
+		CancelButton 460, 320, 50, 15
 	EndDialog
 End function
 
 DO
-	CALL declare_main_menu("actions", cs_scripts_array)
+	CALL declare_main_menu("BULK", cs_scripts_array)
 	Dialog
 	IF ButtonPressed = 0 THEN script_end_procedure("")
-	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/Shared%20Documents/Forms/All%20ACTIONS%20Scripts.aspx")
+	IF ButtonPressed = SIR_instructions_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/PRISMscripts/Shared%20Documents/Forms/All%20BULK%20Scripts.aspx")
 LOOP UNTIL ButtonPressed <> SIR_instructions_button
 
 'Determining the script selected from the value of ButtonPressed
