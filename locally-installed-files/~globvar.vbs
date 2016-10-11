@@ -26,7 +26,7 @@ collecting_statistics = False
 using_SQL_database = False
 
 'This is the file path for the statistics Access database.
-stats_database_path = "C:\DHS-PRISM-Scripts\databases\usage statistics.accdb"
+stats_database_path = "C:\DHS-PRISM-Scripts\databases\usage-statistics.accdb"
 
 'DETAILS ABOUT WHERE TO FIND DOCS AND WHICH TO USE ------------------------------------------------------------------------------------------
 
