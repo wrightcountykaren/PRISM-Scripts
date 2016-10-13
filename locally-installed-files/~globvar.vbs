@@ -67,9 +67,9 @@ If InStr(UCASE(beta_users), UCASE(windows_user_ID)) <> 0 then use_master_branch 
 
 'This is the URL of our script repository, and should only change if the agency is a scriptwriting agency. Scriptwriters can elect to use the master branch, allowing them to test new tools, etc.
 IF use_master_branch = TRUE THEN		'scriptwriters typically use the master branch
-	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/Script Files/"
+	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master"
 ELSE							'Everyone else (who isn't a scriptwriter) typically uses the release branch
-	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/release/Script Files/"
+	script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/release"
 END IF
 
 'If run locally is set to "True", the scripts will totally bypass GitHub and run locally.
