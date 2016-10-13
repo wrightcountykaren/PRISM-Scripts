@@ -400,16 +400,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "FIND THAT SCREEN IN PRISM"
-cs_scripts_array(script_num).category			= "nav"
-cs_scripts_array(script_num).description		= "Displays a list of PRISM screens which you can then select."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "MAXIS SCREEN FINDER"
+cs_scripts_array(script_num).script_name		= "MAXIS Screen Finder"
 cs_scripts_array(script_num).category			= "nav"
 cs_scripts_array(script_num).description		= "Displays a list of MAXIS screens you can select."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -457,6 +448,15 @@ SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "PESE"
 cs_scripts_array(script_num).category			= "nav"
 cs_scripts_array(script_num).description		= "Navigates to the PESE screen."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "PRISM Screen Finder"
+cs_scripts_array(script_num).category			= "nav"
+cs_scripts_array(script_num).description		= "Displays a list of PRISM screens which you can then select."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
 cs_scripts_array(script_num).scriptwriter		= ""
 
