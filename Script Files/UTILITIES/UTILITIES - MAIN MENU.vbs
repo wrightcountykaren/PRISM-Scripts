@@ -1,7 +1,10 @@
-If date > #10/24/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."
+If date > #10/24/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."			'Yells at you if you haven't updated in a while
+script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/release/Script Files/"									'Resets to release settings
+run_locally = false																																'Disables local running to prevent issues
+use_master_branch = false																														'Resets use_master_branch functionality
 
 'LOADING SCRIPT
-script_URL = script_repository & "/utilities/~utilities-menu.vbs"
+script_URL = script_repository & "UTILITIES/UTILITIES - MAIN MENU.vbs"
 IF run_locally = False THEN
 	SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a script_URL
 	req.open "GET", script_URL, FALSE									'Attempts to open the script_URL
