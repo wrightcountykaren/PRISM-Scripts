@@ -50,27 +50,45 @@ DIM SIR_instructions_button
 DIM Dialog1
 
 Function declare_main_menu(menu_type, script_array)
-	BeginDialog Dialog1, 0, 0, 516, 340, menu_type & " Scripts"
+
+	'Figures out how tall to make the dialog
+	FOR current_script = 0 to ubound(script_array)
+		IF InStr(script_array(current_script).category, menu_type) <> 0 THEN scripts_to_display = scripts_to_display + 1
+	Next
+
+	'If not declared elsewhere in the script...		...set variable default
+	If vert_button_position = "" then 				vert_button_position = 10			'Where the buttons start
+	If button_height = "" then  					button_height = 10					'Height of each button
+	If button_spacing = "" then 					button_spacing = 5					'Spacing between each button
+	If cancel_button_height = "" then 				cancel_button_height = 15			'Height of the cancel button
+	If button_width = "" then						button_width = 120					'Width of the buttons
+	If description_text_width = "" then				description_text_width = 360		'Width of description text
+	
+	'Doing height/width calculations
+	pixels_needed_for_height = (scripts_to_display * (button_height + button_spacing)) + vert_button_position + (button_spacing + cancel_button_height)
+	pixels_needed_for_width = button_width + description_text_width + 20
+	
+	'Displays the dialog
+	BeginDialog Dialog1, 0, 0, pixels_needed_for_width, pixels_needed_for_height, ucase(menu_type) & " SCRIPTS MENU"
 	  ButtonGroup ButtonPressed
-	 	'This starts here, but it shouldn't end here :)
-		vert_button_position = 30
+	    CancelButton pixels_needed_for_width - 55, pixels_needed_for_height - 20, 50, cancel_button_height			'Puts this first to avoid accidental tabbing
+	 	
 		button_placeholder = 100
 		FOR current_script = 0 to ubound(script_array)
 			IF InStr(script_array(current_script).category, menu_type) <> 0 THEN
-								'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
-				'FUNCTION		HORIZ. ITEM POSITION								VERT. ITEM POSITION		ITEM WIDTH									ITEM HEIGHT		ITEM TEXT/LABEL										BUTTON VARIABLE
-				PushButton 		5, 													vert_button_position, 	script_array(current_script).button_size, 	10, 			script_array(current_script).script_name, 			button_placeholder
-				Text 			script_array(current_script).button_size + 10, 		vert_button_position, 	500, 										10, 			"--- " & script_array(current_script).description
+				'Displays the button and text description-----------------------------------------------------------------------------------------------------------------------------
+				'FUNCTION		HORIZ. ITEM POSITION			VERT. ITEM POSITION		ITEM WIDTH					ITEM HEIGHT				ITEM TEXT/LABEL										BUTTON VARIABLE
+				PushButton 		5, 								vert_button_position, 	button_width,				button_height, 			script_array(current_script).script_name, 			button_placeholder
+				Text 			button_width + 10,				vert_button_position, 	description_text_width,		button_height, 			"--- " & script_array(current_script).description
 				'----------
-				vert_button_position = vert_button_position + 15	'Needs to increment the vert_button_position by 15px (used by both the text and buttons)
+				vert_button_position = vert_button_position + button_height + button_spacing 'Needs to increment the vert_button_position by 15px (used by both the text and buttons)
 				'----------
 				script_array(current_script).button = button_placeholder	'The .button property won't carry through the function. This allows it to escape the function. Thanks VBScript.
 			END IF
 			button_placeholder = button_placeholder + 1
 		NEXT
-		PushButton 445, 10, 65, 10, "SIR instructions", 	SIR_instructions_button
-		CancelButton 460, 320, 50, 15
 	EndDialog
+	
 End function
 
 DO
