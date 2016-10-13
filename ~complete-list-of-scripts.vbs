@@ -657,7 +657,16 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "INFO"
+cs_scripts_array(script_num).script_name		= "Email Scripts Support"
+cs_scripts_array(script_num).category			= "utilities"
+cs_scripts_array(script_num).description		= "Sends an email to your designated support person (specified by the installer)."
+cs_scripts_array(script_num).release_date		= #10/01/2016#
+cs_scripts_array(script_num).scriptwriter		= "Veronica Cary"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Scripts Install Info"
 cs_scripts_array(script_num).category			= "utilities"
 cs_scripts_array(script_num).description		= "Displays information about your BlueZone Scripts installation."
 cs_scripts_array(script_num).release_date		= #08/01/2016#
@@ -666,7 +675,7 @@ cs_scripts_array(script_num).scriptwriter		= "Veronica Cary"
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "UPDATE WORKER SIGNATURE"
+cs_scripts_array(script_num).script_name		= "Update Worker Signature"
 cs_scripts_array(script_num).category			= "utilities"
 cs_scripts_array(script_num).description		= "Allows you to maintain a default signature that loads in all scripts."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
