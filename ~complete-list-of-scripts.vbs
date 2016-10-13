@@ -295,7 +295,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "DDPL CALCULATOR"
+cs_scripts_array(script_num).script_name		= "DDPL"
 cs_scripts_array(script_num).category			= "calculators"
 cs_scripts_array(script_num).description		= "Calculates direct deposits made over user-provided date range."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -304,7 +304,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "IW CALCULATOR"
+cs_scripts_array(script_num).script_name		= "IW"
 cs_scripts_array(script_num).category			= "calculators"
 cs_scripts_array(script_num).description		= "Calculator for determining the amount of IW over a given period."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -313,7 +313,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "PALC CALCULATOR"
+cs_scripts_array(script_num).script_name		= "PALC"
 cs_scripts_array(script_num).category			= "calculators"
 cs_scripts_array(script_num).description		= "Calculates voluntary and involuntary amounts from the PALC screen."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -322,7 +322,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "PRORATE SUPPORT"
+cs_scripts_array(script_num).script_name		= "Prorate Support"
 cs_scripts_array(script_num).category			= "calculators"
 cs_scripts_array(script_num).description		= "Calculator for determining pro-rated support for patrial months."
 cs_scripts_array(script_num).release_date		= #01/01/2000#

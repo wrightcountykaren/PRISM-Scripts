@@ -34,6 +34,9 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'We have short buttons here, the names are small
+button_width = 80
+
 'Loading all scripts
 If run_locally <> true then
 	If use_master_branch = TRUE then
