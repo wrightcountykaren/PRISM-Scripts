@@ -44,15 +44,6 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Sanction"
-cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Takes actions on the case to apply or remove public assistance sanction for non-cooperation with child support."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Case Transfer"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Transfers single case and creates CAAD about why."
@@ -71,7 +62,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "EMC DORD DOCS"
+cs_scripts_array(script_num).script_name		= "Emancipation DORD docs"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Sends emancipation DORD docs."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -80,7 +71,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "EMPLOYMENT VERIFICATION"
+cs_scripts_array(script_num).script_name		= "Employment Verification"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Complete an Employment Verification in NCID or CPID, includes info on CAAD note."
 cs_scripts_array(script_num).release_date		= #08/01/2016#
@@ -89,7 +80,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ENFORCEMENT INTAKE"
+cs_scripts_array(script_num).script_name		= "Enforcement Intake"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Intake workflow on enforcement cases."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -98,7 +89,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ESTB DORD DOCS FOR NPA CASE"
+cs_scripts_array(script_num).script_name		= "Establishment DORD docs - NPA"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Generates establishment DORD docs for NPA case."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -107,7 +98,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ESTB DORD DOCS FOR PA CASE"
+cs_scripts_array(script_num).script_name		= "Establishment DORD docs - PA"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Generates establishment DORD docs for PA case."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -116,7 +107,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "FEE SUPPRESSION OVERRIDE"
+cs_scripts_array(script_num).script_name		= "Fee Suppression Override"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Overrides a fee suppression."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -125,7 +116,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "FIND NAME ON CALI"
+cs_scripts_array(script_num).script_name		= "Find Name on CALI"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Searches CALI for a specific CP or NCP."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -134,7 +125,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "GENERIC ENFORCEMENT INTAKE"
+cs_scripts_array(script_num).script_name		= "Generic Enforcement Intake"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Creates various docs related to CS intake as well as DORD docs and enters CAAD."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -143,7 +134,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NCP LOCATE"
+cs_scripts_array(script_num).script_name		= "NCP Locate"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Walks you through processing an NCP locate."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -152,7 +143,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NON PAY"
+cs_scripts_array(script_num).script_name		= "Non Pay"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Sends DORD doc and creates CAAD related to Non-Pay."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -161,7 +152,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "RECORD IW INFO"
+cs_scripts_array(script_num).script_name		= "Record IW Info"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Record IW withholding info in a CAAD note, worklist, or view in a message box."
 cs_scripts_array(script_num).release_date		= #09/01/2016#
@@ -170,7 +161,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "RETURNED MAIL"
+cs_scripts_array(script_num).script_name		= "Returned Mail"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Updates address to new or unknown, and creates CAAD note."
 cs_scripts_array(script_num).release_date		= #09/01/2016#
@@ -179,7 +170,16 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "SEND F0104 DORD MEMO"
+cs_scripts_array(script_num).script_name		= "Sanction"
+cs_scripts_array(script_num).category			= "actions"
+cs_scripts_array(script_num).description		= "Takes actions on the case to apply or remove public assistance sanction for non-cooperation with child support."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Send F0104 DORD memo"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Sends F0104 DORD Memo Docs, with options to send a memo to both parties and preview memo text."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -188,7 +188,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "UNREIMBURSED UNINSURED DOCS"
+cs_scripts_array(script_num).script_name		= "Unreimbursed Uninsured Docs"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Prints DORD docs for collecting unreimbursed and uninsured expenses."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
