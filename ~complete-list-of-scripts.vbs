@@ -487,7 +487,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ADJUSTMENTS"
+cs_scripts_array(script_num).script_name		= "Adjustments"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for documenting adjustments made to the case."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -496,7 +496,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "ARREARS MGMT REVIEW"
+cs_scripts_array(script_num).script_name		= "Arrears Management Review"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for documenting an arrears management review."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -505,16 +505,16 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CASE INITIATION DOCS RECEIVED"
+cs_scripts_array(script_num).script_name		= "Case Initiation Docs Received"
 cs_scripts_array(script_num).category			= "notes"
-cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake docs."
+cs_scripts_array(script_num).description		= "Creates CAAD note for recording receipt of intake/case initiation docs."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
 cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CLIENT CONTACT"
+cs_scripts_array(script_num).script_name		= "Client Contact"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates a uniform CAAD note for when you have contact with or about client."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -523,7 +523,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CONTEMPT HEARING"
+cs_scripts_array(script_num).script_name		= "Contempt Hearing"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates a hearing date CAAD note for a contempt hearing."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -532,7 +532,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "COURT ORDER REQUEST"
+cs_scripts_array(script_num).script_name		= "Court Order Request"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates B0170 CAAD note for requesting a court order, which also creates worklist to remind worker of order request."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -541,7 +541,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CSENET INFO"
+cs_scripts_array(script_num).script_name		= "CSENET Info"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates T0111 CAAD note with text copied from INTD screen."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -550,7 +550,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "E-FILING"
+cs_scripts_array(script_num).script_name		= "E-Filing"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Template for adding CAAD note about e-filing."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -559,7 +559,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "FRAUD REFERRAL"
+cs_scripts_array(script_num).script_name		= "Fraud Referral"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Template for adding CAAD note about a fraud referral."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -568,7 +568,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "HEARING NOTES"
+cs_scripts_array(script_num).script_name		= "Hearing Notes"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "CAAD note template for sending details about hearing notes."
 cs_scripts_array(script_num).release_date		= #08/01/2016#
@@ -577,7 +577,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "INVOICES"
+cs_scripts_array(script_num).script_name		= "Invoices"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for recording invoices."
 cs_scripts_array(script_num).release_date		= #07/01/2016#
@@ -595,7 +595,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "MES FINANCIAL DOCS SENT"
+cs_scripts_array(script_num).script_name		= "MES Financial Docs Sent"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for recording documents sent to parties."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -604,7 +604,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "MOD CAAD NOTE - CONTACT CHECKLIST"
+cs_scripts_array(script_num).script_name		= "Mod CAAD Note - Contact Checklist"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for recording contact with Client regarding possible Mod."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -613,7 +613,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "PAY OR REPORT"
+cs_scripts_array(script_num).script_name		= "Pay or Report"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "CAAD note for contempt/''pay or report'' instances."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -622,7 +622,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "QUARTERLY REVIEWS"
+cs_scripts_array(script_num).script_name		= "Quarterly Reviews"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "CAAD note for quarterly review processes."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -631,7 +631,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "QUICK CAAD"
+cs_scripts_array(script_num).script_name		= "Quick CAAD"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Quickly add links to CAAD codes you frequently use. Includes a search feature."
 cs_scripts_array(script_num).release_date		= #08/01/2016#
@@ -640,7 +640,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "WAIVER OF PERSONAL SERVICE"
+cs_scripts_array(script_num).script_name		= "Waiver of Personal Service"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note of the date a CP signed the waiver of personal service document."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
