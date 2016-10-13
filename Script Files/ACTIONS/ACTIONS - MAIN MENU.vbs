@@ -1,4 +1,4 @@
-MsgBox "Note, you appear to be using the old redirect files. You likely need to reinstall your scripts."
+If date > #10/24/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."
 
 'LOADING SCRIPT
 script_URL = script_repository & "/actions/~actions-menu.vbs"
