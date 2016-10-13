@@ -201,16 +201,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CALI TO EXCEL"
-cs_scripts_array(script_num).category			= "bulk"
-cs_scripts_array(script_num).description		= "Builds a list in Excel of case numbers, function types, program codes, interstate codes, and names on given CALI."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CASE TRANSFER"
+cs_scripts_array(script_num).script_name		= "Case Transfer"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Gives the user the ability to quickly transfer mulitple cases."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -219,16 +210,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "CP COMPANION CASE FINDER"
-cs_scripts_array(script_num).category			= "bulk"
-cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "FAILURE POF RSDI DFAS"
+cs_scripts_array(script_num).script_name		= "Failure POF RSDI DFAS"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Clears E0014 (Failure Notice to POF REVW) worklist when income is from RSDI or DFAS."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -237,7 +219,25 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NCP COMPANION CASE FINDER"
+cs_scripts_array(script_num).script_name		= "List Generator - CALI"
+cs_scripts_array(script_num).category			= "bulk"
+cs_scripts_array(script_num).description		= "Builds a list in Excel of case numbers, function types, program codes, interstate codes, and names on given CALI."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "List Generator - Companion Cases - CP"
+cs_scripts_array(script_num).category			= "bulk"
+cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for CPs on your CALI."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "List Generator - Companion Cases - NCP"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Builds list in Excel of companion cases for NCPs on your CALI."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -246,7 +246,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NO PAY REPORT"
+cs_scripts_array(script_num).script_name		= "List Generator - No Pay"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Creates list in Excel of cases that have had no payment within given time period."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -255,7 +255,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "NOTICE OF CONTINUED SERVICE"
+cs_scripts_array(script_num).script_name		= "Notice of Continued Service"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Evaluates D0800 (REVW for Notice of Cont'd Services) worklist and allows user to send DORD docs."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -264,16 +264,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "REVIEW QW INFO"
-cs_scripts_array(script_num).category			= "bulk"
-cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "REVW PAY PLAN - DL IS SUSP"
+cs_scripts_array(script_num).script_name		= "Review Pay Plan - DL is Suspended"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
@@ -282,9 +273,18 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "REVW PAY PLAN RECENT ACTIVITY"
+cs_scripts_array(script_num).script_name		= "Review Pay Plan - Recent Activity"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Presents recent payment activity to evaluate E4111 (REVW Pay Plan) worklists."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Review QW Info"
+cs_scripts_array(script_num).category			= "bulk"
+cs_scripts_array(script_num).description		= "Reviews all L2500 and L2501 worklists on your caseload and purges the worklist if the employer is already on NCID/CPID."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
 cs_scripts_array(script_num).scriptwriter		= ""
 

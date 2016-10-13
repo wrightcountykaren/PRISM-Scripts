@@ -34,6 +34,10 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'Overriding default variables for dialog function
+button_width = 140				'We have some long bulk-script names
+description_text_width = 400	'And long descriptions
+
 'Loading all scripts
 If run_locally <> true then
 	If use_master_branch = TRUE then
