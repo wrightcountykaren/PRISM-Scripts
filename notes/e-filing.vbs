@@ -41,7 +41,7 @@ END IF
 'THE SCRIPT-----------------------------------------------------------------------------------------------------------------------
 'THE DIALOG---------------------------------------------------
 
-BeginDialog efiling_dialog, 0, 0, 186, 200, "E-Filing"
+BeginDialog efiling_dialog, 0, 0, 196, 250, "E-Filing"
   EditBox 80, 5, 100, 15, prism_case_number
   EditBox 85, 30, 95, 15, action_type
   EditBox 80, 50, 100, 15, doc_efiled
@@ -49,18 +49,21 @@ BeginDialog efiling_dialog, 0, 0, 186, 200, "E-Filing"
   CheckBox 10, 100, 140, 10, "Check here to add a follow-up worklist", worklist_checkbox
   EditBox 75, 115, 105, 15, envelope_number
   EditBox 75, 135, 105, 15, eservice
-  EditBox 75, 155, 105, 15, worker_signature
+  EditBox 75, 155, 105, 15, other_notes
+  EditBox 75, 175, 105, 15, worker_signature
   ButtonGroup ButtonPressed
-    OkButton 75, 180, 50, 15
-    CancelButton 130, 180, 50, 15
-  Text 10, 80, 50, 10, "E-Filing Status:"
+    OkButton 75, 200, 50, 15
+    CancelButton 130, 200, 50, 15
   Text 10, 35, 70, 10, "Type of Legal Action:"
   Text 10, 55, 65, 10, "Documents E-Filed:"
   Text 10, 120, 65, 10, "Envelope Number:"
   Text 5, 10, 70, 10, "PRISM Case Number:"
   Text 10, 140, 60, 10, "E-Service Details:"
-  Text 10, 160, 60, 10, "Worker Signature:"
+  Text 10, 180, 60, 10, "Worker Signature:"
+  Text 25, 160, 45, 10, "Other Notes:"
+  Text 10, 80, 50, 10, "E-Filing Status:"
 EndDialog
+
 
 
 'Connects to BLUEZONE
@@ -106,6 +109,7 @@ CALL write_bullet_and_variable_in_CAAD("Type of Action", action_type)
 CALL write_bullet_and_variable_in_CAAD("Documents E-Filed", doc_efiled)
 CALL write_bullet_and_variable_in_CAAD("Envelope Number", envelope_number)
 CALL write_bullet_and_variable_in_CAAD("E-Service Details", eservice)
+CALL write_bullet_and_variable_in_CAAD("Other Notes", other_notes)
 CALL write_variable_in_CAAD(worker_signature)
 transmit
 
