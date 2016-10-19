@@ -172,7 +172,7 @@ call PRISM_case_number_finder(PRISM_case_number)
 
 CALL navigate_to_PRISM_screen("PAPL")
 EMReadScreen last_payment_date, 8, 7, 40   
-EMReadScreen last_payment_amount, 7, 7, 53
+EMReadScreen last_payment_amount, 9, 7, 51
 CALL navigate_to_PRISM_screen("CAFS")
 EMReadScreen arrears_balance, 9, 12, 69
 'Case number display dialog
