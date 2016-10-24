@@ -1,6 +1,6 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 
-name_of_script = "ACTIONS - Unreimbursed Uninsured Docs.vbs"
+name_of_script = "ACTIONS - unreimbursed uninsured sending docs.vbs"
 start_time = timer
 
 
@@ -38,20 +38,17 @@ END IF
 'this is where the copy and paste from functions library ended
 
 
-
 'DIALOGS---------------------------------------------------------------------------
 BeginDialog UnUn_Dialog, 0, 0, 291, 145, "Unreimbursed Uninsured Docs"
   EditBox 60, 45, 90, 15, PRISM_case_number
-  CheckBox 50, 85, 20, 10, "CP", CP
-  CheckBox 120, 85, 25, 10, "NCP", NCP
+  DropListBox 190, 65, 60, 45, "Select One..."+chr(9)+"CPP"+chr(9)+"NCP", person_droplistbox
   EditBox 175, 100, 25, 15, Percent
   ButtonGroup ButtonPressed
     OkButton 180, 125, 50, 15
     CancelButton 235, 125, 50, 15
   Text 25, 10, 240, 15, "This script will gernerate DORD DOCS F0944, F0659, and F0945 for collection of Unreimbursed and Uninsured Medical and Dental Expenses."
   Text 5, 50, 50, 10, "Case Number"
-  Text 5, 70, 175, 10, "Check who requested Unreimbursed/Uninsured forms"
-  Text 90, 85, 15, 10, "or"
+  Text 5, 70, 175, 10, "Select who requested Unreimbursed/Uninsured forms"
   Text 5, 105, 165, 10, "Enter the PERCENT owed by non requesting party:"
 EndDialog
 
@@ -61,7 +58,7 @@ EndDialog
 'Connecting to BlueZone
 EMConnect ""
 
-'brings me to the CAPS screen
+'brings me to the CAPS screend
 CALL navigate_to_PRISM_screen ("CAPS")
 
 'check for prism (password out)before continuing
@@ -78,9 +75,7 @@ Do
 		IF buttonpressed = 0 then stopscript		'Cancel
 		IF PRISM_case_number = "" THEN err_msg = err_msg & vbNewline & "Prism case number must be completed"
 		IF Percent = "" THEN err_msg = err_msg & vbNewline & "Percent of Unreimbursed Uninsured Expense must be completed."
-		'IF both cp box and ncp box blank
-		IF CP = 0 AND NCP = 0 THEN err_msg = vbNewline & "Either CP or NCP must be selected."
-		IF CP = 1 AND NCP = 1 THEN err_msg = vbNewline & "Either CP or NCP must be selected."
+		IF person_droplistbox = "Select One..." THEN err_msg = err_msg & vbNewline & "Select who requested the documents."
 		IF err_msg <> "" THEN 
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 		END IF
@@ -90,9 +85,8 @@ LOOP UNTIL err_msg = ""
 'END LOOP--------------------------------------
 
 
-'creates DORD doc for NCP
-IF NCP = checked THEN
-
+'creates DORD doc for NCP from droplist 
+IF person_droplistbox = "NCP" THEN
 	CALL navigate_to_PRISM_screen ("DORD")
 	EMWriteScreen "C", 3, 29
 	transmit
@@ -118,7 +112,7 @@ IF NCP = checked THEN
 	EMWriteScreen "ncp", 11, 51
 	transmit
 
-	'shift f2, to get to user lables
+	'shift f2, to get to user labels
 	PF14
 	EMWriteScreen "u", 20,14
 	transmit
@@ -126,35 +120,31 @@ IF NCP = checked THEN
 	EMWriteScreen "S", 7, 5
 
 	transmit
-	EMWriteScreen (Percent), 16, 15
+	EMWriteScreen Percent, 16, 15
 	transmit
 	PF3
 	EMWriteScreen "M", 3, 29
 	transmit
 
 '''dialog used because we need to select legal heading
-BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
-  ButtonGroup ButtonPressed
-    OkButton 60, 75, 50, 15
-    CancelButton 115, 75, 50, 15
-  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
-  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
-  Text 5, 40, 55, 10, "2. Press ENTER"
-  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
-EndDialog
+	BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  	  ButtonGroup ButtonPressed
+    	    OkButton 60, 75, 50, 15
+    	    CancelButton 115, 75, 50, 15
+  	  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  	  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  	  Text 5, 40, 55, 10, "2. Press ENTER"
+  	  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+	EndDialog
 
-			Dialog LH_dialog  'name of dialog
-			IF buttonpressed = 0 then stopscript		'Cancel
+	Dialog LH_dialog  'name of dialog
+  	IF buttonpressed = 0 then stopscript		'Cancel
 
-
-EMWriteScreen "B", 3, 29
-transmit
-
+	CALL write_value_and_transmit ("B", 3, 29)
 END IF
 
-'creates DORD doc for CP
-IF CP = checked THEN
-
+'creates DORD doc for CP from droplist 
+IF person_droplistbox = "CPP" THEN
 	CALL navigate_to_PRISM_screen ("DORD")
 	EMWriteScreen "C", 3, 29
 	transmit
@@ -187,34 +177,29 @@ IF CP = checked THEN
 	EMSetCursor 7, 5
 	EMWriteScreen "S", 7, 5
 
-	'enters the percent typed in the dialog box
 	transmit
-	EMWriteScreen (Percent), 16, 15
+	EMWriteScreen Percent, 16, 15
 	transmit
 	PF3
 	EMWriteScreen "M", 3, 29
 	transmit
 
 '''dialog used because we need to select legal heading
-BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
-  ButtonGroup ButtonPressed
-    OkButton 60, 75, 50, 15
-    CancelButton 115, 75, 50, 15
-  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
-  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
-  Text 5, 40, 55, 10, "2. Press ENTER"
-  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
-EndDialog
+	BeginDialog LH_dialog, 0, 0, 171, 95, "Select Legal Heading"
+  	  ButtonGroup ButtonPressed
+    	    OkButton 60, 75, 50, 15
+    	    CancelButton 115, 75, 50, 15
+  	  Text 35, 10, 100, 10, "IMPORTANT! IMPORTANT!"
+  	  Text 5, 25, 130, 10, "1. Select the correct LEGAL HEADING"
+  	  Text 5, 40, 55, 10, "2. Press ENTER"
+  	  Text 5, 55, 140, 10, "3.  THEN click OK for the script to continue"
+	EndDialog
 
-			Dialog LH_dialog  'name of dialog
-			IF buttonpressed = 0 then stopscript		'Cancel
+	Dialog LH_dialog  'name of dialog
+  	IF buttonpressed = 0 then stopscript		'Cancel
 
-
-EMWriteScreen "B", 3, 29
-transmit
-
+CALL write_value_and_transmit ("B", 3, 29)
 END IF
-
 
 script_end_procedure("")
 
