@@ -1,4 +1,4 @@
-If date > #10/24/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."			'Yells at you if you haven't updated in a while
+If date > #11/10/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."			'Yells at you if you haven't updated in a while
 script_repository = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/release/Script Files/"									'Resets to release settings
 run_locally = false																																'Disables local running to prevent issues
 use_master_branch = false																														'Resets use_master_branch functionality
