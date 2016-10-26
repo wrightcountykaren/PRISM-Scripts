@@ -49,7 +49,7 @@ BeginDialog csenet_info_dialog, 0, 0, 216, 90, "CSENET Info"
   ButtonGroup ButtonPressed
     OkButton 105, 70, 50, 15
     CancelButton 160, 70, 50, 15
-  Text 10, 50, 70, 10, "Sign you CAAD note:"
+  Text 10, 50, 70, 10, "Sign your CAAD note:"
   Text 10, 25, 70, 15, "Prism Case Number:"
   Text 10, 5, 235, 10, "Make sure INTD message is open before running this script."
 EndDialog
