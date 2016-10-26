@@ -666,11 +666,29 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Changelog"
+cs_scripts_array(script_num).category			= "utilities"
+cs_scripts_array(script_num).description		= "A script which generates a changelog for end users."
+cs_scripts_array(script_num).release_date		= #11/01/2016#
+cs_scripts_array(script_num).scriptwriter		= "Veronica Cary and Robert Fewins-Kalb"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Email Scripts Support"
 cs_scripts_array(script_num).category			= "utilities"
 cs_scripts_array(script_num).description		= "Sends an email to your designated support person (specified by the installer)."
 cs_scripts_array(script_num).release_date		= #10/01/2016#
 cs_scripts_array(script_num).scriptwriter		= "Veronica Cary"
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "External Resources"
+cs_scripts_array(script_num).category			= "utilities"
+cs_scripts_array(script_num).description		= "An agency-customizable list of web resources for general use."
+cs_scripts_array(script_num).release_date		= #11/01/2016#
+cs_scripts_array(script_num).scriptwriter		= "Robert Fewins-Kalb"
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
