@@ -35,10 +35,8 @@ END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 'A temporary MsgBox while we actually build the functionality...
-MsgBox "Changelog is coming soon! -Veronica and Robert"
-
 'Script ends
-script_end_procedure("")
+script_end_procedure("Changelog is coming soon! -Veronica and Robert")
 
 '...SO ROBERT- here's what I came up with:
 
@@ -50,11 +48,17 @@ changelog = array()
 
 '===== CHANGELOG
 call update_changelog("10/26/2016", "I did some new things.", "Veronica Cary, DHS")
-call update_changelog("10/25/2016", "Today a new function was added: the script now has content.", "Veronica Cary, DHS")
+call update_changelog("10/25/16", "Today a new function was added: the script now has content.", "Robert Fewins-Kalb, Anoka County")
 
+'Splitting the changelog into different variables for making things prettier
 For each changelog_entry in changelog
-	MsgBox changelog_entry
+	date_of_change = left(changelog_entry, instr(changelog_entry, "|") - 1)
+	scriptwriter_of_change = right(changelog_entry, len(changelog_entry) - instrrev(changelog_entry, "|") )
+	text_of_change = replace(replace(replace(changelog_entry, scriptwriter_of_change, ""), date_of_change, ""), "|", "")
+	changelog_msgbox = changelog_msgbox & "-----" & cdate(date_of_change) & "-----" & vbNewLine & text_of_change & vbNewLine & "Completed by " & scriptwriter_of_change & vbNewLine & vbNewLine
 Next
+
+MsgBox changelog_msgbox
 
 'I'm thinking we could either put this on the list of scripts, or in each individual script. Obviously the former is faster to load while the latter is easier for scriptwriters.
 '	Also thinking that we could use this changelog on starting the script: if changes happened in the last day or so, we could alert the worker with a dialog...
