@@ -120,7 +120,7 @@ End Sub
 '------------------------------------End OF HEADER------------------------------------
 
 	'This sets the default directory and makes it the navigation root
-dir = default_directory & "agency-custom\"
+dir = agency_custom_directory
 folder_level = 0
 
 Do
