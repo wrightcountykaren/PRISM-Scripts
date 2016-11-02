@@ -13,9 +13,11 @@ use_master_branch = true
 'Here is the list of agency super users. These users will have access to the test scripts. Enter the list of users' log-in IDs in the quotes below, comma separated
 beta_users = ""
 
-'This is used by the AGENCY CUSTOMIZED process, and is used if scripts are run locally. This is modified by
-'	the installer, which will determine if this is a scriptwriter or a production user.
-default_directory = "C:\DHS-PRISM-Scripts\"
+'This is modified by the installer, which will determine the production directory. Don't update unless you're sure you know what you're doing.
+default_directory = "C:\DHS-PRISM-Scripts\"			'Note: non-local users get "locally-installed-files" tacked onto this
+
+'This is the default location for agency customized scripts. Don't update unless you're sure you know what you're doing.
+agency_custom_directory = "C:\DHS-PRISM-Scripts\agency-custom"
 
 'DETAILS ABOUT STATISTICS AND GATHERING THEM ------------------------------------------------------------------------------------------
 
