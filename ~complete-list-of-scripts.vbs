@@ -197,13 +197,20 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Unreimbursed Uninsured Docs"
+cs_scripts_array(script_num).script_name		= "Unreimbursed Uninsured Returned Docs"
+cs_scripts_array(script_num).category			= "actions"
+cs_scripts_array(script_num).description		= "Sends DORD docs when unreimbursed and uninsured docs are returned."
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Unreimbursed Uninsured Sending Docs"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Prints DORD docs for collecting unreimbursed and uninsured expenses."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
 cs_scripts_array(script_num).scriptwriter		= ""
-
-
 
 'BULK SCRIPTS ============================================================================================================================================================================'
 
