@@ -169,22 +169,21 @@ third_year = Cstr(DatePart("YYYY", DateAdd("YYYY", 2, date)))
 
 '=====THE DIALOGS=====
 BeginDialog case_number_dialog, 0, 0, 197, 146, "Case information dialog"
-  EditBox 60, 5, 80, 14, PRISM_case_number
-  EditBox 60, 26, 80, 14, court_file_number
-  EditBox 100, 45, 80, 14, county_attorney_case_number
-  DropListBox 70, 70, 50, 14, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
-  DropListBox 120, 70, 40, 14, "Year..."+chr(9)+first_year+chr(9)+second_year+chr(9)+third_year, year_list
-  DropListBox 70, 90, 50, 14, "# of Months..."+chr(9)+"6"+chr(9)+"5"+chr(9)+"4"+chr(9)+"3"+chr(9)+"2"+chr(9)+"1", num_of_months
+  EditBox 70, 10, 80, 15, PRISM_case_number
+  EditBox 70, 30, 80, 15, court_file_number
+  EditBox 110, 50, 80, 15, county_attorney_case_number
+  DropListBox 80, 75, 50, 15, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
+  DropListBox 130, 75, 40, 15, "Year..."+chr(9)+"first_year"+chr(9)+"second_year"+chr(9)+"third_year", year_list
+  DropListBox 80, 95, 50, 15, "# of Months..."+chr(9)+"6"+chr(9)+"5"+chr(9)+"4"+chr(9)+"3"+chr(9)+"2"+chr(9)+"1", num_of_months
   ButtonGroup ButtonPressed
-    OkButton 40, 110, 50, 14
-    CancelButton 100, 110, 50, 14
-  Text 0, 10, 50, 10, "Case number:"
-  Text 0, 30, 60, 10, "Court file number:"
-  Text 0, 50, 100, 10, "County attorney case number:"
-  Text 0, 70, 60, 10, "First report month:"
-  Text 0, 90, 70, 10, "Number of months:"
+    OkButton 50, 115, 50, 15
+    CancelButton 110, 115, 50, 15
+  Text 10, 15, 50, 10, "Case number:"
+  Text 10, 35, 60, 10, "Court file number:"
+  Text 10, 55, 100, 10, "County attorney case number:"
+  Text 10, 75, 60, 10, "First report month:"
+  Text 10, 95, 70, 10, "Number of months:"
 EndDialog
-
 
 
 'The Script
