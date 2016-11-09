@@ -41,16 +41,17 @@ Dim prorate_dialog, number_days, obligation_amt, month_to_prorate, days_in_month
 
 
 'DIALOGS----------------------------------------------------------------------------------------------------
-BeginDialog prorate_dialog, 0, 0, 221, 145, "Prorate Support"
-  EditBox 115, 5, 65, 15, obligation_amt
+BeginDialog prorate_dialog, 0, 0, 216, 130, "Prorate Support"
+  Text 5, 5, 100, 15, "Enter the monthly obligation amount to be prorated:"
+  ButtonGroup ButtonPressed
+    CancelButton 155, 110, 50, 15
+  Text 5, 35, 110, 20, "Please select the month you would like to prorate support for:"
   DropListBox 115, 40, 65, 15, "January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_to_prorate
+  Text 5, 75, 100, 20, "How many days is the party entitled to support?"
   EditBox 115, 80, 35, 15, number_days
   ButtonGroup ButtonPressed
-    CancelButton 100, 110, 50, 15
-    OkButton 155, 110, 50, 15
-  Text 5, 5, 100, 15, "Enter the monthly obligation amount to be prorated:"
-  Text 5, 75, 100, 20, "How many days is the party entitled to support?"
-  Text 5, 35, 110, 20, "Please select the month you would like to prorate support for:"
+    OkButton 100, 110, 50, 15
+  EditBox 115, 5, 65, 15, obligation_amt
 EndDialog
 
 
@@ -93,3 +94,4 @@ Loop Until days_in_month > CDbl(number_days) and isnumeric(number_days) = true a
 
 prorate_amt = (obligation_amt/days_in_month) * number_days  'prorated amount is obligation amount, divided by the number of days in the month, multiplied by the number of days to prorate
 Msgbox "The prorated obligation for " & number_days & " days in " & month_to_prorate & " is " & formatCurrency(prorate_amt) & "." 'display result in a message box.
+
