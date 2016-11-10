@@ -36,7 +36,7 @@ END IF
 
 'DIALOGS----------------------------------------------------------------------------------------------------
 BeginDialog MAXIS_screen_finder_dialog, 0, 0, 261, 265, "MAXIS screen finder"
-  EditBox 210, 225, 45, 15, case_number
+  EditBox 210, 225, 45, 15, MAXIS_case_number
   ButtonGroup ButtonPressed
     CancelButton 170, 245, 50, 15
     PushButton 75, 25, 45, 10, "STAT/JOBS", STAT_JOBS_button
@@ -99,15 +99,15 @@ EndDialog
 EMConnect ""
 
 'Finds case number
-call find_variable("Case Nbr: ", case_number, 8)
-case_number = trim(replace(case_number, "_", "")) 'replaces underscores and spaces in the variable
+call find_variable("Case Nbr: ", MAXIS_case_number, 8)
+MAXIS_case_number = trim(replace(MAXIS_case_number, "_", "")) 'replaces underscores and spaces in the variable
 
 'Shows dialog
 Do
   Dialog MAXIS_screen_finder_dialog
   If buttonpressed = 0 then stopscript
-  If isnumeric(case_number) = false then MsgBox "You must enter a valid MAXIS case number! No letters, all numeric."
-Loop until isnumeric(case_number) = True
+  If isnumeric(MAXIS_case_number) = false then MsgBox "You must enter a valid MAXIS case number! No letters, all numeric."
+Loop until isnumeric(MAXIS_case_number) = True
 
 'Figure out if we're in MAXIS
 transmit
