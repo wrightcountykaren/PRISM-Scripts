@@ -1,9 +1,8 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - CONTEMPT HEARING.vbs"
+name_of_script = "contempt-hearing.vbs"
 start_time = timer
 
-
-'LOADING ROUTINE FUNCTIONS (FOR PRISM)--- UPDATED 9/8/16 to MASTER FUNCLIB--------------------------------------------------------------
+'FUNCTIONS LIBRARY BLOCK ======================================================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN 'Shouldn't load FuncLib if it already loaded once
     IF run_locally = FALSE or run_locally = "" THEN    'If the scripts are set to run locally, it skips this and uses an FSO below.
         IF use_master_branch = TRUE THEN               'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
@@ -33,7 +32,19 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN 'Shouldn't load FuncLib if it already loaded
         Execute text_from_the_other_script
     END IF
 END IF
-'END FUNCTIONS LIBRARY BLOCK=======
+'END FUNCTIONS LIBRARY BLOCK ===============================================================================================
+
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
 
 'Using custom functions to convert arrays from global variables into a list for the dialogs.
 call convert_array_to_droplist_items(county_attorney_array, county_attorney_list)										'County attorneys

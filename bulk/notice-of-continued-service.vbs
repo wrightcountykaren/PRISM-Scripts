@@ -1,11 +1,6 @@
 'Collecting stats---------------------------------------------------------------
-script_name = "BULK - EVALUATE NOCS.vbs"
+script_name = "notice-of-continued-service.vbs"
 start_time = timer
-
-'These variables need to be dimmed to work properly with the custom functions in the script.
-DIM initial_run_through
-DIM worker_signature
-DIM cso_name
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -39,6 +34,22 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
+
+'These variables need to be dimmed to work properly with the custom functions in the script.
+DIM initial_run_through
+DIM worker_signature
+DIM cso_name
 
 '=====DIALOGS=====
 BeginDialog confirm_dlg, 0, 0, 281, 135, "Confirmation"
