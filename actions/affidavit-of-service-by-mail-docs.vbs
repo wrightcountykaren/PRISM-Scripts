@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - AFFIDAVIT OF SERVICE BY MAIL.vbs"
+name_of_script = "affidavit-of-service-by-mail.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
@@ -34,6 +34,18 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 	END IF
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
+
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
 
 Dim ncp_button, cp_button, ncp_attorney_button, cp_attorney_button, summons_and_complaint, Amended_Summons_and_Complaint, Findings_Conclusion_Order, des_information, Amended_Findings_Conclusion_Order, Amended_Motion, motion, supporting_affidavit, financial_statement, Amended_Supporting_Affidavit, Notice_of_Hearing, Genetic_Blood_Test_Order, Notice_of_Intervention, Genetic_Blood_Test_results, Notice_of_Registration, Notice_of_Settlement_Conference, Aff_of_Default_and_ID, Your_Privacy_Rights, Case_Financial_Summary, Case_Information_Sheet, Case_Payment_History, Confidential_Info_Form, Important_Statement_of_Rights, sealed_financial_doc, Request_for_Hearing, guidelines_worksheet, Notice_of_Judgment_Renewal, confidential_yes, confidential_no, date_box, certified_mail_yes, certified_mail_no, other_line_1, other_line_2
 BeginDialog AffOfServDialog, 0, 0, 301, 380, "Affidavit of Service By Mail"
@@ -1098,4 +1110,3 @@ EndDialog
 End If
 
 script_end_procedure("")
-
