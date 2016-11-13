@@ -34,19 +34,17 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
-'A temporary MsgBox while we actually build the functionality...
-script_end_procedure("Changelog is coming soon! -Veronica and Robert")
-
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
 changelog = array()
 
-'===== CHANGELOG
-call changelog_update("11/08/2016", "Changelog script is now live!", "Veronica Cary, DHS")
-call changelog_update("10/26/2016", "I did some new things.", "Veronica Cary, DHS")
-call changelog_update("10/25/2016", "Today a new function was added: the script now has content.", "Robert Fewins-Kalb, Anoka County")
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
 
-
-
-'I'm thinking we could either put this on the list of scripts, or in each individual script. Obviously the former is faster to load while the latter is easier for scriptwriters.
-'	Also thinking that we could use this changelog on starting the script: if changes happened in the last day or so, we could alert the worker with a dialog...
+'A temporary MsgBox while we actually build the functionality...
+script_end_procedure("Changelog is coming soon! -Veronica and Robert")
