@@ -1,8 +1,6 @@
-'option explicit
 'GATHERING STATS=================================
-name_of_script = "NOTES - CASE INITIATION DOCS RECEIVED.vbs"
+name_of_script = "case-initiation-docs-received.vbs"
 start_time = timer
-
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -36,9 +34,21 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
+
 
 'DIMMING VARIABLES
-DIM beta_agency, row, col, case_number_valid, intake_docs_recd_dialog, paternity_wkst_check, rec_of_parentage_check, prism_case_number, date_recd, app_supp_coll_services_check, app_fee_check, ref_supp_coll_app_check, good_cause_check, role_county_atty_check, aff_arrears_check, waiver_pers_service_check, birth_check, marriage_check, court_order_check, photo_check, insurance_check, ButtonPressed, other_recd, worker_signature
+DIM row, col, case_number_valid, intake_docs_recd_dialog, paternity_wkst_check, rec_of_parentage_check, prism_case_number, date_recd, app_supp_coll_services_check, app_fee_check, ref_supp_coll_app_check, good_cause_check, role_county_atty_check, aff_arrears_check, waiver_pers_service_check, birth_check, marriage_check, court_order_check, photo_check, insurance_check, ButtonPressed, other_recd, worker_signature
 
 
 'THE DIALOG BOX-------------------------------------------------------------------------------------------------------------------
