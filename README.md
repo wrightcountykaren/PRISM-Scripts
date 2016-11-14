@@ -103,11 +103,11 @@ A proper pull request first contains the issue it resolves. Immediately followin
 
 For example:
 
-> #24601: readme contains correct link
+> `#24601: readme contains correct link`
 
 If your pull request encompasses multiple issues, list them individually:
 
-> #24601, #24602, #24603
+> `#24601, #24602, #24603`
 
 **NOTE**: your pull request should typically only address a single script, unless a single issue spans multiple scripts.
 
@@ -116,7 +116,7 @@ Pull requests that deviate from this process might be rejected. If you make a mi
 ##### Updating the changelog
 It is important to summarize your update in a short "blip" on the changelog within each script. _This should be written from a non-technical perspective_ that end users would understand. The changelog syntax is:
 
-`call changelog_update("<<DATE>>", "<<DESCRIPTION>>", "<<SCRIPTWRITER>>")`
+> `call changelog_update("<<DATE>>", "<<DESCRIPTION>>", "<<SCRIPTWRITER>>")`
 
 A good changelog example:
 
