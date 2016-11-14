@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "action-financial-statement-follow-up.vbs"
+name_of_script = "actions-financial-statement-follow-up.vbs"
 start_time = timer
 
 
@@ -35,6 +35,18 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN 'Shouldn't load FuncLib if it already loaded
 END IF
 
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
+				
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+				
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
 
 
 BeginDialog finacial_statement_dialog, 0, 0, 231, 100, "Finacial Statement Follow up"
@@ -90,7 +102,7 @@ IF recipient_code = "CPP - Custodial Parent" or recipient_code = "NCP - Noncusto
 	EMWriteScreen "       ", 4, 59
 	transmit
 
-	EMSendKey "<PF14>"
+	PF14
 	EMWaitReady 0, 0
 
 	EMWriteScreen "U", 20, 14
@@ -161,9 +173,8 @@ IF recipient_code = "BOTH - CP and NCP" THEN
 	EMWriteScreen "       ", 4, 59
 	transmit
 
-	EMSendKey "<PF14>"
-	EMWaitReady 0, 0
-
+	PF14
+	
 	EMWriteScreen "U", 20, 14
 	transmit
 
@@ -203,7 +214,7 @@ IF recipient_code = "BOTH - CP and NCP" THEN
 	EMWriteScreen "M", 3, 29 					'modify the document
 	transmit
 
-	EMSendKey "<PF15>"						'creating duplicate document
+	PF15						'creating duplicate document
 	EMWriteScreen Left(PRISM_case_number, 10), 10, 020	'adding the case number
 	EMWriteScreen Right(PRISM_case_number, 2), 10, 031
 	Transmit								'Back to DORD Screen
@@ -220,20 +231,20 @@ IF recipient_code = "BOTH - CP and NCP" THEN
 	PF9									'Printing CP Letter
 	Transmit
 
-CALL navigate_to_PRISM_screen("CAAD")
-EMWriteScreen "D", 8, 005
-EMWriteScreen "D", 9, 005
-transmit
-EMWriteScreen "M", 3, 029
-EMSetCursor 16, 004
-Call Write_variable_in_CAAD("Finacial Statement follow up letter send to CP")
-transmit
-F3
-EMWriteScreen "M", 3, 029
-EMSetCursor 16, 004
-Call Write_variable_in_CAAD("Finacial Statement follow up letter send to NCP")
-Transmit
-F3
+	CALL navigate_to_PRISM_screen("CAAD")
+	EMWriteScreen "D", 8, 005
+	EMWriteScreen "D", 9, 005
+	transmit
+	EMWriteScreen "M", 3, 029
+	EMSetCursor 16, 004
+	Call Write_variable_in_CAAD("Finacial Statement follow up letter send to CP")
+	transmit
+	F3
+	EMWriteScreen "M", 3, 029
+	EMSetCursor 16, 004
+	Call Write_variable_in_CAAD("Finacial Statement follow up letter send to NCP")
+	Transmit
+	F3
 
 END IF
 
