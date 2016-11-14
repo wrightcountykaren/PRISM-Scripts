@@ -1,5 +1,5 @@
 'GATHERING STATS---------------------------------------------------------------------------------------------------- 
-name_of_script = "bulk-pa-program-open-review-closed-case(m1600).vbs" 
+name_of_script = "pa-program-reopen-review.vbs" 
 start_time = timer 
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
