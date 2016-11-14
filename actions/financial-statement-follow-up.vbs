@@ -1,5 +1,5 @@
 'GATHERING STATS----------------------------------------------------------------------------------------------------
-name_of_script = "actions-financial-statement-follow-up.vbs"
+name_of_script = "financial-statement-follow-up.vbs"
 start_time = timer
 
 
