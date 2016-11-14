@@ -124,6 +124,15 @@ cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script				
+cs_scripts_array(script_num).script_name		= "Finacial Statement Follow-up"
+cs_scripts_array(script_num).category			= "actions"
+cs_scripts_array(script_num).description		= "Sends follow-up Memo to patries regarding finacial statements"
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""													
+													
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Find Name on CALI"
 cs_scripts_array(script_num).category			= "actions"
@@ -139,7 +148,25 @@ cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Creates various docs related to CS intake as well as DORD docs and enters CAAD."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
 cs_scripts_array(script_num).scriptwriter		= ""
-
+														
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script				
+cs_scripts_array(script_num).script_name		= "Income Verification"
+cs_scripts_array(script_num).category			= "actions"
+cs_scripts_array(script_num).description		= "Generates word document regarding payments CP has received on her case"
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""	
+			
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script				
+cs_scripts_array(script_num).script_name		= "M1600-PA Reopen Scrubber"
+cs_scripts_array(script_num).category			= "bulk"
+cs_scripts_array(script_num).description		= "Reviews and Purges cases that were closed for a reason in which we would not reopen"
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""																		
+																	
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
