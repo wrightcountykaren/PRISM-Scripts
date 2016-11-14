@@ -1,32 +1,41 @@
+If date > #11/10/2016# then MsgBox "Note: you appear to be using the old redirect files. You likely need to reinstall your scripts."
+
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 name_of_script = "NAV - FIND THAT SCREEN IN PRISM.vbs"
 start_time = timer
 
-'LOADING ROUTINE FUNCTIONS FROM GITHUB REPOSITORY---------------------------------------------------------------------------
-url = "https://raw.githubusercontent.com/MN-CS-Script-Team/PRISM-Scripts/master/Shared%20Functions%20Library/PRISM%20Functions%20Library.vbs"
-SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
-req.open "GET", url, FALSE									'Attempts to open the URL
-req.send													'Sends request
-IF req.Status = 200 THEN									'200 means great success
-	Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
-	Execute req.responseText								'Executes the script code
-ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
-	MsgBox 	"Something has gone wrong. The code stored on GitHub was not able to be reached." & vbCr &_ 
-			vbCr & _
-			"Before contacting Veronica Cary, please check to make sure you can load the main page at www.GitHub.com." & vbCr &_
-			vbCr & _
-			"If you can reach GitHub.com, but this script still does not work, ask an alpha user to contact Veronica Cary and provide the following information:" & vbCr &_
-			vbTab & "- The name of the script you are running." & vbCr &_
-			vbTab & "- Whether or not the script is ""erroring out"" for any other users." & vbCr &_
-			vbTab & "- The name and email for an employee from your IT department," & vbCr & _
-			vbTab & vbTab & "responsible for network issues." & vbCr &_
-			vbTab & "- The URL indicated below (a screenshot should suffice)." & vbCr &_
-			vbCr & _
-			"Veronica will work with your IT department to try and solve this issue, if needed." & vbCr &_ 
-			vbCr &_
-			"URL: " & url
-			StopScript
+'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
+IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
+	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
+		IF use_master_branch = TRUE THEN			   'If the default_directory is C:\DHS-MAXIS-Scripts\Script Files, you're probably a scriptwriter and should use the master branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/master/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		Else											'Everyone else should use the release branch.
+			FuncLib_URL = "https://raw.githubusercontent.com/MN-Script-Team/BZS-FuncLib/RELEASE/MASTER%20FUNCTIONS%20LIBRARY.vbs"
+		End if
+		SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a FuncLib_URL
+		req.open "GET", FuncLib_URL, FALSE							'Attempts to open the FuncLib_URL
+		req.send													'Sends request
+		IF req.Status = 200 THEN									'200 means great success
+			Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+			Execute req.responseText								'Executes the script code
+		ELSE														'Error message
+			critical_error_msgbox = MsgBox ("Something has gone wrong. The Functions Library code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+                                            "FuncLib URL: " & FuncLib_URL & vbNewLine & vbNewLine &_
+                                            "The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+                                            vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+            StopScript
+		END IF
+	ELSE
+		FuncLib_URL = "C:\BZS-FuncLib\MASTER FUNCTIONS LIBRARY.vbs"
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(FuncLib_URL)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
 END IF
+'END FUNCTIONS LIBRARY BLOCK================================================================================================
+
 
 BeginDialog Find_that_screen_in_PRISM_dialog, 0, 0, 161, 185, "Find that Screen in PRISM"
   ButtonGroup ButtonPressed
@@ -61,21 +70,20 @@ Dialog Find_that_screen_in_PRISM_dialog
 'Connect to BlueZone
 EMConnect ""
 
-PRISM_check_function			'this checks whether in PRISM or timed out
+CALL check_for_PRISM(true)			'this checks whether in PRISM or timed out
 
 'Not adding case number function as PRISM will go to screen without case number or PRISM populates with last case number used.
 
 'Naviagting to any of the buttons chosen
-If buttonpressed = ACSD_button then call navigate_to_PRISM_screen("ACSD")   
+If buttonpressed = ACSD_button then call navigate_to_PRISM_screen("ACSD")
 If buttonpressed = CPRE_button then call navigate_to_PRISM_screen("CPRE")
-If buttonpressed = GCSC_button then call navigate_to_PRISM_screen("GCSC")   
+If buttonpressed = GCSC_button then call navigate_to_PRISM_screen("GCSC")
 If buttonpressed = NCLD_button then call navigate_to_PRISM_screen("NCLD")
-If buttonpressed = NCLL_button then call navigate_to_PRISM_screen("NCLL")   
+If buttonpressed = NCLL_button then call navigate_to_PRISM_screen("NCLL")
 If buttonpressed = NCSL_button then call navigate_to_PRISM_screen("NCSL")
-If buttonpressed = PALI_button then call navigate_to_PRISM_screen("PALI")   
+If buttonpressed = PALI_button then call navigate_to_PRISM_screen("PALI")
 If buttonpressed = REID_button then call navigate_to_PRISM_screen("REID")
-If buttonpressed = SEPD_button then call navigate_to_PRISM_screen("SEPD")   
+If buttonpressed = SEPD_button then call navigate_to_PRISM_screen("SEPD")
 If buttonpressed = WEDL_button then call navigate_to_PRISM_screen("WEDL")
 
 script_end_procedure("")
-
