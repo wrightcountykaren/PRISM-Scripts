@@ -57,9 +57,9 @@ BeginDialog hearing_notes_expro_dialog, 0, 0, 321, 220, "Date of the Hearing ExP
   Text 5, 5, 80, 10, "Motion before the Court"
   ComboBox 85, 5, 165, 15, "Select one or type in other motion:"+chr(9)+"MES 256 Action"+chr(9)+"Motion to Set"+chr(9)+"Continuance"+chr(9)+"License Suspension Appeal"+chr(9)+"COLA motion"+chr(9)+"Modification/RAM"+chr(9)+"UFM - Register for Modificaion"+chr(9)+"Paternity", motion_before_court
   Text 5, 25, 85, 10, "Child Support Magistrate"
-  DropListBox 90, 25, 85, 15, "Select one:"+chr(9)+"child_support_magistrates_list", child_support_magistrate
+  DropListBox 90, 25, 85, 15, "Select one:"+chr(9)+child_support_magistrates_list, child_support_magistrate
   Text 180, 25, 55, 10, "County Attorney"
-  DropListBox 235, 25, 85, 15, "Select one:"+chr(9)+"county_attorney_list", CAO_list
+  DropListBox 235, 25, 85, 15, "Select one:"+chr(9)+county_attorney_list, CAO_list
   CheckBox 5, 50, 50, 10, "NCP present", NCP_present_check
   Text 60, 50, 60, 10, "Represented by:"
   EditBox 115, 50, 85, 15, NCP_represented_by
