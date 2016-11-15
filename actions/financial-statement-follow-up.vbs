@@ -103,8 +103,7 @@ IF recipient_code = "CPP - Custodial Parent" or recipient_code = "NCP - Noncusto
 	transmit
 
 	PF14
-	EMWaitReady 0, 0
-
+	
 	EMWriteScreen "U", 20, 14
 	transmit
 
