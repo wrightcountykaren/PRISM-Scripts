@@ -125,7 +125,7 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script				
-cs_scripts_array(script_num).script_name		= "Finacial Statement Follow-up"
+cs_scripts_array(script_num).script_name		= "Financial Statement Follow-up"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Sends follow-up Memo to patries regarding finacial statements."
 cs_scripts_array(script_num).release_date		= #11/14/2016#
