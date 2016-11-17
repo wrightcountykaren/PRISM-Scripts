@@ -2,6 +2,7 @@
 name_of_script = "case-transfer.vbs"
 start_time = timer
 
+
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
 	IF run_locally = FALSE or run_locally = "" THEN	   'If the scripts are set to run locally, it skips this and uses an FSO below.
@@ -40,7 +41,10 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/16/2016", "County, Office, Team and Position fields now have length requirements.", "Kelly Hiestand, Wright County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
@@ -99,6 +103,10 @@ DO
 	IF ButtonPressed = 0 THEN StopScript
 	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 	IF case_number_valid = False THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
+	IF len(county)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character county code!"
+	If len(office)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character office code!"
+	If len(team)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character team code!"
+	If len(position)<> 2 then err_msg = err_msg & vbNewline & "You must enter a 2 character position code!"
 	IF transfer_reason = "" THEN err_msg = err_msg & VbNewline & "You must type a Transfer Reason!"
 	IF transfer_type = "Select One..." THEN err_msg = err_msg & VbNewline & "You must select the Type of Transfer!"
 	IF worker_signature = "" THEN err_msg = err_msg & VbNewline & "You must sign your CAAD note!"

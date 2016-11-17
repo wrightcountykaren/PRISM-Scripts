@@ -40,6 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/16/2016", "Functionality has been streamlined for better script performance.", "Robert Fewins-Kalb, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
@@ -245,48 +246,23 @@ FUNCTION create_PALC_variable(PALC)
 	CALL navigate_to_PRISM_screen("PALC")
 	EMWriteScreen date, 20, 49
 	transmit
-	CALL read_PALC_last_payment_date(last_payment_date)
-	PALC = PALC & "Last Payment Date: " & last_payment_date & "; "
-	CALL read_PALC_payment_type(payment_type)
-	PALC = PALC & "Payment Type: " & payment_type & "; "
-	CALL read_PALC_payment_amount(payment_amount)
-	PALC = PALC & "Payment Amount: " & payment_amount & "; "
-	CALL read_PALC_alloc_amount(alloc_amount)
-	PALC = PALC & "Case Allocated Amount: " & alloc_amount
-	create_PALC_variable = PALC  'To make this a return function, this statement must set the value of the function name
-END FUNCTION
-'***************************************************************************************************************
-FUNCTION read_PALC_payment_type(payment_type)
-	CALL navigate_to_PRISM_screen("PALC")
-	EMWriteScreen date, 20, 49
-	transmit
-	EMReadScreen payment_type, 3, 9, 25
-END FUNCTION
-'***************************************************************************************************************
-FUNCTION read_PALC_last_payment_date(last_payment_date)
-	CALL navigate_to_PRISM_screen("PALC")
-	EMWriteScreen date, 20, 49
-	transmit
 	EMWriteScreen "D", 9, 5
 	transmit
+	' >>> Replacing functionality from the function read_PALC_last_payment_date
 	EMReadScreen last_payment_date, 8, 13, 37
-	PF3
-END FUNCTION
-'***************************************************************************************************************
-FUNCTION read_PALC_payment_amount(payment_amount)
-	CALL navigate_to_PRISM_screen("PALC")
-	EMWriteScreen date, 20, 49
-	transmit
+	PALC = PALC & "Last Payment Date: " & last_payment_date & "; "
+	' >>> Replacing functionality from the function read_PALC_payment_type
+	EMReadScreen payment_type, 3, 9, 25
+	PALC = PALC & "Payment Type: " & payment_type & "; "
+	' >>> Replacing functionality from the function read_PALC_payment_amount
 	EMReadScreen payment_amount, 13, 9, 29
 	payment_amount = trim(payment_amount)
-END FUNCTION
-'***************************************************************************************************************
-FUNCTION read_PALC_alloc_amount(alloc_amount)
-	CALL navigate_to_PRISM_screen("PALC")
-	EMWriteScreen date, 20, 49
-	transmit
+	PALC = PALC & "Payment Amount: " & payment_amount & "; "
+	' >>> Replacing functionality from the function read_PALC_alloc_amount
 	EMReadScreen alloc_amount, 12, 9, 68
 	alloc_amount = trim(alloc_amount)
+	PALC = PALC & "Case Allocated Amount: " & alloc_amount
+	create_PALC_variable = PALC  'To make this a return function, this statement must set the value of the function name
 END FUNCTION
 '***************************************************************************************************************
 FUNCTION create_PAPD_variable(PAPD)
@@ -318,8 +294,6 @@ FUNCTION create_PAPD_variable(PAPD)
 	LOOP UNTIL end_of_data = "End of Data"
 	create_PAPD_variable = PAPD
 END FUNCTION
-
-
 '***************************************************************************************************************
 
 

@@ -40,7 +40,8 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+CALL changelog_update("11/15/2016", "This update corrects an issue with the dialog displaying the variable names instead of the variable values.", "Robert Fewins-Kalb, Anoka County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")				
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
@@ -184,7 +185,7 @@ BeginDialog case_number_dialog, 0, 0, 197, 146, "Case information dialog"
   EditBox 70, 30, 80, 15, court_file_number
   EditBox 110, 50, 80, 15, county_attorney_case_number
   DropListBox 80, 75, 50, 15, "Month..."+chr(9)+"January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_list
-  DropListBox 130, 75, 40, 15, "Year..."+chr(9)+"first_year"+chr(9)+"second_year"+chr(9)+"third_year", year_list
+  DropListBox 130, 75, 40, 15, "Year..."+chr(9)+first_year+chr(9)+second_year+chr(9)+third_year, year_list
   DropListBox 80, 95, 50, 15, "# of Months..."+chr(9)+"6"+chr(9)+"5"+chr(9)+"4"+chr(9)+"3"+chr(9)+"2"+chr(9)+"1", num_of_months
   ButtonGroup ButtonPressed
     OkButton 50, 115, 50, 15
