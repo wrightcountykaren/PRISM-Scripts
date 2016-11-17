@@ -127,7 +127,7 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script				
 cs_scripts_array(script_num).script_name		= "Financial Statement Follow-up"
 cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Sends follow-up Memo to patries regarding finacial statements."
+cs_scripts_array(script_num).description		= "Sends follow-up memo to parties regarding financial statements."
 cs_scripts_array(script_num).release_date		= #11/14/2016#
 cs_scripts_array(script_num).scriptwriter		= ""													
 													
@@ -154,7 +154,7 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script				
 cs_scripts_array(script_num).script_name		= "Income Verification"
 cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Generates word document regarding payments CP has received on her case"
+cs_scripts_array(script_num).description		= "Generates Word document regarding payments CP has received on their case."
 cs_scripts_array(script_num).release_date		= #11/14/2016#
 cs_scripts_array(script_num).scriptwriter		= ""																
 																	
@@ -300,7 +300,7 @@ ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script				
 cs_scripts_array(script_num).script_name		= "PA Program Reopen-Review"
 cs_scripts_array(script_num).category			= "bulk"
-cs_scripts_array(script_num).description		= "Reviews M1600 worklist and Purges cases that were closed for a reason in which we would not reopen."
+cs_scripts_array(script_num).description		= "Reviews M1600 worklist and purges cases that were closed for a reason in which we would not reopen."
 cs_scripts_array(script_num).release_date		= #11/14/2016#
 cs_scripts_array(script_num).scriptwriter		= ""		
 
