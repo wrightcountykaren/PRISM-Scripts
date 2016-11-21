@@ -39,8 +39,9 @@ END IF
 changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
-				'Example: call changelog_update("01/01/2000", "T", "Jane Public, Oak County")
-				call changelog_update("11/21/16", "This Script has been updated to include a Review Hearing and Paternity Hearing selection in the Expro Dropdown list", "Kallista Imdieke, Stearns County")
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/21/2016", "This script has been updated to include a Review Hearing and Paternity Hearing selection in the Expro Dropdown list", "Kallista Imdieke, Stearns County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 				
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
