@@ -56,7 +56,7 @@ call convert_array_to_droplist_items(county_judge_array, county_judge_list)					
 'This dialog has been modified to show a dynamic county_attorney_list and child_support_magistrates_list from Global Variables. As such, it cannot be directly edited using dialog editor, without re-adding the preceding variable.
 BeginDialog hearing_notes_expro_dialog, 0, 0, 321, 220, "Date of the Hearing ExPRO"
   Text 5, 5, 80, 10, "Motion before the Court"
-  ComboBox 85, 5, 165, 15, "Select one or type in other motion:"+chr(9)+"MES 256 Action"+chr(9)+"Motion to Set"+chr(9)+"Continuance"+chr(9)+"License Suspension Appeal"+chr(9)+"COLA motion"+chr(9)+"Modification/RAM"+chr(9)+"UFM - Register for Modificaion"+chr(9)+"Paternity"+chr(9)+"Review Hearing", motion_before_court
+  ComboBox 85, 5, 165, 15, "Select one or type in other motion:"+chr(9)+"MES 256 Action"+chr(9)+"Motion to Set"+chr(9)+"Continuance"+chr(9)+"License Suspension Appeal"+chr(9)+"COLA motion"+chr(9)+"Modification/RAM"+chr(9)+"UFM - Register for Modification"+chr(9)+"Paternity"+chr(9)+"Review Hearing", motion_before_court
   Text 5, 25, 85, 10, "Child Support Magistrate"
   DropListBox 90, 25, 85, 15, "Select one:"+chr(9)+child_support_magistrates_list, child_support_magistrate
   Text 180, 25, 55, 10, "County Attorney"
