@@ -524,15 +524,6 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Quick CAAD"
-cs_scripts_array(script_num).category			= "notes"
-cs_scripts_array(script_num).description		= "Quickly add links to CAAD codes you frequently use. Includes a search feature."
-cs_scripts_array(script_num).release_date		= #08/01/2016#
-cs_scripts_array(script_num).scriptwriter		= ""
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Waiver of Personal Service"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note of the date a CP signed the waiver of personal service document."
@@ -590,6 +581,15 @@ cs_scripts_array(script_num).script_name		= "PRISM Screen Finder"
 cs_scripts_array(script_num).category			= "utilities"
 cs_scripts_array(script_num).description		= "Displays a list of PRISM screens which you can then select."
 cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Quick CAAD"
+cs_scripts_array(script_num).category			= "utilities"
+cs_scripts_array(script_num).description		= "Quickly add links to CAAD codes you frequently use. Includes a search feature."
+cs_scripts_array(script_num).release_date		= #08/01/2016#
 cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
