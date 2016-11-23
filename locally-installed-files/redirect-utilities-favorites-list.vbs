@@ -351,7 +351,7 @@ LOOP UNTIL ubound(double_check_array) <= 29
 '>>> Getting ready to write the user's selection to a text file and save it on a prescribed location on the network.
 '>>> Building the content of the text file.	
 FOR i = 0 to number_of_scripts - 1
-	IF scripts_multidimensional_array(i, 1) = 1 THEN favorite_scripts = favorite_scripts & scripts_multidimensional_array(i, 0) & "~~~"
+	IF scripts_multidimensional_array(i, 1) = checked THEN favorite_scripts = favorite_scripts & scripts_multidimensional_array(i, 0) & vbNewLine
 NEXT
 
 '>>> After the user selects their favorite scripts, we are going to write (or overwrite) the list of scripts 
@@ -403,7 +403,7 @@ Else
 '>>> mandatory_array is pre-determined
 all_scripts_array = ""
 new_scripts = ""
-mandatory_array = "ACTIONS - NCP LOCATE~~~ACTIONS - RECORD IW INFO~~~ACTIONS - SEND F0104 DORD MEMO~~~NOTES - ADJUSTMENTS~~~NOTES - ARREARS MANAGEMENT REVIEW~~~NOTES - CLIENT CONTACT~~~"
+mandatory_array = "ACTIONS - NCP LOCATE" & vbNewLine & "ACTIONS - RECORD IW INFO" & vbNewLine & "ACTIONS - SEND F0104 DORD MEMO" & vbNewLine & "NOTES - ADJUSTMENTS" & vbNewLine & "NOTES - ARREARS MANAGEMENT REVIEW" & vbNewLine & "NOTES - CLIENT CONTACT"
 
 '>>> Creating the object needed to connect to the interwebs.
 SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
@@ -427,7 +427,7 @@ END IF
 num_of_new_scripts = 0
 new_array = ""
 FOR i = 0 TO Ubound(cs_scripts_array)
-	IF DateDiff("D", cs_scripts_array(i).release_date, date) < 90 THEN new_array = new_array & UCASE(cs_scripts_array(i).category) & " - " & UCASE(replace(replace(cs_scripts_array(i).file_name, ".vbs", " "), "-", " ")) & "~~~"
+	IF DateDiff("D", cs_scripts_array(i).release_date, date) < 90 THEN new_array = new_array & UCASE(cs_scripts_array(i).category) & " - " & UCASE(replace(replace(cs_scripts_array(i).file_name, ".vbs", " "), "-", " ")) & vbNewLine
 NEXT
 
 '>>> Removing .vbs from the array for the prettification of the display to the users.
@@ -438,13 +438,13 @@ new_array = replace(new_array, ".vbs", "")
 FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_location, worker_signature)
 	'>>> Splitting the array of all scripts. This is found on GitHub under Anoka-Specific Scripts
 	user_scripts_array = trim(user_scripts_array)
-	user_scripts_array = split(user_scripts_array, "~~~")
+	user_scripts_array = split(user_scripts_array, vbNewLine)
 
 	mandatory_array = trim(mandatory_array)
-	mandatory_array = split(mandatory_array, "~~~")
+	mandatory_array = split(mandatory_array, vbNewLine)
 	
 	new_array = trim(new_array)
-	new_array = split(new_array, "~~~")
+	new_array = split(new_array, vbNewLine)
 	
 	num_of_user_scripts = ubound(user_scripts_array)
 	num_of_mandatory_scripts = ubound(mandatory_array)
