@@ -52,7 +52,7 @@ user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
 favorites_text_file_location = user_myDocs_folder & "\scripts-cs-favorites.txt"
 
 'switching up the script_repository because the all scripts file is not in the Script Files folder
-all_scripts_repo = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/~complete-list-of-scripts.vbs"
+all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
 
 
 
@@ -80,24 +80,31 @@ If what_function = vbYes then
 '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+'Looks up the script details online (or locally if you're a scriptwriter)
 
+If run_locally <> true then
 
-'Creating the object to the URL a la text file
-SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
+	'Creating the object to the URL a la text file
+	SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
 
-
-
-'Building an array of all scripts
-'Opening the URL for the given main menu
-get_all_scripts.open "GET", all_scripts_repo, FALSE
-get_all_scripts.send			
-IF get_all_scripts.Status = 200 THEN	
-	Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
-	Execute get_all_scripts.responseText
-ELSE							
-	'If the script cannot open the URL provided...
-	MsgBox 	"Something went wrong with the URL: " & all_scripts_repo
-	stopscript
+	'Building an array of all scripts
+	'Opening the URL for the given main menu
+	get_all_scripts.open "GET", all_scripts_repo, FALSE
+	get_all_scripts.send			
+	IF get_all_scripts.Status = 200 THEN	
+		Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
+		Execute get_all_scripts.responseText
+	ELSE							
+		'If the script cannot open the URL provided...
+		MsgBox 	"Something went wrong with the URL: " & all_scripts_repo
+		stopscript
+	END IF
+ELSE
+	Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+	Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)
+	text_from_the_other_script = fso_command.ReadAll
+	fso_command.Close
+	Execute text_from_the_other_script
 END IF
 
 'Warning/instruction box
@@ -405,21 +412,30 @@ all_scripts_array = ""
 new_scripts = ""
 mandatory_array = "ACTIONS - NCP LOCATE" & vbNewLine & "ACTIONS - RECORD IW INFO" & vbNewLine & "ACTIONS - SEND F0104 DORD MEMO" & vbNewLine & "NOTES - ADJUSTMENTS" & vbNewLine & "NOTES - ARREARS MANAGEMENT REVIEW" & vbNewLine & "NOTES - CLIENT CONTACT"
 
-'>>> Creating the object needed to connect to the interwebs.
-SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
-'all_scripts_repo = script_repository & "~complete-list-of-scripts.vbs"
-get_all_scripts.open "GET", all_scripts_repo, FALSE
-get_all_scripts.send			
-IF get_all_scripts.Status = 200 THEN	
-	Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
-	Execute get_all_scripts.responseText
-ELSE							
-	'>>> Displaying the error message when the script fails to connect to a specific main menu.
-	'>>> the replace & right bits are there to display the main menu in a way that is clear to the user.
-	'>>> We are going to display the right length minus 99 because there are 99 characters between the start of the https and the last / before the main menu name.
-	'>>> That length needs to be updated when we go state-wide.
-	MsgBox("Something went wrong grabbing trying to locate All Scripts File. Please contact scripts administrator.")
-	stopscript
+'Does this differently if you're a run_locally user vs not
+If run_locally <> true then
+	'>>> Creating the object needed to connect to the interwebs.
+	SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
+	'all_scripts_repo = script_repository & "~complete-list-of-scripts.vbs"
+	get_all_scripts.open "GET", all_scripts_repo, FALSE
+	get_all_scripts.send			
+	IF get_all_scripts.Status = 200 THEN	
+		Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
+		Execute get_all_scripts.responseText
+	ELSE							
+		'>>> Displaying the error message when the script fails to connect to a specific main menu.
+		'>>> the replace & right bits are there to display the main menu in a way that is clear to the user.
+		'>>> We are going to display the right length minus 99 because there are 99 characters between the start of the https and the last / before the main menu name.
+		'>>> That length needs to be updated when we go state-wide.
+		MsgBox("Something went wrong grabbing trying to locate All Scripts File. Please contact scripts administrator.")
+		stopscript
+	END IF
+ELSE
+	Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+	Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)
+	text_from_the_other_script = fso_command.ReadAll
+	fso_command.Close
+	Execute text_from_the_other_script
 END IF
 
 '>>> Building the array of new scripts
