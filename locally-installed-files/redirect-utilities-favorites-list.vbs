@@ -1,4 +1,6 @@
-'Built by Robert Kalb and Charles Potter of Anoka County
+'TODO: ensure the array stores the hotkey choice (3) and program it to add an option to add a hotkey
+'TODO: Make the view dialog prettier than it currently is, including instructions
+'TODO: work in agency-customizable mandatory script lists
 
 'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
 Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
@@ -121,7 +123,14 @@ MsgBox "This script will display a dialog with various scripts on it."  & vbNewL
 		"making your selection hit OK and your menu will be updated. " & vbNewLine & vbNewLine &_
 		"- You will be unable to edit NEW Scripts and Recommended Scripts."
 
-REDIM scripts_multidimensional_array(ubound(cs_scripts_array), 1)
+'An array containing details about the list of scripts, including how they are displayed and stored in the favorites tag
+'0 => The script name
+'1 => The checked/unchecked status (based on the dialog list)
+'2 => The script category, and a "/" so that it's presented in a URL
+'3 => The proper script file name
+'4 => The hotkey the user has associated with the script
+
+REDIM scripts_edit_favs_array(ubound(cs_scripts_array), 4)
 
 'determining the number of each kind of script...by category
 number_of_scripts = 0
@@ -190,12 +199,20 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 			END IF
 			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
 			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_multidimensional_array(script_position, 1) = 1
+				scripts_edit_favs_array(script_position, 1) = checked
 			ELSE
-				scripts_multidimensional_array(script_position, 1) = 0
+				scripts_edit_favs_array(script_position, 1) = unchecked
 			END IF
-			scripts_multidimensional_array(script_position, 0) = "ACTIONS: " & replace(cs_scripts_array(i).file_name, ".vbs", "")
-			CheckBox col, row, 185, 10, UCASE(replace(scripts_multidimensional_array(script_position, 0), "-", " ")), scripts_multidimensional_array(script_position, 1) 
+			
+			'Sets the file name and category
+			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+			
+			'Displays the checkbox
+			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+			
+			'Increments the row and script_position
 			row = row + 10
 			script_position = script_position + 1
 		END IF
@@ -216,18 +233,26 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 		IF cs_scripts_array(i).category = "bulk" THEN 
 			'>>> Determining the positioning of the checkboxes.
 			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row = 430 THEN 
+			IF row >= 430 THEN 
 				row = 30
 				col = col + 195
 			END IF
 			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
 			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_multidimensional_array(script_position, 1) = 1
+				scripts_edit_favs_array(script_position, 1) = checked
 			ELSE
-				scripts_multidimensional_array(script_position, 1) = 0
+				scripts_edit_favs_array(script_position, 1) = unchecked
 			END IF
-			scripts_multidimensional_array(script_position, 0) = "BULK: " & replace(cs_scripts_array(i).file_name, ".vbs", "")
-			CheckBox col, row, 185, 10, UCASE(replace(scripts_multidimensional_array(script_position, 0), "-", " ")), scripts_multidimensional_array(script_position, 1) 
+			
+			'Sets the file name and category
+			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+			
+			'Displays the checkbox
+			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+			
+			'Increments the row and script_position
 			row = row + 10
 			script_position = script_position + 1
 		END IF
@@ -248,18 +273,26 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 		IF cs_scripts_array(i).category = "calculators" THEN 
 			'>>> Determining the positioning of the checkboxes.
 			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row = 430 THEN 
+			IF row >= 430 THEN 
 				row = 30
 				col = col + 195
 			END IF
 			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
 			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_multidimensional_array(script_position, 1) = 1
+				scripts_edit_favs_array(script_position, 1) = checked
 			ELSE
-				scripts_multidimensional_array(script_position, 1) = 0
+				scripts_edit_favs_array(script_position, 1) = unchecked
 			END IF
-			scripts_multidimensional_array(script_position, 0) = "CALC: " & replace(cs_scripts_array(i).file_name, ".vbs", "")
-			CheckBox col, row, 185, 10, UCASE(replace(scripts_multidimensional_array(script_position, 0), "-", " ")), scripts_multidimensional_array(script_position, 1) 
+			
+			'Sets the file name and category
+			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+			
+			'Displays the checkbox
+			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+			
+			'Increments the row and script_position
 			row = row + 10
 			script_position = script_position + 1
 		END IF
@@ -280,18 +313,26 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 		IF cs_scripts_array(i).category = "notes" THEN 
 			'>>> Determining the positioning of the checkboxes.
 			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row = 430 THEN 
+			IF row >= 430 THEN 
 				row = 30
 				col = col + 195
 			END IF
 			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
 			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_multidimensional_array(script_position, 1) = 1
+				scripts_edit_favs_array(script_position, 1) = checked
 			ELSE
-				scripts_multidimensional_array(script_position, 1) = 0
+				scripts_edit_favs_array(script_position, 1) = unchecked
 			END IF
-			scripts_multidimensional_array(script_position, 0) = "NOTES: " & replace(cs_scripts_array(i).file_name, ".vbs", "")
-			CheckBox col, row, 185, 10, UCASE(replace(scripts_multidimensional_array(script_position, 0), "-", " ")), scripts_multidimensional_array(script_position, 1) 
+
+			'Sets the file name and category
+			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+			
+			'Displays the checkbox
+			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+			
+			'Increments the row and script_position
 			row = row + 10
 			script_position = script_position + 1
 		END IF
@@ -312,18 +353,26 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 		IF cs_scripts_array(i).category = "utilities" THEN 
 			'>>> Determining the positioning of the checkboxes.
 			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row = 430 THEN 
+			IF row >= 430 THEN 
 				row = 30
 				col = col + 195
 			END IF
 			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
 			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_multidimensional_array(script_position, 1) = 1
+				scripts_edit_favs_array(script_position, 1) = checked
 			ELSE
-				scripts_multidimensional_array(script_position, 1) = 0
+				scripts_edit_favs_array(script_position, 1) = unchecked
 			END IF
-			scripts_multidimensional_array(script_position, 0) = "UTILITIES: " & replace(cs_scripts_array(i).file_name, ".vbs", "")
-			CheckBox col, row, 185, 10, UCASE(replace(scripts_multidimensional_array(script_position, 0), "-", " ")), scripts_multidimensional_array(script_position, 1) 
+
+			'Sets the file name and category
+			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+			
+			'Displays the checkbox
+			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+			
+			'Increments the row and script_position
 			row = row + 10
 			script_position = script_position + 1
 		END IF
@@ -351,7 +400,7 @@ DO
 		'>>> for position 1, thereby clearing the favorites from the display.
 		IF ButtonPressed = reset_favorites_button THEN 
 			FOR i = 0 to number_of_scripts
-				scripts_multidimensional_array(i, 1) = 0
+				scripts_edit_favs_array(i, 1) = unchecked
 			NEXT
 		END IF
 	'>>> The exit condition for the first do/loop is the user pressing 'OK'
@@ -361,7 +410,7 @@ DO
 	'>>> Currently, that value is 30. That is lower than previous because of the larger number of new scripts. (-Robert, 04/20/2016)
 	double_check_array = ""
 	FOR i = 0 to number_of_scripts
-		IF scripts_multidimensional_array(i, 1) = checked THEN double_check_array = double_check_array & scripts_multidimensional_array(i, 0) & "~"
+		IF scripts_edit_favs_array(i, 1) = checked THEN double_check_array = double_check_array & scripts_edit_favs_array(i, 0) & "~"
 	NEXT
 	double_check_array = split(double_check_array, "~")
 	IF ubound(double_check_array) > 29 THEN MsgBox "Your favorites menu is too large. Please limit the number of favorites to no greater than 30."
@@ -371,7 +420,7 @@ LOOP UNTIL ubound(double_check_array) <= 29
 '>>> Getting ready to write the user's selection to a text file and save it on a prescribed location on the network.
 '>>> Building the content of the text file.	
 FOR i = 0 to number_of_scripts - 1
-	IF scripts_multidimensional_array(i, 1) = checked THEN favorite_scripts = favorite_scripts & scripts_multidimensional_array(i, 0) & vbNewLine
+	IF scripts_edit_favs_array(i, 1) = checked THEN favorite_scripts = favorite_scripts & scripts_edit_favs_array(i, 2) & scripts_edit_favs_array(i, 3) & vbNewLine
 NEXT
 
 '>>> After the user selects their favorite scripts, we are going to write (or overwrite) the list of scripts 
@@ -490,40 +539,35 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 	'position 5 = state-supported true/false
 
 	scripts_pos = 0
-	FOR EACH script_name IN user_scripts_array
-		IF script_name <> "" THEN 
-			all_scripts_array(scripts_pos, 0) = script_name
+	FOR EACH script_path IN user_scripts_array
+		IF script_path <> "" THEN 
+			all_scripts_array(scripts_pos, 0) = script_path
 			'>>> Creating the correct URL for the github call
 			'>>> When we clean up this for state-wide deployment, we will need determine the appropriate network location for the agency custom scripts			
-			IF left(script_name, 5) = "ANOKA" THEN 
-				all_scripts_array(scripts_pos, 1) = "Q:\Blue Zone Scripts\Child Support\Script Files\County Customized\" & script_name & ".vbs"
-				all_scripts_array(scripts_pos, 3) = "ANOKA"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
-				all_scripts_array(scripts_pos, 5) = false
-			ELSEIF left(script_name, 5) = "NOTES" THEN 
-				all_scripts_array(scripts_pos, 1) = "/NOTES/" & script_name & ".vbs"
+			IF left(script_path, 5) = "notes" THEN 
+				all_scripts_array(scripts_pos, 1) = script_path
 				all_scripts_array(scripts_pos, 3) = "NOTES"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
+				all_scripts_array(scripts_pos, 4) = right(script_path, len(script_path) - 6)			
 				all_scripts_array(scripts_pos, 5) = true
-			ELSEIF left(script_name, 7) = "ACTIONS" THEN 
-				all_scripts_array(scripts_pos, 1) = "/ACTIONS/" & script_name & ".vbs"
+			ELSEIF left(script_path, 7) = "actions" THEN 
+				all_scripts_array(scripts_pos, 1) = script_path
 				all_scripts_array(scripts_pos, 3) = "ACTIONS"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 9)
+				all_scripts_array(scripts_pos, 4) = right(script_path, len(script_path) - 8)
 				all_scripts_array(scripts_pos, 5) = true
-			ELSEIF left(script_name, 4) = "BULK" THEN 
-				all_scripts_array(scripts_pos, 1) = "/BULK/" & script_name & ".vbs"
+			ELSEIF left(script_path, 4) = "bulk" THEN 
+				all_scripts_array(scripts_pos, 1) = script_path
 				all_scripts_array(scripts_pos, 3) = "BULK"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 6)
+				all_scripts_array(scripts_pos, 4) = right(script_path, len(script_path) - 5)
 				all_scripts_array(scripts_pos, 5) = true
-			ELSEIF left(script_name, 4) = "CALC" THEN 
-				all_scripts_array(scripts_pos, 1) = "/CALCULATORS/" & script_name & ".vbs"
+			ELSEIF left(script_path, 11) = "calculators" THEN 
+				all_scripts_array(scripts_pos, 1) = script_path
 				all_scripts_array(scripts_pos, 3) = "CALCULATORS"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 6)
+				all_scripts_array(scripts_pos, 4) = right(script_path, len(script_path) - 12)
 				all_scripts_array(scripts_pos, 5) = true
-            ELSEIF left(script_name, 9) = "UTILITIES" THEN 
-    			all_scripts_array(scripts_pos, 1) = "/UTILITIES/" & script_name & ".vbs"
+            ELSEIF left(script_path, 9) = "utilities" THEN 
+    			all_scripts_array(scripts_pos, 1) = script_path
     			all_scripts_array(scripts_pos, 3) = "UTILITIES"
-    			all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 6)
+    			all_scripts_array(scripts_pos, 4) = right(script_path, len(script_path) - 10)
     			all_scripts_array(scripts_pos, 5) = true
 			END IF
 			scripts_pos = scripts_pos + 1
@@ -683,19 +727,19 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 		'>>> As we add a pushbutton, we need to increase the value for the start_row by 10 for that kind of script.
 		FOR i = 0 TO (ubound(user_scripts_array) - 1)
 			IF all_scripts_array(i, 3) = "ACTIONS" THEN 
-				PushButton 20, actions_start_row + 10, 170, 10, UCASE(replace(all_scripts_array(i, 4), "-", " ")), all_scripts_array(i, 2)
+				PushButton 20, actions_start_row + 10, 170, 10, all_scripts_array(i, 4), all_scripts_array(i, 2)
 				actions_start_row = actions_start_row + 10
 			ELSEIF all_scripts_array(i, 3) = "BULK" THEN 
-				PushButton 20, bulk_start_row + 10, 170, 10, UCASE(replace(all_scripts_array(i, 4), "-", " ")), all_scripts_array(i, 2)
+				PushButton 20, bulk_start_row + 10, 170, 10, all_scripts_array(i, 4), all_scripts_array(i, 2)
 				bulk_start_row = bulk_start_row + 10
 			ELSEIF all_scripts_array(i, 3) = "CALCULATORS" THEN 
-				PushButton 20, calc_start_row + 10, 170, 10, UCASE(replace(all_scripts_array(i, 4), "-", " ")), all_scripts_array(i, 2)
+				PushButton 20, calc_start_row + 10, 170, 10, all_scripts_array(i, 4), all_scripts_array(i, 2)
 				calc_start_row = calc_start_row + 10
 			ELSEIF all_scripts_array(i, 3) = "NOTES" THEN 
-				PushButton 20, notes_start_row + 10, 170, 10, UCASE(replace(all_scripts_array(i, 4), "-", " ")), all_scripts_array(i, 2)
+				PushButton 20, notes_start_row + 10, 170, 10, all_scripts_array(i, 4), all_scripts_array(i, 2)
 				notes_start_row = notes_start_row + 10			
             ELSEIF all_scripts_array(i, 3) = "UTILITIES" THEN 
-				PushButton 20, utilities_start_row + 10, 170, 10, UCASE(replace(all_scripts_array(i, 4), "-", " ")), all_scripts_array(i, 2)
+				PushButton 20, utilities_start_row + 10, 170, 10, all_scripts_array(i, 4), all_scripts_array(i, 2)
 				utilities_start_row = utilities_start_row + 10			
 			END IF
 		NEXT
