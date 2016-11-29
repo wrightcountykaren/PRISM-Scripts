@@ -59,6 +59,10 @@ all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
 '<<<<VERY TEMPORARY UNTIL BETTER LOGIC IS WORKED OUT
 what_function = MsgBox("Want to edit favorites? Press Yes to edit or No to view.", vbYesNoCancel)
 If what_function = vbCancel then stopscript
+
+'<<<<<<<<<<<<<<<TEMP'
+'what_function = vbYes
+
 If what_function = vbYes then
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
@@ -107,6 +111,9 @@ ELSE
 	Execute text_from_the_other_script
 END IF
 
+
+'<<<<<<<<<<<<<<<<<<<<<<<<<<<<TEMPORARILY COMMENTED OUT
+
 'Warning/instruction box
 MsgBox "This script will display a dialog with various scripts on it."  & vbNewLine &_
 		"Any script you check will be added to your favorites menu.  " & vbNewline &_
@@ -153,49 +160,10 @@ With oTxtFile
 END WITH
 
 '>>> Determining the width of the dialog from the number of scripts that are available...
-'the dialog starts with a width of 800
-dia_width = 900
-'if a second column of actions scripts is needed, the dialog increases in width by 195
-IF actions_scripts >= 40 AND actions_scripts <= 79 THEN 
-	dia_width = dia_width + 195
-	'if a third column of actions scripts is needed, the dialog increases in width by 195
-ELSEIF actions_scripts >= 80 THEN 
-	dia_width = dia_width + 195
-END IF
-'if a second column of bulk scripts is needed, the dialog increases in width by 195
-IF bulk_scripts >= 40 AND bulk_scripts <= 79 THEN 
-	dia_width = dia_width + 195
-	'if a third column of bulk scripts is needed, the dialog increases in width by 195
-ELSEIF bulk_scripts >= 80 THEN 
-	dia_width = dia_width + 195
-END IF
-'if a second column of calc scripts is needed, the dialog increases in width by 195
-IF calc_scripts >= 40 AND calc_scripts <= 79 THEN 
-	dia_width = dia_width + 195
-	'if a third column of calc scripts is needed, the dialog increases in width by 195
-ELSEIF calc_scripts >= 80 THEN 
-	dia_width = dia_width + 195
-END IF
-'if a second column of notes scripts is needed, the dialog increases in width by 195
-IF notes_scripts >= 40 AND notes_scripts <= 79 THEN 
-	dia_width = dia_width + 195
-	'if a third column of notes scripts is needed, the dialog increases in width by 195
-ELSEIF notes_scripts >= 80 AND notes_scripts <= 119 THEN 
-	dia_width = dia_width + 195
-	'if a fourth column of notes scripts is needed, the dialog increases in width by 195
-ELSEIF notes_scripts >= 120 THEN 
-	dia_width = dia_width + 195
-END IF 
-'if a second column of utilities scripts is needed, the dialog increases in width by 195
-IF utilities_scripts >= 40 AND utilities_scripts <= 79 THEN 
-	dia_width = dia_width + 195
-	'if a third column of utilities scripts is needed, the dialog increases in width by 195
-ELSEIF utilities_scripts >= 80 AND utilities_scripts <= 119 THEN 
-	dia_width = dia_width + 195
-	'if a fourth column of utilities scripts is needed, the dialog increases in width by 195
-ELSEIF utilities_scripts >= 120 THEN 
-	dia_width = dia_width + 195
-END IF
+'the dialog starts with a width of 400
+dia_width = 400
+
+'VKC - removed old functionality to determine dynamically the width. This will need to be redetermined based on the number of scripts, but I am holding off on this until I know all of the content I'll jam in here. -11/29/2016
 
 '>>> Building the dialog
 BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
@@ -205,13 +173,18 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 		PushButton 165, 5, 70, 15, "Reset Favorites", reset_favorites_button
 	'>>> Creating the display of all scripts for selection (in checkbox form)
 	script_position = 0		' <<< This value is tied to the number_of_scripts variable
-		col = 10
-		row = 30
+	
+	
+	col = 10
+	row = 30
+	Text col, row, 175, 10, "---------- ACTIONS SCRIPTS ----------"
+	row = row + 10
+	
 	FOR i = 0 to ubound(cs_scripts_array)
 		IF cs_scripts_array(i).category = "actions" THEN 
 			'>>> Determining the positioning of the checkboxes.
 			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.	
-			IF row = 430 THEN 
+			IF row >= 430 THEN 
 				row = 30
 				col = col + 195
 			END IF
@@ -227,8 +200,18 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 			script_position = script_position + 1
 		END IF
 	NEXT
-		col = col + 195
+	
+	'Section header
+	row = row + 20	'Padding for the new section
+	'Account for overflow
+	IF row >= 430 THEN 
 		row = 30
+		col = col + 195
+	END IF
+	Text col, row, 175, 10, "---------- BULK SCRIPTS ----------"
+	row = row + 10
+	
+	'BULK script laying out
 	FOR i = 0 to ubound(cs_scripts_array)
 		IF cs_scripts_array(i).category = "bulk" THEN 
 			'>>> Determining the positioning of the checkboxes.
@@ -249,8 +232,18 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 			script_position = script_position + 1
 		END IF
 	NEXT
+	
+	'Section header
+	row = row + 20	'Padding for the new section
+	'Account for overflow
+	IF row >= 430 THEN 
 		row = 30
 		col = col + 195
+	END IF
+	Text col, row, 175, 10, "---------- CALCULATOR SCRIPTS ----------"
+	row = row + 10
+	
+	'CALCULATOR script laying out
 	FOR i = 0 to ubound(cs_scripts_array)
 		IF cs_scripts_array(i).category = "calculators" THEN 
 			'>>> Determining the positioning of the checkboxes.
@@ -271,8 +264,18 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 			script_position = script_position + 1
 		END IF
 	NEXT
-		col = col + 195
+	
+	'Section header
+	row = row + 20	'Padding for the new section
+	'Account for overflow
+	IF row >= 430 THEN 
 		row = 30
+		col = col + 195
+	END IF
+	Text col, row, 175, 10, "---------- NOTES SCRIPTS ----------"
+	row = row + 10
+	
+	'NOTES script laying out
 	FOR i = 0 to ubound(cs_scripts_array)
 		IF cs_scripts_array(i).category = "notes" THEN 
 			'>>> Determining the positioning of the checkboxes.
@@ -293,8 +296,18 @@ BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
 			script_position = script_position + 1
 		END IF
 	NEXT	
-    col = col + 195
-    row = 30
+	
+	'Section header
+	row = row + 20	'Padding for the new section
+	'Account for overflow
+	IF row >= 430 THEN 
+		row = 30
+		col = col + 195
+	END IF
+	Text col, row, 175, 10, "---------- UTILITIES SCRIPTS ----------"
+	row = row + 10
+	
+	'UTILITIES script laying out
     FOR i = 0 to ubound(cs_scripts_array)
 		IF cs_scripts_array(i).category = "utilities" THEN 
 			'>>> Determining the positioning of the checkboxes.
