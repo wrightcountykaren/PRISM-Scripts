@@ -40,6 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("12/01/2016", "Dialog and Write fixes.", "Robert Fewins-Kalb, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
@@ -62,7 +63,7 @@ Worker_title = "Child Support Officer"
 
 'dialog box to select the information needed
 
-BeginDialog Child_Support_verif_dialog, 0, 0, 241, 265, "Child Support Verif Dialog"
+BeginDialog child_support_income_verification, 0, 0, 241, 265, "Child Support Income Verification"
   Text 10, 10, 50, 10, "Case Number"
   EditBox 60, 5, 145, 15, PRISM_case_number
   Text 15, 30, 105, 10, "Number of Months of Payments"
@@ -194,12 +195,11 @@ total_amount_issued = FormatCurrency(total_amount_issued)
 
 CALL navigate_to_PRISM_screen("PALC")
 
-
 IF begin_date <> "" THEN EMWriteScreen begin_date, 20, 35
 IF end_date <> "" THEN EMWriteScreen end_date, 20, 49
-IF three_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -3, date), 20, 038    		'*****VERONICA THIS IS WHERE WE WOULD NEED THE CODE FOR THE 30, 60, 90 DAY CHECK BOX INFORMATION
-IF six_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -6, date), 20, 038
-IF twelve_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -12, date), 20, 038
+IF three_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -3, date), 20, 35    		'*****VERONICA THIS IS WHERE WE WOULD NEED THE CODE FOR THE 30, 60, 90 DAY CHECK BOX INFORMATION
+IF six_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -6, date), 20, 35
+IF twelve_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -12, date), 20, 35
 
 transmit
 
