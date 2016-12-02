@@ -40,7 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("12/02/2016", "Date writing and handling fixes.", "Robert Fewins-Kalb, Anoka County")
+call changelog_update("12/02/2016", "The script has been updated to improve the user experience by providing a more consistent error message handling and by ensuring the script is always writing the date on DDPL and PALC in the correct format.", "Robert Fewins-Kalb, Anoka County")
 call changelog_update("12/01/2016", "Dialog and Write fixes.", "Robert Fewins-Kalb, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
