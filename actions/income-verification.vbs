@@ -195,11 +195,11 @@ total_amount_issued = FormatCurrency(total_amount_issued)
 
 CALL navigate_to_PRISM_screen("PALC")
 
-IF begin_date <> "" THEN EMWriteScreen begin_date, 20, 35
-IF end_date <> "" THEN EMWriteScreen end_date, 20, 49
-IF three_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -3, date), 20, 35    		'*****VERONICA THIS IS WHERE WE WOULD NEED THE CODE FOR THE 30, 60, 90 DAY CHECK BOX INFORMATION
-IF six_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -6, date), 20, 35
-IF twelve_months_checkbox = checked THEN EMWriteScreen DateAdd("m", -12, date), 20, 35
+IF begin_date <> "" THEN CALL write_date(begin_date, "MM/DD/YYYY", 20, 35)
+IF end_date <> "" THEN CALL write_date(end_date, "MM/DD/YYYY", 20, 49)
+IF three_months_checkbox = checked THEN CALL write_date(DateAdd("m", -3, date), "MM/DD/YYYY", 20, 35)    		'*****VERONICA THIS IS WHERE WE WOULD NEED THE CODE FOR THE 30, 60, 90 DAY CHECK BOX INFORMATION
+IF six_months_checkbox = checked THEN CALL write_date(DateAdd("m", -6, date), "MM/DD/YYYY", 20, 35)
+IF twelve_months_checkbox = checked THEN CALL write_date(DateAdd("m", -12, date), "MM/DD/YYYY", 20, 35)
 
 transmit
 
