@@ -1,4 +1,5 @@
 'TODO: ensure the array stores the hotkey choice (3) and program it to add an option to add a hotkey
+'TODO: make sure file names display clearly in the display dialog
 'TODO: work in agency-customizable mandatory script lists
 
 'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
