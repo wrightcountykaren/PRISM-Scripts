@@ -463,16 +463,13 @@ Else
 
 
 
-'>>> Location of select favorites script on the network
-'network_location_of_select_favorites_script = "Q:\Blue Zone Scripts\Child Support\Script Files\County Customized\ANOKA - SELECT FAVORITE SCRIPTS.vbs"
-
 '>>> Our script arrays. 
 '>>> all_scripts_array will be built from the contents of the user's text file
 '>>> new_scripts will be build automatically by looking at the description of each script in GitHub. If the description includes "NEW" then it is added to the array.
 '>>> mandatory_array is pre-determined
 all_scripts_array = ""
 new_scripts = ""
-mandatory_array = "ACTIONS - NCP LOCATE" & vbNewLine & "ACTIONS - RECORD IW INFO" & vbNewLine & "ACTIONS - SEND F0104 DORD MEMO" & vbNewLine & "NOTES - ADJUSTMENTS" & vbNewLine & "NOTES - ARREARS MANAGEMENT REVIEW" & vbNewLine & "NOTES - CLIENT CONTACT"
+'mandatory_array = "ACTIONS - NCP LOCATE" & vbNewLine & "ACTIONS - RECORD IW INFO" & vbNewLine & "ACTIONS - SEND F0104 DORD MEMO" & vbNewLine & "NOTES - ADJUSTMENTS" & vbNewLine & "NOTES - ARREARS MANAGEMENT REVIEW" & vbNewLine & "NOTES - CLIENT CONTACT"
 
 'Does this differently if you're a run_locally user vs not
 If run_locally <> true then
@@ -514,7 +511,7 @@ new_array = replace(new_array, ".vbs", "")
 '>>> Custom function that builds the Favorites Main Menu dialog.
 '>>> the array of the user's scripts
 FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_location, worker_signature)
-	'>>> Splitting the array of all scripts. This is found on GitHub under Anoka-Specific Scripts
+	'>>> Splitting the array of all scripts.
 	user_scripts_array = trim(user_scripts_array)
 	user_scripts_array = split(user_scripts_array, vbNewLine)
 
@@ -579,12 +576,7 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 			all_scripts_array(scripts_pos, 0) = script_name
 			'>>> Creating the correct URL for the github call
 			'>>> When we clean up this for state-wide deployment, we will need determine the appropriate network location for the agency custom scripts
-			IF left(script_name, 5) = "ANOKA" THEN 
-				all_scripts_array(scripts_pos, 1) = "Q:\Blue Zone Scripts\Child Support\Script Files\County Customized\" & script_name & ".vbs"
-				all_scripts_array(scripts_pos, 3) = "ANOKA"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
-				all_scripts_array(scripts_pos, 5) = false
-			ELSEIF left(script_name, 5) = "NOTES" THEN 
+			IF left(script_name, 5) = "NOTES" THEN 
 				all_scripts_array(scripts_pos, 1) = "/NOTES/" & script_name & ".vbs"
 				all_scripts_array(scripts_pos, 3) = "NOTES"
 				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
@@ -609,12 +601,7 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 			all_scripts_array(scripts_pos, 0) = script_name
 			'>>> Creating the correct URL for the github call
 			'>>> When we clean up this for state-wide deployment, we will need determine the appropriate network location for the agency custom scripts
-			IF left(script_name, 5) = "ANOKA" THEN 
-				all_scripts_array(scripts_pos, 1) = "Q:\Blue Zone Scripts\Child Support\Script Files\County Customized\" & script_name & ".vbs"
-				all_scripts_array(scripts_pos, 3) = "ANOKA"
-				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
-				all_scripts_array(scripts_pos, 5) = false
-			ELSEIF left(script_name, 5) = "NOTES" THEN 
+			IF left(script_name, 5) = "NOTES" THEN 
 				all_scripts_array(scripts_pos, 1) = "/NOTES/" & script_name & ".vbs"
 				all_scripts_array(scripts_pos, 3) = "NOTES"
 				all_scripts_array(scripts_pos, 4) = right(script_name, len(script_name) - 7)
