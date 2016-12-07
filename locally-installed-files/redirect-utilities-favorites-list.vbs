@@ -1,5 +1,4 @@
 'TODO: ensure the array stores the hotkey choice (3) and program it to add an option to add a hotkey
-'TODO: Make the view dialog prettier than it currently is, including instructions
 'TODO: work in agency-customizable mandatory script lists
 
 'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
@@ -45,6 +44,373 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'====================================================================================
+'====================================================================================
+'This VERY VERY long function contains all of the logic behind editing the favorites.
+'====================================================================================
+'====================================================================================
+function edit_favorites
+
+	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>> SECTION 1 <<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>> The gobbins that happen before the user sees anything. <<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+	'Looks up the script details online (or locally if you're a scriptwriter)
+
+	If run_locally <> true then
+
+		'Creating the object to the URL a la text file
+		SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
+
+		'Building an array of all scripts
+		'Opening the URL for the given main menu
+		get_all_scripts.open "GET", all_scripts_repo, FALSE
+		get_all_scripts.send			
+		IF get_all_scripts.Status = 200 THEN	
+			Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
+			Execute get_all_scripts.responseText
+		ELSE							
+			'If the script cannot open the URL provided...
+			MsgBox 	"Something went wrong with the URL: " & all_scripts_repo
+			stopscript
+		END IF
+	ELSE
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
+		Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)
+		text_from_the_other_script = fso_command.ReadAll
+		fso_command.Close
+		Execute text_from_the_other_script
+	END IF
+
+	'Warning/instruction box
+	MsgBox "This script will display a dialog with various scripts on it."  & vbNewLine &_
+			"Any script you check will be added to your favorites menu.  " & vbNewline &_
+			"Scripts you un-check will be removed. Once you are done " & vbNewLine &_
+			"making your selection hit OK and your menu will be updated. " & vbNewLine & vbNewLine &_
+			"- You will be unable to edit NEW Scripts and Recommended Scripts."
+
+	'An array containing details about the list of scripts, including how they are displayed and stored in the favorites tag
+	'0 => The script name
+	'1 => The checked/unchecked status (based on the dialog list)
+	'2 => The script category, and a "/" so that it's presented in a URL
+	'3 => The proper script file name
+	'4 => The hotkey the user has associated with the script
+
+	REDIM scripts_edit_favs_array(ubound(cs_scripts_array), 4)
+
+	'determining the number of each kind of script...by category
+	number_of_scripts = 0
+	actions_scripts = 0
+	bulk_scripts = 0
+	calc_scripts = 0
+	notes_scripts = 0
+	utilities_scripts = 0
+	FOR i = 0 TO ubound(cs_scripts_array)
+		number_of_scripts = i
+		IF cs_scripts_array(i).category = "actions" THEN 
+			actions_scripts = actions_scripts + 1
+		ELSEIF cs_scripts_array(i).category = "bulk" THEN 
+			bulk_scripts = bulk_scripts + 1
+		ELSEIF cs_scripts_array(i).category = "calculators" THEN 
+			calc_scripts = calc_scripts + 1
+		ELSEIF cs_scripts_array(i).category = "notes" THEN 
+			notes_scripts = notes_scripts + 1
+		ELSEIF cs_scripts_array(i).category = "utilities" THEN 
+	        utilities_scripts = utilities_scripts + 1
+	    End if
+	NEXT
+
+
+	'>>> If the user has already selected their favorites, the script will open that file and
+	'>>> and read it, storing the contents in the variable name ''user_scripts_array''
+	SET oTxtFile = (CreateObject("Scripting.FileSystemObject"))
+	With oTxtFile
+		If .FileExists(favorites_text_file_location) Then
+			Set fav_scripts = CreateObject("Scripting.FileSystemObject")
+			Set fav_scripts_command = fav_scripts.OpenTextFile(favorites_text_file_location)
+			fav_scripts_array = fav_scripts_command.ReadAll
+			IF fav_scripts_array <> "" THEN user_scripts_array = fav_scripts_array
+			fav_scripts_command.Close
+		END IF
+	END WITH
+
+	'>>> Determining the width of the dialog from the number of scripts that are available...
+	'the dialog starts with a width of 400
+	dia_width = 400
+
+	'VKC - removed old functionality to determine dynamically the width. This will need to be redetermined based on the number of scripts, but I am holding off on this until I know all of the content I'll jam in here. -11/29/2016
+
+	'>>> Building the dialog
+	BeginDialog build_new_favorites_dialog, 0, 0, dia_width, 440, "Select your favorites"
+		ButtonGroup ButtonPressed
+			OkButton 5, 5, 50, 15 
+			CancelButton 55, 5, 50, 15
+			PushButton 165, 5, 70, 15, "Reset Favorites", reset_favorites_button
+		'>>> Creating the display of all scripts for selection (in checkbox form)
+		script_position = 0		' <<< This value is tied to the number_of_scripts variable
+		
+		
+		col = 10
+		row = 30
+		Text col, row, 175, 10, "---------- ACTIONS SCRIPTS ----------"
+		row = row + 10
+		
+		FOR i = 0 to ubound(cs_scripts_array)
+			IF cs_scripts_array(i).category = "actions" THEN 
+				'>>> Determining the positioning of the checkboxes.
+				'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.	
+				IF row >= 430 THEN 
+					row = 30
+					col = col + 195
+				END IF
+				'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
+				IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
+					scripts_edit_favs_array(script_position, 1) = checked
+				ELSE
+					scripts_edit_favs_array(script_position, 1) = unchecked
+				END IF
+				
+				'Sets the file name and category
+				scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+				scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+				scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+				
+				'Displays the checkbox
+				CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+				
+				'Increments the row and script_position
+				row = row + 10
+				script_position = script_position + 1
+			END IF
+		NEXT
+		
+		'Section header
+		row = row + 20	'Padding for the new section
+		'Account for overflow
+		IF row >= 430 THEN 
+			row = 30
+			col = col + 195
+		END IF
+		Text col, row, 175, 10, "---------- BULK SCRIPTS ----------"
+		row = row + 10
+		
+		'BULK script laying out
+		FOR i = 0 to ubound(cs_scripts_array)
+			IF cs_scripts_array(i).category = "bulk" THEN 
+				'>>> Determining the positioning of the checkboxes.
+				'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
+				IF row >= 430 THEN 
+					row = 30
+					col = col + 195
+				END IF
+				'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
+				IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
+					scripts_edit_favs_array(script_position, 1) = checked
+				ELSE
+					scripts_edit_favs_array(script_position, 1) = unchecked
+				END IF
+				
+				'Sets the file name and category
+				scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+				scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+				scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+				
+				'Displays the checkbox
+				CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+				
+				'Increments the row and script_position
+				row = row + 10
+				script_position = script_position + 1
+			END IF
+		NEXT
+		
+		'Section header
+		row = row + 20	'Padding for the new section
+		'Account for overflow
+		IF row >= 430 THEN 
+			row = 30
+			col = col + 195
+		END IF
+		Text col, row, 175, 10, "---------- CALCULATOR SCRIPTS ----------"
+		row = row + 10
+		
+		'CALCULATOR script laying out
+		FOR i = 0 to ubound(cs_scripts_array)
+			IF cs_scripts_array(i).category = "calculators" THEN 
+				'>>> Determining the positioning of the checkboxes.
+				'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
+				IF row >= 430 THEN 
+					row = 30
+					col = col + 195
+				END IF
+				'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
+				IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
+					scripts_edit_favs_array(script_position, 1) = checked
+				ELSE
+					scripts_edit_favs_array(script_position, 1) = unchecked
+				END IF
+				
+				'Sets the file name and category
+				scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+				scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+				scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+				
+				'Displays the checkbox
+				CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+				
+				'Increments the row and script_position
+				row = row + 10
+				script_position = script_position + 1
+			END IF
+		NEXT
+		
+		'Section header
+		row = row + 20	'Padding for the new section
+		'Account for overflow
+		IF row >= 430 THEN 
+			row = 30
+			col = col + 195
+		END IF
+		Text col, row, 175, 10, "---------- NOTES SCRIPTS ----------"
+		row = row + 10
+		
+		'NOTES script laying out
+		FOR i = 0 to ubound(cs_scripts_array)
+			IF cs_scripts_array(i).category = "notes" THEN 
+				'>>> Determining the positioning of the checkboxes.
+				'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
+				IF row >= 430 THEN 
+					row = 30
+					col = col + 195
+				END IF
+				'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
+				IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
+					scripts_edit_favs_array(script_position, 1) = checked
+				ELSE
+					scripts_edit_favs_array(script_position, 1) = unchecked
+				END IF
+
+				'Sets the file name and category
+				scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+				scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+				scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+				
+				'Displays the checkbox
+				CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+				
+				'Increments the row and script_position
+				row = row + 10
+				script_position = script_position + 1
+			END IF
+		NEXT	
+		
+		'Section header
+		row = row + 20	'Padding for the new section
+		'Account for overflow
+		IF row >= 430 THEN 
+			row = 30
+			col = col + 195
+		END IF
+		Text col, row, 175, 10, "---------- UTILITIES SCRIPTS ----------"
+		row = row + 10
+		
+		'UTILITIES script laying out
+	    FOR i = 0 to ubound(cs_scripts_array)
+			IF cs_scripts_array(i).category = "utilities" THEN 
+				'>>> Determining the positioning of the checkboxes.
+				'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
+				IF row >= 430 THEN 
+					row = 30
+					col = col + 195
+				END IF
+				'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
+				IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
+					scripts_edit_favs_array(script_position, 1) = checked
+				ELSE
+					scripts_edit_favs_array(script_position, 1) = unchecked
+				END IF
+
+				'Sets the file name and category
+				scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
+				scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
+				scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
+				
+				'Displays the checkbox
+				CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
+				
+				'Increments the row and script_position
+				row = row + 10
+				script_position = script_position + 1
+			END IF
+		NEXT	
+	EndDialog
+
+	'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>> SECTION 2 <<<<<<<<<<<<<<<<<<<<<
+	'>>> The gobbins that the user sees and makes do. <<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
+	'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
+
+	DO
+		DO
+			'>>> Running the dialog
+			Dialog build_new_favorites_dialog
+			'>>> Cancel confirmation
+			IF ButtonPressed = 0 THEN 
+				confirm_cancel = MsgBox("Are you sure you want to cancel? Press YES to cancel the script. Press NO to return to the script.", vbYesNo)
+				IF confirm_cancel = vbYes THEN script_end_procedure("~PT: Script cancelled.")
+			END IF
+			'>>> If the user selects to reset their favorites selections, the script
+			'>>> will go through the multi-dimensional array and reset all the values
+			'>>> for position 1, thereby clearing the favorites from the display.
+			IF ButtonPressed = reset_favorites_button THEN 
+				FOR i = 0 to number_of_scripts
+					scripts_edit_favs_array(i, 1) = unchecked
+				NEXT
+			END IF
+		'>>> The exit condition for the first do/loop is the user pressing 'OK'
+		LOOP UNTIL ButtonPressed <> 0 AND ButtonPressed <> reset_favorites_button
+		'>>> Validating that the user does not select more than a prescribed number of scripts.
+		'>>> Exceeding the limit will cause an exception access violation for the Favorites script when it runs.
+		'>>> Currently, that value is 30. That is lower than previous because of the larger number of new scripts. (-Robert, 04/20/2016)
+		double_check_array = ""
+		FOR i = 0 to number_of_scripts
+			IF scripts_edit_favs_array(i, 1) = checked THEN double_check_array = double_check_array & scripts_edit_favs_array(i, 0) & "~"
+		NEXT
+		double_check_array = split(double_check_array, "~")
+		IF ubound(double_check_array) > 29 THEN MsgBox "Your favorites menu is too large. Please limit the number of favorites to no greater than 30."
+		'>>> Exit condition is the user having fewer than 30 scripts in their favorites menu.
+	LOOP UNTIL ubound(double_check_array) <= 29
+
+	'>>> Getting ready to write the user's selection to a text file and save it on a prescribed location on the network.
+	'>>> Building the content of the text file.	
+	FOR i = 0 to number_of_scripts - 1
+		IF scripts_edit_favs_array(i, 1) = checked THEN favorite_scripts = favorite_scripts & scripts_edit_favs_array(i, 2) & scripts_edit_favs_array(i, 3) & vbNewLine
+	NEXT
+
+	'>>> After the user selects their favorite scripts, we are going to write (or overwrite) the list of scripts 
+	'>>> stored at H:\my favorite scripts.txt.
+	IF favorite_scripts <> "" THEN 
+		SET updated_fav_scripts_fso = CreateObject("Scripting.FileSystemObject")
+		SET updated_fav_scripts_command = updated_fav_scripts_fso.CreateTextFile(favorites_text_file_location, 2)
+		updated_fav_scripts_command.Write(favorite_scripts)
+		updated_fav_scripts_command.Close
+		script_end_procedure("Success!! Your Favorites Menu has been updated. Please click your favorites list button to re-load them.")
+	ELSE
+		'>>> OR...if the user has selected no scripts for their favorite, the file will be deleted to 
+		'>>> prevent the Favorites Menu from erroring out.
+		'>>> Experience with worker_signature automation tells us that if the text file is blank, the favorites menu doth not work.
+		oTxtFile.DeleteFile(favorites_text_file_location)
+		script_end_procedure("You have updated your Favorites Menu, but you haven't selected any scripts. The next time you use the Favorites scripts, you will need to select your favorites.")
+	END IF
+
+end function
+
 '>>> Determining the location of the user's favorites list. 
 
 'Needs to determine MyDocs directory before proceeding.
@@ -56,412 +422,15 @@ favorites_text_file_location = user_myDocs_folder & "\scripts-cs-favorites.txt"
 'switching up the script_repository because the all scripts file is not in the Script Files folder
 all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
 
-
-
-'<<<<VERY TEMPORARY UNTIL BETTER LOGIC IS WORKED OUT
-what_function = MsgBox("Want to edit favorites? Press Yes to edit or No to view.", vbYesNoCancel)
-If what_function = vbCancel then stopscript
-
-'<<<<<<<<<<<<<<<TEMP'
-'what_function = vbYes
-
-If what_function = vbYes then
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< THE WRITING THE FAVORITES PART
-
-'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>>>>>>> SECTION 1 <<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>> The gobbins that happen before the user sees anything. <<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-'Looks up the script details online (or locally if you're a scriptwriter)
-
-If run_locally <> true then
-
-	'Creating the object to the URL a la text file
-	SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
-
-	'Building an array of all scripts
-	'Opening the URL for the given main menu
-	get_all_scripts.open "GET", all_scripts_repo, FALSE
-	get_all_scripts.send			
-	IF get_all_scripts.Status = 200 THEN	
-		Set filescriptobject = CreateObject("Scripting.FileSystemObject")		
-		Execute get_all_scripts.responseText
-	ELSE							
-		'If the script cannot open the URL provided...
-		MsgBox 	"Something went wrong with the URL: " & all_scripts_repo
-		stopscript
-	END IF
-ELSE
-	Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-	Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)
-	text_from_the_other_script = fso_command.ReadAll
-	fso_command.Close
-	Execute text_from_the_other_script
-END IF
-
-
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<TEMPORARILY COMMENTED OUT
-
-'Warning/instruction box
-MsgBox "This script will display a dialog with various scripts on it."  & vbNewLine &_
-		"Any script you check will be added to your favorites menu.  " & vbNewline &_
-		"Scripts you un-check will be removed. Once you are done " & vbNewLine &_
-		"making your selection hit OK and your menu will be updated. " & vbNewLine & vbNewLine &_
-		"- You will be unable to edit NEW Scripts and Recommended Scripts."
-
-'An array containing details about the list of scripts, including how they are displayed and stored in the favorites tag
-'0 => The script name
-'1 => The checked/unchecked status (based on the dialog list)
-'2 => The script category, and a "/" so that it's presented in a URL
-'3 => The proper script file name
-'4 => The hotkey the user has associated with the script
-
-REDIM scripts_edit_favs_array(ubound(cs_scripts_array), 4)
-
-'determining the number of each kind of script...by category
-number_of_scripts = 0
-actions_scripts = 0
-bulk_scripts = 0
-calc_scripts = 0
-notes_scripts = 0
-utilities_scripts = 0
-FOR i = 0 TO ubound(cs_scripts_array)
-	number_of_scripts = i
-	IF cs_scripts_array(i).category = "actions" THEN 
-		actions_scripts = actions_scripts + 1
-	ELSEIF cs_scripts_array(i).category = "bulk" THEN 
-		bulk_scripts = bulk_scripts + 1
-	ELSEIF cs_scripts_array(i).category = "calculators" THEN 
-		calc_scripts = calc_scripts + 1
-	ELSEIF cs_scripts_array(i).category = "notes" THEN 
-		notes_scripts = notes_scripts + 1
-	ELSEIF cs_scripts_array(i).category = "utilities" THEN 
-        utilities_scripts = utilities_scripts + 1
-    End if
-NEXT
-
-
-'>>> If the user has already selected their favorites, the script will open that file and
-'>>> and read it, storing the contents in the variable name ''user_scripts_array''
-SET oTxtFile = (CreateObject("Scripting.FileSystemObject"))
-With oTxtFile
-	If .FileExists(favorites_text_file_location) Then
-		Set fav_scripts = CreateObject("Scripting.FileSystemObject")
-		Set fav_scripts_command = fav_scripts.OpenTextFile(favorites_text_file_location)
-		fav_scripts_array = fav_scripts_command.ReadAll
-		IF fav_scripts_array <> "" THEN user_scripts_array = fav_scripts_array
-		fav_scripts_command.Close
-	END IF
-END WITH
-
-'>>> Determining the width of the dialog from the number of scripts that are available...
-'the dialog starts with a width of 400
-dia_width = 400
-
-'VKC - removed old functionality to determine dynamically the width. This will need to be redetermined based on the number of scripts, but I am holding off on this until I know all of the content I'll jam in here. -11/29/2016
-
-'>>> Building the dialog
-BeginDialog build_new_favorites_dialog, 0, 0, dia_width, 440, "Select your favorites"
-	ButtonGroup ButtonPressed
-		OkButton 5, 5, 50, 15 
-		CancelButton 55, 5, 50, 15
-		PushButton 165, 5, 70, 15, "Reset Favorites", reset_favorites_button
-	'>>> Creating the display of all scripts for selection (in checkbox form)
-	script_position = 0		' <<< This value is tied to the number_of_scripts variable
-	
-	
-	col = 10
-	row = 30
-	Text col, row, 175, 10, "---------- ACTIONS SCRIPTS ----------"
-	row = row + 10
-	
-	FOR i = 0 to ubound(cs_scripts_array)
-		IF cs_scripts_array(i).category = "actions" THEN 
-			'>>> Determining the positioning of the checkboxes.
-			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.	
-			IF row >= 430 THEN 
-				row = 30
-				col = col + 195
-			END IF
-			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
-			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_edit_favs_array(script_position, 1) = checked
-			ELSE
-				scripts_edit_favs_array(script_position, 1) = unchecked
-			END IF
-			
-			'Sets the file name and category
-			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
-			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
-			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
-			
-			'Displays the checkbox
-			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
-			
-			'Increments the row and script_position
-			row = row + 10
-			script_position = script_position + 1
-		END IF
-	NEXT
-	
-	'Section header
-	row = row + 20	'Padding for the new section
-	'Account for overflow
-	IF row >= 430 THEN 
-		row = 30
-		col = col + 195
-	END IF
-	Text col, row, 175, 10, "---------- BULK SCRIPTS ----------"
-	row = row + 10
-	
-	'BULK script laying out
-	FOR i = 0 to ubound(cs_scripts_array)
-		IF cs_scripts_array(i).category = "bulk" THEN 
-			'>>> Determining the positioning of the checkboxes.
-			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row >= 430 THEN 
-				row = 30
-				col = col + 195
-			END IF
-			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
-			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_edit_favs_array(script_position, 1) = checked
-			ELSE
-				scripts_edit_favs_array(script_position, 1) = unchecked
-			END IF
-			
-			'Sets the file name and category
-			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
-			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
-			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
-			
-			'Displays the checkbox
-			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
-			
-			'Increments the row and script_position
-			row = row + 10
-			script_position = script_position + 1
-		END IF
-	NEXT
-	
-	'Section header
-	row = row + 20	'Padding for the new section
-	'Account for overflow
-	IF row >= 430 THEN 
-		row = 30
-		col = col + 195
-	END IF
-	Text col, row, 175, 10, "---------- CALCULATOR SCRIPTS ----------"
-	row = row + 10
-	
-	'CALCULATOR script laying out
-	FOR i = 0 to ubound(cs_scripts_array)
-		IF cs_scripts_array(i).category = "calculators" THEN 
-			'>>> Determining the positioning of the checkboxes.
-			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row >= 430 THEN 
-				row = 30
-				col = col + 195
-			END IF
-			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
-			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_edit_favs_array(script_position, 1) = checked
-			ELSE
-				scripts_edit_favs_array(script_position, 1) = unchecked
-			END IF
-			
-			'Sets the file name and category
-			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
-			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
-			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
-			
-			'Displays the checkbox
-			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
-			
-			'Increments the row and script_position
-			row = row + 10
-			script_position = script_position + 1
-		END IF
-	NEXT
-	
-	'Section header
-	row = row + 20	'Padding for the new section
-	'Account for overflow
-	IF row >= 430 THEN 
-		row = 30
-		col = col + 195
-	END IF
-	Text col, row, 175, 10, "---------- NOTES SCRIPTS ----------"
-	row = row + 10
-	
-	'NOTES script laying out
-	FOR i = 0 to ubound(cs_scripts_array)
-		IF cs_scripts_array(i).category = "notes" THEN 
-			'>>> Determining the positioning of the checkboxes.
-			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row >= 430 THEN 
-				row = 30
-				col = col + 195
-			END IF
-			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
-			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_edit_favs_array(script_position, 1) = checked
-			ELSE
-				scripts_edit_favs_array(script_position, 1) = unchecked
-			END IF
-
-			'Sets the file name and category
-			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
-			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
-			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
-			
-			'Displays the checkbox
-			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
-			
-			'Increments the row and script_position
-			row = row + 10
-			script_position = script_position + 1
-		END IF
-	NEXT	
-	
-	'Section header
-	row = row + 20	'Padding for the new section
-	'Account for overflow
-	IF row >= 430 THEN 
-		row = 30
-		col = col + 195
-	END IF
-	Text col, row, 175, 10, "---------- UTILITIES SCRIPTS ----------"
-	row = row + 10
-	
-	'UTILITIES script laying out
-    FOR i = 0 to ubound(cs_scripts_array)
-		IF cs_scripts_array(i).category = "utilities" THEN 
-			'>>> Determining the positioning of the checkboxes.
-			'>>> For some reason, even though we exceed 65 objects, we do not hit any issues with missing scripts. Oh well.
-			IF row >= 430 THEN 
-				row = 30
-				col = col + 195
-			END IF
-			'>>> If the script in question is already known to the list of scripts already picked by the user, the check box is defaulted to checked.
-			IF InStr(UCASE(replace(user_scripts_array, "-", " ")), UCASE(replace(cs_scripts_array(i).script_name, "-", " "))) <> 0 THEN  
-				scripts_edit_favs_array(script_position, 1) = checked
-			ELSE
-				scripts_edit_favs_array(script_position, 1) = unchecked
-			END IF
-
-			'Sets the file name and category
-			scripts_edit_favs_array(script_position, 0) = cs_scripts_array(i).script_name
-			scripts_edit_favs_array(script_position, 3) = cs_scripts_array(i).file_name
-			scripts_edit_favs_array(script_position, 2) = cs_scripts_array(i).category & "/"
-			
-			'Displays the checkbox
-			CheckBox col, row, 185, 10, scripts_edit_favs_array(script_position, 0), scripts_edit_favs_array(script_position, 1) 
-			
-			'Increments the row and script_position
-			row = row + 10
-			script_position = script_position + 1
-		END IF
-	NEXT	
-EndDialog
-
-'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>> SECTION 2 <<<<<<<<<<<<<<<<<<<<<
-'>>> The gobbins that the user sees and makes do. <<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
-'>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<
-
-DO
-	DO
-		'>>> Running the dialog
-		Dialog build_new_favorites_dialog
-		'>>> Cancel confirmation
-		IF ButtonPressed = 0 THEN 
-			confirm_cancel = MsgBox("Are you sure you want to cancel? Press YES to cancel the script. Press NO to return to the script.", vbYesNo)
-			IF confirm_cancel = vbYes THEN script_end_procedure("~PT: Script cancelled.")
-		END IF
-		'>>> If the user selects to reset their favorites selections, the script
-		'>>> will go through the multi-dimensional array and reset all the values
-		'>>> for position 1, thereby clearing the favorites from the display.
-		IF ButtonPressed = reset_favorites_button THEN 
-			FOR i = 0 to number_of_scripts
-				scripts_edit_favs_array(i, 1) = unchecked
-			NEXT
-		END IF
-	'>>> The exit condition for the first do/loop is the user pressing 'OK'
-	LOOP UNTIL ButtonPressed <> 0 AND ButtonPressed <> reset_favorites_button
-	'>>> Validating that the user does not select more than a prescribed number of scripts.
-	'>>> Exceeding the limit will cause an exception access violation for the Favorites script when it runs.
-	'>>> Currently, that value is 30. That is lower than previous because of the larger number of new scripts. (-Robert, 04/20/2016)
-	double_check_array = ""
-	FOR i = 0 to number_of_scripts
-		IF scripts_edit_favs_array(i, 1) = checked THEN double_check_array = double_check_array & scripts_edit_favs_array(i, 0) & "~"
-	NEXT
-	double_check_array = split(double_check_array, "~")
-	IF ubound(double_check_array) > 29 THEN MsgBox "Your favorites menu is too large. Please limit the number of favorites to no greater than 30."
-	'>>> Exit condition is the user having fewer than 30 scripts in their favorites menu.
-LOOP UNTIL ubound(double_check_array) <= 29
-
-'>>> Getting ready to write the user's selection to a text file and save it on a prescribed location on the network.
-'>>> Building the content of the text file.	
-FOR i = 0 to number_of_scripts - 1
-	IF scripts_edit_favs_array(i, 1) = checked THEN favorite_scripts = favorite_scripts & scripts_edit_favs_array(i, 2) & scripts_edit_favs_array(i, 3) & vbNewLine
-NEXT
-
-'>>> After the user selects their favorite scripts, we are going to write (or overwrite) the list of scripts 
-'>>> stored at H:\my favorite scripts.txt.
-IF favorite_scripts <> "" THEN 
-	SET updated_fav_scripts_fso = CreateObject("Scripting.FileSystemObject")
-	SET updated_fav_scripts_command = updated_fav_scripts_fso.CreateTextFile(favorites_text_file_location, 2)
-	updated_fav_scripts_command.Write(favorite_scripts)
-	updated_fav_scripts_command.Close
-	script_end_procedure("Success!! Your Favorites Menu has been updated.")
-ELSE
-	'>>> OR...if the user has selected no scripts for their favorite, the file will be deleted to 
-	'>>> prevent the Favorites Menu from erroring out.
-	'>>> Experience with worker_signature automation tells us that if the text file is blank, the favorites menu doth not work.
-	oTxtFile.DeleteFile(favorites_text_file_location)
-	script_end_procedure("You have updated your Favorites Menu, but you haven't selected any scripts. The next time you use the Favorites scripts, you will need to select your favorites.")
-END IF
-
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VERY TEMPORARY THIS WILL BE BETTER
-Else
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NOW THE VIEW LOGIC
-
-
-
-
-
-
-
-
-
+'========================================================================================================
+'========================================================================================================
+'========================================================================================================
+'========================================================================================================
+'================================================================================== NOW THE ACTUAL SCRIPT
+'========================================================================================================
+'========================================================================================================
+'========================================================================================================
+'========================================================================================================
 
 '>>> Our script arrays. 
 '>>> all_scripts_array will be built from the contents of the user's text file
@@ -767,7 +736,7 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 	'>>> Giving user has the option of updating their favorites menu.
 	'>>> We should try to incorporate the chainloading function of the new script_end_procedure to bring the user back to their favorites.
 	IF buttonpressed = update_favorites_button THEN 
-		call run_another_script(network_location_of_select_favorites_script)
+		call edit_favorites
 		StopScript
 	End if
 	'>>> This tells the script which PushButton has been selected.
@@ -831,4 +800,4 @@ End if
 
 
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< AGAIN, VERY TEMPORARY
-END IF
+'END IF
