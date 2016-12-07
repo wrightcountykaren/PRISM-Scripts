@@ -1,4 +1,5 @@
-'TODO: ensure the array stores the hotkey choice (3) and program it to add an option to add a hotkey
+'TODO: make the hotkey dialog do something
+'TODO: create hotkey file
 'TODO: make sure file names display clearly in the display dialog
 'TODO: work in agency-customizable mandatory script lists
 
@@ -45,6 +46,57 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'This function simply displays a list of hotkeys, and the user can insert screens-to-navigate-to within
+function edit_hotkeys
+	'Instructional MsgBox
+	MsgBox  "This section will add PRISM screens to hotkey combinations!" & vbNewLine & vbNewLine & _
+			"To use it, simply insert the four-character PRISM screen you'd like to navigate to when pressing the specific key combination." & vbNewLine & vbNewLine & _
+			"So, for example, to navigate to CAAD every time Ctrl-F1 is pressed, simply type ""CAAD"" in the editbox." & vbNewLine & vbNewLine & _
+			"When you are finished, the script will add a hotkeys file to your My Documents folder, which will store your choices."
+			
+	'A dialog
+	BeginDialog hotkey_selection_dialog, 0, 0, 116, 285, "Hotkey Selection Dialog"
+	  Text 15, 10, 30, 10, "Hotkey:"
+	  Text 55, 5, 55, 20, "PRISM screen to navigate to:"
+	  Text 15, 30, 25, 10, "Ctrl-F1:"
+	  Text 15, 50, 25, 10, "Ctrl-F2:"
+	  Text 15, 70, 25, 10, "Ctrl-F3:"
+	  Text 15, 90, 25, 10, "Ctrl-F4:"
+	  Text 15, 110, 25, 10, "Ctrl-F5:"
+	  Text 15, 130, 25, 10, "Ctrl-F6:"
+	  Text 15, 150, 25, 10, "Ctrl-F7:"
+	  Text 15, 170, 25, 10, "Ctrl-F8:"
+	  Text 15, 190, 25, 10, "Ctrl-F9:"
+	  Text 10, 210, 30, 10, "Ctrl-F10:"
+	  Text 10, 230, 30, 10, "Ctrl-F11:"
+	  Text 10, 250, 30, 10, "Ctrl-F12:"
+	  EditBox 55, 25, 55, 15, ctrl_f1_hotkey_choice
+	  EditBox 55, 45, 55, 15, ctrl_f2_hotkey_choice
+	  EditBox 55, 65, 55, 15, ctrl_f3_hotkey_choice
+	  EditBox 55, 85, 55, 15, ctrl_f4_hotkey_choice
+	  EditBox 55, 105, 55, 15, ctrl_f5_hotkey_choice
+	  EditBox 55, 125, 55, 15, ctrl_f6_hotkey_choice
+	  EditBox 55, 145, 55, 15, ctrl_f7_hotkey_choice
+	  EditBox 55, 165, 55, 15, ctrl_f8_hotkey_choice
+	  EditBox 55, 185, 55, 15, ctrl_f9_hotkey_choice
+	  EditBox 55, 205, 55, 15, ctrl_f10_hotkey_choice
+	  EditBox 55, 225, 55, 15, ctrl_f11_hotkey_choice
+	  EditBox 55, 245, 55, 15, ctrl_f12_hotkey_choice
+	  ButtonGroup ButtonPressed
+	    OkButton 5, 265, 50, 15
+	    CancelButton 60, 265, 50, 15
+	EndDialog
+	
+	'Show the dialog
+	Dialog hotkey_selection_dialog
+	If ButtonPressed = cancel then StopScript
+	
+	'Edit the hotkey file
+	
+	'Somehow program the redirects to look at that file and do the magic
+
+end function
+
 '====================================================================================
 '====================================================================================
 'This VERY VERY long function contains all of the logic behind editing the favorites.
@@ -88,11 +140,8 @@ function edit_favorites
 	END IF
 
 	'Warning/instruction box
-	MsgBox "This script will display a dialog with various scripts on it."  & vbNewLine &_
-			"Any script you check will be added to your favorites menu.  " & vbNewline &_
-			"Scripts you un-check will be removed. Once you are done " & vbNewLine &_
-			"making your selection hit OK and your menu will be updated. " & vbNewLine & vbNewLine &_
-			"- You will be unable to edit NEW Scripts and Recommended Scripts."
+	MsgBox  "This section will display a dialog with various scripts on it. Any script you check will be added to your favorites menu. Scripts you un-check will be removed. Once you are done making your selection hit ""OK"" and your menu will be updated. " & vbNewLine & vbNewLine &_
+			"Note: you will be unable to edit the list of NEW Scripts and Recommended Scripts."
 
 	'An array containing details about the list of scripts, including how they are displayed and stored in the favorites tag
 	'0 => The script name
@@ -726,7 +775,8 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 		IF calc_count <> 0 THEN GroupBox 5, bulk_end_row + 10, 195, (15 + (10 * calc_count)), "CALCULATORS"
 		IF notes_count <> 0 THEN GroupBox 5, calc_end_row + 10, 195, (15 + (10 * notes_count)), "NOTES"
         IF utilities_count <> 0 THEN GroupBox 5, notes_end_row + 10, 195, (15 + (10 * utilities_count)), "UTILITIES"
-		PushButton 210, dlg_height - 25, 70, 15, "Update Favorites", update_favorites_button
+		PushButton 210, dlg_height - 25, 65, 15, "Update Favorites", update_favorites_button
+		PushButton 285, dlg_height - 25, 60, 15, "Update Hotkeys", update_hotkeys_button
 		CancelButton 355, dlg_height - 25, 50, 15
 	EndDialog
 	
@@ -738,6 +788,9 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 	'>>> We should try to incorporate the chainloading function of the new script_end_procedure to bring the user back to their favorites.
 	IF buttonpressed = update_favorites_button THEN 
 		call edit_favorites
+		StopScript
+	ElseIf buttonpressed = update_hotkeys_button then
+		call edit_hotkeys
 		StopScript
 	End if
 	'>>> This tells the script which PushButton has been selected.
