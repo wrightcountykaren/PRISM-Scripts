@@ -175,7 +175,7 @@ dia_width = 400
 'VKC - removed old functionality to determine dynamically the width. This will need to be redetermined based on the number of scripts, but I am holding off on this until I know all of the content I'll jam in here. -11/29/2016
 
 '>>> Building the dialog
-BeginDialog fav_dlg, 0, 0, dia_width, 440, "Select your favorites"
+BeginDialog build_new_favorites_dialog, 0, 0, dia_width, 440, "Select your favorites"
 	ButtonGroup ButtonPressed
 		OkButton 5, 5, 50, 15 
 		CancelButton 55, 5, 50, 15
@@ -389,7 +389,7 @@ EndDialog
 DO
 	DO
 		'>>> Running the dialog
-		Dialog fav_dlg
+		Dialog build_new_favorites_dialog
 		'>>> Cancel confirmation
 		IF ButtonPressed = 0 THEN 
 			confirm_cancel = MsgBox("Are you sure you want to cancel? Press YES to cancel the script. Press NO to return to the script.", vbYesNo)
@@ -707,7 +707,7 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 	END IF
 	
 	'>>> The dialog
-	BeginDialog favorites_dlg, 0, 0, 411, dlg_height, dlg_name & " "
+	BeginDialog favorites_dialog, 0, 0, 411, dlg_height, dlg_name & " "
   	  ButtonGroup ButtonPressed
 		'>>> User's favorites
 		'>>> Here, we are using the value for the script type start_row to determine the vertical position of each pushbutton.
@@ -761,7 +761,7 @@ FUNCTION favorite_menu(user_scripts_array, mandatory_array, new_array, script_lo
 	EndDialog
 	
 	'>>> Loading the favorites dialog
-	DIALOG favorites_dlg
+	DIALOG favorites_dialog
 	'>>> Cancelling the script if ButtonPressed = 0
 	IF ButtonPressed = 0 THEN stopscript
 	'>>> Giving user has the option of updating their favorites menu.
