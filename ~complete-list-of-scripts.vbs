@@ -62,15 +62,6 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Court Prep Worksheet"
-cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Leads you through performing a COLA. Adds CAAD note when completed."
-cs_scripts_array(script_num).release_date		= #01/01/2000#
-cs_scripts_array(script_num).scriptwriter		= "Runs a court prep worksheet in anticipation of court dates, getting info from PRISM and putting it into a Word doc."
-
-script_num = script_num + 1
-ReDim Preserve cs_scripts_array(script_num)
-SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Emancipation DORD docs"
 cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Sends emancipation DORD docs."
