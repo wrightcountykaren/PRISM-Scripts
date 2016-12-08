@@ -148,6 +148,15 @@ cs_scripts_array(script_num).category			= "actions"
 cs_scripts_array(script_num).description		= "Generates Word document regarding payments CP has received on their case."
 cs_scripts_array(script_num).release_date		= #11/14/2016#
 cs_scripts_array(script_num).scriptwriter		= ""																
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Interview Information Sheet"
+cs_scripts_array(script_num).category			= "actions"
+cs_scripts_array(script_num).description		= "Creates a Word document with general and case-specific information to be used as a reference when meeting with clients."
+cs_scripts_array(script_num).release_date		= #12/08/2016#
+cs_scripts_array(script_num).scriptwriter		= ""
 																	
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
