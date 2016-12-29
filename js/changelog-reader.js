@@ -1,3 +1,4 @@
+// TODO: this isn't working in IE??
 // TODO: add "about scripts" page
 // TODO: add footer to all docs
 // TODO: pretty up the html to view script title in a single header (this should borrow from the alpha split in FuncLib)
