@@ -3,7 +3,7 @@ name_of_script = "pa-program-reopen-review.vbs"
 start_time = timer 
 STATS_counter = 1
 STATS_manualtime = 205             
-STATS_denomination = "C"
+STATS_denomination = "I"
 'END OF STATS BLOCK-------------------------------------------------------------------------------------------------
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
