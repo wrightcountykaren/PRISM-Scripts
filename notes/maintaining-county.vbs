@@ -41,6 +41,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update ("01/18/2017", "Added DHS SIR button.", "Jodi Martin, Wright County")
 call changelog_update ("11/16/2016", "Initial version.", "Jodi Martin, Wright County")
 
 
