@@ -1,14 +1,6 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "MAINTAINING-COUNTY.vbs"
-start_time = timer
-STATS_counter = 1
-STATS_manualtime = 180
-STATS_denomination = "C"
-'END OF STATS BLOCK-------------------------------------------------------------------------------------------
+name_of_script = "maintaining-county.vbs"
 
-DIM beta_agency, row, col  
-
-Use_master_branch = true
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -39,7 +31,7 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 		fso_command.Close
 		Execute text_from_the_other_script
 	END IF
-END IF
+	END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
 
@@ -49,8 +41,8 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update ("11/16/2016", "Maintaining County", "Jodi Martin, Wright County")
-call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+call changelog_update ("11/16/2016", "Initial version.", "Jodi Martin, Wright County")
+
 
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
@@ -60,17 +52,18 @@ changelog_display
 'DIALOGS------------------------------------------------------------------------------------------------------------------
 
 'First Initial Dialog
-BeginDialog Main_question_dlg, 0, 0, 191, 140, "First_Main_cnty"
+BeginDialog Main_question_dlg, 0, 0, 226, 145, "Maintaining County"
   ButtonGroup ButtonPressed
     OkButton 75, 120, 50, 15
     CancelButton 135, 120, 50, 15
-  EditBox 80, 30, 90, 15, prism_case_number 
+  EditBox 80, 30, 90, 15, prism_case_number
   Text 5, 60, 180, 20, "Are you requesting a county to maintain the case or are you responding to a request to maintain a case?"
-  Text 50, 10, 105, 15, "Maintaining County CAAD note"
+  Text 15, 10, 105, 15, "Maintaining County CAAD note"
   DropListBox 35, 90, 115, 15, "Select one..."+chr(9)+"Requesting County"+chr(9)+"Responding County", script_run_mode
   Text 5, 35, 70, 10, "Prism case number"
+  ButtonGroup ButtonPressed
+    PushButton 145, 5, 60, 15, "DHS Sir-Milo Info", DHS_sir_button
 EndDialog
-
 
 
 'Requesting County Dialog
@@ -83,7 +76,7 @@ BeginDialog requesting_dlg, 0, 0, 256, 240, "Requesting County"
   CheckBox 15, 105, 140, 10, "CP is receiving PA in reviewing county", PA_reviewing
   CheckBox 15, 120, 175, 10, "Requesting County has not started any legal action", No_legal
   CheckBox 15, 135, 160, 10, "Reviewing County has an existing court order", Existing_order
-  CheckBox 15, 150, 220, 10, "Reviewing County has the companion case with controlling order", Compion_case
+  CheckBox 15, 150, 220, 10, "Reviewing County has the Companion case with controlling order", companion_case
   EditBox 90, 170, 145, 15, Additional_info
   EditBox 190, 190, 45, 15, worker_signature
   ButtonGroup ButtonPressed
@@ -135,17 +128,24 @@ CALL check_for_PRISM(True)
 CALL PRISM_case_number_finder(PRISM_case_number)
 
 'The script will not run unless the mandatory fields are completed
+
+
+'The script will not run unless the mandatory fields are completed
 DO
-	DIALOG Main_question_dlg
-	IF ButtonPressed = stop_script_button THEN stopscript
+	Do
+		DIALOG Main_question_dlg
+		IF ButtonPressed = 0 then stopscript
+		IF ButtonPressed = DHS_sir_button THEN CreateObject("WScript.Shell").Run("https://www.dhssir.cty.dhs.state.mn.us/PRISM/Documentation/Training/Job%20Aids/Forms/OnlyMaintainingCounty.aspx")
+	Loop until buttonpressed = ok
 	IF script_run_mode = "Select one..." THEN MsgBox "Please select a maintaining county action"
 LOOP UNTIL script_run_mode <> "Select one..."
 
 
-IF script_run_mode = "Requesting County" THEN
+
+	IF script_run_mode = "Requesting County" THEN
 	
 'Goes to CAAD
-CALL Navigate_to_PRISM_screen ("CAAD")											'goes to the CAAD screen
+	CALL Navigate_to_PRISM_screen ("CAAD")											'goes to the CAAD screen
 PF5																	'F5 to add a note
 EMWritescreen "A", 3, 29													'put the A on the action line
 
@@ -170,21 +170,21 @@ DO
 LOOP UNTIL err_msg = ""												 	
 
 'Writes info from dialog into CAAD
-CALL write_bullet_and_variable_in_CAAD("Requesting from CSO:", Request_From)
-CALL write_bullet_and_variable_in_CAAD("Requesting to CSO:", Request_To)
-CALL write_bullet_and_variable_in_CAAD("Requesting county:", Requesting_county)
-CALL write_bullet_and_variable_in_CAAD("Responding county:", Responding_county)
-If CP_in_county = checked then call write_variable_in_CAAD("CP is now living in the reviewing county")
-If PA_reviewing = 1 then call write_variable_in_CAAD("CP is receiving PA in reviewing county")
-If No_legal = 1 then call write_variable_in_CAAD("Requesting County has not started any legal action")
-If Existing_order = 1 then call write_variable_in_CAAD("Reviewing County has an existing court order")
-If Compion_case = 1 then call write_variable_in_CAAD("Reviewing County has the companion case with controlling order")
-CALL write_bullet_and_variable_in_CAAD("Additional Info", Additional_info)
-CALL write_variable_in_CAAD(worker_signature)
+	CALL write_bullet_and_variable_in_CAAD("Requesting from CSO:", Request_From)
+	CALL write_bullet_and_variable_in_CAAD("Requesting to CSO:", Request_To)
+	CALL write_bullet_and_variable_in_CAAD("Requesting county:", Requesting_county)
+	CALL write_bullet_and_variable_in_CAAD("Responding county:", Responding_county)
+	If CP_in_county = checked then call write_variable_in_CAAD("CP is now living in the reviewing county")
+	If PA_reviewing = 1 then call write_variable_in_CAAD("CP is receiving PA in reviewing county")
+	If No_legal = 1 then call write_variable_in_CAAD("Requesting County has not started any legal action")
+	If Existing_order = 1 then call write_variable_in_CAAD("Reviewing County has an existing court order")
+	If companion_case = 1 then call write_variable_in_CAAD("Reviewing County has the companion case with controlling order")
+	CALL write_bullet_and_variable_in_CAAD("Additional Info", Additional_info)
+	CALL write_variable_in_CAAD(worker_signature)
 
 transmit
 
-end if	
+	end if	
 	
 IF script_run_mode = "Responding County" THEN
 
@@ -196,7 +196,7 @@ DO
 LOOP UNTIL accept_deny <> "Select one..."
 
 'Goes to CAAD
-CALL Navigate_to_PRISM_screen ("CAAD")											'goes to the CAAD screen
+	CALL Navigate_to_PRISM_screen ("CAAD")											'goes to the CAAD screen
 PF5																	'F5 to add a note
 EMWritescreen "A", 3, 29													'put the A on the action line
 
@@ -204,18 +204,18 @@ EMWritescreen "A", 3, 29													'put the A on the action line
 EMWritescreen "T0098", 4, 54													'types T0098(CONTACT WITH WORKER FROM ANOTHER MN COUNTY)on caad code: line
 EMWritescreen "Maintaining County", 16, 4								 	     	 	'types Maintaining County on the first line of the note
 EMSetCursor 17, 4															' sets cursor on the 2nd line of the CAAD note
-CALL write_bullet_and_variable_in_CAAD ("Maintaining request is", accept_deny)
-CALL write_bullet_and_variable_in_CAAD("Reason", Reason_note)
-CALL write_bullet_and_variable_in_CAAD ("Transfer to county", Transfer_to)
-CALL write_bullet_and_variable_in_CAAD ("County", County_nbr)
-CALL write_bullet_and_variable_in_CAAD ("Office", Office_nbr)
-CALL write_bullet_and_variable_in_CAAD ("Team", Team_nbr)
-CALL write_bullet_and_variable_in_CAAD ("Position", Position_nbr)
-IF Transfer_tocheck = 1 THEN CALL write_variable_in_CAAD("Transfer to county:", Transfer_to)
-CALL write_variable_in_CAAD(worker_signature)
+	CALL write_bullet_and_variable_in_CAAD ("Maintaining request is", accept_deny)
+	CALL write_bullet_and_variable_in_CAAD("Reason", Reason_note)
+	CALL write_bullet_and_variable_in_CAAD ("Transfer to county", Transfer_to)
+	CALL write_bullet_and_variable_in_CAAD ("County", County_nbr)
+	CALL write_bullet_and_variable_in_CAAD ("Office", Office_nbr)
+	CALL write_bullet_and_variable_in_CAAD ("Team", Team_nbr)
+	CALL write_bullet_and_variable_in_CAAD ("Position", Position_nbr)
+	IF Transfer_tocheck = 1 THEN CALL write_variable_in_CAAD("Transfer to county:", Transfer_to)
+	CALL write_variable_in_CAAD(worker_signature)
 
 transmit
 
-end if
+	end if
 
 script_end_procedure("")
