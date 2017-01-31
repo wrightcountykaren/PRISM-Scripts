@@ -55,6 +55,9 @@ EDMS_choice = "Compass Pilot"
 'This is the county's email support address. It can be a distribution list or an individual.
 support_email_address = "jean.valjean@paris.fr"
 
+'This is a setting to determine if changes to scripts will be displayed in messageboxes in real time to end users
+changelog_enabled = true
+
 'ACTIONS TAKEN BASED ON COUNTY CUSTOM VARIABLES------------------------------------------------------------------------------
 '**DO NOT EDIT BELOW THIS LINE UNLESS YOU ARE ABSOLUTELY SURE OF WHAT YOU ARE DOING**
 
