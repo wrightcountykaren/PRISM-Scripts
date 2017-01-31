@@ -11,7 +11,7 @@ fso_command.Close																											'Close the other script file, and...
 Execute text_from_the_other_script
 
 'LOADING SCRIPT
-script_URL = script_repository & "/nav/uswd.vbs"
+script_URL = script_repository & "/favorites/ctrl-f6.vbs"
 IF run_locally = False THEN
 	SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
 	req.open "GET", script_URL, FALSE									'Attempts to open the URL
