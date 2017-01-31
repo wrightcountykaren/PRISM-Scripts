@@ -40,6 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+CALL changelog_update("01/18/2017", "The worker signature field should now auto-populate.", "Kelly Hiestand, Wright County")
 CALL changelog_update("11/30/2016", "The script has been updated to include a Requested Via drop down option of E-Filed. Signature Date has also been added to the order type field.", "Kelly Hiestand, Wright County")
 CALL changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
@@ -48,7 +49,7 @@ changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
 'DIMMING variables
-DIM row, col, case_number_valid, Court_Order_Request_Dialog, prism_case_number, date_court_order_requested, requested_via_droplistbox, requested_from, court_order_number, create_worklist_checkbox, worker_signature, order_type, ButtonPressed
+DIM row, col, case_number_valid, Court_Order_Request_Dialog, prism_case_number, date_court_order_requested, requested_via_droplistbox, requested_from, court_order_number, create_worklist_checkbox, order_type, ButtonPressed
 
 
 'THE DIALOG----------------------------------------------------------------------------------------------------------------------------------------------
