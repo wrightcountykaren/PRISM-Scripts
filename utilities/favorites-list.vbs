@@ -1,3 +1,4 @@
+'TODO: needs to know what to do if the favorites file doesn't yet exist!!
 'TODO: make the hotkey dialog do something
 'TODO: create hotkey file
 'TODO: make sure file names display clearly in the display dialog
