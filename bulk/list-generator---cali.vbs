@@ -40,7 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("02/14/2017", "The script has been updated to include double-checks so that the worker does not accidentally cancel the script. Additionally, the script has been updated to give the worker the ability to cancel the script after the second dialog.", "Robert Fewins-Kalb, Anoka County")
+call changelog_update("02/22/2017", "The script has been updated to include double-checks so that the worker does not accidentally cancel the script. Additionally, the script has been updated to give the worker the ability to cancel the script after the second dialog.", "Robert Fewins-Kalb, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
