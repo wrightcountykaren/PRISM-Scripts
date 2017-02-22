@@ -488,6 +488,15 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Maintaining County"
+cs_scripts_array(script_num).category			= "notes"
+cs_scripts_array(script_num).description		= "Creates CAAD note for requesting maintaining county."
+cs_scripts_array(script_num).release_date		= #02/22/2017#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "MES Financial Docs Sent"
 cs_scripts_array(script_num).category			= "notes"
 cs_scripts_array(script_num).description		= "Creates CAAD note for recording documents sent to parties."
