@@ -1,6 +1,6 @@
-'TODO: make the hotkey dialog do something
-'TODO: create hotkey file
-'TODO: make sure file names display clearly in the display dialog
+'TODO: create hotkey file (line 100)
+'TODO: make the hotkey dialog do something (line 100)
+'TODO: make sure file names display clearly in the display dialog (line 740)
 
 'STATS GATHERING--------------------------------------------------------------------------------------------------------------
 name_of_script = "favorites-list.vbs"
