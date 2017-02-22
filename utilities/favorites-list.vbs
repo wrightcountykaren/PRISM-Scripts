@@ -97,7 +97,23 @@ function edit_hotkeys
 	Dialog hotkey_selection_dialog
 	If ButtonPressed = cancel then StopScript
 
-	'Edit the hotkey file
+	'>>> If the user has already selected their hotkeys, the script will open that file and
+	'>>> and read it, storing the contents in the variable name ''user_scripts_array''
+	SET oTxtFile = (CreateObject("Scripting.FileSystemObject"))
+	With oTxtFile
+		If .FileExists(hotkeys_text_file_location) Then
+			Set hotkeys = CreateObject("Scripting.FileSystemObject")
+			Set hotkeys_command = hotkeys.OpenTextFile(hotkeys_text_file_location)
+			hotkeys_array = hotkeys_command.ReadAll
+			hotkeys_command.Close
+		Else
+			MsgBox "file not found"
+			Set hotkeys = CreateObject("Scripting.FileSystemObject")
+			Set hotkeys_command = hotkeys.CreateTextFile(hotkeys_text_file_location)
+			hotkeys_command.Write("Hey")
+			hotkeys_command.Close
+		End if
+	END WITH
 
 	'Somehow program the redirects to look at that file and do the magic
 
@@ -474,6 +490,7 @@ Set wshshell = CreateObject("WScript.Shell")
 user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
 
 favorites_text_file_location = user_myDocs_folder & "\scripts-cs-favorites.txt"
+hotkeys_text_file_location = user_myDocs_folder & "\scripts-cs-hotkeys.txt"
 
 'switching up the script_repository because the all scripts file is not in the Script Files folder
 all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
