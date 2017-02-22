@@ -1,8 +1,6 @@
-'TODO: needs to know what to do if the favorites file doesn't yet exist!!
 'TODO: make the hotkey dialog do something
 'TODO: create hotkey file
 'TODO: make sure file names display clearly in the display dialog
-'TODO: work in agency-customizable mandatory script lists
 
 'STATS GATHERING--------------------------------------------------------------------------------------------------------------
 name_of_script = "favorites-list.vbs"
@@ -46,13 +44,13 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("01/31/2017", "Initial version.", "Veronica Cary, DHS")
+call changelog_update("02/22/2017", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
-script_end_procedure("Favorites button is coming soon! - Veronica Cary (01/31/2017)")
+'script_end_procedure("Favorites button is coming soon! - Veronica Cary (01/31/2017)")
 
 'This function simply displays a list of hotkeys, and the user can insert screens-to-navigate-to within
 function edit_hotkeys
@@ -835,7 +833,7 @@ With (CreateObject("Scripting.FileSystemObject"))
 		fav_scripts_command.Close
 	ELSE
 		'>>> ...otherwise, if the file does not exist, the script will require the user to select their favorite scripts.
-		run_another_script(network_location_of_select_favorites_script)
+		call edit_favorites
 	END IF
 END WITH
 
