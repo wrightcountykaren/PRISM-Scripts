@@ -307,6 +307,15 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
+cs_scripts_array(script_num).script_name		= "Review Case No Payment"
+cs_scripts_array(script_num).category			= "bulk"
+cs_scripts_array(script_num).description		= "Reviews all E0002 worklists and copies the Worklists Date, Case Number, NCP Name, File Location, Last NCP Contact in 90 days, NCP's Phone Number into a spreadsheet and purges the worklists"
+cs_scripts_array(script_num).release_date		= #01/01/2000#
+cs_scripts_array(script_num).scriptwriter		= ""
+
+script_num = script_num + 1
+ReDim Preserve cs_scripts_array(script_num)
+SET cs_scripts_array(script_num) = NEW cs_script
 cs_scripts_array(script_num).script_name		= "Review Pay Plan - DL is Suspended"
 cs_scripts_array(script_num).category			= "bulk"
 cs_scripts_array(script_num).description		= "Scrubs E4111 (REVW Pay Plan) workflists when DL is already suspended."
