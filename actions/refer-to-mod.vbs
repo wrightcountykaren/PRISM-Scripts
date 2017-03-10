@@ -153,6 +153,7 @@ CLASS doc_info
 		EMReadScreen known, 1, 10, 46
 		IF known = "Y" THEN
 			EMReadScreen cp_zip, 10, 17, 50
+			cp_zip = fix_read_data(cp_zip)
 		ELSE
 		cp_zip = "ZIP"
 		END IF
@@ -273,6 +274,7 @@ CLASS doc_info
 		EMReadScreen known, 1, 10, 46
 		IF known = "Y" THEN
 			EMReadScreen ncp_zip, 10, 17, 50
+			ncp_zip = fix_read_data(ncp_zip)
 		ELSE
 			ncp_zip = "ZIP"
 		END IF
