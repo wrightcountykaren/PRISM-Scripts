@@ -1,5 +1,3 @@
-
-
 'GATHERING STATS----------------------------------------------------------------------------------------------------
 name_of_script = "refer-to-mod.vbs"
 start_time = timer
@@ -42,16 +40,12 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("01/26/2017", "Initial version.", "Wendy LeVesseur, Anoka County")
+call changelog_update("03/10/2017", "Initial version.", "Wendy LeVesseur, Anoka County")
 
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
-
-'VARIABLES THAT NEED DECLARING----------------------------------------------------------------------------------------------------
-checked = 1
-unchecked = 0
 
 
 '------Start of Class definitions--------------------------------------------------------------------------------
@@ -115,7 +109,12 @@ CLASS doc_info
 		IF known = "Y" THEN
 			EMReadScreen cp_addr1, 30, 15, 11
 			EMReadScreen cp_addr2, 30, 16, 11
-			cp_addr = replace(cp_addr1, "_", "") & ", " & replace(cp_addr2, "_", "")
+			cp_addr2 = replace(cp_addr2, "_", "")
+				IF cp_addr2 <> "" THEN
+					cp_addr = replace(cp_addr1, "_", "") & ", " & replace(cp_addr2, "_", "")
+				ELSE
+					cp_addr = replace (cp_addr1, "_", "")
+				END IF
 			cp_addr = fix_read_data(cp_addr)
 		ELSE
 			cp_addr = "Unknown Address"
@@ -230,7 +229,12 @@ CLASS doc_info
 		IF known = "Y" THEN
 			EMReadScreen ncp_addr1, 30, 15, 11
 			EMReadScreen ncp_addr2, 30, 16, 11
-			ncp_addr = replace(ncp_addr1, "_", "") & ", " & replace(ncp_addr2, "_", "")
+			ncp_addr2 = replace(ncp_addr2, "_", "")
+				IF ncp_addr2 <> "" THEN
+					ncp_addr = replace(ncp_addr1, "_", "") & ", " & replace(ncp_addr2, "_", "")
+				ELSE
+					ncp_addr = replace (ncp_addr1, "_", "")
+				END IF
 			ncp_addr = fix_read_data(ncp_addr)
 		ELSE
 			ncp_addr = "Unknown Address"
@@ -324,7 +328,7 @@ BeginDialog Mod_info_dialog, 0, 0, 321, 195, "Mod Actions Dialog"
   CheckBox 180, 80, 125, 10, "Send FPLS request for child(ren)", CH_CHMR_check
   CheckBox 10, 95, 165, 10, "Update Notice of Review with Mod Worker Info", update_mod_worker
   CheckBox 180, 95, 125, 10, "Create followup worklist", CAWD_check
-  DropListBox 90, 125, 90, 10, "Select one"+chr(9)+"Theresa Hogan"+chr(9)+"Terri Spence-Garski"+chr(9)+"Karla Wangrud", mod_worker
+  DropListBox 90, 125, 90, 10, "Select one"+chr(9)+"Theresa Hogan"+chr(9)+"Terri Spence-Garski"+chr(9)+"Kelly Rein"+chr(9)+"Karla Wangrud", mod_worker
   EditBox 100, 150, 90, 15, caad_note_text
   ButtonGroup ButtonPressed
     OkButton 205, 170, 50, 15
@@ -354,7 +358,7 @@ EMConnect ""
 
 continue = msgbox ("Run this script after you have entered the REAM for initiating an agency review.  This script can help send out documents " &_
 	"in preparation for modification of court orders and send manual locate requests to obtain social security information. Please click OK to continue or Cancel to stop the script.", 1)
-IF continue = 2 THEN
+IF continue = vbCancel THEN
 	script_end_procedure("The script is now ending.  Action has been cancelled.")
 END IF	
 
@@ -434,6 +438,7 @@ worker_telephone = info.worker_phone
 NCP_EVR_SENT = True
 CP_EVR_SENT = True
 CHMR_SENT = True
+NCP_NCMR_SENT = True
 
 'Creating selected Word documents and populating fields with data
 If child_care_verification_check = checked then
@@ -472,7 +477,7 @@ If CP_special_assessment_check = checked then
 		.FormFields("other_party6").Result = NCP_name
 		.FormFields("due_date").Result = dateadd("d", date, 7)
 		.FormFields("due_date1").Result = dateadd("d", date, 7)
-		.FormFields("CaseWorkerName").Result = workers_name
+		'.FormFields("CaseWorkerName").Result = workers_name
 		.FormFields("CaseWorkerPhone").Result = worker_telephone
 	End With
 End if
@@ -497,7 +502,7 @@ If NCP_special_assessment_check = checked then
 		.FormFields("other_party6").Result = CP_name
 		.FormFields("due_date").Result = dateadd("d", date, 7)
 		.FormFields("due_date1").Result = dateadd("d", date, 7)
-		.FormFields("CaseWorkerName").Result = workers_name
+		'.FormFields("CaseWorkerName").Result = workers_name
 		.FormFields("CaseWorkerPhone").Result = worker_telephone
 	End With
 End if
@@ -647,6 +652,8 @@ IF NCP_NCMR_check = checked THEN
 	EMWriteScreen ssn3, 11, 14
 	EMWriteScreen NCP_ln, 9, 8
 	EMWriteScreen NCP_fn, 9, 33
+	EMSetCursor 4, 36
+	EMSendKey "<EraseEof>"
 	transmit
 
 	'Check for error messages and produce a message box to alert user if an error is rec'd.
@@ -688,6 +695,8 @@ IF CH_CHMR_check = checked THEN
 				EMWriteScreen "A", 3, 29
 				EMWriteScreen child_mci, 4, 7
 				EMWriteScreen "FPL", 4, 27
+				EMSetCursor 4, 36
+				EMSendKey "<EraseEof>"
 				transmit
 				
 				'Check for error messages and produce a message box to alert user if an error is rec'd.
@@ -700,6 +709,8 @@ IF CH_CHMR_check = checked THEN
 					Msgbox "Unable to send a FPLS CHMR for " & child_name & ".  Error message rec'd: " & vbCr & vbCr & message 
 					CHMR_SENT = FALSE
 					children_not_sent = children_not_sent & " " & child_name & "-"
+				ELSE
+					children_sent = children_sent & " " & child_name & "-"	
 				END IF
 		END IF		
 		call navigate_to_PRISM_screen("CHDE")
@@ -770,6 +781,13 @@ IF update_mod_worker = checked THEN
 					transmit
 					EMWriteScreen "763-323-6056", 16, 15				
 					transmit
+				ELSEIF mod_worker = "Kelly Rein" THEN
+					EMWriteScreen "Kelly Rein                  ", 16, 15
+					transmit
+					EMWriteScreen "Expedited Process Specialist", 16, 15
+					transmit
+					EMWriteScreen "763-323-6059", 16, 15					 
+					transmit
 				ELSEIF mod_worker = "Karla Wangrud" THEN
 					EMWriteScreen "Karla Wangrud            ", 16, 15
 					transmit
@@ -817,7 +835,7 @@ If CAWD_check = checked then
 	'Then, add worklist
 	PF5
 	EMWriteScreen "FREE", 4, 37
-	EMWriteScreen "*** Requested Mod documents received from the parties?", 10, 4
+	EMWriteScreen "*** Special Services assessment received from the parties?", 10, 4
 	EMWriteScreen dateadd("d", date, 7), 17, 21
 	transmit
 End if
@@ -848,7 +866,7 @@ If case_activity_detail <> "Case Activity Detail" then script_end_procedure("The
 		IF CHMR_SENT = FALSE THEN
 			call write_variable_in_CAAD("* Error sending manual FPLS locate sent for child(ren):" & children_not_sent)
 		ELSE
-			call write_variable_in_CAAD("* Manual FPLS locate sent for child(ren)")
+			call write_variable_in_CAAD("* Manual FPLS locate sent for child(ren):" & children_sent)
 		END IF
 	END IF
 	if NCP_NCMR_check = checked then
@@ -884,3 +902,7 @@ If case_activity_detail <> "Case Activity Detail" then script_end_procedure("The
 	call write_variable_in_CAAD(worker_signature)
 
 script_end_procedure("The script is now ending.  Please save your CAAD note.")
+
+
+
+
