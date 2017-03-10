@@ -442,7 +442,7 @@ NCP_NCMR_SENT = True
 
 'Creating selected Word documents and populating fields with data
 If child_care_verification_check = checked then
-	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Childcare Verification Letter.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Childcare-Verification-Letter.dotm")
 	With objDoc
 		.FormFields("CPName").Result = CP_name 
 		.FormFields("CPName1").Result = CP_name
@@ -458,7 +458,7 @@ If child_care_verification_check = checked then
 End if
 
 If CP_special_assessment_check = checked then
-	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Special Services Assessment - cover letter and assessment.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Special-Services-Assessment-cover-letter-and-assessment.dotm")
 	With objDoc
 		.FormFields("party_name").Result = CP_name
 		.FormFields("party_name1").Result = CP_name
@@ -483,7 +483,7 @@ If CP_special_assessment_check = checked then
 End if
 
 If NCP_special_assessment_check = checked then
-	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Special Services Assessment - cover letter and assessment.dotm")
+	set objDoc = objWord.Documents.Add(word_documents_folder_path & "Special-Services-Assessment-cover-letter-and-assessment.dotm")
 	With objDoc
 		.FormFields("party_name").Result = NCP_name
 		.FormFields("party_name1").Result = NCP_name
