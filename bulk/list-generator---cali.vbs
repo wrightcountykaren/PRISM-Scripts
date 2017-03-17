@@ -1,7 +1,6 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "BULK - CALI TO EXCEL.vbs"
+name_of_script = "list-generator---cali.vbs"
 start_time = timer
-'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -34,6 +33,19 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 	END IF
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
+
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("02/22/2017", "The script has been updated to include double-checks so that the worker does not accidentally cancel the script. Additionally, the script has been updated to give the worker the ability to cancel the script after the second dialog.", "Robert Fewins-Kalb, Anoka County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
 
 Dim CAFS_checkbox
 
@@ -88,10 +100,11 @@ EMConnect ""
 check_for_PRISM(TRUE)
 
 DIALOG CALI_to_excel_Dialog
-	IF ButtonPressed = 0 THEN StopScript
+	cancel_confirmation
 
 	IF action_dropdown = "Run for another CALI list" THEN
 		Dialog CALI_selection_dialog
+		cancel_confirmation
 	END IF
 
 	EMReadScreen check_for_position_list, 22, 8, 36

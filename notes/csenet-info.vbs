@@ -1,7 +1,6 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "NOTES - CSENET INFO.vbs"
+name_of_script = "csenet-info.vbs"
 start_time = timer
-'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -35,11 +34,21 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+CALL changelog_update("01/18/2017", "The worker signature should now auto-populate.", "Kelly Hiestand, Wright County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
+
 'DIMMING VARIABLES-------------------------------------------------------------------------------------------------------------------------------------
-
-DIM prism_case_number, csenet_total, csenet_info_dialog, ButtonPressed, write_new_line_in_CAAD, csenet_sent_recd, reason_code_line, row, col, beta_agency, worker_signature, case_number_valid, csenet_dateline, csenet_line_01, csenet_line_02, csenet_line_03, csenet_line_04, csenet_line_05
-
-
+DIM prism_case_number, csenet_total, csenet_info_dialog, ButtonPressed, write_new_line_in_CAAD, csenet_sent_recd, reason_code_line, row, col, beta_agency, case_number_valid, csenet_dateline, csenet_line_01, csenet_line_02, csenet_line_03, csenet_line_04, csenet_line_05
 
 'THE DIALOG-------------------------------------------------------------------------------------------------------------------------------------------
 

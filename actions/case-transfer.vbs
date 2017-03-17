@@ -1,6 +1,7 @@
 'Gathering stats-------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - CASE TRANSFER.vbs"
+name_of_script = "case-transfer.vbs"
 start_time = timer
+
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -34,6 +35,22 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+CALL changelog_update("01/18/2017", "A bug was fixed in this script to require the team field have 3 characters.", "Kelly Hiestand, Wright County")
+call changelog_update("11/16/2016", "County, Office, Team and Position fields now have length requirements.", "Kelly Hiestand, Wright County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
+
 
 'THE DIALOG------------------------------------------------------------------------------------------
 'Single case transfer dialog is here
@@ -41,7 +58,7 @@ BeginDialog Case_Transfer_dialog, 0, 0, 316, 160, "Case Transfer"
   EditBox 85, 5, 80, 15, prism_case_number
   EditBox 50, 45, 35, 15, county
   EditBox 50, 65, 35, 15, office
-  EditBox 50, 85, 35, 15, Team:
+	EditBox 50, 85, 35, 15, team
   EditBox 50, 105, 35, 15, Position
   EditBox 130, 45, 175, 15, transfer_reason
   DropListBox 190, 70, 85, 15, "Select One..."+chr(9)+"Internal"+chr(9)+"External", transfer_type
@@ -87,6 +104,10 @@ DO
 	IF ButtonPressed = 0 THEN StopScript
 	CALL PRISM_case_number_validation(PRISM_case_number, case_number_valid)
 	IF case_number_valid = False THEN err_msg = err_msg & vbNewline & "You must enter a valid PRISM case number!"
+	IF len(county)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character county code!"
+	If len(office)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character office code!"
+	If len(team)<> 3 then err_msg = err_msg & vbNewline & "You must enter a 3 character team code!"
+	If len(position)<> 2 then err_msg = err_msg & vbNewline & "You must enter a 2 character position code!"
 	IF transfer_reason = "" THEN err_msg = err_msg & VbNewline & "You must type a Transfer Reason!"
 	IF transfer_type = "Select One..." THEN err_msg = err_msg & VbNewline & "You must select the Type of Transfer!"
 	IF worker_signature = "" THEN err_msg = err_msg & VbNewline & "You must sign your CAAD note!"
@@ -135,5 +156,3 @@ transmit
 MsgBox "Success! The case has been transferred and CAAD noted."
 
 script_end_procedure("")
-
-

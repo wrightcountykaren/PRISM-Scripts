@@ -1,6 +1,5 @@
-'Option Explicit  -- COMMENTED OUT PER VKC REQUEST
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "ACTIONS - PRORATE SUPPORT.vbs"
+name_of_script = "prorate-support.vbs"
 start_time = timer
 'MANUAL TIME TO COMPLETE THIS SCRIPT IS NEEDED
 
@@ -36,21 +35,34 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded
 END IF
 'END FUNCTIONS LIBRARY BLOCK================================================================================================
 
+'CHANGELOG BLOCK ===========================================================================================================
+'Starts by defining a changelog array
+changelog = array()
+
+'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
+'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+
+'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
+changelog_display
+'END CHANGELOG BLOCK =======================================================================================================
+
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
 Dim prorate_dialog, number_days, obligation_amt, month_to_prorate, days_in_month, leap_year, prorate_amt, ButtonPressed
 
 
 'DIALOGS----------------------------------------------------------------------------------------------------
-BeginDialog prorate_dialog, 0, 0, 221, 145, "Prorate Support"
-  EditBox 115, 5, 65, 15, obligation_amt
+BeginDialog prorate_dialog, 0, 0, 216, 130, "Prorate Support"
+  Text 5, 5, 100, 15, "Enter the monthly obligation amount to be prorated:"
+  ButtonGroup ButtonPressed
+    CancelButton 155, 110, 50, 15
+  Text 5, 35, 110, 20, "Please select the month you would like to prorate support for:"
   DropListBox 115, 40, 65, 15, "January"+chr(9)+"February"+chr(9)+"March"+chr(9)+"April"+chr(9)+"May"+chr(9)+"June"+chr(9)+"July"+chr(9)+"August"+chr(9)+"September"+chr(9)+"October"+chr(9)+"November"+chr(9)+"December", month_to_prorate
+  Text 5, 75, 100, 20, "How many days is the party entitled to support?"
   EditBox 115, 80, 35, 15, number_days
   ButtonGroup ButtonPressed
-    CancelButton 100, 110, 50, 15
-    OkButton 155, 110, 50, 15
-  Text 5, 5, 100, 15, "Enter the monthly obligation amount to be prorated:"
-  Text 5, 75, 100, 20, "How many days is the party entitled to support?"
-  Text 5, 35, 110, 20, "Please select the month you would like to prorate support for:"
+    OkButton 100, 110, 50, 15
+  EditBox 115, 5, 65, 15, obligation_amt
 EndDialog
 
 
