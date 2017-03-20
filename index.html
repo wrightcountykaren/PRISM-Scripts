@@ -16,6 +16,9 @@
 	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
 	  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	
+	<!-- Bootstrap datepicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" integrity="sha256-LPN+eTpTPBqagrVriv55Ec3nMrGY4CdujtnzMBrAwMA=" crossorigin="anonymous" />
 
 	<!-- Google fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Oxygen:300,400,700|Source+Sans+Pro:400,700|Source+Code+Pro:400,700" rel="stylesheet">
@@ -27,7 +30,11 @@
 	<link rel="shortcut icon" type="image/png" href="img/BlueZoneScripts.png"/>
 
 	<!--Hit our custom JavaScript-->
-	<script src="js/changelog-reader.js" charset="utf-8"></script>
+	<script src="js/changelog-reader.js" charset="utf-8"></script>	
+	
+	<!--Hit moment.js-->
+	<script src="js/moment.min.js" charset="utf-8"></script>	
+	
 </head>
 
 
@@ -80,11 +87,22 @@
 			</div>
 		</div>
 		<hr>
+		<form class="row" id="search-form">
+			<div class="col-xs-12 col-sm-4" id="sandbox-container">
+				<div class="input-daterange input-group" id="datepicker">
+					<label for="start" class="sr-only">Start date</label>
+		    		<input type="text" class="input-sm form-control" name="start" id="start" />
+		    		<span class="input-group-addon">to</span>
+					<label for="end" class="sr-only">End date:</label>
+		    		<input type="text" class="input-sm form-control" name="end" id="end" />
+				</div>
+				<p>Select a date range to search for script changes.</p>
+			</div>
+			<input type="button" onclick="displayChangelogInfo()" class="btn btn-primary btn-sm" value="Submit" />
+		</form>
+		<hr />
 
 		<span id="changelogContents">
-			<div id="loading">
-				<img id="loading-image" src="img/loading.gif" alt="Loading..." />
-			</div>
 
 		</span>
 
@@ -96,9 +114,18 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-	<!-- Run our custom JavaScript function to modify the findlibContents span with actual stuff -->
-	<script type="text/javascript">displayChangelogInfo();</script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" integrity="sha256-zXNrZH6Aqd2T5QyZumro0VuxbhdKhOiQhxtw6YxgjUM=" crossorigin="anonymous"></script>
+	
+	<!-- jQuery for the datepicker -->
+	<script>
+		$(function(){
+			$('#search-form .input-daterange').datepicker({
+				maxViewMode: 2,
+    			todayBtn: "linked"
+			});
+		});
+	</script>
 
 </body>
 </html>

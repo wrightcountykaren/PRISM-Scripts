@@ -1,4 +1,3 @@
-// TODO: determine dates in a cleaner way, with filtering and formatting custom to the user (last 3 months, etc)
 // TODO: add a feature to switch branches (master or insert your own)
 // TODO: pretty up the html, follow new color guidelines and other standards from style guide
 
@@ -22,9 +21,27 @@ function msieversion() {
 
 function displayChangelogInfo() {
     
+    // Get the span for changelog contents, which is adds to later when we've retrieved details.
     var listOfScriptsHTML = document.getElementById("changelogContents");
     
+    // Removes any existing details in the HTML doc (in case the report is re-run without refreshing)
+    listOfScriptsHTML.innerHTML = "";
+    
+    // Adds a loading spinner
+    listOfScriptsHTML.insertAdjacentHTML('beforeend', 
+        '<div id="loading"><img id="loading-image" src="img/loading.gif" alt="Loading..." /></div>'
+    );
+    
+    // Storing the changelog_update string in a variable, which we'll use in our regex search later
     var functionToCheckFor = "changelog_update";
+    
+    // Gets the user-input from date picker, both begin and end
+    var beginDateString = document.getElementById("start").value;
+    var endDateString = document.getElementById("end").value;
+    
+    // Converts strings into proper date objects using moment.js
+    var momentBeginDateObj = moment(beginDateString, 'MM/DD/YYYY');
+    var momentEndDateObj = moment(endDateString, 'MM/DD/YYYY');
     
     // read text from URL location to get the list of scripts
     var request = new XMLHttpRequest();
@@ -97,10 +114,11 @@ function displayChangelogInfo() {
                                         var changelogEntryText = changelogEntryArray[3];            // item [3] is the entry text
                                         var changelogEntryScriptwriter = changelogEntryArray[5];    // item [5] is the entry scriptwriter
                                         
-                                        var today = new Date();                            
-                                        var changelogDateDiff = parseInt((today - changelogEntryDate)/(1000*60*60*24));
-                                        
-                                        if (changelogDateDiff <= 30) {
+                                        // Uses moment.js to determine whether-or-not the script currently being evaluated falls within the date range specified by the user                                        
+                                        var withinDateRange = moment(changelogEntryDate).isBetween(momentBeginDateObj, momentEndDateObj, 'day', '[]');
+                                    
+                                        // If we are within the range, it'll write to the HTML doc
+                                        if (withinDateRange == true) {
                                             // This is the part that writes to the HTML doc
                                             listOfScriptsHTML.insertAdjacentHTML('beforeend', 
                                             
