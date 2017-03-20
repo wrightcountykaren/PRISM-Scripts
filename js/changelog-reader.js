@@ -1,18 +1,30 @@
-// TODO: this isn't working in IE??
-// TODO: add "about scripts" page
-// TODO: add footer to all docs
-// TODO: pretty up the html to view script title in a single header (this should borrow from the alpha split in FuncLib)
-// TODO: set to evaluate master and not release
-// TODO: incorporate date.js and determine dates in a cleaner way, with filtering and formatting custom to the user (last 3 months, etc)
+// TODO: determine dates in a cleaner way, with filtering and formatting custom to the user (last 3 months, etc)
 // TODO: add a feature to switch branches (master or insert your own)
-// TODO: replace warning text with a spinner or something so as not to alarm folks with slow connections, move warning text to something that happens if connection not made
-// TODO: create expand all functionality
+// TODO: pretty up the html, follow new color guidelines and other standards from style guide
+
+function msieversion() {
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) { 
+        var ieWarningHTML = document.getElementById("IEWarning");
+        
+        // This is the part that writes to the HTML doc
+        ieWarningHTML.insertAdjacentHTML('beforeend', 
+            // Here's the div I made up
+            '<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> You appear to be using Internet Explorer. This utility may not work in Internet Explorer. If nothing displays, please use Chrome or Firefox.</div>'
+        );
+    }
+
+    return false;
+}
 
 function displayChangelogInfo() {
     
-    var listOfScriptsHTML = document.getElementById("changelogContents")
+    var listOfScriptsHTML = document.getElementById("changelogContents");
     
-    var functionToCheckFor = "changelog_update"
+    var functionToCheckFor = "changelog_update";
     
     // read text from URL location to get the list of scripts
     var request = new XMLHttpRequest();
@@ -97,6 +109,10 @@ function displayChangelogInfo() {
                                             "<p>" + changelogEntryText + "</p> \n" + 
                                             "<p><strong> Completed by " + changelogEntryScriptwriter + ". </strong></p>"
                                             );
+                                            
+                                            // This part kills the loading spinner once details are loaded
+                                            var loadingSpinner = document.getElementById("loading");
+                                            loadingSpinner.parentNode.removeChild(loadingSpinner);
                                         }
                                     };
                                 }                                
