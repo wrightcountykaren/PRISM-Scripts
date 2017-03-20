@@ -16,16 +16,16 @@
 	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
 	  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	
+
 	<!-- Google fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Oxygen:300,400,700|Source+Sans+Pro:400,700|Source+Code+Pro:400,700" rel="stylesheet">
-	
+
 	<!--Hit our custom CSS-->
 	<link rel="stylesheet" href="css/styles.css">
-	
+
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="img/BlueZoneScripts.png"/>
-	
+
 	<!--Hit our custom JavaScript-->
 	<script src="js/changelog-reader.js" charset="utf-8"></script>
 </head>
@@ -43,7 +43,7 @@
 				</button>
 				<a class="navbar-brand" href="index.html">DHS-PRISM-Scripts</a>
 			</div>
-				
+
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
@@ -51,21 +51,27 @@
 					<li><a href="issuelist.html">Project tracking/issue list</a></li>
 					<li><a href="https://mn-script-team.github.io/bzs-config-utility/" target="_blank">Get scripts!</a></li>
 				</ul>
-			</div><!-- /.navbar-collapse --> 
-				
+			</div><!-- /.navbar-collapse -->
+
 		</div>
 	</nav>
 	<div class="container">
-		
+
 		<div class="jumbotron">
 		  	<h1>DHS-PRISM-Scripts</h1>
-		  	<p>List of changes over the last month</p> 
+		  	<p>List of changes over the last month</p>
 		</div>
 		
-		<div class="alert alert-warning" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Please note that this list and the utilities behind it are both very much under construction.
+		<span id="IEWarning">
+			<script>
+				msieversion();
+			</script>
+		</span>
+
+		<div class="alert alert-info" role="info">
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please note that this list and the utilities behind it are both very much under construction.
 		</div>
-		
+
 		<div class="row">
 			<div class="col-xs-12">
 				<h3>About this list</h3>
@@ -73,19 +79,17 @@
 				<p>These functions and all scripts in this project are open source. The source code for the project can be <a href="https://github.com/MN-Script-Team/DHS-PRISM-Scripts" target="_blank">found on GitHub</a>.</p>
 			</div>
 		</div>
-		<hr> 
-		
-		<span id="changelogContents"> 
-			<!--This is an alert to be provided in case FuncLib is unreachable or the JS is broken or something.-->
-<!--			<div class="alert alert-danger" role="alert">
-				<p>
-					If you can see this, then something is wrong, and <a href="mailto:veronica.cary@state.mn.us">Veronica Cary</a> should probably be notified.
-				</p>
-			</div>  -->
+		<hr>
+
+		<span id="changelogContents">
+			<div id="loading">
+				<img id="loading-image" src="img/loading.gif" alt="Loading..." />
+			</div>
+
 		</span>
-		
-			
-		
+
+
+
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
