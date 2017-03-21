@@ -1,6 +1,31 @@
-// TODO: determine dates in a cleaner way, with filtering and formatting custom to the user (last 3 months, etc)
-// TODO: add a feature to switch branches (master or insert your own)
 // TODO: pretty up the html, follow new color guidelines and other standards from style guide
+
+function modifyDateRangeLast30Days() {
+    // Writing values
+    document.getElementById("start").value = moment().add(-30, 'days').format("MM/DD/YYYY");
+    document.getElementById("end").value = moment().format("MM/DD/YYYY");
+}
+
+function modifyDateRangeLast90Days() {
+    // Writing values
+    document.getElementById("start").value = moment().add(-90, 'days').format("MM/DD/YYYY");
+    document.getElementById("end").value = moment().format("MM/DD/YYYY");
+}
+
+function modifyDateRangeMonthToDate() {
+    // Writing values
+    document.getElementById("start").value = moment().format("MM/01/YYYY");
+    document.getElementById("end").value = moment().format("MM/DD/YYYY");
+}
+
+function modifyDateRangeLastCompleteMonth() {
+    // We need the first day of the current month, in order to determine the last day of the prior month, by subtracting 1 day
+    var firstDayOfCurrentMonth = moment().format("MM/01/YYYY");
+
+    // Writing values
+    document.getElementById("start").value = moment().add(-1, 'months').format("MM/01/YYYY");
+    document.getElementById("end").value = moment(firstDayOfCurrentMonth).add(-1, 'days').format("MM/DD/YYYY");
+}
 
 function msieversion() {
 
@@ -22,13 +47,40 @@ function msieversion() {
 
 function displayChangelogInfo() {
     
+    // Get the span for changelog contents, which is adds to later when we've retrieved details.
     var listOfScriptsHTML = document.getElementById("changelogContents");
     
+    // Removes any existing details in the HTML doc (in case the report is re-run without refreshing)
+    listOfScriptsHTML.innerHTML = "";
+    
+    // Adds a loading spinner
+    listOfScriptsHTML.insertAdjacentHTML('beforeend', 
+        '<div id="loading"><img id="loading-image" src="img/loading.gif" alt="Loading..." /></div>'
+    );
+    
+    // Storing the changelog_update string in a variable, which we'll use in our regex search later
     var functionToCheckFor = "changelog_update";
+    
+    // Gets the user-input from date picker, both begin and end
+    var beginDateString = document.getElementById("start").value;
+    var endDateString = document.getElementById("end").value;
+    
+    // Converts strings into proper date objects using moment.js
+    var momentBeginDateObj = moment(beginDateString, 'MM/DD/YYYY');
+    var momentEndDateObj = moment(endDateString, 'MM/DD/YYYY');
+    
+    // Then we need to know if the master branch will be used (it's a checkbox on the form)
+    var masterBranchCheckbox = document.getElementById("scriptwriterBranchCheckbox");
+    
+    if (masterBranchCheckbox.checked) {
+        var branchChoice = "master";
+    } else {
+        var branchChoice = "release";
+    }
     
     // read text from URL location to get the list of scripts
     var request = new XMLHttpRequest();
-    request.open('GET', 'https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/~complete-list-of-scripts.vbs', false);
+    request.open('GET', 'https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/' + branchChoice + '/~complete-list-of-scripts.vbs', false);
     
     // This sends the request for info and does all of the hard work
     request.onreadystatechange = function () {
@@ -56,7 +108,7 @@ function displayChangelogInfo() {
                         var scriptCategory = listOfScriptsArray[i + 1].slice((listOfScriptsArray[i + 1].length - listOfScriptsArray[i + 1].lastIndexOf("=")) * -1).replace(/"/g, '').replace('=', '').trim();
                         
                         // Getting the URL for the script file
-                        var scriptURL = 'https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/' + scriptCategory + '\\' + scriptFriendlyName.toLowerCase().replace(/ /g, '-') + '.vbs';
+                        var scriptURL = 'https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/'+ branchChoice + '/' + scriptCategory + '\\' + scriptFriendlyName.toLowerCase().replace(/ /g, '-') + '.vbs';
                                                 
                         // read text from URL location to get the list of scripts
                         var scriptCheck = new XMLHttpRequest();
@@ -97,10 +149,11 @@ function displayChangelogInfo() {
                                         var changelogEntryText = changelogEntryArray[3];            // item [3] is the entry text
                                         var changelogEntryScriptwriter = changelogEntryArray[5];    // item [5] is the entry scriptwriter
                                         
-                                        var today = new Date();                            
-                                        var changelogDateDiff = parseInt((today - changelogEntryDate)/(1000*60*60*24));
-                                        
-                                        if (changelogDateDiff <= 30) {
+                                        // Uses moment.js to determine whether-or-not the script currently being evaluated falls within the date range specified by the user                                        
+                                        var withinDateRange = moment(changelogEntryDate).isBetween(momentBeginDateObj, momentEndDateObj, 'day', '[]');
+                                    
+                                        // If we are within the range, it'll write to the HTML doc
+                                        if (withinDateRange == true) {
                                             // This is the part that writes to the HTML doc
                                             listOfScriptsHTML.insertAdjacentHTML('beforeend', 
                                             
