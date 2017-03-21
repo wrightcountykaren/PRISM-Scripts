@@ -82,24 +82,45 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h3>About this list</h3>
-				<p>This is a dynamic list of changes implemented in the last 30 days by the Minnesota Department of Human Services' BlueZone Scripts PRISM project. It works by scanning the scripts and returning each change from the changelog functions.</p>
+				<p>This is a dynamic list of changes implemented by the Minnesota Department of Human Services' BlueZone Scripts PRISM project. It works by scanning the scripts and returning each change from the changelog functions.</p>
 				<p>These functions and all scripts in this project are open source. The source code for the project can be <a href="https://github.com/MN-Script-Team/DHS-PRISM-Scripts" target="_blank">found on GitHub</a>.</p>
 			</div>
 		</div>
 		<hr>
-		<form class="row" id="search-form">
-			<div class="col-xs-12 col-sm-4" id="sandbox-container">
-				<div class="input-daterange input-group" id="datepicker">
-					<label for="start" class="sr-only">Start date</label>
-		    		<input type="text" class="input-sm form-control" name="start" id="start" />
-		    		<span class="input-group-addon">to</span>
-					<label for="end" class="sr-only">End date:</label>
-		    		<input type="text" class="input-sm form-control" name="end" id="end" />
+		<div class="row" id="search-form">
+			<div class="col-xs-12 col-sm-3">
+				<h4>Select some default dates...</h4>
+				<div class="input-group">
+					<input type="button" onclick="modifyDateRangeLast30Days()" class="btn btn-default btn-sm" value="last 30 days" />
+					<input type="button" onclick="modifyDateRangeLast90Days()" class="btn btn-default btn-sm" value="last 90 days" />
+					<input type="button" onclick="modifyDateRangeMonthToDate()" class="btn btn-default btn-sm" value="Month to date" />
+					<input type="button" onclick="modifyDateRangeLastCompleteMonth()" class="btn btn-default btn-sm" value="Last complete month" />
 				</div>
-				<p>Select a date range to search for script changes.</p>
 			</div>
-			<input type="button" onclick="displayChangelogInfo()" class="btn btn-primary btn-sm" value="Submit" />
-		</form>
+			<div class="col-xs-12 col-sm-3">
+				<h4>...or pick a custom date range...</h4>
+				<span>
+					<div class="input-daterange input-group input-group-sm" id="datepicker">
+						<label for="start" class="sr-only">Start date</label>
+			    		<input type="text" class="input-sm form-control" name="start" id="start" />
+			    		<span class="input-group-addon">to</span>
+						<label for="end" class="sr-only">End date:</label>
+			    		<input type="text" class="input-sm form-control" name="end" id="end" />
+					</div>
+					<p>Select a custom date range to search for script changes.</p>
+				</span>
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<h4>...change these if you need to...</h4>
+				<div class="checkbox">
+  					<label><input type="checkbox" value="scriptwriterBranchCheckbox" id="scriptwriterBranchCheckbox" checked>Use scriptwriter branch</label>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-1">
+				<h4>Go!</h4>
+				<input type="button" onclick="displayChangelogInfo()" class="btn btn-primary btn-sm" value="Submit" />
+			</div>
+		</div>
 		<hr />
 
 		<span id="changelogContents">
