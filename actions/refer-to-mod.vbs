@@ -435,6 +435,8 @@ ncp_address = info.ncp_addr
 ncp_csz =  info.ncp_city & ", " & info.ncp_state & "  " & info.ncp_zip
 workers_name = info.worker_name
 worker_telephone = info.worker_phone
+PRISM_left = Left(PRISM_case_number, 10)
+PRISM_right = Right(PRISM_case_number, 2)
 
 'These are variables to indicate if documents were sent.
 NCP_EVR_SENT = True
@@ -718,8 +720,8 @@ IF CH_CHMR_check = checked THEN
 		call navigate_to_PRISM_screen("CHDE")
 		EMWriteScreen "B", 3, 29
 		transmit
-		EMWriteScreen Left(PRISM_case_number, 10), 20, 8
-		EMWriteScreen Right(PRISM_case_number, 2), 20, 19
+		EMWriteScreen PRISM_left, 20, 8
+		EMWriteScreen PRISM_right, 20, 19
 		transmit
 	
 		row = row + 1
@@ -733,15 +735,17 @@ IF CH_CHMR_check = checked THEN
 	LOOP UNTIL end_of_data_check = "*** End of Data ***"
 END IF
 
+
 'Update pending Notice of Review document with mod worker information.
 IF update_mod_worker = checked THEN
 	call navigate_to_PRISM_screen("DORD")
-
-	'First, make sure we have the right case displayed.
-	EMWriteScreen Left(PRISM_case_number, 10), 20, 8
-	EMWriteScreen Right(PRISM_case_number, 2), 20, 19
 	EMWriteScreen "B", 3, 29
 	transmit
+
+	'First, make sure we have the right case displayed.
+	EMWriteScreen PRISM_left, 20, 26
+	EMWriteScreen PRISM_right, 20, 37
+
 
 	EMWriteScreen "PND", 20, 48
 	transmit
@@ -752,10 +756,10 @@ IF update_mod_worker = checked THEN
 	DO
 		EMReadScreen end_of_data_check, 19, row, 28
 		IF end_of_data_check = "*** End of Data ***" THEN EXIT DO
-
+		 
 		EMReadScreen stat, 3, row, 22
 		EMReadScreen doc_name, 30, row, 57
-		EMReadScreen packt, 8, row, 36
+		
 
 		IF InStr(doc_name, "REVIEW SUPPORT") > 0 AND stat = "PND" THEN			
 				EMWriteScreen "S", row, 5
@@ -769,6 +773,7 @@ IF update_mod_worker = checked THEN
 				EMWriteScreen "S", 12, 5
 				transmit
 				
+		
 				IF mod_worker = "Theresa Hogan" THEN
 					EMWriteScreen "Theresa Hogan          ", 16, 15
 					transmit
@@ -806,9 +811,18 @@ IF update_mod_worker = checked THEN
 				Dialog LH_dialog  'name of dialog
 			  	IF buttonpressed = 0 then script_end_procedure("The script has ended.")		'Cancel
 				
+				call navigate_to_PRISM_screen("DORD")
 				EMWriteScreen "B", 3, 29
 				transmit
+	
+				'Make sure we have the right case displayed.
+				EMWriteScreen PRISM_left, 20, 26
+				EMWriteScreen PRISM_right, 20, 37
+	
 
+				EMWriteScreen "PND", 20, 48
+				transmit
+			
 		END IF 
 		
 		row = row + 1
@@ -830,8 +844,8 @@ If CAWD_check = checked then
 	call navigate_to_PRISM_screen("CAWD")
 
 	'First, make sure we have the right case displayed.
-	EMWriteScreen Left(PRISM_case_number, 10), 20, 8
-	EMWriteScreen Right(PRISM_case_number, 2), 20, 19
+	EMWriteScreen PRISM_left, 20, 8
+	EMWriteScreen PRISM_right, 20, 19
 	transmit
 	
 	'Then, add worklist
@@ -846,8 +860,8 @@ End if
 call navigate_to_PRISM_screen("CAAD")
 'First, make sure we are have the right case displayed.
 EMWriteScreen "A", 8, 5
-EMWriteScreen Left(PRISM_case_number, 10), 20, 8
-EMWriteScreen Right(PRISM_case_number, 2), 20, 19																
+EMWriteScreen PRISM_left, 20, 8
+EMWriteScreen PRISM_right, 20, 19																
 transmit
 PF5
 
@@ -904,7 +918,3 @@ If case_activity_detail <> "Case Activity Detail" then script_end_procedure("The
 	call write_variable_in_CAAD(worker_signature)
 
 script_end_procedure("The script is now ending.  Please save your CAAD note.")
-
-
-
-
