@@ -46,7 +46,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("03/28/2017", "You can now add the County Name for the Affidavit of Service.", "Gretchen Thornbrugh, Dakota Co.")
+call changelog_update("03/28/2017", "When the non standard arrears dialog box appears, it will now bring you to CAWT instead of NCOD.", "Gretchen Thornbrugh, Dakota Co.")
 CALL changelog_update("01/20/2017", "Worker signature should now auto-populate.", "Kelly Hiestand, Wright County.")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
