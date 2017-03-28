@@ -1,5 +1,5 @@
 'STATS GATHERING ---------------------------
-name_of_script = "E0002-no-pay-to-spreadsheet.vbs"
+name_of_script = "e0002-no-pay-to-spreadsheet.vbs"
 start_time = timer
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY=========================================================================== 
