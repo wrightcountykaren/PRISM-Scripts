@@ -118,6 +118,7 @@ transmit
 	End If
 
 'non standard arrears payment ordered
+call navigate_to_PRISM_screen ("CAWT")	
 	ARREARSresult = msgbox ("Is there a non-standard arrears payment ordered (not 20%)?" & VbNewline & VbNewline & _
 		"If YES make sure non-accrual is on NCOD and case is coded with 20% overide on SUOD.", VbOKCancel)
 	If ARREARSresult = vbCancel then
