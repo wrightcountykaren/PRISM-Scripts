@@ -188,19 +188,19 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Returned Mail"
+cs_scripts_array(script_num).script_name		= "Refer to Mod"
 cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Updates address to new or unknown, and creates CAAD note."
-cs_scripts_array(script_num).release_date		= #09/01/2016#
+cs_scripts_array(script_num).description		= "Starts REAM and sends docs to include employer verifs."
+cs_scripts_array(script_num).release_date		= #03/28/2017#
 cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Refer to Mod"
+cs_scripts_array(script_num).script_name		= "Returned Mail"
 cs_scripts_array(script_num).category			= "actions"
-cs_scripts_array(script_num).description		= "Starts REAM and sends docs to include employer verifs."
-cs_scripts_array(script_num).release_date		= #03/28/2017#
+cs_scripts_array(script_num).description		= "Updates address to new or unknown, and creates CAAD note."
+cs_scripts_array(script_num).release_date		= #09/01/2016#
 cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
