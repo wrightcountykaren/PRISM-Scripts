@@ -1,5 +1,3 @@
-// TODO: pretty up the html, follow new color guidelines and other standards from style guide
-
 function modifyDateRangeLast30Days() {
     // Writing values
     document.getElementById("start").value = moment().add(-30, 'days').format("MM/DD/YYYY");
@@ -51,12 +49,21 @@ function displayChangelogInfo() {
     var listOfScriptsHTML = document.getElementById("changelogContents");
     
     // Removes any existing details in the HTML doc (in case the report is re-run without refreshing)
-    listOfScriptsHTML.innerHTML = "";
+    
+    //listOfScriptsHTML.innerHTML = "";
+    var tableRows = listOfScriptsHTML.getElementsByTagName('tr');
+    var rowCount = tableRows.length;
+
+    for (var x=rowCount; x>0; x--) {
+        listOfScriptsHTML.removeChild(tableRows[x]);
+    }
+    
+    
     
     // Adds a loading spinner
-    listOfScriptsHTML.insertAdjacentHTML('beforeend', 
-        '<div id="loading"><img id="loading-image" src="img/loading.gif" alt="Loading..." /></div>'
-    );
+    //listOfScriptsHTML.insertAdjacentHTML('beforeend', 
+    //    '<div id="loading"><img id="loading-image" src="img/loading.gif" alt="Loading..." /></div>'
+    //);
     
     // Storing the changelog_update string in a variable, which we'll use in our regex search later
     var functionToCheckFor = "changelog_update";
@@ -157,15 +164,20 @@ function displayChangelogInfo() {
                                             // This is the part that writes to the HTML doc
                                             listOfScriptsHTML.insertAdjacentHTML('beforeend', 
                                             
-                                            "<h4><a href=\'" + scriptURL + "\' target=\'_blank\'>" + scriptCategory.toUpperCase() + " - " + scriptFriendlyName + "</a></h4> \n" + 
-                                            "<h5>" + changelogEntryDate.toDateString() + "</h5> \n" + 
-                                            "<p>" + changelogEntryText + "</p> \n" + 
-                                            "<p><strong> Completed by " + changelogEntryScriptwriter + ". </strong></p>"
+                                            //"<h4><a href=\'" + scriptURL + "\' target=\'_blank\'>" + scriptCategory.toUpperCase() + " - " + scriptFriendlyName + "</a></h4> \n" + 
+                                            //"<h5>" + changelogEntryDate.toDateString() + "</h5> \n" + 
+                                            //"<p>" + changelogEntryText + "</p> \n" + 
+                                            //"<p><strong> Completed by " + changelogEntryScriptwriter + ". </strong></p>"
+                                            //);
+                                            "<tr> \n" +
+                                            "    <td>" + scriptCategory.toUpperCase() + "</td> \n" + 
+                                            "    <td><a href=\'" + scriptURL + "\' target=\'_blank\'>" + scriptFriendlyName + "</a></td> \n" + 
+                                            //"    <td>" + changelogEntryDate.toDateString() + "</td> \n" + 
+                                            "    <td>" + moment(changelogEntryDate).format('MM/DD/YYYY') + "</td> \n" + 
+                                            "    <td>" + changelogEntryText + "</td> \n" + 
+                                            "    <td>" + changelogEntryScriptwriter + "</td> \n" +
+                                            "</tr>"
                                             );
-                                            
-                                            // This part kills the loading spinner once details are loaded
-                                            var loadingSpinner = document.getElementById("loading");
-                                            loadingSpinner.parentNode.removeChild(loadingSpinner);
                                         }
                                     };
                                 }                                
@@ -179,4 +191,59 @@ function displayChangelogInfo() {
         }
     }
     request.send(null);
+}
+
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("changelogTable");
+  switching = true;
+  //Set the sorting direction to ascending:
+  dir = "asc"; 
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /*check if the two rows should switch place,
+      based on the direction, asc or desc:*/
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      //Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /*If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again.*/
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
 }
