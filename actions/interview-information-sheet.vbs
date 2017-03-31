@@ -42,7 +42,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("03/09/2017", "Bug fix for FormatCurrency error message.", "Wendy LeVesseur, Anoka County")
+call changelog_update("03/31/2017", "Bug fix for FormatCurrency error message.", "Wendy LeVesseur, Anoka County")
 call changelog_update("03/09/2017", "Replace username with worker signature and fix other bugs.", "Wendy LeVesseur, Anoka County")
 call changelog_update("12/08/2016", "Initial version.", "Wendy LeVesseur, Anoka County")
 
