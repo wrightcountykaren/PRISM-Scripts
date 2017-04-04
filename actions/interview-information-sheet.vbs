@@ -779,7 +779,7 @@ IF participant = "NCP" Then
 			.FormFields("other_cases").Result = info.number_of_ncps_open_cases		
 			.FormFields("function").Result = info.case_function
 			.FormFields("assigned_worker").Result = info.worker_name & ", Phone: " & info.worker_phone
-			.FormFields("last_payment").Result = info.last_payment_date & " $" & FormatCurrency(CCur(info.last_payment_allocation)) & " " & info.last_payment_type
+			.FormFields("last_payment").Result = info.last_payment_date & " " & FormatCurrency(CCur(info.last_payment_allocation)) & " " & info.last_payment_type
 			.FormFields("arrears_balance").Result = FormatCurrency (info.pa_arrears) & " PA arrears + " & FormatCurrency(info.npa_arrears) & " NPA arrears = " & FormatCurrency(info.ttl_arrears) & " total"
 			.FormFields("pay_plan").Result = info.pay_plan_info(PRISM_case_number)
 			'The dollar values below must be converted to currency using the CCur before we can use the FormatCurrency fucntion.  The end result is beautifully formatted dollar amounts with minimal effort!
