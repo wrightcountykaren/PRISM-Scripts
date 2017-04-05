@@ -47,6 +47,16 @@ call changelog_update("02/22/2017", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+'INSTRUCTIONS BLOCK ========================================================================================================
+'~~~~~ This script either creates a new favorites list for your use, or allows you to view and run your favorites scripts, as well as new scripts.
+'~~~~~ On the first start-up, you'll be prompted to select your favorite scripts from a list. The script will then exit in this case, and write a text file to your My-Documents folder containing your favorite scripts.
+'~~~~~ After this, for general use, simply start the script, then select the script you want to run. That's it!
+'+++++ https://upload.wikimedia.org/wikipedia/commons/f/fb/CH_cow_2.jpg
+'***** This is a picture of a cow.
+'~~~~~ To edit your list, simply select the "update favorites" button at the bottom of the window.
+'===== Keywords: favorites, customization
+'END INSTRUCTIONS BLOCK ====================================================================================================
+
 'DEFINING SOME VARIABLES ===================================================================================================
 button_height = 12
 button_width = 145
