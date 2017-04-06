@@ -95,7 +95,7 @@
 		
 		
 		
-			<input id="goButton" type="button" onclick="" class="btn btn-primary btn-md" value="utilities/favorites-list.vbs" />
+			<input id="goButton" type="button" onclick="openFavoritesForTesting()" class="btn btn-primary btn-md" value="utilities/favorites-list.vbs" />
 			
 			<table class="table" id="scriptListTable">
 	    		<thead>
@@ -122,18 +122,31 @@
 		
 		<script>
 		
+			// This function will be replaced with a list that can pass the window.open to the url
+        	$("#goButton").click(function(){
+          		window.open("instructions.html?script=utilities%2Ffavorites-list.vbs", "_self");
+        	});
+ 
+		
 			$(document).ready(function(){
 
 				// Setup config
 				var params = { doc: [] };
-
+				
+				// Setting up this variable, which is manipulated inside parseURLParams. This is used later to determine if fetchScript should be run.
+				var queryStringFound = false;
+				
 				// Parse URL Params
 				function parseURLParams(){
-					$.each(location.search.replace(/\?/g,"").split(/\&/g),function(k,v){ 
+					$.each(location.search.replace(/\?/g,"").split(/\&/g), function(k, v) { 
 						var param = v.split(/\=/g);
 						params[param[0]] = param[1]; 
+						if (param[0] != "") {queryStringFound = true};						// Sets an item for figuring out if a query string was found on the page
 					});
 				}
+				
+				// Sets up cross-site scripting, necessary for IE
+				jQuery.support.cors = true;
 
 				function fetchScript(callback){
 					$.ajax({
@@ -142,12 +155,13 @@
 						success: function( data ){
 							callback(data);
 						},
-						error: function(){ 
-							//Error handler
+						error: function( data ){ 
+							// Just a simple readout for now because we're very much testing this.
+							alert(JSON.stringify(data));
 						}
 					});
 				}
-
+				
 				// Compile doc data into DOM
 				function compileDoc(){
 					// From original script
@@ -158,36 +172,49 @@
 						else $('#testspan2').append(v);
 					})	
 				}
+				
+				
 
 				// Parse URL params 
 				parseURLParams();
-				// Setup title
-				$("#pageHeaderText").text("Instructions: " + decodeURIComponent(scriptToDisplay));
+				
+				// alert(queryStringFound);
+				
+				
+				
+				
+				
 
-				// Run fetchscript, parse on success
-				fetchScript(function(script){
-					//Parse Data
-					params.code = script.split(/\n/mg);
-					$.each(params.code,function(k,v){
-						// Reviews the code for key elements and creates HTML elems based on those
-						var elem, parsedData;
-						if(v.indexOf("'~~~~~") > -1) {
-							parsedData = v.replace("'~~~~~","").trim();
-							elem = $('<p>',{ 'text': parsedData });
-						}
-						else if(v.indexOf("'+++++") > -1){
-							parsedData = v.replace("'+++++","").trim();
-							elem = $('<img>',{ 'src': parsedData });
-						}
-						else if(v.indexOf("'*****") > -1){
-							parsedData = v.replace("'*****","").trim();
-							elem = $('<figcaption>',{ 'text': parsedData, 'class': 'figure-caption' });
-						}
-						if(elem) params.doc.push(elem[0]);
+				// If a query string was passed through, run fetchscript, parse on success
+				if (queryStringFound == true) {
+					
+					// Setup title
+					$("#pageHeaderText").text("Instructions: " + decodeURIComponent(params.script));
+					
+					fetchScript(function(script){
+						//Parse Data
+						params.code = script.split(/\n/mg);
+						$.each(params.code,function(k,v){
+							// Reviews the code for key elements and creates HTML elems based on those
+							var elem, parsedData;
+							if(v.indexOf("'~~~~~") > -1) {
+								parsedData = v.replace("'~~~~~","").trim();
+								elem = $('<p>',{ 'text': parsedData });
+							}
+							else if(v.indexOf("'+++++") > -1){
+								parsedData = v.replace("'+++++","").trim();
+								elem = $('<img>',{ 'src': parsedData });
+							}
+							else if(v.indexOf("'*****") > -1){
+								parsedData = v.replace("'*****","").trim();
+								elem = $('<figcaption>',{ 'text': parsedData, 'class': 'figure-caption' });
+							}
+							if(elem) params.doc.push(elem[0]);
+						});
+						// Run DOM compiler
+						compileDoc();
 					});
-					// Run DOM compiler
-					compileDoc();
-				});
+				}
 
 			});
 
