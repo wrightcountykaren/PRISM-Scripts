@@ -122,75 +122,75 @@
 		
 		<script>
 		
-			// -------------------------- THIS WILL NOT STAY HERE: IT SHOULD BE ADDED TO A SEPARATE FILE
-			
-			$.ajaxSetup({
-				cache: false,
-			})
+			$(document).ready(function(){
 
-			// Read a page's GET URL query string and return them as an associative array.
-			function getURLVars() {
-			    var vars = [], hash;
-			    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-			    for(var i = 0; i < hashes.length; i++)
-			    {
-			        hash = hashes[i].split('=');
-			        vars.push(hash[0]);
-			        vars[hash[0]] = hash[1];
-			    }
-			    return vars;
-			}
-			
-			
-			// This function will be replaced with a list that can pass the window.open to the url
-			$("#goButton").click(function(){
-				window.open("instructions.html?script=utilities%2Ffavorites-list.vbs", "_self");
+				// Setup config
+				var params = { doc: [] };
+
+				// Parse URL Params
+				function parseURLParams(){
+					$.each(location.search.replace(/\?/g,"").split(/\&/g),function(k,v){ 
+						var param = v.split(/\=/g);
+						params[param[0]] = param[1]; 
+					});
+				}
+
+				function fetchScript(callback){
+					$.ajax({
+						url: "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/VKC-745-instructions-docstring-intro/" + params.script,
+						dataType: 'text',
+						success: function( data ){
+							callback(data);
+						},
+						error: function(){ 
+							//Error handler
+						}
+					});
+				}
+
+				// Compile doc data into DOM
+				function compileDoc(){
+					// From original script
+					$("#scriptListArea").remove();
+					// Add elems to DOM
+					$.each(params.doc,function(k,v){
+						if(v.tagName == "P") $('#testspan').append(v);
+						else $('#testspan2').append(v);
+					})	
+				}
+
+				// Parse URL params 
+				parseURLParams();
+				// Setup title
+				$("#pageHeaderText").text("Instructions: " + decodeURIComponent(scriptToDisplay));
+
+				// Run fetchscript, parse on success
+				fetchScript(function(script){
+					//Parse Data
+					params.code = script.split(/\n/mg);
+					$.each(params.code,function(k,v){
+						// Reviews the code for key elements and creates HTML elems based on those
+						var elem, parsedData;
+						if(v.indexOf("'~~~~~") > -1) {
+							parsedData = v.replace("'~~~~~","").trim();
+							elem = $('<p>',{ 'text': parsedData });
+						}
+						else if(v.indexOf("'+++++") > -1){
+							parsedData = v.replace("'+++++","").trim();
+							elem = $('<img>',{ 'src': parsedData });
+						}
+						else if(v.indexOf("'*****") > -1){
+							parsedData = v.replace("'*****","").trim();
+							elem = $('<figcaption>',{ 'text': parsedData, 'class': 'figure-caption' });
+						}
+						if(elem) params.doc.push(elem[0]);
+					});
+					// Run DOM compiler
+					compileDoc();
+				});
+
 			});
-			
-			// Getting the query string value for the script selected
-			var scriptToDisplay = getURLVars()["script"];
-			
-			// If a script is indicated in the query string, display the instructions
-			if (scriptToDisplay != null) {
-				
-				// Remove the script list area and instructions
-				$("#scriptListArea").remove();
-				
-				// Modify the page header to reflect that it's the specific script
-				$("#pageHeaderText").text("Instructions: " + scriptToDisplay);
-							
-				// This jQuery get object will load our script's raw data, which we'll then use to get the query string.
-	    		$.get("https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/VKC-745-instructions-docstring-intro/" + scriptToDisplay, function(data, status){
-					
-					// Split the instructions returned into an array
-					var instructionsArray = data.split("\n");
-					
-					// Iterate through the array and look for the strings we'll need to check this out...
-					for (var i = 0; i < instructionsArray.length; i++) {
-						
-						// Handling for instructions steps
-						if (instructionsArray[i].startsWith("'~~~~~ ")) {
-							$( "#testspan" ).append( "<p>" + instructionsArray[i].slice(7) + "</p>" );
-						}
-						
-						// Handling for images and their captions
-						if (instructionsArray[i].startsWith("'+++++ ")) {
-							// $( "#testspan2" ).append( "<figure class='figure'><img src='" + instructionsArray[i].slice(7) + "' style='width: 300px;' /><figcaption class='figure-caption'>" + instructionsArray[i + 1].slice(7) + "</figcaption></figure>" );
-							$( "#testspan2" ).append( "<figure class='figure'><img src='https://www.dhssir.cty.dhs.state.mn.us/MAXIS/blzn/Script%20Image%20Library/ACTIONS%20-%20ABAWD%20FIATER/initial%20dialog.png' style='width: 300px;' /><figcaption class='figure-caption'>" + instructionsArray[i + 1].slice(7) + "</figcaption></figure>" );
-						}
-						
-					}
-					
-					
-					
-	    		});
-			
-			} else {
-				//alert("No script");
-			}
-			
-			
-			
+
 		</script>
 		
 	</div>
