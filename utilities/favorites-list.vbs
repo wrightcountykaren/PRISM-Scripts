@@ -1,3 +1,15 @@
+'LOADING GLOBAL VARIABLES--------------------------------------------------------------------
+GlobVar_path = "C:\DHS-PRISM-Scripts\locally-installed-files\~globvar.vbs"													'Setting a default path, which is modified by the installer
+Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")														'Creating an FSO for the work
+If run_another_script_fso.FileExists(GlobVar_path) then																		'If a Global Variables file is found in above directory...
+	Set fso_command = run_another_script_fso.OpenTextFile(GlobVar_path)														'...run it!
+Else																														'If a Global Variables file is not found in the above directory...
+	Set fso_command = run_another_script_fso.OpenTextFile("Scripts\~globvar-local.vbs")										'...use the default BlueZone Scripts directory, and insert a custom "local flavor" Global Variables file, which can override the default selections.
+End if
+text_from_the_other_script = fso_command.ReadAll																			'Once we have the text from the other script, read it all!
+fso_command.Close																											'Close the other script file, and...
+Execute text_from_the_other_script
+
 'STATS GATHERING--------------------------------------------------------------------------------------------------------------
 name_of_script = "favorites-list.vbs"
 start_time = timer
@@ -145,33 +157,29 @@ function edit_favorites
 	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+	If list_of_scripts_ran <> true then
 
-	'Looks up the script details online (or locally if you're a scriptwriter)
-
+	' Looks up the script details online (or locally if you're a scriptwriter)
 	If run_locally <> true then
-
-		'Creating the object to the URL a la text file
-		SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")
-
-		'Building an array of all scripts
-		'Opening the URL for the given main menu
-		get_all_scripts.open "GET", all_scripts_repo, FALSE
-		get_all_scripts.send
-		IF get_all_scripts.Status = 200 THEN
-			Set filescriptobject = CreateObject("Scripting.FileSystemObject")
-			Execute get_all_scripts.responseText
-		ELSE
-			'If the script cannot open the URL provided...
-			MsgBox 	"Something went wrong with the URL: " & all_scripts_repo
-			stopscript
+		SET get_all_scripts = CreateObject("Msxml2.XMLHttp.6.0")				' Creating the object to the URL a la text file
+		get_all_scripts.open "GET", all_scripts_repo, FALSE						' Creating an AJAX object
+		get_all_scripts.send													' Opening the URL for the given main menu
+		IF get_all_scripts.Status = 200 THEN									' 200 means great success
+			Set filescriptobject = CreateObject("Scripting.FileSystemObject")	' Create an FSO for the script object
+			Execute get_all_scripts.responseText								' Execute the script (building an array of all scripts)
+		ELSE																	' If the script cannot open the URL provided...
+			MsgBox 	"Something went wrong with the URL: " & all_scripts_repo	' Tell the worker
+			stopscript															' Stop the script
 		END IF
-	ELSE
-		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")
-		Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)
-		text_from_the_other_script = fso_command.ReadAll
-		fso_command.Close
-		Execute text_from_the_other_script
+	ELSE																		' If it's set as run_locally...
+		Set run_another_script_fso = CreateObject("Scripting.FileSystemObject")	' Create an FSO to read the script list file
+		Set fso_command = run_another_script_fso.OpenTextFile(all_scripts_repo)	' Create a command object to run the script list object
+		text_from_the_other_script = fso_command.ReadAll						' Read the file
+		fso_command.Close														' Close the file
+		Execute text_from_the_other_script										' Execute the script (building an array of all scripts)
 	END IF
+	
+	end if
 
 	'Warning/instruction box
 	MsgBox  "This section will display a dialog with various scripts on it. Any script you check will be added to your favorites menu. Scripts you un-check will be removed. Once you are done making your selection hit ""OK"" and your menu will be updated. " & vbNewLine & vbNewLine &_
@@ -504,8 +512,12 @@ user_myDocs_folder = wshShell.SpecialFolders("MyDocuments") & "\"
 favorites_text_file_location = user_myDocs_folder & "\scripts-cs-favorites.txt"
 hotkeys_text_file_location = user_myDocs_folder & "\scripts-cs-hotkeys.txt"
 
-'switching up the script_repository because the all scripts file is not in the Script Files folder
-all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
+'Setting up the all_scripts_repo to work with the defined script_repository. If undefined it'll go with master (implies it's a scriptwriter testing)
+If script_repository <> "" then
+	all_scripts_repo = script_repository & "/~complete-list-of-scripts.vbs"
+Else
+	all_scripts_repo = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/~complete-list-of-scripts.vbs"
+End if
 
 '========================================================================================================
 '========================================================================================================
