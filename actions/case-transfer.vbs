@@ -44,6 +44,7 @@ changelog = array()
 CALL changelog_update("01/18/2017", "A bug was fixed in this script to require the team field have 3 characters.", "Kelly Hiestand, Wright County")
 call changelog_update("11/16/2016", "County, Office, Team and Position fields now have length requirements.", "Kelly Hiestand, Wright County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+call changelog_update("05/02/20117", "Added additional information to the last message box.", "Jodi Martin, Wright County")
 
 
 
@@ -153,6 +154,6 @@ IF letter_checkbox = 1 THEN CALL write_variable_in_CAAD("* Sent New Worker lette
 CALL write_variable_in_CAAD(worker_signature)
 transmit
 
-MsgBox "Success! The case has been transferred and CAAD noted."
+MsgBox "Success! The case has been transferred and CAAD noted. Please complete any additional necessary actions per your county's case transfer process."
 
 script_end_procedure("")
