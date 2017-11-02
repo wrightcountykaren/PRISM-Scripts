@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-name_of_script = "maintaining-county.vbs"
+'name_of_script = "maintaining-county.vbs"
 
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
@@ -41,6 +41,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update ("11/02/2017", "Changed Reviewing County to Responding County, added spot to add worker's phone number, updated the display that worker, county, and phone number are all on the same line in CAAD, added option to add CAWT", "Heather Allen, Scott County")
 call changelog_update ("03/09/2017", "Removed automatic transmit so user can save the CAAD note themselves.", "Kelly Hiestand, Wright County")
 call changelog_update ("01/18/2017", "Added DHS SIR button.", "Jodi Martin, Wright County")
 call changelog_update ("11/16/2016", "Initial version.", "Jodi Martin, Wright County")
@@ -69,29 +70,36 @@ EndDialog
 
 
 'Requesting County Dialog
-BeginDialog requesting_dlg, 0, 0, 256, 240, "Requesting County"
-  EditBox 50, 45, 75, 15, Request_From
-  EditBox 170, 45, 80, 15, Requesting_county
-  EditBox 50, 65, 75, 15, Request_To
-  EditBox 170, 65, 80, 15, Responding_county
-  CheckBox 15, 90, 140, 10, "CP is now living in the reviewing county", CP_in_county
-  CheckBox 15, 105, 140, 10, "CP is receiving PA in reviewing county", PA_reviewing
-  CheckBox 15, 120, 175, 10, "Requesting County has not started any legal action", No_legal
-  CheckBox 15, 135, 160, 10, "Reviewing County has an existing court order", Existing_order
-  CheckBox 15, 150, 220, 10, "Reviewing County has the Companion case with controlling order", companion_case
-  EditBox 90, 170, 145, 15, Additional_info
-  EditBox 190, 190, 45, 15, worker_signature
-  ButtonGroup ButtonPressed
-    OkButton 120, 215, 50, 15
-    CancelButton 190, 215, 50, 15
-  Text 5, 70, 45, 10, "Request To:"
-  Text 30, 5, 175, 10, "Maintaining County Request and Review CAAD Note"
-  Text 5, 175, 75, 10, "Additional information:"
-  Text 140, 50, 25, 10, "County"
-  Text 140, 195, 35, 10, "Signature:"
-  Text 140, 70, 25, 10, "County"
+BeginDialog requesting_dlg, 0, 0, 306, 315, "Requesting County"
+  Text 70, 5, 175, 10, "Maintaining County Request and Review CAAD Note"
+  Text 120, 25, 80, 10, "REQUESTING COUNTY"
   Text 5, 50, 50, 10, "Request From:  "
-  Text 85, 25, 80, 10, "REQUESTING COUNTY"
+  Text 55, 50, 50, 10, "Worker Name"
+  EditBox 105, 45, 75, 15, Request_From
+  Text 185, 50, 50, 10, "Worker Phone"
+  EditBox 235, 45, 65, 15, requesting_worker_phone
+  Text 75, 75, 25, 10, "County"
+  EditBox 105, 70, 80, 15, Requesting_county
+  Text 5, 100, 45, 10, "Request To:"
+  Text 55, 100, 50, 10, "Worker Name"
+  EditBox 105, 95, 75, 15, Request_To
+  EditBox 235, 95, 65, 15, responding_worker_phone
+  Text 185, 100, 55, 10, "Worker Phone"
+  Text 75, 120, 25, 10, "County"
+  EditBox 105, 115, 80, 15, Responding_county
+  CheckBox 15, 145, 140, 10, "CP is now living in the reviewing county", CP_in_county
+  CheckBox 15, 160, 140, 10, "CP is receiving PA in reviewing county", PA_reviewing
+  CheckBox 15, 175, 175, 10, "Requesting County has not started any legal action", No_legal
+  CheckBox 15, 190, 160, 10, "Reviewing County has an existing court order", Existing_order
+  CheckBox 15, 205, 220, 10, "Reviewing County has the Companion case with controlling order", companion_case
+  Text 5, 235, 75, 10, "Additional information:"
+  EditBox 85, 230, 145, 15, Additional_info
+  CheckBox 15, 260, 160, 10, "Check if you want to add a follow-up worklist ", cawt_worklist
+  Text 155, 280, 65, 10, "Worker Signature:"
+  EditBox 225, 275, 70, 15, worker_signature
+  ButtonGroup ButtonPressed
+    OkButton 190, 295, 50, 15
+    CancelButton 245, 295, 50, 15
 EndDialog
 
 
@@ -164,13 +172,12 @@ DO
 	IF Responding_county = "" THEN err_msg = err_msg & vbNewline & "You must enter the responding county"
 	IF worker_signature = "" THEN err_msg = err_msg & vbNewline & "You sign your CAAD note!"
 	IF err_msg <> "" THEN MsgBox "***NOTICE***" & vbNewLine & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue!"
-LOOP UNTIL err_msg = ""												 	
+LOOP UNTIL err_msg = ""	
+											 	
 
 'Writes info from dialog into CAAD
-	CALL write_bullet_and_variable_in_CAAD("Requesting from CSO:", Request_From)
-	CALL write_bullet_and_variable_in_CAAD("Requesting to CSO:", Request_To)
-	CALL write_bullet_and_variable_in_CAAD("Requesting county:", Requesting_county)
-	CALL write_bullet_and_variable_in_CAAD("Responding county:", Responding_county)
+	CALL write_bullet_and_variable_in_CAAD("Requesting County Worker", Request_From & Space(2) & requesting_worker_phone & Space (2) & requesting_county)
+	CALL write_bullet_and_variable_in_CAAD("Responding County Worker", Request_To & Space (2) & responding_worker_phone & Space (2) & responding_county)
 	If CP_in_county = checked then call write_variable_in_CAAD("CP is now living in the reviewing county")
 	If PA_reviewing = 1 then call write_variable_in_CAAD("CP is receiving PA in reviewing county")
 	If No_legal = 1 then call write_variable_in_CAAD("Requesting County has not started any legal action")
@@ -178,8 +185,21 @@ LOOP UNTIL err_msg = ""
 	If companion_case = 1 then call write_variable_in_CAAD("Reviewing County has the companion case with controlling order")
 	CALL write_bullet_and_variable_in_CAAD("Additional Info", Additional_info)
 	CALL write_variable_in_CAAD(worker_signature)
+	transmit
 
-	end if	
+	end if
+
+'If user checks the box to create a follow-up worklist
+	IF cawt_worklist = checked then 
+		call navigate_to_PRISM_screen("CAWT")
+		PF5
+		EMWritescreen "A", 3, 30
+		EMWritescreen "FREE", 4, 37
+		EMWritescreen "Did responding county respond to maintaining county request?", 10, 4
+		EMWritescreen "7", 17, 52
+		transmit
+	End if
+			
 	
 IF script_run_mode = "Responding County" THEN
 
@@ -202,13 +222,10 @@ EMSetCursor 17, 4															' sets cursor on the 2nd line of the CAAD note
 	CALL write_bullet_and_variable_in_CAAD ("Maintaining request is", accept_deny)
 	CALL write_bullet_and_variable_in_CAAD("Reason", Reason_note)
 	CALL write_bullet_and_variable_in_CAAD ("Transfer to county", Transfer_to)
-	CALL write_bullet_and_variable_in_CAAD ("County", County_nbr)
-	CALL write_bullet_and_variable_in_CAAD ("Office", Office_nbr)
-	CALL write_bullet_and_variable_in_CAAD ("Team", Team_nbr)
-	CALL write_bullet_and_variable_in_CAAD ("Position", Position_nbr)
+	CALL write_bullet_and_variable_in_CAAD ("County, Office, Team, Position", County_nbr & Space (1) & Office_nbr & Space (1) & Team_nbr & Space (1) & Position_nbr)
 	IF Transfer_tocheck = 1 THEN CALL write_variable_in_CAAD("Transfer to county:", Transfer_to)
 	CALL write_variable_in_CAAD(worker_signature)
-
+	
 	end if
 
 script_end_procedure("")
