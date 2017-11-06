@@ -1,5 +1,5 @@
 'STATS GATHERING----------------------------------------------------------------------------------------------------
-'name_of_script = "maintaining-county.vbs"
+name_of_script = "maintaining-county.vbs"
 
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
@@ -41,7 +41,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update ("11/02/2017", "Changed Reviewing County to Responding County, added spot to add worker's phone number, updated the display that worker, county, and phone number are all on the same line in CAAD, added option to add CAWT", "Heather Allen, Scott County")
+call changelog_update ("11/06/2017", "Changed Reviewing County to Responding County, added spot to add worker's phone number, updated the display that worker, county, and phone number are all on the same line in CAAD, added option to add CAWT", "Heather Allen, Scott County")
 call changelog_update ("03/09/2017", "Removed automatic transmit so user can save the CAAD note themselves.", "Kelly Hiestand, Wright County")
 call changelog_update ("01/18/2017", "Added DHS SIR button.", "Jodi Martin, Wright County")
 call changelog_update ("11/16/2016", "Initial version.", "Jodi Martin, Wright County")
