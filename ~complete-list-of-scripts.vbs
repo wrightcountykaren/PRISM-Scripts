@@ -516,10 +516,10 @@ cs_scripts_array(script_num).scriptwriter		= ""
 script_num = script_num + 1
 ReDim Preserve cs_scripts_array(script_num)
 SET cs_scripts_array(script_num) = NEW cs_script
-cs_scripts_array(script_num).script_name		= "Mets Referral Attempted"
+cs_scripts_array(script_num).script_name		= "METS Referral Attempted"
 cs_scripts_array(script_num).category			= "notes"
-cs_scripts_array(script_num).description		= "CAAD note when a Mets referral is attempted."
-cs_scripts_array(script_num).release_date		= #05/01/2017#
+cs_scripts_array(script_num).description		= "CAAD note when a METS referral is attempted."
+cs_scripts_array(script_num).release_date		= #11/06/2017#
 cs_scripts_array(script_num).scriptwriter		= ""
 
 script_num = script_num + 1
