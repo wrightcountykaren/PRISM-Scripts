@@ -40,6 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/06/2017", "Added error handling to help ensure users do not accidentally time out.", "Wendy LeVesseur, Anoka County")
 call changelog_update("04/10/2017", "Added error handling to ensure that a recipient is selected, also added error handling to make sure script gets into DORD.", "Charles Potter, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
@@ -254,7 +255,7 @@ DO
 	Dialog memo_dialog
 	IF buttonpressed = 0 THEN stopscript
 	IF recipient_code = "Select One" THEN err_msg = "Please select a recipient" & vbCr
-
+	check_for_PRISM(false)
 	IF buttonpressed = spell_button THEN
 
 		'Copy memo text to a new Word document, run spell check, and return the spell checked text to the dialog, close the Word doc
@@ -275,12 +276,15 @@ DO
 		message_text = memo_text
 		CALL write_text_to_msgbox(message_text, recipient_code)
 	End IF
+	
 
 	IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr  & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
+
 
 LOOP UNTIL buttonpressed <> preview_button and buttonpressed <> spell_button and err_msg = ""
 
 
+check_for_PRISM(false)
 
 'Ensuring that all required fields are completed before continuing with export to DORD.
 DO
