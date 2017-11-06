@@ -40,6 +40,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/06/2017", "Fixed an error message that occurs if user elects to send CP Initial Contempt Letter.", "Wendy LeVesseur, Anoka County")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
@@ -358,6 +359,6 @@ Loop until case_number_valid = True
 	End With
 		CALL add_caad_code("M2123")
 		EMSetCursor 16, 4
-		CALL write_new_line_in_PRISM_case_note("    * CP Initial Contempt Letter, Role of County Attorney, and Special Services Coverletter and Assessment sent to CP.")
+		CALL write_variable_in_CAAD("    * CP Initial Contempt Letter, Role of County Attorney, and Special Services Coverletter and Assessment sent to CP.")
 		transmit
  end if
