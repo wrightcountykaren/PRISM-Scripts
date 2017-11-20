@@ -3,22 +3,22 @@ BlueZone Scripts | DHS-PRISM-Scripts
 
 Table of contents for this README
 ---
-* **[Introduction](#introduction)**
-* **[State Administrators](#state-administrators)**
-* **[GitHub workflow and organization](#github-workflow-and-organization)**
-* **[Issue List](#issue-list)**
-  * [Issue guidelines/best practices](#issue-guidelinesbest-practices)
-  * [When to remove a script from the project](#when-to-remove-a-script-from-the-project)
-* **[Pull Requests](#pull-requests)**
-  * [Anatomy of a pull request](#anatomy-of-a-pull-request)
-    * [Title](#title)
-    * ["The Blip"](#the-blip)
-  * [Pull Request Feedback](#pull-request-feedback)
-  * [When to wait on your pull request](#when-to-wait-on-your-pull-request)
-  * [What to do if there's a merge conflict](#what-to-do-if-theres-a-merge-conflict)
-* **[Scriptwriters and Hackathons](#scriptwriters-and-hackathons)**
-* **[About the Functions Library (FuncLib)](#about-the-functions-library-funclib)**
-* **[About the Installer/Configuration Utility](#about-the-installerconfiguration-utility)**
+*	**[Introduction](#introduction)**
+*	**[State Administrators](#state-administrators)**
+*	**[GitHub workflow and organization](#github-workflow-and-organization)**
+*	**[Issue List](#issue-list)**
+	*	[Issue guidelines/best practices](#issue-guidelinesbest-practices)
+	*	[When to remove a script from the project](#when-to-remove-a-script-from-the-project)
+* 	**[Pull Requests](#pull-requests)**
+  	* 	[Anatomy of a pull request](#anatomy-of-a-pull-request)
+    	* 	[Title](#title)
+    	* 	["The Blip"](#the-blip)
+	* 	[Pull Request Feedback](#pull-request-feedback)
+  	* 	[When to wait on your pull request](#when-to-wait-on-your-pull-request)
+  	* 	[What to do if there's a merge conflict](#what-to-do-if-theres-a-merge-conflict)
+* 	**[Scriptwriters and Hackathons](#scriptwriters-and-hackathons)**
+* 	**[About the Functions Library (FuncLib)](#about-the-functions-library-funclib)**
+* 	**[About the Installer/Configuration Utility](#about-the-installerconfiguration-utility)**
 
 ---
 Introduction
@@ -33,13 +33,11 @@ _[(back to top)](#bluezone-scripts--dhs-prism-scripts)_
 ---
 State Administrators
 ---
-As of July 2016, there are two state administrators for the BlueZone Scripts project:
-* **For PRISM scripts: [Veronica Cary](mailto:veronica.cary@state.mn.us)**: Technical Consultant
-* **For MAXIS scripts: [Charles Potter](mailto:charles.potter@state.mn.us)**: SNAP ME Reviewer
+As of January 2017, there is one statewide coordinator for the BlueZone Scripts project:
+*	**For PRISM scripts: [Veronica Cary](mailto:veronica.cary@state.mn.us)**
+*	**For MAXIS scripts:** vacant, Veronica Cary filling in as needed
 
-The MAXIS scriptwriter backs up the PRISM scriptwriter, and vice versa, for coverage in case of critical issues.
-
-In addition to our state administrators, numerous county/tribal agency personnel are involved in much of the writing and testing of BlueZone Scripts. Their contribution is appreciated!
+In addition to our statewide coordinator, numerous county/tribal agency personnel are involved in much of the writing and testing of BlueZone Scripts. Their contribution is appreciated!
 
 
 _[(back to top)](#bluezone-scripts--dhs-prism-scripts)_
@@ -50,10 +48,30 @@ GitHub workflow and organization
 
 GitHub can be somewhat complex and daunting for beginners. For our organization, scripts are divided into two "branches":
 
-* **master**: the working directory for scriptwriters and select power users in scriptwriting agencies.
-* **release**: the branch for most eligibility workers statewide.
+*	**master**: the working directory for scriptwriters and select power users in scriptwriting agencies.
+* 	**release**: the branch for most eligibility workers statewide.
 
-Changes proposed here (assuming they "pass muster" with any policy/procedural folks involved at DHS) will first be merged into "master", then into "release" after **at least** two separate agencies confirm that the change is working. **Scriptwriters (and a few select "power users" in each agency) are expected to work off of the master branch, and _contribute feedback_ frequently**.
+Changes proposed here are are evaluated, cataloged, and acted on using a standard workflow:
+1.	A bug is reported, or a new script idea is suggested, using an issue on our GitHub issues list.
+2.	The statewide coordinator reviews the issue for basic technical feasibility and possible redundancy (copies of other issues or 
+	scripts which already exist).
+	*	If the suggestion is a brand new script, or an enhancement to a current script which may impact policy, pertinent staff from DHS 
+		policy areas review the suggestion. Script ideas that do not meet their approval will be rejected with the reason posted on the 
+		GitHub issue.
+3.	The suggested idea is posted for any possible scriptwriters from counties who want to take it. As the scriptwriters work for their 
+	counties, and not DHS, there is no guarantee that new ideas will be acted on. However, every attempt will be made to ensure script 
+	ideas are implemented as quickly as possible. Issues not currently "claimed" by a scriptwriter will be tagged as "backlogged" in our 
+	issue list. In some cases, the statewide coordinator may work on an issue directly, particularly if it fixes a bug or provides a 
+	substantive benefit to staff (these will be evaluated on a case-by-case basis).
+4.	If the issue is taken up by a scriptwriter (county or state), it will be processed as soon as possible, and the statewide 
+	coordinator will check in with the scriptwriter throughout the process of writing the script.
+5.	Once the script is developed by the scriptwriter, they are expected to test the new script locally and collect feedback from any 
+	pertinent local staff involved. After that point, the scriptwriter submits a *pull request* containing the script, which is reviewed 
+	by the statewide coordinator before being pulled into the master branch for testing. **Only the statewide coordinator can pull in 
+	changes into the supported branches.**
+6.	Agencies that are using the master branch (the branch used for testing) are notified of the new/improved script, and are asked to 
+	test it and report back to the statewide coordinator.
+7.	Once testing is determined to be successful, the new/improved script is pulled into the release branch.
 
 _[(back to top)](#bluezone-scripts--dhs-prism-scripts)_
 
