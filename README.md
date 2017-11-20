@@ -51,7 +51,7 @@ GitHub can be somewhat complex and daunting for beginners. For our organization,
 *	**master**: the working directory for scriptwriters and select power users in scriptwriting agencies.
 * 	**release**: the branch for most eligibility workers statewide.
 
-Changes proposed here are are evaluated, cataloged, and acted on using a standard workflow:
+Changes proposed here are evaluated, cataloged, and acted on using a standard workflow:
 1.	A bug is reported, or a new script idea is suggested, using an issue on our GitHub issues list.
 2.	The statewide coordinator reviews the issue for basic technical feasibility and possible redundancy (copies of other issues or 
 	scripts which already exist).
