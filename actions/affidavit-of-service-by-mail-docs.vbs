@@ -41,6 +41,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
+call changelog_update("11/21/2017", "Fixed the buttons for CAFS and Affidavit of Default selection buttons as they were mixed up.", "Heather Allen, Scott Co.")
 call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
@@ -262,13 +263,13 @@ EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Aff_of_Default_and_ID = checked then
-EMWriteScreen "S", 14, 5
+EMWriteScreen "S", 13, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Case_Financial_Summary = checked then
-EMWriteScreen "S", 13, 5
+EMWriteScreen "S", 14, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
@@ -502,13 +503,13 @@ EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Aff_of_Default_and_ID = checked then
-EMWriteScreen "S", 14, 5
+EMWriteScreen "S", 13, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Case_Financial_Summary = checked then
-EMWriteScreen "S", 13, 5
+EMWriteScreen "S", 14, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
@@ -745,13 +746,13 @@ EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Aff_of_Default_and_ID = checked then
-EMWriteScreen "S", 14, 5
+EMWriteScreen "S", 13, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Case_Financial_Summary = checked then
-EMWriteScreen "S", 13, 5
+EMWriteScreen "S", 14, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
@@ -988,13 +989,13 @@ EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Aff_of_Default_and_ID = checked then
-EMWriteScreen "S", 14, 5
+EMWriteScreen "S", 13, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
 End IF
 If Case_Financial_Summary = checked then
-EMWriteScreen "S", 13, 5
+EMWriteScreen "S", 14, 5
 Transmit
 EMWriteScreen "x", 16, 15
 Transmit
