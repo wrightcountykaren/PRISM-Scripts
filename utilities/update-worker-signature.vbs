@@ -79,7 +79,7 @@ BeginDialog dialog1, 0, 0, 191, 105, "Update Worker Signature"
 EndDialog
 
 '----------THE SCRIPT----------
-dialog 												'Shows the dialog
+dialog dialog1										'Shows the dialog
 IF ButtonPressed = cancel THEN stopscript			'Handling for if cancel is pressed
 IF worker_signature = "" THEN stopscript			'If they enter nothing, it exits
 
