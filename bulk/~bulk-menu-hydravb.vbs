@@ -2,8 +2,8 @@
 name_of_script = "~bulk-menu-hydravb.vbs"
 start_time = timer
 
-MsgBox "bulk menu coming soon"
-stopscript
+' MsgBox "bulk menu coming soon"
+' stopscript
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
@@ -49,12 +49,18 @@ call changelog_update("01/24/2018", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' ERROR HANDLING
+on error resume next				' So this way I can catch errors
+ButtonGroup ""						' Sending a test ButtonGroup "" function... if it errors then we need to load functions
+if err.number = 13 then LoadFuncs 	' Declared below
+on error goto 0 					' Further errors should behave as expected
 
 ' Predeclaring a number which will match what Hydra provides to ButtonPressed, does not actually connect with Hydra
 button_incrementer = 1
 
 
 BeginDialog actions_menu_dialog, 0, 0, 506, 390, "Actions menu dialog"
+
   ButtonGroup ButtonPressed
     CancelButton 450, 370, 50, 15
 
@@ -246,8 +252,21 @@ end if
 
 'Determining the script selected from the value of ButtonPressed
 'Since we start at 100 and then go up, we will simply subtract 100 when determining the position in the array
-if engine = "cscript.exe" then
-	call parse_and_execute_bzs(script_to_run)
-else
-	CALL run_from_GitHub(script_to_run)
-end if
+call parse_and_execute_bzs(script_to_run)
+
+function LoadFuncs
+	script_URL = "https://raw.githubusercontent.com/MN-Script-Team/hydra/master/vbs-libs/bzio-helper-functions.vbs"
+	SET req = CreateObject("Msxml2.XMLHttp.6.0")				'Creates an object to get a URL
+	req.open "GET", script_URL, FALSE									'Attempts to open the URL
+	req.send													'Sends request
+	IF req.Status = 200 THEN									'200 means great success
+		Set fso = CreateObject("Scripting.FileSystemObject")	'Creates an FSO
+		ExecuteGlobal req.responseText								'Executes the script code
+	ELSE														'Error message, tells user to try to reach github.com, otherwise instructs to contact Veronica with details (and stops script).
+		critical_error_msgbox = MsgBox ("Something has gone wrong. The code stored on GitHub was not able to be reached." & vbNewLine & vbNewLine &_
+										"Script URL: " & script_URL & vbNewLine & vbNewLine &_
+										"The script has stopped. Please check your Internet connection. Consult a scripts administrator with any questions.", _
+										vbOKonly + vbCritical, "BlueZone Scripts Critical Error")
+		StopScript
+	END IF
+end function
