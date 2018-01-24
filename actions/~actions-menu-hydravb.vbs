@@ -47,8 +47,6 @@ changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
 
-' THE MAIN MENU FILE TODO: move to an actual main menu file and away from the redirect
-
 ' Predeclaring a number which will match what Hydra provides to ButtonPressed, does not actually connect with Hydra
 button_incrementer = 1
 
@@ -242,8 +240,6 @@ elseif ButtonPressed = btn_unreimbursed_uninsured_sending_docs then
     script_to_run = "https://raw.githubusercontent.com/MN-Script-Team/DHS-PRISM-Scripts/master/actions/unreimbursed-uninsured-sending-docs.vbs"
 end if
 
-
-MsgBox "Button: " & ButtonPressed
 
 'Determining the script selected from the value of ButtonPressed
 'Since we start at 100 and then go up, we will simply subtract 100 when determining the position in the array
