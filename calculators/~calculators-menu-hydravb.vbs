@@ -47,38 +47,38 @@ changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
 ' ERROR HANDLING
-' on error resume next				' So this way I can catch errors
-' ButtonGroup ""						' Sending a test ButtonGroup "" function... if it errors then we need to load functions
-' if err.number = 13 then LoadFuncs 	' Declared below
-' on error goto 0 					' Further errors should behave as expected
+ on error resume next				' So this way I can catch errors
+ ButtonGroup ""						' Sending a test ButtonGroup "" function... if it errors then we need to load functions
+ if err.number = 13 then LoadFuncs 	' Declared below
+ on error goto 0 					' Further errors should behave as expected
 
 ' Predeclaring a number which will match what Hydra provides to ButtonPressed, does not actually connect with Hydra
 button_incrementer = 1
 
 
-BeginDialog actions_menu_dialog, 0, 0, 506, 100, "Calculators menu dialog"
+BeginDialog menu_dialog, 0, 0, 506, 100, "Calculators menu dialog"
 
   ButtonGroup ButtonPressed
     CancelButton 450, 75, 50, 15
 
     PushButton 5, 5, 120, 10, "DDPL", btn_ddpl
     Text 130, 5, 370, 10, "Calculates direct deposits made over user-provided date range."
-    btn_admin_redirect = button_incrementer
+    btn_ddpl = button_incrementer
     button_incrementer = button_incrementer + 1
 
     PushButton 5, 20, 120, 10, "IW", btn_iw
     Text 130, 20, 370, 10, "Calculator for determining the amount of IW over a given period."
-    btn_cola = button_incrementer
+    btn_iw = button_incrementer
     button_incrementer = button_incrementer + 1
 
     PushButton 5, 35, 120, 10, "PALC", btn_palc
     Text 130, 35, 370, 10, "Calculates voluntary and involuntary amounts from the PALC screen."
-    btn_emancipation_dord_docs = button_incrementer
+    btn_palc = button_incrementer
     button_incrementer = button_incrementer + 1
 
     PushButton 5, 50, 120, 10, "Prorate Support", btn_prorate_support
     Text 130, 50, 370, 10, "Calculator for determining pro-rated support for patrial months."
-    btn_employment_verification = button_incrementer
+    btn_prorate_support = button_incrementer
     button_incrementer = button_incrementer + 1
 
     ' These scripts don't appear to have worked in Hydra (commented out one for use as a sample)
@@ -98,7 +98,7 @@ EndDialog
 
 
 
-Dialog actions_menu_dialog
+Dialog menu_dialog
 IF ButtonPressed = 0 THEN script_end_procedure("")
 
 if ButtonPressed = btn_ddpl then
