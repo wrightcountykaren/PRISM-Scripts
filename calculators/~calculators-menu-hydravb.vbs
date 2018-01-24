@@ -47,10 +47,10 @@ changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
 ' ERROR HANDLING
-on error resume next				' So this way I can catch errors
-ButtonGroup ""						' Sending a test ButtonGroup "" function... if it errors then we need to load functions
-if err.number = 13 then LoadFuncs 	' Declared below
-on error goto 0 					' Further errors should behave as expected
+' on error resume next				' So this way I can catch errors
+' ButtonGroup ""						' Sending a test ButtonGroup "" function... if it errors then we need to load functions
+' if err.number = 13 then LoadFuncs 	' Declared below
+' on error goto 0 					' Further errors should behave as expected
 
 ' Predeclaring a number which will match what Hydra provides to ButtonPressed, does not actually connect with Hydra
 button_incrementer = 1
