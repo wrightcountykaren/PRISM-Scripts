@@ -2,8 +2,8 @@
 name_of_script = "~bulk-menu-hydravb.vbs"
 start_time = timer
 
-' MsgBox "bulk menu coming soon"
-' stopscript
+MsgBox "bulk menu coming soon"
+stopscript
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
 IF IsEmpty(FuncLib_URL) = TRUE THEN	'Shouldn't load FuncLib if it already loaded once
