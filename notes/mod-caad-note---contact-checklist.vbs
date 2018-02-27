@@ -44,7 +44,7 @@ changelog = array()
 
 'INSERT ACTUAL CHANGES HERE, WITH PARAMETERS DATE, DESCRIPTION, AND SCRIPTWRITER. **ENSURE THE MOST RECENT CHANGE GOES ON TOP!!**
 'Example: call changelog_update("01/01/2000", "The script has been updated to fix a typo on the initial dialog.", "Jane Public, Oak County")
-call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
+call changelog_update("02/27/2018", "Update version fixing bug on the CAAD note made.", "Kallista Imdieke, Stearns County")
 
 'Actually displays the changelog. This function uses a text file located in the My Documents folder. It stores the name of the script file and a description of the most recent viewed change.
 changelog_display
@@ -132,8 +132,8 @@ EMSetCursor 16, 4			'Because the cursor does not default to this location
 call write_bullet_and_variable_in_CAAD("Who discussed the Modification with", Who_requested_editbox)
 call write_bullet_and_variable_in_CAAD("What is the Change", Change_Options_droplist)
 call write_bullet_and_variable_in_CAAD("More info on change", more_info_editbox)
-IF Up_Down_Same_checkbox = 1 then call write_variable_in_CAAD("* Informed of the online child support calculator.")
-IF Online_calculator_checkbox = 1 then call write_variable_in_CAAD("* Informed that the support could go up, down or remain the same.")
+IF Up_Down_Same_checkbox = 1 then call write_variable_in_CAAD("* Informed that the support could go up, down or remain the same..")
+IF Online_calculator_checkbox = 1 then call write_variable_in_CAAD("Informed of the online child support calculator")
 IF Cannot_stop_checkbox = 1 then call write_variable_in_CAAD("* Informed that once a review has started we cannot stop it.")
 call write_bullet_and_variable_in_CAAD("Total timeframe to complete the modification given", Amt_time_editbox)
 IF Effective_date_checkbox = 1 then call write_variable_in_CAAD("* Informed that the Effective Date is the month following service date.")
