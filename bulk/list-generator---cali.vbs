@@ -47,6 +47,7 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: case number in Excel has two spaces, evaluate and fix (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/779)
 ' TODO: in Python, add loop until user enters valid CALI info (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/778)
 
 Dim CAFS_checkbox
