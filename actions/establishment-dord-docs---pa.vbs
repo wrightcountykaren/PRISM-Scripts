@@ -46,7 +46,9 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
-'THIS SCRIPT IS READY FOR USE 
+' TODO: evaluate for merging into single intake script in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/451)
+
+'THIS SCRIPT IS READY FOR USE
 
 
 'This is an updated version of the ESTB PA DORD DOCS that is used when starting a NEW ESTABLISH ACTION on a public assistance case that prints the
@@ -54,7 +56,7 @@ changelog_display
 'the CP is not required to complete financial docs on that type of case.
 
 'Connecting to BZ  'This is a script for a PA case to print the fin docs & waivers
-EMConnect ""   
+EMConnect ""
 
 'Checks to make sure we are in Prism
 CALL check_for_Prism (true)
@@ -70,7 +72,7 @@ transmit
 EMWriteScreen "A", 3,29
 
 EMSetCursor 6,36
-		
+
 'adding the financial statement to DORD
 EMWriteScreen "F0021", 6,36
 
@@ -94,7 +96,7 @@ transmit
 'Adding the Important Statement of Rights
 EMWriteScreen "A", 3,29
 
-EMSetCursor 6,36			
+EMSetCursor 6,36
 
 EMWriteScreen "F0022", 6,36
 
@@ -119,7 +121,7 @@ transmit
 'Adding CP Waiver
 EMWriteScreen "A", 3,29
 
-EMSetCursor 6,36		
+EMSetCursor 6,36
 
 EMWriteScreen "F5000", 6,36
 
@@ -133,8 +135,8 @@ transmit
 EMSetCursor 3,29
 
 'Modifying label in DORD
-EMWriteScreen "M", 3,29	   
-				    
+EMWriteScreen "M", 3,29
+
 pf14
 
 pf8
@@ -172,7 +174,7 @@ EMSetCursor 6,36
 
 EMWriteScreen "F5000", 6,36
 
-EMSetCursor 11,51		
+EMSetCursor 11,51
 
 'Changing recipient to NCP on Waiver
 EMWriteScreen "NCP", 11,51
@@ -205,7 +207,7 @@ pf3
 'Pinting NCP Waiver
 pf9
 
-transmit	
+transmit
 
 EMSetCursor 3,29
 
@@ -214,7 +216,7 @@ EMWriteScreen "C", 3,29
 
 transmit
 'Adding the NCP Notice of Liability
-EMWriteScreen "A", 3,29   
+EMWriteScreen "A", 3,29
 
 EMSetCursor 6,36
 
@@ -240,7 +242,7 @@ EMWriteScreen "S", 7,5
 transmit
 
 'Selecting the "Include Financial Statement" line
-EMwriteScreen "X", 16,15 
+EMwriteScreen "X", 16,15
 
 transmit
 
@@ -263,7 +265,7 @@ BeginDialog pa_dord_docs_dialog, 0, 0, 191, 135, "Worker Information Dialog"
 EndDialog
 
 'This makes the dialog run
-Dialog pa_dord_docs_dialog  
+Dialog pa_dord_docs_dialog
 
 IF ButtonPressed = 0 THEN StopScript
 
@@ -274,7 +276,7 @@ EMWriteScreen "S", 9,5
 transmit     'This next part below is needed to make the dialog box run in the script when entering the info
 
 'Below writes the worker information typed into the DORD doc
-EMWriteScreen (worker_name_dialog), 16,15 
+EMWriteScreen (worker_name_dialog), 16,15
 
 transmit
 
@@ -283,7 +285,7 @@ EMWriteScreen "S", 10,5
 
 transmit
 
-EMWriteScreen (worker_title_dialog), 16,15  
+EMWriteScreen (worker_title_dialog), 16,15
 
 transmit
 
@@ -293,7 +295,7 @@ EMWriteScreen "S", 11,5
 
 transmit
 
-EMWriteScreen (worker_phone_dialog), 16,15  
+EMWriteScreen (worker_phone_dialog), 16,15
 
 transmit
 
@@ -301,14 +303,14 @@ pf3
 
 pf9
 
-transmit 
+transmit
 
 'Adding the CAAD note
 CALL navigate_to_PRISM_screen ("CAAD")
 
 pf5
-	
-EMSetCursor 4,54    
+
+EMSetCursor 4,54
 
 EMWriteScreen "FREE", 4,54
 
@@ -327,7 +329,7 @@ EMSetCursor 3,3
 
 EMWriteScreen "A", 3,3
 
-EMSetCursor 4,37   
+EMSetCursor 4,37
 
 EMWriteScreen "Free", 4,37
 

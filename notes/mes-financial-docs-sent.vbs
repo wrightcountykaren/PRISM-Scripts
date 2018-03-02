@@ -47,6 +47,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: evaluate for merging into single intake script in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/451)
+
 'DIMMING VARIABLES---------------------------------------------------------------------------------------------------------------------------------------------------------
 DIM row, col
 DIM financial_stmt_cp_check, financial_stmt_ncp_check, Cover_letter_cp_check, cover_letter_ncp_check, Waiver_cp_check, waiver_ncp_check, calendar_cp_check, calendar_ncp_check, past_support_cp_check, past_support_ncp_check, return_date, PRISM_case_number, MES_Financial_Docs_Sent_dialog, buttonpressed, case_number_valid
