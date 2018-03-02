@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: look at CAWT to see if E4102 worklist exists, in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/764)
+
 ' >>>>> THE SCRIPT <<<<<
 EMConnect ""
 CALL check_for_PRISM(False)
