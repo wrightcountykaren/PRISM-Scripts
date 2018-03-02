@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: load an email object using automation (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/464)
+
 'DIALOGS----------------------------------------------------------------------------------------------------
 BeginDialog PRISM_case_number_dialog, 0, 0, 186, 50, "PRISM case number dialog"
   EditBox 100, 10, 80, 15, PRISM_case_number
