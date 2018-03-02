@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: add Excel functionality in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/461)
+
 'DIALOGS---------------------------------------------------------------------------
 BeginDialog start_end_date_dialog, 0, 0, 171, 65, "Start and End Date Dialog"
   ButtonGroup ButtonPressed

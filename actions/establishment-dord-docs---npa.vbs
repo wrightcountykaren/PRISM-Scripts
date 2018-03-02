@@ -46,6 +46,9 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: add options to indicate who docs should be sent to in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/710)
+' TODO: evaluate for merging into single intake script in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/451)
+
 'THE SCRIPT IS READY FOR USE
 
 'This is an updated version of the ESTB NPA DORD DOCS that is used when starting a NEW ESTABLISH ACTION on a non public assistance or DWP case that prints the

@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: functionality for CSO to create worklist if NCP is required to do specific things as part of contempt hearing (in Python) (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/688)
+
 'Using custom functions to convert arrays from global variables into a list for the dialogs.
 call convert_array_to_droplist_items(county_attorney_array, county_attorney_list)										'County attorneys
 call convert_array_to_droplist_items(child_support_magistrates_array, child_support_magistrates_list)					'County magistrates
@@ -61,7 +63,7 @@ BeginDialog Contempt_Hearing_Note, 0, 0, 371, 350, "Contempt Hearing Note"
   Text 15, 55, 55, 10, "County Attorney"
   DropListBox 15, 70, 145, 15, "Select one" +chr(9)+ county_attorney_list, CAO_list
   Text 180, 55, 110, 10, "Child Support Officer"
-  EditBox 180, 70, 170, 15, CSO_textbox  
+  EditBox 180, 70, 170, 15, CSO_textbox
   CheckBox 15, 95, 55, 10, "NCP Present ", NCP_Present
   CheckBox 80, 95, 60, 10, "Pro Se", Pro_se
   Text 80, 106, 60, 10, "Represented by:"
@@ -126,7 +128,7 @@ Do
 'Shows dialog, validates that PRISM is up and not timed out, with transmit
 	err_msg = ""
 	Dialog Contempt_Hearing_Note
-	cancel_confirmation	
+	cancel_confirmation
 	CALL Prism_case_number_validation(prism_case_number, case_number_valid)
 	IF worker_signature = "" THEN err_msg = err_msg & vbNEWline & "You must sign your CAAD note"
 	IF Hearing_Type = "Select one:" THEN err_msg = err_msg & vbNEWline & "You must enter in a hearing type!"
@@ -135,7 +137,7 @@ Do
 	IF CSO_textbox = "" THEN err_msg = err_msg & vbNEWline & "You must enter Child Support Officer!"
 	IF Summary_of_Hearing = "" THEN err_msg = err_msg & vbNEWline & "You must enter hearing notes"
 	IF err_msg <> "" THEN MsgBox "***Notice***" & vbNEWline & err_msg &vbNEWline & vbNEWline & "Please resolve for the script"
-LOOP UNTIL err_msg = ""	
+LOOP UNTIL err_msg = ""
 
 
 'Going to CAAD note
@@ -148,27 +150,27 @@ call enter_PRISM_case_number(PRISM_case_number, 20, 8)
 
 PF5					'Did this because you have to add a new note
 
-EMWriteScreen "M3909", 4, 54  'adds correct caad code 
+EMWriteScreen "M3909", 4, 54  'adds correct caad code
 
 EMSetCursor 16, 4			'Because the cursor does not default to this location
 
-call write_bullet_and_variable_in_CAAD("Type of Contempt Hearing", Hearing_Type) 
+call write_bullet_and_variable_in_CAAD("Type of Contempt Hearing", Hearing_Type)
 call write_bullet_and_variable_in_CAAD("District Court Judge/Child Support Magistrate", district_court_judge)
 call write_bullet_and_variable_in_CAAD("County Attorney", CAO_list)
 call write_bullet_and_variable_in_CAAD("Child Support Officer", CSO_textbox)
 if NCP_present = 1 then
 	call write_variable_in_CAAD("* NCP present")
 	call write_bullet_and_variable_in_CAAD("Represented by", NCP_Represented_by)
-else 
+else
 	call write_variable_in_CAAD ("* NCP not present")
 end if
 if Pro_se = 1 then
 	call write_variable_in_CAAD("* NCP Pro Se")
-end if 
+end if
 if CP_present = 1 then
 	call write_variable_in_CAAD("* CP present")
 	call write_bullet_and_variable_in_CAAD("Represented by", CP_Represented_by)
-else 
+else
 	call write_variable_in_CAAD ("* CP not present")
 end if
 call write_bullet_and_variable_in_CAAD("Total arrears on the date of hearing", Total_arrears_on_the_hearing_date)
@@ -184,7 +186,7 @@ else
 end if
 
 call write_bullet_and_variable_in_CAAD("Bail amount", Bail_amount)
-call write_variable_in_CAAD("---")	
+call write_variable_in_CAAD("---")
 call write_variable_in_CAAD(worker_signature)
 
 script_end_procedure("")

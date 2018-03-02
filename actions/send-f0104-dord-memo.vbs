@@ -48,6 +48,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: in Python, add check to make sure DORD info isn't too long (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/800)
+
 buffer_size = 5 'number of lines to buffer when creating the array.  Due to wrapping, the array may need more lines than initially projected.
 
 
@@ -276,7 +278,7 @@ DO
 		message_text = memo_text
 		CALL write_text_to_msgbox(message_text, recipient_code)
 	End IF
-	
+
 
 	IF err_msg <> "" THEN MsgBox "*** NOTICE!!! ***" & vbCr  & vbCr & err_msg & vbCr & vbCr & "Please resolve for the script to continue."
 

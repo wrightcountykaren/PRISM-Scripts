@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: add customizable fields for counties to add custom sections in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/566)
+
 'VARIABLES TO DECLARE----------------------------------------------------------------------------------------------------
 date_of_contact = date & ""	'defaults to today
 

@@ -46,6 +46,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: add check for CACL to see if there's an approved case closure record (in Python) (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/691)
+
 'Building the dialog
 BeginDialog arrears_dialog, 0, 0, 276, 130, "Collections Report"
   EditBox 55, 15, 205, 15, position_array

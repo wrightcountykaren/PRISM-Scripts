@@ -33,7 +33,7 @@ IF IsEmpty(FuncLib_URL) = TRUE THEN 'Shouldn't load FuncLib if it already loaded
         Execute text_from_the_other_script
     END IF
 END IF
-				
+
 'CHANGELOG BLOCK ===========================================================================================================
 'Starts by defining a changelog array
 changelog = array()
@@ -48,6 +48,7 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: change name to be more descriptive in Python (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/758)
 
 'Pulling in phone number
 

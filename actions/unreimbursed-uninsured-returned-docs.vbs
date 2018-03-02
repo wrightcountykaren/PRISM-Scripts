@@ -2,7 +2,7 @@
 name_of_script = "unreimbursed-uninsured-returned-docs.vbs"
 start_time = timer
 STATS_counter = 1
-'STATS_manualtime = 
+'STATS_manualtime =
 STATS_denomination = "C"
 
 'LOADING FUNCTIONS LIBRARY FROM GITHUB REPOSITORY===========================================================================
@@ -51,7 +51,9 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
-'first dialog 
+' TODO: in Python, have a field under Amount Requested where user can enter dates of when amount was incurred (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/799)
+
+'first dialog
 BeginDialog UnUn1_Dialog, 0, 0, 276, 135, "Unreimbursed Uninsured Docs Received"
   EditBox 70, 5, 80, 15, PRISM_case_number
   DropListBox 195, 65, 60, 45, "Select One..."+chr(9)+"CPP"+chr(9)+"NCP", person_droplistbox
@@ -62,7 +64,7 @@ BeginDialog UnUn1_Dialog, 0, 0, 276, 135, "Unreimbursed Uninsured Docs Received"
   Text 15, 30, 255, 25, "This script will gernerate DORD DOCS Notice of Intent to Enforce UN/UN and Affidavit of Service for the collection of Unreimbursed and Uninsured Medical and Dental Expenses as requested by CP or NCP."
   Text 5, 70, 190, 10, "Select who returned the Unreimbursed/Uninsured forms."
 EndDialog
-'end first dialog 
+'end first dialog
 
 'Connecting to BlueZone
 EMConnect ""
@@ -85,7 +87,7 @@ Do
 	IF buttonpressed = 0 then stopscript		'Cancel
 	IF PRISM_case_number = "" THEN err_msg = err_msg & vbNewline & "Prism case number must be completed"
 	IF person_droplistbox = "Select One..." THEN err_msg = err_msg & vbNewline & "Select who returned the documents."
-	IF err_msg <> "" THEN 
+	IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 
@@ -94,7 +96,7 @@ LOOP UNTIL err_msg = ""
 
 'dialog if cp is requesting collection of un/un
 IF person_droplistbox = "CPP" THEN
-	
+
 	BeginDialog Cp_requested_Dialog, 0, 0, 216, 200, "Completed Documents received from Requesting Party (CP)"
   	  EditBox 80, 5, 60, 15, amount
   	  CheckBox 10, 30, 195, 10, "Check to add CAAD note of documents received from CP", CPCAAD_checkbox
@@ -118,9 +120,9 @@ Do
 	Dialog Cp_requested_Dialog 'Shows name of dialog
 	IF buttonpressed = 0 then stopscript		'Cancel
 	IF CPCAAD_checkbox = 0 AND jude_checkbox = 0 AND ncp_documents_checkbox = 0 THEN err_msg = err_msg & vbNewline & "Please select at least one checkbox."
-	IF amount = "" THEN err_msg = err_msg & vbNewline & "The UnUn amount to be collected must be completed." 
+	IF amount = "" THEN err_msg = err_msg & vbNewline & "The UnUn amount to be collected must be completed."
 	IF CPCAAD_checkbox =1 AND worker_signature = "" THEN err_msg = err_msg & vbNewline & "Please sign your CAAD Note."
-	IF err_msg <> "" THEN 
+	IF err_msg <> "" THEN
 		MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 
@@ -129,13 +131,13 @@ LOOP UNTIL err_msg = ""
 
 'ADDS CAAD NOTE
 	IF CPCAAD_checkbox = 1 THEN
-		CALL navigate_to_PRISM_screen ("CAAD")																					
+		CALL navigate_to_PRISM_screen ("CAAD")
 		PF5
 		EMWriteScreen "A", 3, 29
 		EMWriteScreen "free", 4, 54
 		EMSetCursor 16, 4
 
-'this will add information to the CAAD note of what emc docs sent 
+'this will add information to the CAAD note of what emc docs sent
 		CALL write_variable_in_CAAD ("CP returned Affidavit of Health Care Expenses, Notice to Collect UN MED   Exp Req Party, and Copies of bills, receipts, EOB's.")
 		CALL write_variable_in_CAAD ("Amount requested $" & amount)
 		CALL write_variable_in_CAAD(worker_signature)
@@ -157,7 +159,7 @@ LOOP UNTIL err_msg = ""
         Text 10, 35, 50, 10, "County Name:"
 	EndDialog
 
-	
+
 'dialog box for date on aff of service
 Do
 	err_msg = ""
@@ -165,7 +167,7 @@ Do
 	IF buttonpressed = 0 then stopscript
 	IF date_served = "" THEN err_msg = err_msg & vbNewline & "Please enter date you are sending Affidavit of Service."
 	IF county_name = "" THEN err_msg = err_msg & vbNewline & "Please enter County Name for the Affidavit of Service."
-	IF err_msg <> "" THEN 
+	IF err_msg <> "" THEN
 		MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 Loop until err_msg = ""
@@ -181,11 +183,11 @@ Loop until err_msg = ""
 		transmit
 		PF14
 		PF8
-		PF8	
+		PF8
 
 		EMWriteScreen "S", 11, 5
-		transmit 
-	
+		transmit
+
 		EMWriteScreen amount, 16, 15
 		transmit
 		PF3
@@ -245,7 +247,7 @@ Loop until err_msg = ""
 
 		Dialog LH_dialog  'name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
-			
+
 	END IF
 
 
@@ -299,20 +301,20 @@ Loop until err_msg = ""
 
 		Dialog LH_dialog  'name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
-			
+
 	END IF
 'END IF
 
 
 	IF jude_checkbox = 1 THEN
-	'CP Name											
+	'CP Name
 		call navigate_to_PRISM_screen("CPDE")
 		EMWriteScreen CP_MCI, 4, 7
 		EMReadScreen CP_F, 12, 8, 34
 		EMReadScreen CP_M, 12, 8, 56
 		EMReadScreen CP_L, 17, 8, 8
 
-		CP_name = fix_read_data(CP_F) & " " & fix_read_data(CP_M) & " " & fix_read_data(CP_L)	
+		CP_name = fix_read_data(CP_F) & " " & fix_read_data(CP_M) & " " & fix_read_data(CP_L)
 		CP_name = trim(CP_Name)
 
 
@@ -355,7 +357,7 @@ Do
 		IF CP_name = "" THEN err_msg = err_msg & vbNewline & "Please enter the CP's name."
 		IF eff_date = "" THEN err_msg = err_msg & vbNewline & "Please enter the effective date."
 		IF beg_date = "" THEN err_msg = err_msg & vbNewline & "Please enter the begin date."
-		IF err_msg <> "" THEN 
+		IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 		END IF
 Loop until err_msg = ""
@@ -378,13 +380,13 @@ Loop until err_msg = ""
 
 	'checking bottom screen for jol success
 		EMReadScreen jol_success, 18, 24, 33
-		IF jol_success <> "added successfully" THEN 
+		IF jol_success <> "added successfully" THEN
 			script_end_procedure ("Jude information was not added correctly, please reneter information.  Script Ended.")
 		END IF
 
 	'reading judgment sequence number to add to ncod
 		EMReadScreen jdgmt_number, 2, 4, 52
-		
+
 	'adding ncod info
 		CALL navigate_to_PRISM_screen ("NCOD")
 		EMWriteScreen "C", 3, 29
@@ -392,7 +394,7 @@ Loop until err_msg = ""
 		EMWriteScreen "A", 3, 29
 		EMWriteScreen "JME", 4, 34
 		EMWriteScreen "  ", 4, 053
-		EMWriteScreen eff_date, 9, 59 
+		EMWriteScreen eff_date, 9, 59
 		EMWriteScreen "npa", 12, 10
 		EMWriteScreen Co_Seq, 11, 62
 		EMWriteScreen "n", 13, 12
@@ -400,13 +402,13 @@ Loop until err_msg = ""
 		EMWriteScreen jdgmt_number, 12, 74
 		EMWriteScreen "D", 18, 44
 		EMWriteScreen "y", 18, 57
-		EMWriteScreen beg_date, 14, 68 
+		EMWriteScreen beg_date, 14, 68
 		transmit
-		
-	
+
+
 	'reading ncod success
 		EMReadScreen ncod_success, 18 , 24, 34
-		IF ncod_success <> "added successfully" THEN 
+		IF ncod_success <> "added successfully" THEN
 			ncod_message = Msgbox ("NCOD information was not added correctly, please correct error and click OK to continue. click CANCEL to end script.", VbOKCancel)
 			If ncod_message = vbCancel then stopscript
 	END IF
@@ -418,12 +420,12 @@ Loop until err_msg = ""
 	EMWriteScreen amount, 18, 15
 	PF11
 	EMWriteScreen "added un/un expenses. " & worker_signature, 18, 25
-	EMWriteScreen "n", 17, 72 
+	EMWriteScreen "n", 17, 72
 	transmit
 
 	'reading modified sucess
 	EMReadScreen obbd_success, 13 , 24, 68
-		IF obbd_success <> "modified succ" THEN 
+		IF obbd_success <> "modified succ" THEN
 			Msgbox "OBBD information was not added correctly, please reneter information.  Script Ended."
 			StopScript
 		END IF
@@ -433,7 +435,7 @@ CALL navigate_to_PRISM_screen ("NCOL")
 	END IF
 END IF
 
-	
+
 '*****************************dialog if ncp is requesting collection of un/un from the cp********************************
 
 IF person_droplistbox = "NCP" THEN
@@ -462,9 +464,9 @@ Do
 	Dialog Ncp_requested_Dialog 'Shows name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
 		IF NCPCAAD_checkbox = 0 AND cpod_checkbox = 0 AND cp_documents_checkbox = 0 THEN err_msg = err_msg & vbNewline & "Please select at least one checkbox."
-		IF amount = "" THEN err_msg = err_msg & vbNewline & "The UnUn amount to be collected must be completed." 
+		IF amount = "" THEN err_msg = err_msg & vbNewline & "The UnUn amount to be collected must be completed."
 		IF NCPCAAD_checkbox =1 AND worker_signature = "" THEN err_msg = err_msg & vbNewline & "Please sign your CAAD Note."
-		IF err_msg <> "" THEN 
+		IF err_msg <> "" THEN
 			MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 		END IF
 
@@ -472,13 +474,13 @@ LOOP UNTIL err_msg = ""
 
 'ADDS CAAD NOTE
 	IF NCPCAAD_checkbox = 1 THEN
-		CALL navigate_to_PRISM_screen ("CAAD")																					
+		CALL navigate_to_PRISM_screen ("CAAD")
 		PF5
 		EMWriteScreen "A", 3, 29
 		EMWriteScreen "free", 4, 54
 		EMSetCursor 16, 4
 
-'this will add information to the CAAD note of what emc docs sent 
+'this will add information to the CAAD note of what emc docs sent
 		CALL write_variable_in_CAAD ("NCP returned Affidavit of Health Care Expenses, Notice to Collect UN MED   Exp Req Party, and Copies of bills, receipts, EOB's.")
 		CALL write_variable_in_CAAD ("Amount requested $" & amount)
 		CALL write_variable_in_CAAD(worker_signature)
@@ -506,8 +508,8 @@ Do
 	Dialog DATE_SERVED_dialog
 	IF buttonpressed = 0 then stopscript
 	IF date_served = "" THEN err_msg = err_msg & vbNewline & "Please enter date you are sending Affidavit of Service."
-	IF county_name = "" THEN err_msg = err_msg & vbNewline & "Please enter County Name for the Affidavit of Service."	
-	IF err_msg <> "" THEN 
+	IF county_name = "" THEN err_msg = err_msg & vbNewline & "Please enter County Name for the Affidavit of Service."
+	IF err_msg <> "" THEN
 		MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 
@@ -524,11 +526,11 @@ Loop until err_msg = ""
 		transmit
 		PF14
 		PF8
-		PF8	
+		PF8
 
 		EMWriteScreen "S", 11, 5
-		transmit 
-	
+		transmit
+
 		EMWriteScreen amount, 16, 15
 		transmit
 		PF3
@@ -588,7 +590,7 @@ Loop until err_msg = ""
 
 		Dialog LH_dialog  'name of dialog
 		IF buttonpressed = 0 then stopscript		'Cancel
-			
+
 	END IF
 
 
@@ -675,7 +677,7 @@ Do
 	IF Co_Seq = "" THEN err_msg = err_msg & vbNewline & "Please enter the Court order sequence number."
 	IF eff_date = "" THEN err_msg = err_msg & vbNewline & "Please enter the effective date."
 	IF beg_date = "" THEN err_msg = err_msg & vbNewline & "Please enter the begin date."
-	IF err_msg <> "" THEN 
+	IF err_msg <> "" THEN
 		MsgBox "***NOTICE!!!***" & vbNewline & err_msg & vbNewline & vbNewline & "Please resolve for the script to continue."
 	END IF
 
@@ -692,20 +694,20 @@ Loop until err_msg = ""
 		EMWriteScreen "JME", 4, 34
 		EMWriteScreen "DIR", 9, 35
 		EMWriteScreen eff_date, 9, 59
-		EMWriteScreen "MDN", 12, 10 
-		EMWriteScreen "N", 13, 12 
-		EMWriteScreen Co_Seq, 12, 55 
+		EMWriteScreen "MDN", 12, 10
+		EMWriteScreen "N", 13, 12
+		EMWriteScreen Co_Seq, 12, 55
 		EMWriteScreen beg_date, 14, 68
 		EMWriteScreen "A", 18, 57
 		EMWriteScreen "N", 18, 71
 		transmit
-	
-	
+
+
 		EMReadScreen cpod_success, 18 , 24, 33
-			IF cpod_success <> "added successfully" THEN 
+			IF cpod_success <> "added successfully" THEN
 				script_end_procedure ("CPOD information was not added correctly, please reneter information.  Script Ended.")
 			END IF
-	
+
 'add information on obbd
 		CALL navigate_to_PRISM_screen ("OBBD")
 		EMWriteScreen "M", 3, 29
@@ -714,17 +716,16 @@ Loop until err_msg = ""
 		EMWriteScreen amount, 18, 15
 		PF11
 		EMWriteScreen "added un/un expenses. " & worker_signature, 18, 25
-		EMWriteScreen "n", 17, 72 
+		EMWriteScreen "n", 17, 72
 		transmit
 
-	'reading modified success 
+	'reading modified success
 		EMReadScreen obbd_success, 13 , 24, 66
-			IF obbd_success <> "modified succ" THEN 
+			IF obbd_success <> "modified succ" THEN
 				script_end_procedure ("OBBD information was not added correctly, please reneter information.  Script Ended.")
 			END IF
 
 		CALL navigate_to_PRISM_screen ("CPOL")
-	END IF		
-END IF	
+	END IF
+END IF
 script_end_procedure("")
-
