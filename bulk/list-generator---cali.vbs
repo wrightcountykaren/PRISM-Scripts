@@ -47,6 +47,8 @@ call changelog_update("11/13/2016", "Initial version.", "Veronica Cary, DHS")
 changelog_display
 'END CHANGELOG BLOCK =======================================================================================================
 
+' TODO: in Python, add loop until user enters valid CALI info (https://github.com/MN-Script-Team/DHS-PRISM-Scripts/issues/778)
+
 Dim CAFS_checkbox
 
 BeginDialog CALI_to_excel_Dialog, 0, 0, 231, 115, "CALI To Excel"
